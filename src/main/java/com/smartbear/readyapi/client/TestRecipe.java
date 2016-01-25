@@ -3,7 +3,7 @@ package com.smartbear.readyapi.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartbear.readyapi.client.execution.ApiException;
-import io.swagger.client.model.TestCase;
+import com.smartbear.readyapi.client.model.TestCase;
 
 public class TestRecipe {
     private final TestCase testCase;

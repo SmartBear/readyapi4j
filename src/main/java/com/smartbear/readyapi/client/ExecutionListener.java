@@ -1,7 +1,6 @@
 package com.smartbear.readyapi.client;
 
-import io.swagger.client.model.ProjectResultReport;
-import io.swagger.client.model.TestCase;
+import com.smartbear.readyapi.client.model.ProjectResultReport;
 
 public interface ExecutionListener {
     void requestSent(ProjectResultReport projectResultReport);

@@ -1,15 +1,15 @@
 package com.smartbear.readyapi.client;
 
-import io.swagger.client.model.GroovyScriptAssertion;
-import io.swagger.client.model.InvalidHttpStatusCodesAssertion;
-import io.swagger.client.model.JsonPathContentAssertion;
-import io.swagger.client.model.JsonPathCountAssertion;
-import io.swagger.client.model.ResponseSLAAssertion;
-import io.swagger.client.model.RestTestRequestStep;
-import io.swagger.client.model.SimpleContainsAssertion;
-import io.swagger.client.model.ValidHttpStatusCodesAssertion;
-import io.swagger.client.model.XPathContainsAssertion;
-import io.swagger.client.model.XQueryContainsAssertion;
+import com.smartbear.readyapi.client.model.GroovyScriptAssertion;
+import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion;
+import com.smartbear.readyapi.client.model.JsonPathContentAssertion;
+import com.smartbear.readyapi.client.model.JsonPathCountAssertion;
+import com.smartbear.readyapi.client.model.ResponseSLAAssertion;
+import com.smartbear.readyapi.client.model.RestTestRequestStep;
+import com.smartbear.readyapi.client.model.SimpleContainsAssertion;
+import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion;
+import com.smartbear.readyapi.client.model.XPathContainsAssertion;
+import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -17,8 +17,6 @@ import java.util.Arrays;
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.assertions.Assertions.contains;
 import static com.smartbear.readyapi.client.assertions.Assertions.invalidStatusCodes;
-import static com.smartbear.readyapi.client.assertions.Assertions.jsonPathContent;
-import static com.smartbear.readyapi.client.assertions.Assertions.jsonPathCount;
 import static com.smartbear.readyapi.client.assertions.Assertions.notContains;
 import static com.smartbear.readyapi.client.assertions.Assertions.responseSLA;
 import static com.smartbear.readyapi.client.assertions.Assertions.script;

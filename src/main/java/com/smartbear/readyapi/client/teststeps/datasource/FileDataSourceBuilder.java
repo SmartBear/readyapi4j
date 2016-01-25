@@ -1,7 +1,7 @@
 package com.smartbear.readyapi.client.teststeps.datasource;
 
-import io.swagger.client.model.DataSource;
-import io.swagger.client.model.FileDataSource;
+import com.smartbear.readyapi.client.model.DataSource;
+import com.smartbear.readyapi.client.model.FileDataSource;
 
 import java.util.ArrayList;
 import java.util.List;

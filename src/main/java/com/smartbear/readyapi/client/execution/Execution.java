@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client.execution;
 
-import io.swagger.client.model.ProjectResultReport;
+import com.smartbear.readyapi.client.model.ProjectResultReport;
 
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;

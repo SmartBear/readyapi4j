@@ -4,12 +4,12 @@ import com.smartbear.readyapi.client.assertions.AbstractAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.AssertionBuilder;
 import com.smartbear.readyapi.client.auth.AbstractAuthenticationBuilder;
 import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
+import com.smartbear.readyapi.client.model.Assertion;
+import com.smartbear.readyapi.client.model.Parameter;
+import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.TestSteps;
-import io.swagger.client.model.Assertion;
-import io.swagger.client.model.Parameter;
-import io.swagger.client.model.RestTestRequestStep;
 
 import java.util.ArrayList;
 import java.util.Collections;

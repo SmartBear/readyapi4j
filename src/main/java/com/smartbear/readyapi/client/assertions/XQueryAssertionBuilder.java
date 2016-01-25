@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client.assertions;
 
-import io.swagger.client.model.XQueryContainsAssertion;
+import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
 
 public interface XQueryAssertionBuilder extends AssertionBuilder<XQueryContainsAssertion> {
     XQueryAssertionBuilder allowWildcards();

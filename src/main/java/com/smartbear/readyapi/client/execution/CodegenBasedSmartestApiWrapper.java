@@ -1,17 +1,17 @@
 package com.smartbear.readyapi.client.execution;
 
+import com.smartbear.readyapi.client.model.DataSource;
+import com.smartbear.readyapi.client.model.DataSourceTestStep;
+import com.smartbear.readyapi.client.model.ExcelDataSource;
+import com.smartbear.readyapi.client.model.FileDataSource;
+import com.smartbear.readyapi.client.model.ProjectResultReport;
+import com.smartbear.readyapi.client.model.ProjectResultReports;
+import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestSteps;
 import com.sun.jersey.api.client.GenericType;
 import io.swagger.client.Pair;
 import io.swagger.client.auth.HttpBasicAuth;
-import io.swagger.client.model.DataSource;
-import io.swagger.client.model.DataSourceTestStep;
-import io.swagger.client.model.ExcelDataSource;
-import io.swagger.client.model.FileDataSource;
-import io.swagger.client.model.ProjectResultReport;
-import io.swagger.client.model.ProjectResultReports;
-import io.swagger.client.model.TestCase;
-import io.swagger.client.model.TestStep;
 
 import java.io.File;
 import java.util.ArrayList;

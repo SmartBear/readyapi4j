@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client.teststeps.datasource;
 
-import io.swagger.client.model.DataSource;
+import com.smartbear.readyapi.client.model.DataSource;
 
 import java.util.HashMap;
 import java.util.List;

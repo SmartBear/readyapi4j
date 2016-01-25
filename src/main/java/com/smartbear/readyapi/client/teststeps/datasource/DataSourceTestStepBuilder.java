@@ -1,9 +1,9 @@
 package com.smartbear.readyapi.client.teststeps.datasource;
 
+import com.smartbear.readyapi.client.model.DataSourceTestStep;
+import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
-import io.swagger.client.model.DataSourceTestStep;
-import io.swagger.client.model.TestStep;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,12 +1,12 @@
 package com.smartbear.readyapi.client;
 
+import com.smartbear.readyapi.client.model.GroovyScriptTestStep;
+import com.smartbear.readyapi.client.model.PropertyTransfer;
+import com.smartbear.readyapi.client.model.PropertyTransferSource;
+import com.smartbear.readyapi.client.model.PropertyTransferTarget;
+import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PathLanguage;
-import io.swagger.client.model.GroovyScriptTestStep;
-import io.swagger.client.model.PropertyTransfer;
-import io.swagger.client.model.PropertyTransferSource;
-import io.swagger.client.model.PropertyTransferTarget;
-import io.swagger.client.model.PropertyTransferTestStep;
 import org.junit.Test;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;

@@ -1,8 +1,8 @@
 package com.smartbear.readyapi.client;
 
+import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
-import io.swagger.client.model.TestCase;
-import io.swagger.client.model.TestStep;
 
 import java.util.LinkedList;
 import java.util.List;

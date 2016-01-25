@@ -1,8 +1,8 @@
 package com.smartbear.readyapi.client.teststeps.groovyscript;
 
+import com.smartbear.readyapi.client.model.GroovyScriptTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
-import io.swagger.client.model.GroovyScriptTestStep;
 
 /**
  * Builder for GroovyScriptTestStep objects.

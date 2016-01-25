@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client.assertions;
 
-import io.swagger.client.model.InvalidHttpStatusCodesAssertion;
+import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion;
 
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 
