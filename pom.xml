@@ -6,12 +6,12 @@
 
     <groupId>com.smartbear</groupId>
     <artifactId>ready-api-java-client</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <scm>
         <url>https://github.com/SmartBear/ready-api-java-client</url>
-        <connection>scm:git:ssh://git@github.com/SmartBear/ready-api-java-client.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/SmartBear/ready-api-java-client.git</developerConnection>
+        <connection>scm:git:ssh://git@github.com/SmartBear/ready-api-testserver-client.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/SmartBear/ready-api-testserver-client.git</developerConnection>
     </scm>
 
     <properties>
