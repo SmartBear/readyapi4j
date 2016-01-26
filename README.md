@@ -32,14 +32,16 @@ TestServer receives and runs *test recipes* <html>&ndash;</html> special JSON re
 		
 		/* Create the recipe executor for your TestServer */
 		RecipeExecutor executor = new RecipeExecutor( "<your TestServer hostname>" );
+		
 		/* User credentials for connecting to the TestServer */
 		executor.setCredentials("<your user>", "<your password>");
+		
 		/* Run the recipe */
 		Execution execution = executor.executeRecipe(recipe);
 	
 		/* Checks the response */
 		assertEquals(Arrays.toString( execution.getErrorMessages().toArray()),
-		ProjectResultReport.StatusEnum.FINISHED, execution.getCurrentStatus());
+		    ProjectResultReport.StatusEnum.FINISHED, execution.getCurrentStatus());
 	}
 	```
 	You can set up the executor in a setup method.
