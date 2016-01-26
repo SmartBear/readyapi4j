@@ -23,12 +23,6 @@ public class RecipeExecutor {
     private HttpBasicAuth authentication;
     private final List<ExecutionListener> executionListeners = new CopyOnWriteArrayList<>();
 
-    // Used for testing
-    RecipeExecutor(Scheme scheme, String host, int port, String basePath, SmartestApiWrapper apiStub) {
-        this.apiStub = apiStub;
-        apiStub.setBasePath(String.format("%s://%s:%d%s", scheme.getValue(), host, port, basePath));
-    }
-
     public RecipeExecutor(Scheme scheme, String host, int port) {
         this(scheme, host, port, ServerDefaults.VERSION_PREFIX, new CodegenBasedSmartestApiWrapper());
     }
@@ -39,6 +33,12 @@ public class RecipeExecutor {
 
     public RecipeExecutor(String host) {
         this(host, ServerDefaults.DEFAULT_PORT);
+    }
+
+    // Used for testing
+    RecipeExecutor(Scheme scheme, String host, int port, String basePath, SmartestApiWrapper apiStub) {
+        this.apiStub = apiStub;
+        apiStub.setBasePath(String.format("%s://%s:%d%s", scheme.getValue(), host, port, basePath));
     }
 
     public void setCredentials(String username, String password) {
