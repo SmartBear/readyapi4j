@@ -4,6 +4,7 @@ import com.smartbear.readyapi.client.execution.ApiClientWrapper;
 import com.smartbear.readyapi.client.execution.CodegenBasedSmartestApiWrapper;
 import com.smartbear.readyapi.client.execution.Execution;
 import com.smartbear.readyapi.client.execution.RecipeExecutor;
+import com.smartbear.readyapi.client.execution.RecipeExecutorTestCreator;
 import com.smartbear.readyapi.client.execution.ServerDefaults;
 import com.smartbear.readyapi.client.execution.SmartestApiWrapper;
 import com.smartbear.readyapi.client.model.DataSource;
@@ -169,7 +170,7 @@ public class DataSourceTestStepRecipeTest {
 
         ApiClientWrapper apiClientWrapper = mockApiClientWrapper();
         SmartestApiWrapper smartestApiWrapper = new CodegenBasedSmartestApiWrapper(apiClientWrapper);
-        RecipeExecutor recipeExecutor = new RecipeExecutor("localhost", ServerDefaults.DEFAULT_PORT,
+        RecipeExecutor recipeExecutor = RecipeExecutorTestCreator.createRecipeExecutor(ServerDefaults.DEFAULT_SCHEME, "localhost", ServerDefaults.DEFAULT_PORT,
                 ServerDefaults.VERSION_PREFIX, smartestApiWrapper);
         recipeExecutor.setCredentials("user", "password");
         Execution execution = recipeExecutor.executeRecipe(recipe);
