@@ -37,7 +37,7 @@ public class RecipeExecutorTest {
     @Before
     public void setUp() throws Exception {
         apiWrapper = mock(SmartestApiWrapper.class);
-        executor = new RecipeExecutor(HOST, PORT, BASE_PATH, apiWrapper);
+        executor = new RecipeExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, apiWrapper);
         executor.setCredentials("theUser", "thePassword");
         recipeToSubmit = new TestRecipe(new TestCase());
     }

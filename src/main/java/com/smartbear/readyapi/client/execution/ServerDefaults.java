@@ -6,10 +6,11 @@ package com.smartbear.readyapi.client.execution;
 public class ServerDefaults {
 
     public static final String VERSION_PREFIX = "/v1";
-
     private ServerDefaults() {
     }
 
     public static final String SERVICE_BASE_PATH = "/readyapi";
-    public static final int DEFAULT_PORT = 8912;
+
+    public static final int DEFAULT_PORT = 8443;
+    public static final Scheme DEFAULT_SCHEME = Scheme.HTTPS;
 }
