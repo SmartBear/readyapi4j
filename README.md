@@ -17,7 +17,7 @@ Here comes a quick guide to get you started:
 <dependency>
     <groupId>com.smartbear.readyapi</groupId>
     <artifactId>ready-api-testserver-client</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 
 ```
