@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client.assertions;
 
-import io.swagger.client.model.Assertion;
+import com.smartbear.readyapi.client.model.Assertion;
 
 import java.util.List;
 

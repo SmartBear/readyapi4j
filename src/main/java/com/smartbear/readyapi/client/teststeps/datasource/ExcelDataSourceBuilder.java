@@ -1,7 +1,7 @@
 package com.smartbear.readyapi.client.teststeps.datasource;
 
-import io.swagger.client.model.DataSource;
-import io.swagger.client.model.ExcelDataSource;
+import com.smartbear.readyapi.client.model.DataSource;
+import com.smartbear.readyapi.client.model.ExcelDataSource;
 
 import java.util.ArrayList;
 import java.util.List;

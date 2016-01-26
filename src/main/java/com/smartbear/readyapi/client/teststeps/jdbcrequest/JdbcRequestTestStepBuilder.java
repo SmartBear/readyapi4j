@@ -2,10 +2,10 @@ package com.smartbear.readyapi.client.teststeps.jdbcrequest;
 
 import com.smartbear.readyapi.client.assertions.AbstractAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.AssertionBuilder;
+import com.smartbear.readyapi.client.model.Assertion;
+import com.smartbear.readyapi.client.model.JdbcRequestTestStepStruct;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
-import io.swagger.client.model.Assertion;
-import io.swagger.client.model.JdbcRequestTestStepStruct;
 
 import java.util.ArrayList;
 import java.util.HashMap;

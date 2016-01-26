@@ -1,10 +1,10 @@
 package com.smartbear.readyapi.client;
 
+import com.smartbear.readyapi.client.model.Authentication;
+import com.smartbear.readyapi.client.model.Parameter;
+import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.TestSteps;
-import io.swagger.client.model.Authentication;
-import io.swagger.client.model.Parameter;
-import io.swagger.client.model.RestTestRequestStep;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;

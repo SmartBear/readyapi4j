@@ -1,9 +1,9 @@
 package com.smartbear.readyapi.client.teststeps.propertytransfer;
 
+import com.smartbear.readyapi.client.model.PropertyTransfer;
+import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
-import io.swagger.client.model.PropertyTransfer;
-import io.swagger.client.model.PropertyTransferTestStep;
 
 import java.util.ArrayList;
 import java.util.List;

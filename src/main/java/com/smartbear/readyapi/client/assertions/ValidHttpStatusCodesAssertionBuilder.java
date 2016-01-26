@@ -1,7 +1,7 @@
 package com.smartbear.readyapi.client.assertions;
 
-import io.swagger.client.model.Assertion;
-import io.swagger.client.model.ValidHttpStatusCodesAssertion;
+import com.smartbear.readyapi.client.model.Assertion;
+import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion;
 
 import java.util.ArrayList;
 import java.util.List;

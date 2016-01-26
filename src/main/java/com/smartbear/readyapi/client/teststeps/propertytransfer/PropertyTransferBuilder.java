@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client.teststeps.propertytransfer;
 
-import io.swagger.client.model.PropertyTransfer;
+import com.smartbear.readyapi.client.model.PropertyTransfer;
 
 public class PropertyTransferBuilder {
     private PropertyTransfer transfer = new PropertyTransfer();

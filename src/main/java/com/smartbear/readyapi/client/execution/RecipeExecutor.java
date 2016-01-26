@@ -2,10 +2,10 @@ package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.ExecutionListener;
 import com.smartbear.readyapi.client.TestRecipe;
+import com.smartbear.readyapi.client.model.ProjectResultReport;
+import com.smartbear.readyapi.client.model.ProjectResultReports;
+import com.smartbear.readyapi.client.model.TestCase;
 import io.swagger.client.auth.HttpBasicAuth;
-import io.swagger.client.model.ProjectResultReport;
-import io.swagger.client.model.ProjectResultReports;
-import io.swagger.client.model.TestCase;
 
 import java.util.ArrayList;
 import java.util.List;

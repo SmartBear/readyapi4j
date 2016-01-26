@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client.auth;
 
-import io.swagger.client.model.Authentication;
+import com.smartbear.readyapi.client.model.Authentication;
 
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 

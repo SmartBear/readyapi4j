@@ -1,12 +1,11 @@
 package com.smartbear.readyapi.client;
 
+import com.smartbear.readyapi.client.model.Assertion;
+import com.smartbear.readyapi.client.model.JdbcRequestTestStepStruct;
+import com.smartbear.readyapi.client.model.SimpleContainsAssertion;
+import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.jdbcrequest.JdbcConnection;
-import io.swagger.client.model.Assertion;
-import io.swagger.client.model.JdbcRequestTestStepStruct;
-import io.swagger.client.model.SimpleContainsAssertion;
-import io.swagger.client.model.TestStep;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.assertions.Assertions.contains;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.jdbcConnection;
-import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;

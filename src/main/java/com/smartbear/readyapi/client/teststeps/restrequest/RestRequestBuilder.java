@@ -2,8 +2,8 @@ package com.smartbear.readyapi.client.teststeps.restrequest;
 
 import com.smartbear.readyapi.client.assertions.AssertionBuilder;
 import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
+import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
-import io.swagger.client.model.RestTestRequestStep;
 
 import java.util.List;
 
