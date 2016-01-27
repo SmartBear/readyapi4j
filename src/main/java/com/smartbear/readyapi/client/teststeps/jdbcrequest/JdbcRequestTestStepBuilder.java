@@ -3,7 +3,7 @@ package com.smartbear.readyapi.client.teststeps.jdbcrequest;
 import com.smartbear.readyapi.client.assertions.AbstractAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.AssertionBuilder;
 import com.smartbear.readyapi.client.model.Assertion;
-import com.smartbear.readyapi.client.model.JdbcRequestTestStepStruct;
+import com.smartbear.readyapi.client.model.JdbcRequestTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 
@@ -13,10 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.smartbear.readyapi.client.assertions.Assertions.jdbcRequestStatusOk;
+import static com.smartbear.readyapi.client.assertions.Assertions.jdbcRequestTimeout;
+
 /**
- * Builder for JdbcRequestTestStepStruct objects.
+ * Builder for JdbcRequestTestStep objects.
  */
-public class JdbcRequestTestStepBuilder implements TestStepBuilder<JdbcRequestTestStepStruct> {
+public class JdbcRequestTestStepBuilder implements TestStepBuilder<JdbcRequestTestStep> {
 
     private final String driver;
     private final String connectionString;
@@ -59,8 +62,8 @@ public class JdbcRequestTestStepBuilder implements TestStepBuilder<JdbcRequestTe
     }
 
     @Override
-    public JdbcRequestTestStepStruct build() {
-        JdbcRequestTestStepStruct testStep = new JdbcRequestTestStepStruct();
+    public JdbcRequestTestStep build() {
+        JdbcRequestTestStep testStep = new JdbcRequestTestStep();
         testStep.setType(TestStepTypes.JDBC_REQUEST.getName());
         testStep.setDriver(driver);
         testStep.setConnectionString(connectionString);
@@ -72,11 +75,23 @@ public class JdbcRequestTestStepBuilder implements TestStepBuilder<JdbcRequestTe
         return testStep;
     }
 
-    private void setAssertions(JdbcRequestTestStepStruct testStep) {
+    private void setAssertions(JdbcRequestTestStep testStep) {
         List<Assertion> assertions = new ArrayList<>();
         for (AssertionBuilder assertionBuilder : assertionBuilders) {
             assertions.add(((AbstractAssertionBuilder) assertionBuilder).build());
         }
         testStep.setAssertions(assertions);
+    }
+
+    /**
+     * Assertion shortcuts
+     */
+
+    public JdbcRequestTestStepBuilder assertTimeout(long timeout){
+        return addAssertion( jdbcRequestTimeout( timeout ));
+    }
+
+    public JdbcRequestTestStepBuilder assertStatus(){
+        return addAssertion( jdbcRequestStatusOk());
     }
 }

@@ -46,4 +46,21 @@ public class Assertions {
         return new DefaultResponseSLAAssertionBuilder(maxResponseTime);
     }
 
+    public static AssertionBuilder jdbcRequestTimeout(long timeout) {
+        return new JdbcTimeoutAssertionBuilder(timeout);
+    }
+
+    /**
+     * This makes it possible to provide a property expansion that gives the timeout
+     * @param timeout a String that should expand to a numeric
+     * @return a builder that will construct the JDBC Timeout assertion
+     */
+
+    public static AssertionBuilder jdbcRequestTimeout(String timeout) {
+        return new JdbcTimeoutAssertionBuilder(timeout);
+    }
+
+    public static AssertionBuilder jdbcRequestStatusOk() {
+        return new JdbcStatusAssertionBuilder();
+    }
 }

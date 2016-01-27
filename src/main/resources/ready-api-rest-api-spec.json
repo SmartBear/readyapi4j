@@ -1,27 +1,23 @@
 {
   "swagger": "2.0",
   "info": {
+    "description": "API for executing test recipes",
     "version": "1.0.0",
-    "title": "Ready! API Runtime Service API",
+    "title": "",
     "contact": {
       "name": "SmartBear Software",
       "url": "http://smartbear.com/product/ready-api"
     }
   },
-  "basePath": "/v1",
   "tags": [
     {
       "name": "readyapi"
     }
   ],
   "schemes": [
-    "https"
+    "https",
+    "http"
   ],
-  "securityDefinitions": {
-    "basicAuth": {
-      "type": "basic"
-    }
-  },
   "paths": {
     "/readyapi/executions": {
       "get": {
@@ -58,7 +54,7 @@
         ],
         "summary": "Post test recipe",
         "description": "",
-        "operationId": "postRecipe",
+        "operationId": "postRecipeExecution",
         "consumes": [
           "application/json"
         ],
@@ -98,11 +94,11 @@
           "400": {
             "description": "Bad Request"
           },
-          "429": {
-            "description": "Too many requests"
-          },
           "500": {
             "description": "Server error"
+          },
+          "429": {
+            "description": "Too many requests"
           }
         },
         "security": [
@@ -171,11 +167,11 @@
           "400": {
             "description": "Bad Request"
           },
-          "429": {
-            "description": "Too many requests"
-          },
           "500": {
             "description": "Server error"
+          },
+          "429": {
+            "description": "Too many requests"
           }
         },
         "security": [
@@ -202,14 +198,14 @@
           }
         ],
         "responses": {
+          "500": {
+            "description": "Server error"
+          },
           "204": {
             "description": "Execution canceled"
           },
           "404": {
             "description": "Execution not found"
-          },
-          "500": {
-            "description": "Server error"
           }
         },
         "security": [
@@ -245,11 +241,11 @@
               "$ref": "#/definitions/ProjectResultReport"
             }
           },
-          "404": {
-            "description": "Execution not found"
-          },
           "500": {
             "description": "Server error"
+          },
+          "404": {
+            "description": "Execution not found"
           }
         },
         "security": [
@@ -307,20 +303,20 @@
           "400": {
             "description": "Bad Request"
           },
+          "422": {
+            "description": "Not a pending execution"
+          },
           "412": {
             "description": "Precondition Failed",
             "schema": {
               "$ref": "#/definitions/ProjectResultReport"
             }
           },
-          "422": {
-            "description": "Not a pending execution"
+          "500": {
+            "description": "Server error"
           },
           "429": {
             "description": "Too many requests"
-          },
-          "500": {
-            "description": "Server error"
           }
         },
         "security": [
@@ -331,8 +327,99 @@
       }
     }
   },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
   "definitions": {
-    "JsonPathContentAssertion": {
+    "BodyPart": {
+      "type": "object",
+      "properties": {
+        "contentDisposition": {
+          "$ref": "#/definitions/ContentDisposition"
+        },
+        "entity": {
+          "type": "object"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "mediaType": {
+          "$ref": "#/definitions/MediaType"
+        },
+        "messageBodyWorkers": {
+          "$ref": "#/definitions/MessageBodyWorkers"
+        },
+        "parent": {
+          "$ref": "#/definitions/MultiPart"
+        },
+        "providers": {
+          "$ref": "#/definitions/Providers"
+        },
+        "parameterizedHeaders": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ParameterizedHeader"
+            }
+          }
+        }
+      }
+    },
+    "PropertyTransferTestStep": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/TestStep"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "transfers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PropertyTransfer"
+              }
+            }
+          },
+          "description": "Property TransferTestStep source test step definition"
+        }
+      ]
+    },
+    "ProjectResultReports": {
+      "type": "object",
+      "properties": {
+        "projectResultReports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProjectResultReport"
+          }
+        }
+      },
+      "description": "List of reports for test recipe executions"
+    },
+    "ParameterizedHeader": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "InvalidHttpStatusCodesAssertion": {
       "allOf": [
         {
           "$ref": "#/definitions/Assertion"
@@ -340,7 +427,107 @@
         {
           "type": "object",
           "properties": {
-            "jsonPath": {
+            "invalidStatusCodes": {
+              "type": "array",
+              "description": "invalidStatusCodes",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          "description": "Invalid Http status codes assertion definition"
+        }
+      ]
+    },
+    "PropertyTransfer": {
+      "type": "object",
+      "properties": {
+        "transferName": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/definitions/PropertyTransferSource"
+        },
+        "target": {
+          "$ref": "#/definitions/PropertyTransferTarget"
+        },
+        "failTransferOnError": {
+          "type": "boolean",
+          "default": false
+        },
+        "setNullOnMissingSource": {
+          "type": "boolean",
+          "default": false
+        },
+        "transferTextContent": {
+          "type": "boolean",
+          "default": false
+        },
+        "ignoreEmptyValue": {
+          "type": "boolean",
+          "default": false
+        },
+        "transferToAll": {
+          "type": "boolean",
+          "default": false
+        },
+        "transferChildNodes": {
+          "type": "boolean",
+          "default": false
+        },
+        "entitizeTransferredValues": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "description": "Property transfer definition"
+    },
+    "ResponseSLAAssertion": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Assertion"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "maxResponseTime": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "description": "Response SLA assertion definition"
+        }
+      ]
+    },
+    "Providers": {
+      "type": "object"
+    },
+    "GroovyScriptTestStep": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/TestStep"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "script": {
+              "type": "string"
+            }
+          },
+          "description": "Groovy Script Test step definition"
+        }
+      ]
+    },
+    "XQueryContainsAssertion": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Assertion"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "xquery": {
               "type": "string"
             },
             "expectedContent": {
@@ -351,7 +538,7 @@
               "default": false
             }
           },
-          "description": "JsonPath content assertion definition"
+          "description": "XQuery contains assertion definition"
         }
       ]
     },
@@ -402,351 +589,17 @@
         }
       }
     },
-    "MediaType": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "subtype": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "wildcardType": {
-          "type": "boolean",
-          "default": false
-        },
-        "wildcardSubtype": {
-          "type": "boolean",
-          "default": false
-        }
-      }
-    },
-    "JdbcRequestTestStepStruct": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/TestStep"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "driver": {
-              "type": "string"
-            },
-            "connectionString": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            },
-            "sqlQuery": {
-              "type": "string"
-            },
-            "properties": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
-            },
-            "assertions": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Assertion"
-              }
-            },
-            "storedProcedure": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "description": "Test step definition"
-        }
-      ]
-    },
-    "ProjectResultReport": {
-      "type": "object",
-      "properties": {
-        "projectName": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string",
-          "enum": [
-            "INITIALIZED",
-            "PENDING",
-            "RUNNING",
-            "CANCELED",
-            "FINISHED",
-            "FAILED",
-            "WARNING"
-          ]
-        },
-        "testSuiteResultReports": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/TestSuiteResultReport"
-          }
-        },
-        "timeTaken": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "startTime": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "executionID": {
-          "type": "string"
-        },
-        "unresolvedDataSources": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/DataSource"
-          }
-        }
-      },
-      "description": "Report for test recipe execution"
-    },
-    "FormDataBodyPart": {
-      "type": "object",
-      "properties": {
-        "contentDisposition": {
-          "$ref": "#/definitions/ContentDisposition"
-        },
-        "entity": {
-          "type": "object"
-        },
-        "headers": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "mediaType": {
-          "$ref": "#/definitions/MediaType"
-        },
-        "messageBodyWorkers": {
-          "$ref": "#/definitions/MessageBodyWorkers"
-        },
-        "parent": {
-          "$ref": "#/definitions/MultiPart"
-        },
-        "providers": {
-          "$ref": "#/definitions/Providers"
-        },
-        "name": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        },
-        "formDataContentDisposition": {
-          "$ref": "#/definitions/FormDataContentDisposition"
-        },
-        "simple": {
-          "type": "boolean",
-          "default": false
-        },
-        "parameterizedHeaders": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/ParameterizedHeader"
-            }
-          }
-        }
-      }
-    },
-    "InputStream": {
-      "type": "object"
-    },
-    "PropertyTransferTestStep": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/TestStep"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "transfers": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PropertyTransfer"
-              }
-            }
-          },
-          "description": "Property TransferTestStep source test step definition"
-        }
-      ]
-    },
-    "Authentication": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "domain": {
-          "type": "string"
-        },
-        "accessToken": {
-          "type": "string"
-        },
-        "accessTokenPosition": {
-          "type": "string"
-        },
-        "accessTokenUri": {
-          "type": "string"
-        },
-        "clientId": {
-          "type": "string"
-        },
-        "clientSecret": {
-          "type": "string"
-        },
-        "refreshToken": {
-          "type": "string"
-        }
-      },
-      "description": "Authentication definition"
-    },
-    "XQueryContainsAssertion": {
+    "JdbcStatusAssertion": {
       "allOf": [
         {
           "$ref": "#/definitions/Assertion"
         },
         {
           "type": "object",
-          "properties": {
-            "xquery": {
-              "type": "string"
-            },
-            "expectedContent": {
-              "type": "string"
-            },
-            "allowWildcards": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "description": "XQuery contains assertion definition"
+          "properties": {},
+          "description": "Validates that the JDBC statement of the target TestStep executed successfully. Applicable to JDBC TestSteps only."
         }
       ]
-    },
-    "TestStepResultReport": {
-      "type": "object",
-      "properties": {
-        "testStepName": {
-          "type": "string"
-        },
-        "assertionStatus": {
-          "type": "string",
-          "enum": [
-            "UNKNOWN",
-            "OK",
-            "FAILED",
-            "CANCELED"
-          ]
-        },
-        "timeTaken": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "messages": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "DataSource": {
-      "type": "object",
-      "properties": {
-        "properties": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "grid": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "excel": {
-          "$ref": "#/definitions/ExcelDataSource"
-        },
-        "file": {
-          "$ref": "#/definitions/FileDataSource"
-        }
-      },
-      "description": "Data source definition"
-    },
-    "PropertyTransferTarget": {
-      "type": "object",
-      "properties": {
-        "targetName": {
-          "type": "string"
-        },
-        "property": {
-          "type": "string"
-        },
-        "pathLanguage": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        }
-      }
-    },
-    "PropertyTransferSource": {
-      "type": "object",
-      "properties": {
-        "sourceName": {
-          "type": "string"
-        },
-        "property": {
-          "type": "string"
-        },
-        "pathLanguage": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        }
-      }
-    },
-    "TestStep": {
-      "type": "object",
-      "discriminator": "type",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "description": "Test step definition"
     },
     "FileDataSource": {
       "type": "object",
@@ -827,60 +680,13 @@
         }
       }
     },
-    "InvalidHttpStatusCodesAssertion": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/Assertion"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "invalidStatusCodes": {
-              "type": "array",
-              "description": "invalidStatusCodes",
-              "items": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          },
-          "description": "Invalid Http status codes assertion definition"
-        }
-      ]
-    },
-    "TestCaseResultReport": {
-      "type": "object",
-      "properties": {
-        "testCaseName": {
-          "type": "string"
-        },
-        "testStepResultReports": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/TestStepResultReport"
-          }
-        }
-      }
-    },
-    "Parameter": {
+    "MediaType": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string"
         },
-        "name": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        }
-      },
-      "description": "Parameter definition"
-    },
-    "FormDataContentDisposition": {
-      "type": "object",
-      "properties": {
-        "type": {
+        "subtype": {
           "type": "string"
         },
         "parameters": {
@@ -889,77 +695,15 @@
             "type": "string"
           }
         },
-        "fileName": {
-          "type": "string"
+        "wildcardSubtype": {
+          "type": "boolean",
+          "default": false
         },
-        "creationDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "modificationDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "readDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "size": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
+        "wildcardType": {
+          "type": "boolean",
+          "default": false
         }
       }
-    },
-    "XPathContainsAssertion": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/Assertion"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "xpath": {
-              "type": "string"
-            },
-            "expectedContent": {
-              "type": "string"
-            },
-            "allowWildcards": {
-              "type": "boolean",
-              "default": false
-            },
-            "ignoreNamespaces": {
-              "type": "boolean",
-              "default": false
-            },
-            "ignoreComments": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          "description": "XPath contains assertion definition"
-        }
-      ]
-    },
-    "ResponseSLAAssertion": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/Assertion"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "maxResponseTime": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "description": "Response SLA assertion definition"
-        }
-      ]
     },
     "DataSourceTestStep": {
       "allOf": [
@@ -1026,77 +770,23 @@
         }
       ]
     },
-    "ParameterizedHeader": {
+    "PropertyTransferSource": {
       "type": "object",
       "properties": {
-        "value": {
+        "sourceName": {
           "type": "string"
         },
-        "parameters": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "JdbcStatusAssertionStruct": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/Assertion"
-        },
-        {
-          "type": "object",
-          "properties": {},
-          "description": "Test step assertion definition"
-        }
-      ]
-    },
-    "PropertyTransfer": {
-      "type": "object",
-      "properties": {
-        "transferName": {
+        "property": {
           "type": "string"
         },
-        "source": {
-          "$ref": "#/definitions/PropertyTransferSource"
+        "pathLanguage": {
+          "type": "string"
         },
-        "target": {
-          "$ref": "#/definitions/PropertyTransferTarget"
-        },
-        "failTransferOnError": {
-          "type": "boolean",
-          "default": false
-        },
-        "setNullOnMissingSource": {
-          "type": "boolean",
-          "default": false
-        },
-        "transferTextContent": {
-          "type": "boolean",
-          "default": false
-        },
-        "ignoreEmptyValue": {
-          "type": "boolean",
-          "default": false
-        },
-        "transferToAll": {
-          "type": "boolean",
-          "default": false
-        },
-        "transferChildNodes": {
-          "type": "boolean",
-          "default": false
-        },
-        "entitizeTransferredValues": {
-          "type": "boolean",
-          "default": false
+        "path": {
+          "type": "string"
         }
       },
-      "description": "Property transfer definition"
-    },
-    "MessageBodyWorkers": {
-      "type": "object"
+      "description": "Property transfer source"
     },
     "ExcelDataSource": {
       "type": "object",
@@ -1117,23 +807,41 @@
       },
       "description": "Excel data source definition"
     },
-    "GroovyScriptTestStep": {
+    "XPathContainsAssertion": {
       "allOf": [
         {
-          "$ref": "#/definitions/TestStep"
+          "$ref": "#/definitions/Assertion"
         },
         {
           "type": "object",
           "properties": {
-            "script": {
+            "xpath": {
               "type": "string"
+            },
+            "expectedContent": {
+              "type": "string"
+            },
+            "allowWildcards": {
+              "type": "boolean",
+              "default": false
+            },
+            "ignoreNamespaces": {
+              "type": "boolean",
+              "default": false
+            },
+            "ignoreComments": {
+              "type": "boolean",
+              "default": false
             }
           },
-          "description": "Groovy Script Test step definition"
+          "description": "XPath contains assertion definition"
         }
       ]
     },
-    "JsonPathCountAssertion": {
+    "MessageBodyWorkers": {
+      "type": "object"
+    },
+    "JsonPathContentAssertion": {
       "allOf": [
         {
           "$ref": "#/definitions/Assertion"
@@ -1144,208 +852,126 @@
             "jsonPath": {
               "type": "string"
             },
-            "expectedCount": {
-              "type": "integer",
-              "format": "int32"
+            "expectedContent": {
+              "type": "string"
             },
             "allowWildcards": {
               "type": "boolean",
               "default": false
             }
           },
-          "description": "JsonPath count assertion definition"
+          "description": "JsonPath content assertion definition"
         }
       ]
     },
-    "ProjectResultReports": {
-      "type": "object",
-      "properties": {
-        "projectResultReports": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ProjectResultReport"
-          }
-        }
-      },
-      "description": "List of reports for test recipe executions"
-    },
-    "Assertion": {
+    "TestStep": {
       "type": "object",
       "discriminator": "type",
       "properties": {
         "type": {
           "type": "string"
+        },
+        "name": {
+          "type": "string"
         }
       },
-      "description": "Test step assertion definition"
+      "description": "Test step definition"
     },
-    "Providers": {
+    "PropertyTransferTarget": {
+      "type": "object",
+      "properties": {
+        "targetName": {
+          "type": "string"
+        },
+        "property": {
+          "type": "string"
+        },
+        "pathLanguage": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "description": "Property transfer target"
+    },
+    "ValidHttpStatusCodesAssertion": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Assertion"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "validStatusCodes": {
+              "type": "array",
+              "description": "validStatusCodes",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          "description": "Valid HTTP test step assertion definition"
+        }
+      ]
+    },
+    "JdbcTimeoutAssertion": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Assertion"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "timeout": {
+              "type": "string"
+            }
+          },
+          "description": "Validates that the JDBC statement of the target TestStep did not take longer than the specified duration. Applicable to JDBC TestSteps only."
+        }
+      ]
+    },
+    "InputStream": {
       "type": "object"
     },
-    "GroovyScriptAssertion": {
+    "JdbcRequestTestStep": {
       "allOf": [
         {
-          "$ref": "#/definitions/Assertion"
+          "$ref": "#/definitions/TestStep"
         },
         {
           "type": "object",
           "properties": {
-            "script": {
-              "type": "string"
-            }
-          },
-          "description": "Groovy script assertion definition"
-        }
-      ]
-    },
-    "SimpleNotContainsAssertion": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/Assertion"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "token": {
+            "driver": {
               "type": "string"
             },
-            "ignoreCase": {
+            "connectionString": {
+              "type": "string"
+            },
+            "sqlQuery": {
+              "type": "string"
+            },
+            "storedProcedure": {
               "type": "boolean",
               "default": false
             },
-            "useRegexp": {
-              "type": "boolean",
-              "default": false
+            "properties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            },
+            "assertions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Assertion"
+              }
             }
           },
-          "description": "Simple not contain assertion definition"
+          "description": "JDBC Request Test step definition"
         }
       ]
-    },
-    "ContentDisposition": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "fileName": {
-          "type": "string"
-        },
-        "creationDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "modificationDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "readDate": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "size": {
-          "type": "integer",
-          "format": "int64"
-        }
-      }
-    },
-    "BodyPart": {
-      "type": "object",
-      "properties": {
-        "contentDisposition": {
-          "$ref": "#/definitions/ContentDisposition"
-        },
-        "entity": {
-          "type": "object"
-        },
-        "headers": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "mediaType": {
-          "$ref": "#/definitions/MediaType"
-        },
-        "messageBodyWorkers": {
-          "$ref": "#/definitions/MessageBodyWorkers"
-        },
-        "parent": {
-          "$ref": "#/definitions/MultiPart"
-        },
-        "providers": {
-          "$ref": "#/definitions/Providers"
-        },
-        "parameterizedHeaders": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/ParameterizedHeader"
-            }
-          }
-        }
-      }
-    },
-    "JdbcTimeoutAssertionStruct": {
-      "allOf": [
-        {
-          "$ref": "#/definitions/Assertion"
-        },
-        {
-          "type": "object",
-          "properties": {},
-          "description": "Test step assertion definition"
-        }
-      ]
-    },
-    "TestCase": {
-      "type": "object",
-      "properties": {
-        "searchProperties": {
-          "type": "boolean",
-          "default": false
-        },
-        "maintainSession": {
-          "type": "boolean",
-          "default": false
-        },
-        "abortOnError": {
-          "type": "boolean",
-          "default": false
-        },
-        "failTestCaseOnError": {
-          "type": "boolean",
-          "default": false
-        },
-        "discardOkResults": {
-          "type": "boolean",
-          "default": false
-        },
-        "socketTimeout": {
-          "type": "string"
-        },
-        "testCaseTimeout": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "testSteps": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/TestStep"
-          }
-        }
-      },
-      "description": "Test case definition"
     },
     "SimpleContainsAssertion": {
       "allOf": [
@@ -1370,6 +996,87 @@
           "description": "Simple contains assertion definition"
         }
       ]
+    },
+    "TestStepResultReport": {
+      "type": "object",
+      "properties": {
+        "testStepName": {
+          "type": "string"
+        },
+        "assertionStatus": {
+          "type": "string",
+          "enum": [
+            "UNKNOWN",
+            "OK",
+            "FAILED",
+            "CANCELED"
+          ]
+        },
+        "timeTaken": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Assertion": {
+      "type": "object",
+      "discriminator": "type",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "description": "Test step assertion definition"
+    },
+    "ProjectResultReport": {
+      "type": "object",
+      "properties": {
+        "projectName": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "INITIALIZED",
+            "PENDING",
+            "RUNNING",
+            "CANCELED",
+            "FINISHED",
+            "FAILED",
+            "WARNING"
+          ]
+        },
+        "testSuiteResultReports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestSuiteResultReport"
+          }
+        },
+        "timeTaken": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "startTime": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "executionID": {
+          "type": "string"
+        },
+        "unresolvedDataSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DataSource"
+          }
+        }
+      },
+      "description": "Report for test recipe execution"
     },
     "RestTestRequestStep": {
       "allOf": [
@@ -1435,6 +1142,87 @@
         }
       ]
     },
+    "DataSource": {
+      "type": "object",
+      "properties": {
+        "properties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "grid": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "excel": {
+          "$ref": "#/definitions/ExcelDataSource"
+        },
+        "file": {
+          "$ref": "#/definitions/FileDataSource"
+        }
+      },
+      "description": "Data source definition"
+    },
+    "GroovyScriptAssertion": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Assertion"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "script": {
+              "type": "string"
+            }
+          },
+          "description": "Groovy script assertion definition"
+        }
+      ]
+    },
+    "JsonPathCountAssertion": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Assertion"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonPath": {
+              "type": "string"
+            },
+            "expectedCount": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "allowWildcards": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "description": "JsonPath count assertion definition"
+        }
+      ]
+    },
+    "TestCaseResultReport": {
+      "type": "object",
+      "properties": {
+        "testCaseName": {
+          "type": "string"
+        },
+        "testStepResultReports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestStepResultReport"
+          }
+        }
+      }
+    },
     "TestSuiteResultReport": {
       "type": "object",
       "properties": {
@@ -1449,7 +1237,172 @@
         }
       }
     },
-    "ValidHttpStatusCodesAssertion": {
+    "ContentDisposition": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "fileName": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modificationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "readDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "TestCase": {
+      "type": "object",
+      "properties": {
+        "searchProperties": {
+          "type": "boolean",
+          "readOnly": true,
+          "default": false
+        },
+        "maintainSession": {
+          "type": "boolean",
+          "default": false
+        },
+        "abortOnError": {
+          "type": "boolean",
+          "default": false
+        },
+        "failTestCaseOnError": {
+          "type": "boolean",
+          "readOnly": true,
+          "default": false
+        },
+        "discardOkResults": {
+          "type": "boolean",
+          "readOnly": true,
+          "default": false
+        },
+        "socketTimeout": {
+          "type": "string"
+        },
+        "testCaseTimeout": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "testSteps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestStep"
+          }
+        }
+      },
+      "description": "Test case definition"
+    },
+    "FormDataBodyPart": {
+      "type": "object",
+      "properties": {
+        "contentDisposition": {
+          "$ref": "#/definitions/ContentDisposition"
+        },
+        "entity": {
+          "type": "object"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "mediaType": {
+          "$ref": "#/definitions/MediaType"
+        },
+        "messageBodyWorkers": {
+          "$ref": "#/definitions/MessageBodyWorkers"
+        },
+        "parent": {
+          "$ref": "#/definitions/MultiPart"
+        },
+        "providers": {
+          "$ref": "#/definitions/Providers"
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "formDataContentDisposition": {
+          "$ref": "#/definitions/FormDataContentDisposition"
+        },
+        "simple": {
+          "type": "boolean",
+          "default": false
+        },
+        "parameterizedHeaders": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ParameterizedHeader"
+            }
+          }
+        }
+      }
+    },
+    "Authentication": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "accessTokenPosition": {
+          "type": "string"
+        },
+        "accessTokenUri": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "clientSecret": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      },
+      "description": "Authentication definition"
+    },
+    "SimpleNotContainsAssertion": {
       "allOf": [
         {
           "$ref": "#/definitions/Assertion"
@@ -1457,18 +1410,72 @@
         {
           "type": "object",
           "properties": {
-            "validStatusCodes": {
-              "type": "array",
-              "description": "validStatusCodes",
-              "items": {
-                "type": "integer",
-                "format": "int32"
-              }
+            "token": {
+              "type": "string"
+            },
+            "ignoreCase": {
+              "type": "boolean",
+              "default": false
+            },
+            "useRegexp": {
+              "type": "boolean",
+              "default": false
             }
           },
-          "description": "Valid HTTP test step assertion definition"
+          "description": "Simple not contain assertion definition"
         }
       ]
+    },
+    "Parameter": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "description": "Parameter definition"
+    },
+    "FormDataContentDisposition": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "fileName": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modificationDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "readDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
     }
   }
 }
