@@ -13,7 +13,7 @@ TestServer receives and runs *test recipes* <html>&ndash;</html> special JSON re
 	<dependency>
 		<groupId>com.smartbear.readyapi</groupId>
 		<artifactId>ready-api-testserver-client</artifactId>
-		<version>1.0.1</version>
+		<version>1.0.2</version>
 	</dependency>
 	```
 
