@@ -46,8 +46,12 @@ public class Assertions {
         return new DefaultResponseSLAAssertionBuilder(maxResponseTime);
     }
 
-    public static AssertionBuilder jdbcTimeout() {
+    public static AssertionBuilder jdbcRequestNotTimedOut() {
         return new JdbcTimeoutAssertionBuilder();
+    }
+
+    public static AssertionBuilder jdbcRequestStatusOk() {
+        return new JdbcStatusAssertionBuilder();
     }
 
 }
