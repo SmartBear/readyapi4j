@@ -441,9 +441,6 @@
             "connectionString": {
               "type": "string"
             },
-            "password": {
-              "type": "string"
-            },
             "sqlQuery": {
               "type": "string"
             },
