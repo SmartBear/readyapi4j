@@ -17,6 +17,7 @@ public class TestRecipeBuilder {
 
     public TestRecipe buildTestRecipe() {
         TestCase testCase = new TestCase();
+        testCase.setFailTestCaseOnError( true );
         addTestSteps(testCase);
         return new TestRecipe(testCase);
     }

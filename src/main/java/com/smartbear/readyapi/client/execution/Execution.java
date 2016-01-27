@@ -1,8 +1,13 @@
 package com.smartbear.readyapi.client.execution;
 
+import com.google.common.collect.Lists;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
+import com.smartbear.readyapi.client.model.TestCaseResultReport;
+import com.smartbear.readyapi.client.model.TestStepResultReport;
+import com.smartbear.readyapi.client.model.TestSuiteResultReport;
 
 import java.util.Deque;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -31,5 +36,23 @@ public class Execution {
 
     void addResultReport(ProjectResultReport newReport) {
         executionStatusReports.add(newReport);
+    }
+
+    public List<String> getErrorMessages(){
+        List<String> result = Lists.newArrayList();
+
+        if( executionStatusReports.getLast() != null ){
+            for( TestSuiteResultReport testSuiteReport : executionStatusReports.getLast().getTestSuiteResultReports()){
+                for(TestCaseResultReport testCaseResultReport : testSuiteReport.getTestCaseResultReports()){
+                    for(TestStepResultReport testStepResultReport : testCaseResultReport.getTestStepResultReports()){
+                        if( testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED){
+                            result.addAll( testStepResultReport.getMessages());
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }
