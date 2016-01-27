@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Builder for JdbcRequestTestStepobjects.
+ * Builder for JdbcRequestTestStep objects.
  */
 public class JdbcRequestTestStepBuilder implements TestStepBuilder<JdbcRequestTestStep> {
 
