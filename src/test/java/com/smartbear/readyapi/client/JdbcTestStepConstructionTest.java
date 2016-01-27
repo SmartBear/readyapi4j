@@ -1,7 +1,7 @@
 package com.smartbear.readyapi.client;
 
 import com.smartbear.readyapi.client.model.Assertion;
-import com.smartbear.readyapi.client.model.JdbcRequestTestStepStruct;
+import com.smartbear.readyapi.client.model.JdbcRequestTestStep;
 import com.smartbear.readyapi.client.model.SimpleContainsAssertion;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
@@ -34,7 +34,7 @@ public class JdbcTestStepConstructionTest {
                 .addStep(connection.jdbcRequest(sql))
                 .buildTestRecipe();
 
-        JdbcRequestTestStepStruct jdbcRequest = extractJdbcRequestTestStep(recipe);
+        JdbcRequestTestStep jdbcRequest = extractJdbcRequestTestStep(recipe);
         assertConnectionProperties(jdbcRequest);
         assertThat(jdbcRequest.getSqlQuery(), is(sql));
         assertThat(jdbcRequest.getStoredProcedure(), is(false));
@@ -47,7 +47,7 @@ public class JdbcTestStepConstructionTest {
                 .addStep(connection.storedProcedureCall(sql))
                 .buildTestRecipe();
 
-        JdbcRequestTestStepStruct jdbcRequest = extractJdbcRequestTestStep(recipe);
+        JdbcRequestTestStep jdbcRequest = extractJdbcRequestTestStep(recipe);
         assertConnectionProperties(jdbcRequest);
         assertThat(jdbcRequest.getSqlQuery(), is(sql));
         assertThat(jdbcRequest.getStoredProcedure(), is(true));
@@ -62,7 +62,7 @@ public class JdbcTestStepConstructionTest {
 
                 .buildTestRecipe();
 
-        JdbcRequestTestStepStruct jdbcRequest = extractJdbcRequestTestStep(recipe);
+        JdbcRequestTestStep jdbcRequest = extractJdbcRequestTestStep(recipe);
         assertThat(jdbcRequest.getName(), is(stepName));
     }
 
@@ -77,7 +77,7 @@ public class JdbcTestStepConstructionTest {
 
                 .buildTestRecipe();
 
-        JdbcRequestTestStepStruct jdbcRequest = extractJdbcRequestTestStep(recipe);
+        JdbcRequestTestStep jdbcRequest = extractJdbcRequestTestStep(recipe);
         assertThat(jdbcRequest.getProperties().get(propertyName), is((Object) propertyValue));
     }
 
@@ -91,7 +91,7 @@ public class JdbcTestStepConstructionTest {
 
                 .buildTestRecipe();
 
-        JdbcRequestTestStepStruct jdbcRequest = extractJdbcRequestTestStep(recipe);
+        JdbcRequestTestStep jdbcRequest = extractJdbcRequestTestStep(recipe);
         List<Assertion> assertions = jdbcRequest.getAssertions();
         assertThat(assertions.size(), is(1));
         Assertion assertion = assertions.get(0);
@@ -99,13 +99,13 @@ public class JdbcTestStepConstructionTest {
         assertThat(((SimpleContainsAssertion) assertion).getToken(), is(token));
     }
 
-    private JdbcRequestTestStepStruct extractJdbcRequestTestStep(TestRecipe recipe) {
+    private JdbcRequestTestStep extractJdbcRequestTestStep(TestRecipe recipe) {
         TestStep testStep = recipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getType(), is(TestStepTypes.JDBC_REQUEST.getName()));
-        return (JdbcRequestTestStepStruct) testStep;
+        return (JdbcRequestTestStep) testStep;
     }
 
-    private void assertConnectionProperties(JdbcRequestTestStepStruct jdbcRequest) {
+    private void assertConnectionProperties(JdbcRequestTestStep jdbcRequest) {
         assertThat(jdbcRequest.getDriver(), is(DRIVER));
         assertThat(jdbcRequest.getConnectionString(), is(CONNECTION_STRING));
     }

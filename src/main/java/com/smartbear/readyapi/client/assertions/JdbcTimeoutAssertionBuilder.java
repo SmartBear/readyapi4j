@@ -1,12 +1,26 @@
 package com.smartbear.readyapi.client.assertions;
 
-import com.smartbear.readyapi.client.model.JdbcTimeoutAssertionStruct;
+import com.smartbear.readyapi.client.model.JdbcTimeoutAssertion;
 
-public class JdbcTimeoutAssertionBuilder extends AbstractAssertionBuilder<JdbcTimeoutAssertionStruct> {
+import java.util.Objects;
+
+public class JdbcTimeoutAssertionBuilder extends AbstractAssertionBuilder<JdbcTimeoutAssertion> {
+
+    private final Object timeout;
+
+    public JdbcTimeoutAssertionBuilder(long timeout) {
+        this.timeout = timeout;
+    }
+
+    public JdbcTimeoutAssertionBuilder(String timeout) {
+        Objects.requireNonNull(timeout);
+        this.timeout = timeout;
+    }
 
     @Override
-    public JdbcTimeoutAssertionStruct build() {
-        JdbcTimeoutAssertionStruct timeoutAssertion = new JdbcTimeoutAssertionStruct();
+    public JdbcTimeoutAssertion build() {
+        JdbcTimeoutAssertion timeoutAssertion = new JdbcTimeoutAssertion();
+        timeoutAssertion.setTimeout(String.valueOf(timeout));
         timeoutAssertion.setType("JDBC Timeout");
         return timeoutAssertion;
     }
