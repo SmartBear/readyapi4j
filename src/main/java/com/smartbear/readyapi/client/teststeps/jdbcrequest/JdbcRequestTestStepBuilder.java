@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.smartbear.readyapi.client.assertions.Assertions.jdbcRequestStatusOk;
+import static com.smartbear.readyapi.client.assertions.Assertions.jdbcRequestTimeout;
+
 /**
  * Builder for JdbcRequestTestStep objects.
  */
@@ -78,5 +81,17 @@ public class JdbcRequestTestStepBuilder implements TestStepBuilder<JdbcRequestTe
             assertions.add(((AbstractAssertionBuilder) assertionBuilder).build());
         }
         testStep.setAssertions(assertions);
+    }
+
+    /**
+     * Assertion shortcuts
+     */
+
+    public JdbcRequestTestStepBuilder assertTimeout(long timeout){
+        return addAssertion( jdbcRequestTimeout( timeout ));
+    }
+
+    public JdbcRequestTestStepBuilder assertStatus(){
+        return addAssertion( jdbcRequestStatusOk());
     }
 }

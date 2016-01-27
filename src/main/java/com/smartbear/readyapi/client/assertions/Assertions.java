@@ -55,6 +55,7 @@ public class Assertions {
      * @param timeout a String that should expand to a numeric
      * @return a builder that will construct the JDBC Timeout assertion
      */
+
     public static AssertionBuilder jdbcRequestTimeout(String timeout) {
         return new JdbcTimeoutAssertionBuilder(timeout);
     }
@@ -62,5 +63,4 @@ public class Assertions {
     public static AssertionBuilder jdbcRequestStatusOk() {
         return new JdbcStatusAssertionBuilder();
     }
-
 }
