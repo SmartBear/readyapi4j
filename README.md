@@ -21,7 +21,7 @@ TestServer receives and runs *test recipes* <html>&ndash;</html> special JSON re
 
 	```java
 	@Test
-	public void dumpsRecipe() throws Exception {
+	public void testSwaggerHubApi() throws Exception {
 		TestRecipe recipe = newTestRecipe()  /* Create a new recipe */
 			.addStep(
 				getRequest("https://api.swaggerhub.com/apis") /* Add a test step (REST Request) */
