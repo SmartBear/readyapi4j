@@ -16,4 +16,10 @@ public class NotContainsAssertionBuilder extends DefaultContainsAssertionBuilder
         containsAssertion.setType(Assertions.NOT_CONTAINS_TYPE);
         return containsAssertion;
     }
+
+    public final static SimpleContainsAssertion create(){
+        SimpleContainsAssertion assertion = new SimpleContainsAssertion();
+        assertion.setType(Assertions.NOT_CONTAINS_TYPE);
+        return assertion;
+    }
 }

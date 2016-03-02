@@ -24,4 +24,10 @@ public class JdbcTimeoutAssertionBuilder extends AbstractAssertionBuilder<JdbcTi
         timeoutAssertion.setType(Assertions.JDBC_TIMEOUT_TYPE);
         return timeoutAssertion;
     }
+
+    public final static JdbcTimeoutAssertion create(){
+        JdbcTimeoutAssertion assertion = new JdbcTimeoutAssertion();
+        assertion.setType(Assertions.JDBC_TIMEOUT_TYPE);
+        return assertion;
+    }
 }

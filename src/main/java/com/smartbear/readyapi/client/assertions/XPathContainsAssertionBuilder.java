@@ -37,4 +37,10 @@ public class XPathContainsAssertionBuilder extends AbstractAssertionBuilder<XPat
         xPathContainsAssertion.setType(Assertions.XPATH_MATCH_TYPE);
         return xPathContainsAssertion;
     }
+
+    public final static XPathContainsAssertion create(){
+        XPathContainsAssertion assertion = new XPathContainsAssertion();
+        assertion.setType(Assertions.XPATH_MATCH_TYPE);
+        return assertion;
+    }
 }

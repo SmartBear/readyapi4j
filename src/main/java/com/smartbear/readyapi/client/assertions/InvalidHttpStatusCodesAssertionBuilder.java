@@ -17,4 +17,10 @@ public class InvalidHttpStatusCodesAssertionBuilder extends ValidHttpStatusCodes
         invalidHttpStatusCodesAssertion.setInvalidStatusCodes(statusCodes);
         return invalidHttpStatusCodesAssertion;
     }
+
+    public final static InvalidHttpStatusCodesAssertion create(){
+        InvalidHttpStatusCodesAssertion assertion = new InvalidHttpStatusCodesAssertion();
+        assertion.setType(Assertions.INVALID_HTTP_STATUS_CODES_TYPE);
+        return assertion;
+    }
 }

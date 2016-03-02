@@ -25,4 +25,10 @@ public class JsonPathCountAssertionBuilder extends AbstractAssertionBuilder<Json
         jsonPathCountAssertion.setType(Assertions.JSON_PATH_COUNT_TYPE);
         return jsonPathCountAssertion;
     }
+
+    public final static JsonPathCountAssertion create(){
+        JsonPathCountAssertion assertion = new JsonPathCountAssertion();
+        assertion.setType(Assertions.JSON_PATH_COUNT_TYPE);
+        return assertion;
+    }
 }

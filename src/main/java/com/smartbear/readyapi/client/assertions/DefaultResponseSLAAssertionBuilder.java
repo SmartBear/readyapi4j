@@ -17,4 +17,10 @@ public class DefaultResponseSLAAssertionBuilder extends AbstractAssertionBuilder
         responseSLAAssertion.setType(Assertions.RESPONSE_SLA_TYPE);
         return responseSLAAssertion;
     }
+
+    public final static ResponseSLAAssertion create(){
+        ResponseSLAAssertion assertion = new ResponseSLAAssertion();
+        assertion.setType(Assertions.RESPONSE_SLA_TYPE);
+        return assertion;
+    }
 }

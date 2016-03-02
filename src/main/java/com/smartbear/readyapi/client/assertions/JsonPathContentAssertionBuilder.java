@@ -25,4 +25,10 @@ public class JsonPathContentAssertionBuilder extends AbstractAssertionBuilder<Js
         jsonPathContentAssertion.setType(Assertions.JSON_PATH_MATCH_TYPE);
         return jsonPathContentAssertion;
     }
+
+    public final static JsonPathContentAssertion create(){
+        JsonPathContentAssertion assertion = new JsonPathContentAssertion();
+        assertion.setType(Assertions.JSON_PATH_MATCH_TYPE);
+        return assertion;
+    }
 }

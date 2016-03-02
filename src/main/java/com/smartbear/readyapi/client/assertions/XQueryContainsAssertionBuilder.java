@@ -25,4 +25,10 @@ public class XQueryContainsAssertionBuilder extends AbstractAssertionBuilder<XQu
         xQueryContainsAssertion.setType(Assertions.XQUERY_MATCH_TYPE);
         return xQueryContainsAssertion;
     }
+
+    public final static XQueryContainsAssertion create(){
+        XQueryContainsAssertion assertion = new XQueryContainsAssertion();
+        assertion.setType(Assertions.XQUERY_MATCH_TYPE);
+        return assertion;
+    }
 }

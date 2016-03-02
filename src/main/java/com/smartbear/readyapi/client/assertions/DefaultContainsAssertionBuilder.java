@@ -29,4 +29,10 @@ public class DefaultContainsAssertionBuilder extends AbstractAssertionBuilder<Si
         containsAssertion.setType(Assertions.CONTAINS_ASSERTION_TYPE);
         return containsAssertion;
     }
+
+    public static SimpleContainsAssertion create(){
+        SimpleContainsAssertion assertion = new SimpleContainsAssertion();
+        assertion.setType(Assertions.CONTAINS_ASSERTION_TYPE);
+        return assertion;
+    }
 }

@@ -10,4 +10,10 @@ public class JdbcStatusAssertionBuilder extends AbstractAssertionBuilder<JdbcSta
         statusAssertion.setType(Assertions.JDBC_STATUS_TYPE);
         return statusAssertion;
     }
+
+    public final static JdbcStatusAssertion create(){
+        JdbcStatusAssertion assertion = new JdbcStatusAssertion();
+        assertion.setType(Assertions.JDBC_STATUS_TYPE);
+        return assertion;
+    }
 }

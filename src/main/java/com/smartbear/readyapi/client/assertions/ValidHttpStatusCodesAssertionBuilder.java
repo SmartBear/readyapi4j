@@ -31,4 +31,10 @@ public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion> extends A
         statusCodesAssertion.setValidStatusCodes(statusCodes);
         return (T) statusCodesAssertion;
     }
+
+    public static <T extends Assertion> T create(){
+        ValidHttpStatusCodesAssertion assertion = new ValidHttpStatusCodesAssertion();
+        assertion.setType(Assertions.VALID_HTTP_STATUS_CODES_TYPE);
+        return (T) assertion;
+    }
 }

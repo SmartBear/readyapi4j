@@ -17,4 +17,10 @@ public class DefaultGroovyScriptAssertionBuilder extends AbstractAssertionBuilde
         scriptAssertion.setType(Assertions.SCRIPT_ASSERTION_TYPE);
         return scriptAssertion;
     }
+
+    public final static GroovyScriptAssertion create(){
+        GroovyScriptAssertion assertion = new GroovyScriptAssertion();
+        assertion.setType(Assertions.SCRIPT_ASSERTION_TYPE);
+        return assertion;
+    }
 }
