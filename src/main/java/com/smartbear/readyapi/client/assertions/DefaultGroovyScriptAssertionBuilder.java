@@ -14,7 +14,7 @@ public class DefaultGroovyScriptAssertionBuilder extends AbstractAssertionBuilde
     @Override
     public GroovyScriptAssertion build() {
         validateNotEmpty(scriptAssertion.getScript(), "Missing script. Script is a mandatory parameter for ScriptAssertion");
-        scriptAssertion.setType("Script Assertion");
+        scriptAssertion.setType(Assertions.SCRIPT_ASSERTION_TYPE);
         return scriptAssertion;
     }
 }

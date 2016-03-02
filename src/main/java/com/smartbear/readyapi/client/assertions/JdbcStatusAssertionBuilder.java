@@ -7,7 +7,7 @@ public class JdbcStatusAssertionBuilder extends AbstractAssertionBuilder<JdbcSta
     @Override
     public JdbcStatusAssertion build() {
         JdbcStatusAssertion statusAssertion = new JdbcStatusAssertion();
-        statusAssertion.setType("JDBC Status");
+        statusAssertion.setType(Assertions.JDBC_STATUS_TYPE);
         return statusAssertion;
     }
 }

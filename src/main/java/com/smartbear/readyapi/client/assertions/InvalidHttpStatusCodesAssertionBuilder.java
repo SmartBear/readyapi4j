@@ -5,6 +5,7 @@ import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion;
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 
 public class InvalidHttpStatusCodesAssertionBuilder extends ValidHttpStatusCodesAssertionBuilder<InvalidHttpStatusCodesAssertion> {
+
     InvalidHttpStatusCodesAssertionBuilder() {
     }
 
@@ -12,7 +13,7 @@ public class InvalidHttpStatusCodesAssertionBuilder extends ValidHttpStatusCodes
     public InvalidHttpStatusCodesAssertion build() {
         validateNotEmpty(statusCodes, "Missing status codes. Status codes are mandatory for InvalidHttpStatusCodesAssertion");
         InvalidHttpStatusCodesAssertion invalidHttpStatusCodesAssertion = new InvalidHttpStatusCodesAssertion();
-        invalidHttpStatusCodesAssertion.setType("Invalid HTTP Status Codes");
+        invalidHttpStatusCodesAssertion.setType(Assertions.INVALID_HTTP_STATUS_CODES_TYPE);
         invalidHttpStatusCodesAssertion.setInvalidStatusCodes(statusCodes);
         return invalidHttpStatusCodesAssertion;
     }

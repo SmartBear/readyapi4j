@@ -34,7 +34,7 @@ public class XPathContainsAssertionBuilder extends AbstractAssertionBuilder<XPat
     public XPathContainsAssertion build() {
         validateNotEmpty(xPathContainsAssertion.getXpath(), "Missing Xpath, it's a mandatory parameter for XPathContainsAssertion");
         validateNotEmpty(xPathContainsAssertion.getExpectedContent(), "Missing expected content, it's a mandatory parameter for XPathContainsAssertion");
-        xPathContainsAssertion.setType("XPath Match");
+        xPathContainsAssertion.setType(Assertions.XPATH_MATCH_TYPE);
         return xPathContainsAssertion;
     }
 }

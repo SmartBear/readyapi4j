@@ -27,7 +27,7 @@ public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion> extends A
     public T build() {
         validateNotEmpty(statusCodes, "Missing status codes. Status codes are mandatory for ValidHttpStatusCodesAssertion");
         ValidHttpStatusCodesAssertion statusCodesAssertion = new ValidHttpStatusCodesAssertion();
-        statusCodesAssertion.setType("Valid HTTP Status Codes");
+        statusCodesAssertion.setType(Assertions.VALID_HTTP_STATUS_CODES_TYPE);
         statusCodesAssertion.setValidStatusCodes(statusCodes);
         return (T) statusCodesAssertion;
     }

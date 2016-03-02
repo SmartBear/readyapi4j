@@ -22,7 +22,7 @@ public class JsonPathContentAssertionBuilder extends AbstractAssertionBuilder<Js
     public JsonPathContentAssertion build() {
         validateNotEmpty(jsonPathContentAssertion.getJsonPath(), "Missing JSON path, it's a mandatory parameter for JsonPathContentAssertion");
         validateNotEmpty(jsonPathContentAssertion.getExpectedContent(), "Missing expected content, it's a mandatory parameter for JsonPathContentAssertion");
-        jsonPathContentAssertion.setType("JsonPath Match");
+        jsonPathContentAssertion.setType(Assertions.JSON_PATH_MATCH_TYPE);
         return jsonPathContentAssertion;
     }
 }

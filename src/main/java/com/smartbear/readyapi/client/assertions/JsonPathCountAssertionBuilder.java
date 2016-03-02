@@ -22,7 +22,7 @@ public class JsonPathCountAssertionBuilder extends AbstractAssertionBuilder<Json
     public JsonPathCountAssertion build() {
         validateNotEmpty(jsonPathCountAssertion.getJsonPath(), "Missing JSON path, it's a mandatory parameter for JsonPathCountAssertion");
         validateNotEmpty(jsonPathCountAssertion.getExpectedCount(), "Missing expected count, it's a mandatory parameter for JsonPathCountAssertion");
-        jsonPathCountAssertion.setType("JsonPath Count");
+        jsonPathCountAssertion.setType(Assertions.JSON_PATH_COUNT_TYPE);
         return jsonPathCountAssertion;
     }
 }

@@ -22,7 +22,7 @@ public class XQueryContainsAssertionBuilder extends AbstractAssertionBuilder<XQu
     public XQueryContainsAssertion build() {
         validateNotEmpty(xQueryContainsAssertion.getXquery(), "Missing XQuery, it's a mandatory parameter for XQueryContainsAssertion");
         validateNotEmpty(xQueryContainsAssertion.getExpectedContent(), "Missing expected content, it's a mandatory parameter for XQueryContainsAssertion");
-        xQueryContainsAssertion.setType("XQuery Match");
+        xQueryContainsAssertion.setType(Assertions.XQUERY_MATCH_TYPE);
         return xQueryContainsAssertion;
     }
 }

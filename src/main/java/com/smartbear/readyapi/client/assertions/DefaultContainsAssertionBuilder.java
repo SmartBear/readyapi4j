@@ -26,7 +26,7 @@ public class DefaultContainsAssertionBuilder extends AbstractAssertionBuilder<Si
     @Override
     public SimpleContainsAssertion build() {
         validateNotEmpty(containsAssertion.getToken(), "Missing token, it's a mandatory parameter for ContainsAssertion");
-        containsAssertion.setType("Contains");
+        containsAssertion.setType(Assertions.CONTAINS_ASSERTION_TYPE);
         return containsAssertion;
     }
 }
