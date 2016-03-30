@@ -12,7 +12,16 @@ public class PropertyTransferBuilder {
     }
 
     public static PropertyTransferBuilder newTransfer() {
-        return new PropertyTransferBuilder();
+        return new PropertyTransferBuilder().named( "Transfer " + String.valueOf(Math.random()));
+    }
+
+    public static PropertyTransferBuilder newTransfer( String name ) {
+        return new PropertyTransferBuilder().named( name );
+    }
+
+    private PropertyTransferBuilder named(String name) {
+        transfer.setTransferName( name );
+        return this;
     }
 
     public PropertyTransferBuilder withSource(PropertyTransferSourceBuilder propertyTransferSourceBuilder) {
