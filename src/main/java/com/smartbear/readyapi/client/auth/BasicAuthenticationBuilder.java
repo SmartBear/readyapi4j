@@ -4,7 +4,7 @@ import com.smartbear.readyapi.client.model.Authentication;
 
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 
-public class BasicAuthenticationBuilder extends AbstractAuthenticationBuilder {
+public class BasicAuthenticationBuilder implements AuthenticationBuilder {
     protected Authentication authentication = new Authentication();
 
     public BasicAuthenticationBuilder(String username, String password) {
