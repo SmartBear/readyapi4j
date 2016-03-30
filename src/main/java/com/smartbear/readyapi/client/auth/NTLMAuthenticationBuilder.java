@@ -4,13 +4,12 @@ import com.smartbear.readyapi.client.model.Authentication;
 
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 
-public class NTLMAuthenticationBuilder extends BasicAuthenticationBuilder implements AuthenticationBuilderWithDomain {
+public class NTLMAuthenticationBuilder extends BasicAuthenticationBuilder {
 
     public NTLMAuthenticationBuilder(String username, String password) {
         super(username, password);
     }
 
-    @Override
     public NTLMAuthenticationBuilder setDomain(String domain) {
         authentication.setDomain(domain);
         return this;

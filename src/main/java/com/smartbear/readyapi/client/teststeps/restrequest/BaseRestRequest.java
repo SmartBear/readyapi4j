@@ -2,7 +2,6 @@ package com.smartbear.readyapi.client.teststeps.restrequest;
 
 import com.smartbear.readyapi.client.assertions.AbstractAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.AssertionBuilder;
-import com.smartbear.readyapi.client.auth.AbstractAuthenticationBuilder;
 import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
 import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.Parameter;
@@ -78,7 +77,7 @@ public class BaseRestRequest<RequestBuilderType extends RestRequestBuilder> impl
 
     @Override
     public RequestBuilderType setAuthentication(AuthenticationBuilder authenticationBuilder) {
-        testStep.setAuthentication(((AbstractAuthenticationBuilder) authenticationBuilder).build());
+        testStep.setAuthentication(authenticationBuilder.build());
         return (RequestBuilderType) this;
     }
 
