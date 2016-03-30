@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client.teststeps.groovyscript;
 
+import com.smartbear.readyapi.client.BuilderUtils;
 import com.smartbear.readyapi.client.model.GroovyScriptTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
@@ -13,14 +14,13 @@ public class GroovyScriptTestStepBuilder implements TestStepBuilder<GroovyScript
 
     public GroovyScriptTestStepBuilder(String scriptText) {
         this.scriptText = scriptText;
-        this.name = "Script " + String.valueOf(Math.random());
+        this.name = BuilderUtils.randomName("Script");
     }
 
     public GroovyScriptTestStepBuilder named(String name) {
         this.name = name;
         return this;
     }
-
 
     @Override
     public GroovyScriptTestStep build() {
