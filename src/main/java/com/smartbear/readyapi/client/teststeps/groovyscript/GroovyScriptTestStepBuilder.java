@@ -13,6 +13,7 @@ public class GroovyScriptTestStepBuilder implements TestStepBuilder<GroovyScript
 
     public GroovyScriptTestStepBuilder(String scriptText) {
         this.scriptText = scriptText;
+        this.name = "Script " + String.valueOf(Math.random());
     }
 
     public GroovyScriptTestStepBuilder named(String name) {
