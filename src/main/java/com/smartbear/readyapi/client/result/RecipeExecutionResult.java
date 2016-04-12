@@ -15,6 +15,8 @@ public interface RecipeExecutionResult {
 
     TestStepResultReport getTestStepResult(int index);
 
+    TestStepResultReport getTestStepResult(String name);
+
     List<TestStepResultReport> getTestStepResults();
 
     List<TestStepResultReport> getFailedTestStepsResults();

@@ -108,6 +108,13 @@ public class Execution {
         }
 
         @Override
+        public TestStepResultReport getTestStepResult(String name) {
+            return results.stream()
+                .filter(e -> e.getTestStepName().equals(name))
+                .findFirst().get();
+        }
+
+        @Override
         public List<TestStepResultReport> getTestStepResults() {
             return Collections.unmodifiableList(results);
         }
@@ -130,6 +137,5 @@ public class Execution {
         public TestStepResultReport getTestStepResult(int index) {
             return results.get(index);
         }
-
     }
 }
