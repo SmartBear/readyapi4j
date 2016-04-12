@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ProjectExecutionResultTestCase {
 
@@ -29,5 +30,7 @@ public class ProjectExecutionResultTestCase {
         assertEquals(1, result.getErrorMessages().size());
         assertEquals(1, result.getTestStepResult(1).getMessages().size());
 
+        assertNotNull(result.getTestStepResult("GET request 1"));
+        assertEquals(1, result.getFailedTestStepsResults("GET request 1").size());
     }
 }
