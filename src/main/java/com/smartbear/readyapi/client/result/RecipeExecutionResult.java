@@ -15,13 +15,15 @@ public interface RecipeExecutionResult {
 
     TestStepResultReport getTestStepResult(int index);
 
-    TestStepResultReport getTestStepResult(String name);
+    TestStepResultReport getTestStepResult(String testStepName);
 
     List<TestStepResultReport> getTestStepResults();
 
+    List<TestStepResultReport> getTestStepResults(String testStepName);
+
     List<TestStepResultReport> getFailedTestStepsResults();
 
-    List<TestStepResultReport> getTestStepResults(String testStepName);
+    List<TestStepResultReport> getFailedTestStepsResults(String testStepName);
 
     enum Status {
         INITIALIZED, PENDING, RUNNING, CANCELED, FINISHED, FAILED, WARNING

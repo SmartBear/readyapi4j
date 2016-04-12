@@ -127,6 +127,14 @@ public class Execution {
         }
 
         @Override
+        public List<TestStepResultReport> getFailedTestStepsResults(String testStepName) {
+            return results.stream()
+                .filter(e -> e.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED)
+                .filter(e -> e.getTestStepName().equals(testStepName))
+                .collect(Collectors.toList());
+        }
+
+        @Override
         public List<TestStepResultReport> getTestStepResults(String testStepName) {
             return results.stream()
                 .filter(e -> e.getTestStepName().equals(testStepName))
