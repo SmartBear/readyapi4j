@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 /**
  * Represents an execution, synchronous or asynchronous, and encapsulates all available information about the execution.
  */
+
 public class Execution {
     private final Deque<ProjectResultReport> executionStatusReports = new ConcurrentLinkedDeque<>();
     private final String id;
@@ -40,7 +41,7 @@ public class Execution {
         executionStatusReports.add(newReport);
     }
 
-    RecipeExecutionResult getResult() {
+    public RecipeExecutionResult getExecutionResult() {
         ProjectResultReport lastReport = executionStatusReports.getLast();
         return lastReport == null ? null : new ProjectRecipeExecutionResult(getCurrentReport());
     }
@@ -63,7 +64,7 @@ public class Execution {
         return result;
     }
 
-    public static class ProjectRecipeExecutionResult implements RecipeExecutionResult {
+    static class ProjectRecipeExecutionResult implements RecipeExecutionResult {
         private final ProjectResultReport report;
         private final List<TestStepResultReport> results = Lists.newArrayList();
 

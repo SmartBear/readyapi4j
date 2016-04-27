@@ -12,6 +12,8 @@ public interface RecipeExecutionResult {
 
     ProjectResultReport.StatusEnum getStatus();
 
+    List<String> getErrorMessages();
+
     int getResultCount();
 
     TestStepResultReport getTestStepResult(int index);

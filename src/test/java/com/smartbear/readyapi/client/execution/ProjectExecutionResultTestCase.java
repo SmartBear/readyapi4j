@@ -1,6 +1,5 @@
-package com.smartbear.readyapi.client.result;
+package com.smartbear.readyapi.client.execution;
 
-import com.smartbear.readyapi.client.execution.Execution;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import io.swagger.util.Json;
 import org.junit.Test;
