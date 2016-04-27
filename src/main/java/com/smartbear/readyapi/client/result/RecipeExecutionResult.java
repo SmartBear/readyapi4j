@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client.result;
 
+import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 
 import java.util.List;
@@ -9,13 +10,15 @@ public interface RecipeExecutionResult {
 
     String getExecutionId();
 
-    Status getStatus();
+    ProjectResultReport.StatusEnum getStatus();
 
     int getResultCount();
 
     TestStepResultReport getTestStepResult(int index);
 
-    TestStepResultReport getTestStepResult(String testStepName);
+    TestStepResultReport getFirstTestStepResult(String testStepName);
+
+    TestStepResultReport getLastTestStepResult(String testStepName);
 
     List<TestStepResultReport> getTestStepResults();
 
@@ -24,8 +27,4 @@ public interface RecipeExecutionResult {
     List<TestStepResultReport> getFailedTestStepsResults();
 
     List<TestStepResultReport> getFailedTestStepsResults(String testStepName);
-
-    enum Status {
-        INITIALIZED, PENDING, RUNNING, CANCELED, FINISHED, FAILED, WARNING
-    }
 }

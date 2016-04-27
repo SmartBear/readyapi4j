@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.stream.Collectors;
 
 /**
  * Represents an execution, synchronous or asynchronous, and encapsulates all available information about the execution.
@@ -46,15 +45,15 @@ public class Execution {
         return lastReport == null ? null : new ProjectRecipeExecutionResult(getCurrentReport());
     }
 
-    public List<String> getErrorMessages(){
+    public List<String> getErrorMessages() {
         List<String> result = Lists.newArrayList();
 
-        if( executionStatusReports.getLast() != null ){
-            for( TestSuiteResultReport testSuiteReport : executionStatusReports.getLast().getTestSuiteResultReports()){
-                for(TestCaseResultReport testCaseResultReport : testSuiteReport.getTestCaseResultReports()){
-                    for(TestStepResultReport testStepResultReport : testCaseResultReport.getTestStepResultReports()){
-                        if( testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED){
-                            result.addAll( testStepResultReport.getMessages());
+        if (executionStatusReports.getLast() != null) {
+            for (TestSuiteResultReport testSuiteReport : executionStatusReports.getLast().getTestSuiteResultReports()) {
+                for (TestCaseResultReport testCaseResultReport : testSuiteReport.getTestCaseResultReports()) {
+                    for (TestStepResultReport testStepResultReport : testCaseResultReport.getTestStepResultReports()) {
+                        if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
+                            result.addAll(testStepResultReport.getMessages());
                         }
                     }
                 }
@@ -91,8 +90,8 @@ public class Execution {
         }
 
         @Override
-        public Status getStatus() {
-            return Status.valueOf(report.getStatus().name());
+        public ProjectResultReport.StatusEnum getStatus() {
+            return report.getStatus();
         }
 
         @Override
@@ -101,17 +100,37 @@ public class Execution {
         }
 
         public List<String> getErrorMessages() {
-            return results.stream()
-                .filter(e -> e.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED)
-                .flatMap(e -> e.getMessages().stream())
-                .collect(Collectors.toList());
+            List<String> result = Lists.newArrayList();
+
+            for (TestStepResultReport testStepResultReport : results) {
+                if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
+                    result.addAll(testStepResultReport.getMessages());
+                }
+            }
+
+            return result;
         }
 
         @Override
-        public TestStepResultReport getTestStepResult(String name) {
-            return results.stream()
-                .filter(e -> e.getTestStepName().equals(name))
-                .findFirst().get();
+        public TestStepResultReport getFirstTestStepResult(String name) {
+            for (TestStepResultReport testStepResultReport : results) {
+                if (testStepResultReport.getTestStepName().equalsIgnoreCase(name)) {
+                    return testStepResultReport;
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        public TestStepResultReport getLastTestStepResult(String testStepName) {
+            for (TestStepResultReport testStepResultReport : Lists.reverse(results)) {
+                if (testStepResultReport.getTestStepName().equalsIgnoreCase(testStepName)) {
+                    return testStepResultReport;
+                }
+            }
+
+            return null;
         }
 
         @Override
@@ -121,24 +140,42 @@ public class Execution {
 
         @Override
         public List<TestStepResultReport> getFailedTestStepsResults() {
-            return results.stream()
-                .filter(e -> e.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED)
-                .collect(Collectors.toList());
+            List<TestStepResultReport> result = Lists.newArrayList();
+
+            for (TestStepResultReport testStepResultReport : results) {
+                if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
+                    result.add(testStepResultReport);
+                }
+            }
+
+            return result;
         }
 
         @Override
         public List<TestStepResultReport> getFailedTestStepsResults(String testStepName) {
-            return results.stream()
-                .filter(e -> e.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED)
-                .filter(e -> e.getTestStepName().equals(testStepName))
-                .collect(Collectors.toList());
+            List<TestStepResultReport> result = Lists.newArrayList();
+
+            for (TestStepResultReport testStepResultReport : results) {
+                if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED &&
+                    testStepResultReport.getTestStepName().equalsIgnoreCase(testStepName)) {
+                    result.add(testStepResultReport);
+                }
+            }
+
+            return result;
         }
 
         @Override
         public List<TestStepResultReport> getTestStepResults(String testStepName) {
-            return results.stream()
-                .filter(e -> e.getTestStepName().equals(testStepName))
-                .collect(Collectors.toList());
+            List<TestStepResultReport> result = Lists.newArrayList();
+
+            for (TestStepResultReport testStepResultReport : results) {
+                if (testStepResultReport.getTestStepName().equalsIgnoreCase(testStepName)) {
+                    result.add(testStepResultReport);
+                }
+            }
+
+            return result;
         }
 
         @Override

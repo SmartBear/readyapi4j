@@ -21,6 +21,7 @@ public class ProjectExecutionResultTestCase {
 
         Execution.ProjectRecipeExecutionResult result = new Execution.ProjectRecipeExecutionResult(resultReport);
 
+        assertEquals(ProjectResultReport.StatusEnum.FINISHED, result.getStatus());
         assertEquals(215, result.getTimeTaken());
         assertEquals("93ddece4-53b3-4f23-9bb0-f5db6ed6b9ef", result.getExecutionId());
         assertEquals(3, result.getResultCount());
@@ -30,7 +31,8 @@ public class ProjectExecutionResultTestCase {
         assertEquals(1, result.getErrorMessages().size());
         assertEquals(1, result.getTestStepResult(1).getMessages().size());
 
-        assertNotNull(result.getTestStepResult("GET request 1"));
+        assertNotNull(result.getFirstTestStepResult("get request 1"));
+        assertNotNull(result.getLastTestStepResult("get request 1"));
         assertEquals(1, result.getFailedTestStepsResults("GET request 1").size());
     }
 }
