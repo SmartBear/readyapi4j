@@ -21,9 +21,9 @@ import static com.smartbear.readyapi.client.teststeps.TestSteps.getRequest;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.postRequest;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.putRequest;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.restRequest;
-import static com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequest.ParameterType.HEADER;
-import static com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequest.ParameterType.MATRIX;
-import static com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequest.ParameterType.QUERY;
+import static com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequestBuilder.ParameterType.HEADER;
+import static com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequestBuilder.ParameterType.MATRIX;
+import static com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequestBuilder.ParameterType.QUERY;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -230,9 +230,9 @@ public class RestRequestStepRecipeTest {
     public void buildsRestRequestTestStepRecipeWithRequestOptions() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(getRequest(URI)
+                    .postQueryString()
                         .followRedirects()
                         .entitizeParameters()
-                        .postQueryString()
                 )
                 .buildTestRecipe();
 

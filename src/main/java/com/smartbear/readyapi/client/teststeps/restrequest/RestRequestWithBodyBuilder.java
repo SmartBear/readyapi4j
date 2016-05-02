@@ -2,9 +2,9 @@ package com.smartbear.readyapi.client.teststeps.restrequest;
 
 import com.smartbear.readyapi.client.teststeps.TestSteps;
 
-public class RestRequestWithBody extends BaseRestRequest<RestRequestBuilderWithBody> implements RestRequestBuilder<RestRequestBuilderWithBody>, RestRequestBuilderWithBody {
+public class RestRequestWithBodyBuilder extends BaseRestRequestBuilder<RestRequestBuilderWithBody> implements RestRequestBuilderWithBody {
 
-    public RestRequestWithBody(String uri, TestSteps.HttpMethod post) {
+    public RestRequestWithBodyBuilder(String uri, TestSteps.HttpMethod post) {
         super(uri, post);
     }
 

@@ -10,11 +10,16 @@ import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransfer
 import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestBuilder;
 import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestBuilderWithBody;
 import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestTestStepBuilder;
+import com.smartbear.readyapi.client.teststeps.soaprequest.SoapRequestStepBuilder;
 
 public class TestSteps {
 
     public enum HttpMethod {
         GET, POST, PUT, DELETE, HEAD, OPTIONS, TRACE, PATCH
+    }
+
+    public static SoapRequestStepBuilder soapRequest(String wsdl) {
+        return new SoapRequestStepBuilder().withWsdl(wsdl);
     }
 
     public static RestRequestTestStepBuilder restRequest() {
