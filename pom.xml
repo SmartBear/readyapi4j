@@ -47,14 +47,16 @@
     </licenses>
 
     <properties>
-        <swagger-version>1.5.6</swagger-version>
-        <jersey-version>1.18</jersey-version>
+        <swagger-version>1.5.8</swagger-version>
+        <jersey-version>1.19</jersey-version>
         <jackson-version>2.4.6</jackson-version>
         <jodatime-version>2.3</jodatime-version>
         <maven-plugin-version>1.0.0</maven-plugin-version>
         <junit-version>4.8.1</junit-version>
+        <swagger-codegen.version>2.1.6</swagger-codegen.version>
 
-        <codegen.swagger.path>src/main/resources/ready-api-rest-api-spec.json</codegen.swagger.path>
+        <codegen.swagger.path>https://api.swaggerhub.com/apis/smartbear/ready-api-testserver/1.1.0
+        </codegen.swagger.path>
     </properties>
 
     <dependencies>
@@ -167,7 +169,7 @@
                     <dependency>
                         <groupId>io.swagger</groupId>
                         <artifactId>swagger-codegen-cli</artifactId>
-                        <version>2.1.5</version>
+                        <version>${swagger-codegen.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
