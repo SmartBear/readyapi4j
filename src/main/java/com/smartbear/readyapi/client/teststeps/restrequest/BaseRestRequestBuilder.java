@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client.teststeps.restrequest;
 
+import com.smartbear.readyapi.client.model.Parameter;
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.TestSteps;
@@ -31,6 +32,20 @@ public class BaseRestRequestBuilder<RestRequestBuilderType extends RestRequestBu
 
     public RestRequestBuilderType addMatrixParameter(String parameterName, String value) {
         return addParameter(parameterName, value, ParameterType.MATRIX);
+    }
+
+    public RestRequestBuilderType addHeaderParameter(String parameterName, String value) {
+        return addParameter(parameterName, value, ParameterType.HEADER);
+    }
+
+    protected RestRequestBuilderType addParameter(String parameterName, String value, BaseRestRequestBuilder.ParameterType type) {
+        Parameter parameter = new Parameter();
+        parameter.setName(parameterName);
+        parameter.setValue(value);
+        parameter.setType(type.name());
+
+        getParameters().add(parameter);
+        return (RestRequestBuilderType) this;
     }
 
     public RestRequestBuilderType postQueryString() {

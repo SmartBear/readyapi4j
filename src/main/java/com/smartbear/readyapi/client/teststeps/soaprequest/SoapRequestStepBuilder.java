@@ -60,7 +60,12 @@ public class SoapRequestStepBuilder extends BaseRequestBuilder<SoapRequestStepBu
     }
 
     public SoapRequestStepBuilder withParameter(String name, String value) {
-        return addParameter(name, value, null);
+        Parameter parameter = new Parameter();
+        parameter.setName(name);
+        parameter.setValue(value);
+
+        getParameters().add(parameter);
+        return this;
     }
 
     public SoapRequestStepBuilder withPathParameter(String path, String value) {

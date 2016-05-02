@@ -6,7 +6,6 @@ import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
 import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.Parameter;
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
-import com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequestBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,10 +44,6 @@ public class BaseRequestBuilder<RequestBuilderType extends RequestBuilder, Reque
     public RequestBuilderType named(String name) {
         testStep.setName(name);
         return (RequestBuilderType) this;
-    }
-
-    public RequestBuilderType addHeaderParameter(String parameterName, String value) {
-        return addParameter(parameterName, value, BaseRestRequestBuilder.ParameterType.HEADER);
     }
 
     public RequestBuilderType addAssertion(AssertionBuilder assertionBuilder) {
@@ -112,19 +107,6 @@ public class BaseRequestBuilder<RequestBuilderType extends RequestBuilder, Reque
         testStep.setParameters(parameters);
 
         return testStep;
-    }
-
-    protected RequestBuilderType addParameter(String parameterName, String value, BaseRestRequestBuilder.ParameterType type) {
-        Parameter parameter = new Parameter();
-        parameter.setName(parameterName);
-        parameter.setValue(value);
-
-        if (type != null) {
-            parameter.setType(type == BaseRestRequestBuilder.ParameterType.PATH ? "TEMPLATE" : type.name());
-        }
-
-        parameters.add(parameter);
-        return (RequestBuilderType) this;
     }
 
     private void setAssertions(RequestTestStepType testStep) {
