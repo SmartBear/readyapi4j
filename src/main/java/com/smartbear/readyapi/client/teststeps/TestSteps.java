@@ -7,10 +7,8 @@ import com.smartbear.readyapi.client.teststeps.datasource.GridDataSourceTestStep
 import com.smartbear.readyapi.client.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.jdbcrequest.JdbcConnection;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferTestStepBuilder;
-import com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestStepWithBodyBuilder;
-import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestWithBodyBuilder;
 import com.smartbear.readyapi.client.teststeps.soaprequest.SoapRequestStepBuilder;
 
 public class TestSteps {
@@ -24,23 +22,23 @@ public class TestSteps {
     }
 
     public static RestRequestStepBuilder restRequest() {
-        return new BaseRestRequestStepBuilder(null, TestSteps.HttpMethod.GET);
+        return new RestRequestStepBuilder(null, TestSteps.HttpMethod.GET);
     }
 
     public static RestRequestStepBuilder getRequest(String uri) {
-        return new BaseRestRequestStepBuilder(uri, TestSteps.HttpMethod.GET);
+        return new RestRequestStepBuilder(uri, TestSteps.HttpMethod.GET);
     }
 
     public static RestRequestStepWithBodyBuilder postRequest(String uri) {
-        return new RestRequestWithBodyBuilder(uri, TestSteps.HttpMethod.POST);
+        return new RestRequestStepWithBodyBuilder(uri, TestSteps.HttpMethod.POST);
     }
 
     public static RestRequestStepWithBodyBuilder putRequest(String uri) {
-        return new RestRequestWithBodyBuilder(uri, TestSteps.HttpMethod.PUT);
+        return new RestRequestStepWithBodyBuilder(uri, TestSteps.HttpMethod.PUT);
     }
 
     public static RestRequestStepBuilder deleteRequest(String uri) {
-        return new BaseRestRequestStepBuilder(uri, TestSteps.HttpMethod.DELETE);
+        return new RestRequestStepBuilder(uri, TestSteps.HttpMethod.DELETE);
     }
 
     public static PropertyTransferTestStepBuilder propertyTransfer() {

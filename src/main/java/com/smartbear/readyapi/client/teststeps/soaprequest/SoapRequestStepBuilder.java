@@ -6,11 +6,11 @@ import com.smartbear.readyapi.client.assertions.SoapFaultAssertionBuilder;
 import com.smartbear.readyapi.client.model.Parameter;
 import com.smartbear.readyapi.client.model.SoapRequestTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
-import com.smartbear.readyapi.client.teststeps.request.BaseRequestStepBuilder;
+import com.smartbear.readyapi.client.teststeps.request.HttpRequestStepBuilder;
 
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 
-public class SoapRequestStepBuilder extends BaseRequestStepBuilder<SoapRequestStepBuilder, SoapRequestTestStep> {
+public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestStepBuilder, SoapRequestTestStep> {
 
     public SoapRequestStepBuilder() {
         super(new SoapRequestTestStep(), TestStepTypes.SOAP_REQUEST.getName());
