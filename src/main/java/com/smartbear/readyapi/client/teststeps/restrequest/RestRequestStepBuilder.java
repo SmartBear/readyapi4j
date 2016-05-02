@@ -18,8 +18,8 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
 
     public RestRequestStepBuilder(String uri, TestSteps.HttpMethod method) {
         super(new RestTestRequestStep(), TestStepTypes.REST_REQUEST.getName());
-        testStep.setURI(uri);
-        testStep.setMethod(method.toString());
+        getTestStep().setURI(uri);
+        getTestStep().setMethod(method.toString());
     }
 
     public RestRequestBuilderType addQueryParameter(String parameterName, String value) {
@@ -49,7 +49,7 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
     }
 
     public RestRequestBuilderType postQueryString() {
-        testStep.setPostQueryString(true);
+        getTestStep().setPostQueryString(true);
         return (RestRequestBuilderType) this;
     }
 
@@ -62,37 +62,37 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
     }
 
     public RestRequestBuilderType get(String uri) {
-        testStep.setMethod("GET");
-        testStep.setURI(uri);
+        getTestStep().setMethod("GET");
+        getTestStep().setURI(uri);
 
         return (RestRequestBuilderType) this;
     }
 
     public RestRequestBuilderType post(String uri) {
-        testStep.setMethod("POST");
-        testStep.setURI(uri);
+        getTestStep().setMethod("POST");
+        getTestStep().setURI(uri);
 
         return (RestRequestBuilderType) this;
     }
 
     public RestRequestBuilderType put(String uri) {
-        testStep.setMethod("PUT");
-        testStep.setURI(uri);
+        getTestStep().setMethod("PUT");
+        getTestStep().setURI(uri);
 
         return (RestRequestBuilderType) this;
     }
 
     public RestRequestBuilderType delete(String uri) {
-        testStep.setMethod("DELETE");
-        testStep.setURI(uri);
+        getTestStep().setMethod("DELETE");
+        getTestStep().setURI(uri);
 
         return (RestRequestBuilderType) this;
     }
 
     public RestTestRequestStep build() {
         super.build();
-        validateNotEmpty(testStep.getURI(), "No URI set, it's a mandatory parameter for REST Request");
-        validateNotEmpty(testStep.getMethod(), "No HTTP method set, it's a mandatory parameter for REST Request");
-        return testStep;
+        validateNotEmpty(getTestStep().getURI(), "No URI set, it's a mandatory parameter for REST Request");
+        validateNotEmpty(getTestStep().getMethod(), "No HTTP method set, it's a mandatory parameter for REST Request");
+        return getTestStep();
     }
 }

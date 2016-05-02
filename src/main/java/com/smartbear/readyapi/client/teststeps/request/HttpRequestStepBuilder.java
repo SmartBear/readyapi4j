@@ -24,7 +24,8 @@ import static com.smartbear.readyapi.client.assertions.Assertions.xPathContains;
 import static com.smartbear.readyapi.client.assertions.Assertions.xQueryContains;
 
 abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequestStepBuilder, RequestTestStepType extends RequestTestStepBase> implements TestStepBuilder {
-    protected final RequestTestStepType testStep;
+
+    private final RequestTestStepType testStep;
     private List<Parameter> parameters = new ArrayList<>();
     private List<AssertionBuilder> assertionBuilders = new ArrayList<>();
     private Map<String, Object> headers = new HashMap<>();
@@ -32,6 +33,10 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
     protected HttpRequestStepBuilder(RequestTestStepType testStep, String type) {
         this.testStep = testStep;
         this.testStep.setType(type);
+    }
+
+    final protected RequestTestStepType getTestStep() {
+        return testStep;
     }
 
     protected List<Parameter> getParameters() {

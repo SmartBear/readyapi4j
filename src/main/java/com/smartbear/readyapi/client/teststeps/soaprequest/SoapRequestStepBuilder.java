@@ -20,30 +20,30 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
     public SoapRequestTestStep build() {
         super.build();
 
-        validateNotEmpty(testStep.getWsdl(), "Missing WSDL location");
-        validateNotEmpty(testStep.getBinding(), "Missing WSDL Binding");
-        validateNotEmpty(testStep.getOperation(), "Missing WSDL Operation");
+        validateNotEmpty(getTestStep().getWsdl(), "Missing WSDL location");
+        validateNotEmpty(getTestStep().getBinding(), "Missing WSDL Binding");
+        validateNotEmpty(getTestStep().getOperation(), "Missing WSDL Operation");
 
-        return testStep;
+        return getTestStep();
     }
 
     public SoapRequestStepBuilder withWsdl(String wsdl) {
-        testStep.setWsdl(wsdl);
+        getTestStep().setWsdl(wsdl);
         return this;
     }
 
     public SoapRequestStepBuilder forOperation(String operation) {
-        testStep.setOperation(operation);
+        getTestStep().setOperation(operation);
         return this;
     }
 
     public SoapRequestStepBuilder forBinding(String binding) {
-        testStep.setBinding(binding);
+        getTestStep().setBinding(binding);
         return this;
     }
 
     public SoapRequestStepBuilder withEndpoint(String endpoint) {
-        testStep.setURI(endpoint);
+        getTestStep().setURI(endpoint);
         return this;
     }
 

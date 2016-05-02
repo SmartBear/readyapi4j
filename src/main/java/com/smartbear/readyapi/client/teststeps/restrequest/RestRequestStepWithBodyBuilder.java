@@ -9,17 +9,17 @@ public class RestRequestStepWithBodyBuilder extends RestRequestStepBuilder<RestR
     }
 
     public RestRequestStepWithBodyBuilder withRequestBody(String requestBody) {
-        testStep.setRequestBody(requestBody);
+        getTestStep().setRequestBody(requestBody);
         return this;
     }
 
     public RestRequestStepWithBodyBuilder withMediaType(String mediaType) {
-        testStep.setMediaType(mediaType);
+        getTestStep().setMediaType(mediaType);
         return this;
     }
 
     public RestRequestStepWithBodyBuilder withEncoding(String encoding) {
-        testStep.setEncoding(encoding);
+        getTestStep().setEncoding(encoding);
         return this;
     }
 
