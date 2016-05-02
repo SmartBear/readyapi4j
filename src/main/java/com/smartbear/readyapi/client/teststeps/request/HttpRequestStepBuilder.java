@@ -6,7 +6,7 @@ import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 
 import java.util.List;
 
-public interface RequestBuilder<RequestBuilderType extends RequestBuilder> extends TestStepBuilder {
+public interface HttpRequestStepBuilder<RequestBuilderType extends HttpRequestStepBuilder> extends TestStepBuilder {
     RequestBuilderType named(String name);
 
     RequestBuilderType addAssertion(AssertionBuilder assertionBuilder);

@@ -22,13 +22,13 @@ import static com.smartbear.readyapi.client.assertions.Assertions.validStatusCod
 import static com.smartbear.readyapi.client.assertions.Assertions.xPathContains;
 import static com.smartbear.readyapi.client.assertions.Assertions.xQueryContains;
 
-public class BaseRequestBuilder<RequestBuilderType extends RequestBuilder, RequestTestStepType extends RequestTestStepBase> implements RequestBuilder<RequestBuilderType> {
+public class BaseRequestStepBuilder<RequestBuilderType extends HttpRequestStepBuilder, RequestTestStepType extends RequestTestStepBase> implements HttpRequestStepBuilder<RequestBuilderType> {
     protected final RequestTestStepType testStep;
     private List<Parameter> parameters = new ArrayList<>();
     private List<AssertionBuilder> assertionBuilders = new ArrayList<>();
     private Map<String, Object> headers = new HashMap<>();
 
-    protected BaseRequestBuilder(RequestTestStepType testStep, String type) {
+    protected BaseRequestStepBuilder(RequestTestStepType testStep, String type) {
         this.testStep = testStep;
         this.testStep.setType(type);
     }

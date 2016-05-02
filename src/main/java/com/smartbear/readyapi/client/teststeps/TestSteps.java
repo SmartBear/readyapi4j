@@ -7,9 +7,10 @@ import com.smartbear.readyapi.client.teststeps.datasource.GridDataSourceTestStep
 import com.smartbear.readyapi.client.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.jdbcrequest.JdbcConnection;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferTestStepBuilder;
-import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestBuilder;
-import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestBuilderWithBody;
-import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestTestStepBuilder;
+import com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequestStepBuilder;
+import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestStepBuilder;
+import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestStepWithBodyBuilder;
+import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestWithBodyBuilder;
 import com.smartbear.readyapi.client.teststeps.soaprequest.SoapRequestStepBuilder;
 
 public class TestSteps {
@@ -22,24 +23,24 @@ public class TestSteps {
         return new SoapRequestStepBuilder().withWsdl(wsdl);
     }
 
-    public static RestRequestTestStepBuilder restRequest() {
-        return new RestRequestTestStepBuilder();
+    public static RestRequestStepBuilder restRequest() {
+        return new BaseRestRequestStepBuilder(null, TestSteps.HttpMethod.GET);
     }
 
-    public static RestRequestBuilder getRequest(String uri) {
-        return new RestRequestTestStepBuilder().get(uri);
+    public static RestRequestStepBuilder getRequest(String uri) {
+        return new BaseRestRequestStepBuilder(uri, TestSteps.HttpMethod.GET);
     }
 
-    public static RestRequestBuilderWithBody postRequest(String uri) {
-        return new RestRequestTestStepBuilder().post(uri);
+    public static RestRequestStepWithBodyBuilder postRequest(String uri) {
+        return new RestRequestWithBodyBuilder(uri, TestSteps.HttpMethod.POST);
     }
 
-    public static RestRequestBuilderWithBody putRequest(String uri) {
-        return new RestRequestTestStepBuilder().put(uri);
+    public static RestRequestStepWithBodyBuilder putRequest(String uri) {
+        return new RestRequestWithBodyBuilder(uri, TestSteps.HttpMethod.PUT);
     }
 
-    public static RestRequestBuilder deleteRequest(String uri) {
-        return new RestRequestTestStepBuilder().delete(uri);
+    public static RestRequestStepBuilder deleteRequest(String uri) {
+        return new BaseRestRequestStepBuilder(uri, TestSteps.HttpMethod.DELETE);
     }
 
     public static PropertyTransferTestStepBuilder propertyTransfer() {

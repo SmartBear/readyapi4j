@@ -4,19 +4,19 @@ import com.smartbear.readyapi.client.model.Parameter;
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.TestSteps;
-import com.smartbear.readyapi.client.teststeps.request.BaseRequestBuilder;
+import com.smartbear.readyapi.client.teststeps.request.BaseRequestStepBuilder;
 
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 import static com.smartbear.readyapi.client.assertions.Assertions.jsonPathContent;
 import static com.smartbear.readyapi.client.assertions.Assertions.jsonPathCount;
 
-public class BaseRestRequestBuilder<RestRequestBuilderType extends RestRequestBuilder> extends BaseRequestBuilder<RestRequestBuilderType, RestTestRequestStep> implements RestRequestBuilder<RestRequestBuilderType> {
+public class BaseRestRequestStepBuilder<RestRequestBuilderType extends RestRequestStepBuilder> extends BaseRequestStepBuilder<RestRequestBuilderType, RestTestRequestStep> implements RestRequestStepBuilder<RestRequestBuilderType> {
 
     public enum ParameterType {
         MATRIX, HEADER, QUERY, PATH
     }
 
-    public BaseRestRequestBuilder(String uri, TestSteps.HttpMethod method) {
+    public BaseRestRequestStepBuilder(String uri, TestSteps.HttpMethod method) {
         super(new RestTestRequestStep(), TestStepTypes.REST_REQUEST.getName());
         testStep.setURI(uri);
         testStep.setMethod(method.toString());
@@ -38,7 +38,7 @@ public class BaseRestRequestBuilder<RestRequestBuilderType extends RestRequestBu
         return addParameter(parameterName, value, ParameterType.HEADER);
     }
 
-    protected RestRequestBuilderType addParameter(String parameterName, String value, BaseRestRequestBuilder.ParameterType type) {
+    protected RestRequestBuilderType addParameter(String parameterName, String value, BaseRestRequestStepBuilder.ParameterType type) {
         Parameter parameter = new Parameter();
         parameter.setName(parameterName);
         parameter.setValue(value);
@@ -59,6 +59,38 @@ public class BaseRestRequestBuilder<RestRequestBuilderType extends RestRequestBu
 
     public RestRequestBuilderType assertJsonCount(String jsonPath, int expectedCount) {
         return addAssertion(jsonPathCount(jsonPath, expectedCount).allowWildcards());
+    }
+
+    @Override
+    public RestRequestBuilderType get(String uri) {
+        testStep.setMethod("GET");
+        testStep.setURI(uri);
+
+        return (RestRequestBuilderType) this;
+    }
+
+    @Override
+    public RestRequestBuilderType post(String uri) {
+        testStep.setMethod("POST");
+        testStep.setURI(uri);
+
+        return (RestRequestBuilderType) this;
+    }
+
+    @Override
+    public RestRequestBuilderType put(String uri) {
+        testStep.setMethod("PUT");
+        testStep.setURI(uri);
+
+        return (RestRequestBuilderType) this;
+    }
+
+    @Override
+    public RestRequestBuilderType delete(String uri) {
+        testStep.setMethod("DELETE");
+        testStep.setURI(uri);
+
+        return (RestRequestBuilderType) this;
     }
 
     public RestTestRequestStep build() {

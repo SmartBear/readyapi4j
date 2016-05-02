@@ -1,8 +1,8 @@
 package com.smartbear.readyapi.client.teststeps.restrequest;
 
-import com.smartbear.readyapi.client.teststeps.request.RequestBuilder;
+import com.smartbear.readyapi.client.teststeps.request.HttpRequestStepBuilder;
 
-public interface RestRequestBuilder<RestRequestBuilderType extends RestRequestBuilder> extends RequestBuilder<RestRequestBuilderType> {
+public interface RestRequestStepBuilder<RestRequestBuilderType extends RestRequestStepBuilder> extends HttpRequestStepBuilder<RestRequestBuilderType> {
 
     RestRequestBuilderType addQueryParameter(String parameterName, String value);
 
@@ -25,4 +25,12 @@ public interface RestRequestBuilder<RestRequestBuilderType extends RestRequestBu
     RestRequestBuilderType assertValidStatusCodes(Integer... statusCodes);
 
     RestRequestBuilderType assertInvalidStatusCodes(Integer... statusCodes);
+
+    RestRequestBuilderType get(String uri);
+
+    RestRequestBuilderType post(String uri);
+
+    RestRequestBuilderType put(String uri);
+
+    RestRequestBuilderType delete(String uri);
 }
