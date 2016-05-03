@@ -17,8 +17,8 @@ public class TestSteps {
         GET, POST, PUT, DELETE, HEAD, OPTIONS, TRACE, PATCH
     }
 
-    public static SoapRequestStepBuilder soapRequest(String wsdl) {
-        return new SoapRequestStepBuilder().withWsdl(wsdl);
+    public static SoapRequestStepBuilder soapRequest(String wsdlUrl) {
+        return new SoapRequestStepBuilder().withWsdlAt(wsdlUrl);
     }
 
     public static RestRequestStepBuilder restRequest() {

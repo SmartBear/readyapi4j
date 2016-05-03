@@ -27,8 +27,8 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
         return getTestStep();
     }
 
-    public SoapRequestStepBuilder withWsdl(String wsdl) {
-        getTestStep().setWsdl(wsdl);
+    public SoapRequestStepBuilder withWsdlAt(String wsdlUrl) {
+        getTestStep().setWsdl(wsdlUrl);
         return this;
     }
 
