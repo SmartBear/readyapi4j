@@ -3,14 +3,19 @@ package com.smartbear.readyapi.client.teststeps.soaprequest;
 import com.smartbear.readyapi.client.assertions.NotSoapFaultAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.SchemaComplianceAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.SoapFaultAssertionBuilder;
-import com.smartbear.readyapi.client.model.Parameter;
+import com.smartbear.readyapi.client.model.SoapParameter;
 import com.smartbear.readyapi.client.model.SoapRequestTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.request.HttpRequestStepBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 
 public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestStepBuilder, SoapRequestTestStep> {
+
+    private List<SoapParameter> parameters = new ArrayList<>();
 
     public SoapRequestStepBuilder() {
         super(new SoapRequestTestStep(), TestStepTypes.SOAP_REQUEST.getName());
@@ -23,6 +28,8 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
         validateNotEmpty(getTestStep().getWsdl(), "Missing WSDL location");
         validateNotEmpty(getTestStep().getBinding(), "Missing WSDL Binding");
         validateNotEmpty(getTestStep().getOperation(), "Missing WSDL Operation");
+
+        getTestStep().setParameters( parameters );
 
         return getTestStep();
     }
@@ -60,20 +67,20 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
     }
 
     public SoapRequestStepBuilder withParameter(String name, String value) {
-        Parameter parameter = new Parameter();
+        SoapParameter parameter = new SoapParameter();
         parameter.setName(name);
         parameter.setValue(value);
 
-        getParameters().add(parameter);
+        parameters.add(parameter);
         return this;
     }
 
     public SoapRequestStepBuilder withPathParameter(String path, String value) {
-        Parameter parameter = new Parameter();
+        SoapParameter parameter = new SoapParameter();
         parameter.setPath(path);
         parameter.setValue(value);
 
-        getParameters().add(parameter);
+        parameters.add(parameter);
         return this;
     }
 }

@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client;
 
-import com.smartbear.readyapi.client.model.Parameter;
+import com.smartbear.readyapi.client.model.SoapParameter;
 import com.smartbear.readyapi.client.model.SoapRequestTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class SoapRequestStepRecipeTest {
         assertThat(testStep.getBinding(), is("GlobalWeatherSoap12"));
         assertThat(testStep.getOperation(), is("GetWeather"));
 
-        List<Parameter> parameters = testStep.getParameters();
+        List<SoapParameter> parameters = testStep.getParameters();
         assertThat(parameters.size(), is(2));
         assertThat(parameters.get(0).getName(), is("CountryName"));
         assertThat(parameters.get(1).getName(), nullValue());

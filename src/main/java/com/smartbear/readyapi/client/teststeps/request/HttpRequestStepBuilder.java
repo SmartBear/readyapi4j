@@ -4,7 +4,6 @@ import com.smartbear.readyapi.client.assertions.AbstractAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.AssertionBuilder;
 import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
 import com.smartbear.readyapi.client.model.Assertion;
-import com.smartbear.readyapi.client.model.Parameter;
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 
@@ -26,7 +25,6 @@ import static com.smartbear.readyapi.client.assertions.Assertions.xQueryContains
 abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequestStepBuilder, RequestTestStepType extends RequestTestStepBase> implements TestStepBuilder {
 
     private final RequestTestStepType testStep;
-    private List<Parameter> parameters = new ArrayList<>();
     private List<AssertionBuilder> assertionBuilders = new ArrayList<>();
     private Map<String, Object> headers = new HashMap<>();
 
@@ -37,10 +35,6 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
 
     final protected RequestTestStepType getTestStep() {
         return testStep;
-    }
-
-    protected List<Parameter> getParameters() {
-        return parameters;
     }
 
     protected Map<String, Object> getHeaders() {
@@ -110,7 +104,6 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
     public RequestTestStepType build() {
         testStep.setHeaders(headers);
         setAssertions(testStep);
-        testStep.setParameters(parameters);
 
         return testStep;
     }
