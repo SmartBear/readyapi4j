@@ -51,11 +51,11 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
         return addAssertion(new SchemaComplianceAssertionBuilder());
     }
 
-    public SoapRequestStepBuilder assertSoapFault() {
+    public SoapRequestStepBuilder assertSoapFaultResponse() {
         return addAssertion(new SoapFaultAssertionBuilder());
     }
 
-    public SoapRequestStepBuilder assertNotSoapFault() {
+    public SoapRequestStepBuilder assertSoapOkResponse() {
         return addAssertion(new NotSoapFaultAssertionBuilder());
     }
 
