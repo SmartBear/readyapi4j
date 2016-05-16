@@ -4,6 +4,7 @@ import com.smartbear.readyapi.client.model.DataSource;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.ExcelDataSource;
 import com.smartbear.readyapi.client.model.FileDataSource;
+import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
@@ -23,7 +24,7 @@ public class CodegenBasedSmartestApiWrapper implements SmartestApiWrapper {
 
     private ApiClientWrapper apiClient;
 
-    public CodegenBasedSmartestApiWrapper() {
+    CodegenBasedSmartestApiWrapper() {
         this(new ApiClientWrapper());
     }
 
@@ -31,7 +32,7 @@ public class CodegenBasedSmartestApiWrapper implements SmartestApiWrapper {
         apiClient = apiClientWrapper;
     }
 
-    public static final String APPLICATION_JSON = "application/json";
+    private static final String APPLICATION_JSON = "application/json";
 
     /**
      * Execute submitted test recipe
@@ -93,6 +94,7 @@ public class CodegenBasedSmartestApiWrapper implements SmartestApiWrapper {
      *
      * @return ProjectResultReports
      */
+    @Override
     public ProjectResultReports getExecutions(HttpBasicAuth auth) throws ApiException {
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions";
         setAuthentication(auth);
@@ -120,6 +122,25 @@ public class CodegenBasedSmartestApiWrapper implements SmartestApiWrapper {
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions/" + executionID;
 
         return invokeAPI(path, TestSteps.HttpMethod.DELETE.name(), null, APPLICATION_JSON, new ArrayList<Pair>(),
+                new HashMap<String, File>());
+
+    }
+
+    /**
+     * Gets transaction log for the provided execution id and transaction id
+     *
+     * @param executionID   execution id
+     * @param transactionId transaction id
+     * @return HarLogRoot
+     */
+    public HarLogRoot getTransactionLog(String executionID, String transactionId, HttpBasicAuth auth) throws ApiException {
+        if (executionID == null) {
+            throw new ApiException(400, "Missing the required parameter 'executionID' when calling cancelExecution");
+        }
+        setAuthentication(auth);
+        String path = ServerDefaults.SERVICE_BASE_PATH + "/executions/" + executionID + "/transactions/" + transactionId;
+
+        return getTransactionLog(path, TestSteps.HttpMethod.GET.name(), null, APPLICATION_JSON, new ArrayList<Pair>(),
                 new HashMap<String, File>());
 
     }
@@ -192,15 +213,27 @@ public class CodegenBasedSmartestApiWrapper implements SmartestApiWrapper {
                                           List<Pair> queryParams, Map<String, File> formParams) throws ApiException {
 
         return (ProjectResultReport) apiClient.invokeAPI(path, method, queryParams, postBody, formParams, APPLICATION_JSON, contentType,
-                getAuthNames(), getReturnType());
+                getAuthNames(), getReturnTypeProjectResultReport());
+    }
+
+    private HarLogRoot getTransactionLog(String path, String method, Object postBody, String contentType,
+                                         List<Pair> queryParams, Map<String, File> formParams) throws ApiException {
+
+        return (HarLogRoot) apiClient.invokeAPI(path, method, queryParams, postBody, formParams, APPLICATION_JSON, contentType,
+                getAuthNames(), getReturnTypeHarLogRoot());
     }
 
     private String[] getAuthNames() {
         return new String[]{"basicAuth"};
     }
 
-    private GenericType getReturnType() {
+    private GenericType getReturnTypeProjectResultReport() {
         return new GenericType<ProjectResultReport>() {
+        };
+    }
+
+    private GenericType getReturnTypeHarLogRoot() {
+        return new GenericType<HarLogRoot>() {
         };
     }
 

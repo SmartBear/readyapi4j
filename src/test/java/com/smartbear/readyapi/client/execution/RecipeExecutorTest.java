@@ -10,9 +10,12 @@ import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makeCancelledReport;
+import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makeFinishedReport;
+import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makeProjectResultReports;
+import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makeRunningReport;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -120,35 +123,5 @@ public class RecipeExecutorTest {
 
         execution = executor.cancelExecution(execution);
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.CANCELED));
-    }
-
-    private ProjectResultReports makeProjectResultReports() {
-        List<ProjectResultReport> projectResultReportList = new ArrayList<>();
-        projectResultReportList.add(makeRunningReport("ExecutionIdRunning"));
-        projectResultReportList.add(makeFinishedReport("ExecutionIdFinished1"));
-        ProjectResultReports projectStatusReports = new ProjectResultReports();
-        projectStatusReports.setProjectResultReports(projectResultReportList);
-        return projectStatusReports;
-    }
-
-    private ProjectResultReport makeRunningReport(String executionID) {
-        ProjectResultReport startReport = new ProjectResultReport();
-        startReport.setExecutionID(executionID);
-        startReport.setStatus(ProjectResultReport.StatusEnum.RUNNING);
-        return startReport;
-    }
-
-    private ProjectResultReport makeFinishedReport(String executionID) {
-        ProjectResultReport report = new ProjectResultReport();
-        report.setExecutionID(executionID);
-        report.setStatus(ProjectResultReport.StatusEnum.FINISHED);
-        return report;
-    }
-
-    private ProjectResultReport makeCancelledReport(String executionID) {
-        ProjectResultReport startReport = new ProjectResultReport();
-        startReport.setExecutionID(executionID);
-        startReport.setStatus(ProjectResultReport.StatusEnum.CANCELED);
-        return startReport;
     }
 }

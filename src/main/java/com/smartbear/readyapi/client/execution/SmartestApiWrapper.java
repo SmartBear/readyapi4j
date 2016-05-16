@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client.execution;
 
+import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
@@ -16,6 +17,8 @@ public interface SmartestApiWrapper {
     ProjectResultReports getExecutions(HttpBasicAuth auth) throws ApiException;
 
     ProjectResultReport cancelExecution(String executionID, HttpBasicAuth auth) throws ApiException;
+
+    HarLogRoot getTransactionLog(String executionID, String transactionId, HttpBasicAuth auth) throws ApiException;
 
     void setBasePath(String basePath);
 }

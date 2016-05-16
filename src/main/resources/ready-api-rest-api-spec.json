@@ -327,6 +327,92 @@
       }
     }
   },
+  "/v1/readyapi/executions/{executionID}/logs": {
+    "get": {
+      "tags": [
+        "readyapi"
+      ],
+      "summary": "Gets message exchange for a test step execution transaction",
+      "description": "",
+      "operationId": "getMessageExchange",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "executionID",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": {
+            "$ref": "#/definitions/HarLogRoot"
+          }
+        },
+        "500": {
+          "description": "Server error"
+        },
+        "404": {
+          "description": "Execution or transaction not found"
+        }
+      },
+      "security": [
+        {
+          "basicAuth": []
+        }
+      ]
+    }
+  },
+  "/readyapi/executions/{executionID}/transactions/{transactionId}": {
+    "get": {
+      "tags": [
+        "readyapi"
+      ],
+      "summary": "Gets message exchange for a test step execution transaction",
+      "description": "",
+      "operationId": "getMessageExchange",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "executionID",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "transactionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": {
+            "$ref": "#/definitions/HarLogRoot"
+          }
+        },
+        "500": {
+          "description": "Server error"
+        },
+        "404": {
+          "description": "Execution or transaction not found"
+        }
+      },
+      "security": [
+        {
+          "basicAuth": []
+        }
+      ]
+    }
+  },
   "securityDefinitions": {
     "basicAuth": {
       "type": "basic"
@@ -1474,6 +1560,521 @@
         },
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "HarCookie": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "value": {
+          "type": "string",
+          "readOnly": true
+        },
+        "path": {
+          "type": "string",
+          "readOnly": true
+        },
+        "domain": {
+          "type": "string",
+          "readOnly": true
+        },
+        "expires": {
+          "type": "string",
+          "readOnly": true
+        },
+        "httpOnly": {
+          "type": "boolean",
+          "readOnly": true,
+          "default": false
+        },
+        "secure": {
+          "type": "boolean",
+          "readOnly": true,
+          "default": false
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarContent": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "compression": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "mimeType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "text": {
+          "type": "string",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarCreator": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "version": {
+          "type": "string",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarPostData": {
+      "type": "object",
+      "properties": {
+        "mimeType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "params": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/definitions/HarParam"
+          }
+        },
+        "text": {
+          "type": "string",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarCacheRequest": {
+      "type": "object",
+      "properties": {
+        "expires": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "lastAccess": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "hitCount": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        },
+        "etag": {
+          "type": "string"
+        }
+      }
+    },
+    "HarPageTimings": {
+      "type": "object",
+      "properties": {
+        "onContentLoad": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "onLoad": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarPage": {
+      "type": "object",
+      "properties": {
+        "startedDateTime": {
+          "type": "string",
+          "readOnly": true
+        },
+        "id": {
+          "type": "string",
+          "readOnly": true
+        },
+        "title": {
+          "type": "string",
+          "readOnly": true
+        },
+        "pageTimings": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarPageTimings"
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarQueryString": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "value": {
+          "type": "string",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarRequest": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "readOnly": true
+        },
+        "url": {
+          "type": "string",
+          "readOnly": true
+        },
+        "httpVersion": {
+          "type": "string",
+          "readOnly": true
+        },
+        "cookies": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/definitions/HarCookie"
+          }
+        },
+        "headers": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/definitions/HarHeader"
+          }
+        },
+        "queryString": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/definitions/HarQueryString"
+          }
+        },
+        "postData": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarPostData"
+        },
+        "headersSize": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "bodySize": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarParam": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "value": {
+          "type": "string",
+          "readOnly": true
+        },
+        "fileName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "contentType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarHeader": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "value": {
+          "type": "string",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarEntry": {
+      "type": "object",
+      "properties": {
+        "pageref": {
+          "type": "string",
+          "readOnly": true
+        },
+        "startedDateTime": {
+          "type": "string",
+          "readOnly": true
+        },
+        "time": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "request": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarRequest"
+        },
+        "response": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarResponse"
+        },
+        "cache": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarCache"
+        },
+        "timings": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarTimings"
+        },
+        "serverIPAddress": {
+          "type": "string",
+          "readOnly": true
+        },
+        "connection": {
+          "type": "string",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarLog": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "readOnly": true
+        },
+        "creator": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarCreator"
+        },
+        "browser": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarBrowser"
+        },
+        "pages": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/definitions/HarPage"
+          }
+        },
+        "entries": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/definitions/HarEntry"
+          }
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "readOnly": true
+        },
+        "statusText": {
+          "type": "string",
+          "readOnly": true
+        },
+        "httpVersion": {
+          "type": "string",
+          "readOnly": true
+        },
+        "cookies": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/definitions/HarCookie"
+          }
+        },
+        "headers": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/definitions/HarHeader"
+          }
+        },
+        "content": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarContent"
+        },
+        "redirectURL": {
+          "type": "string",
+          "readOnly": true
+        },
+        "headersSize": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "bodySize": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarTimings": {
+      "type": "object",
+      "properties": {
+        "blocked": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "dns": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "connect": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "send": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "wait": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "receive": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "ssl": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarBrowser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "version": {
+          "type": "string",
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "HarLogRoot": {
+      "type": "object",
+      "properties": {
+        "log": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarLog"
+        }
+      }
+    },
+    "HarCache": {
+      "type": "object",
+      "properties": {
+        "beforeRequest": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarCacheRequest"
+        },
+        "afterRequest": {
+          "readOnly": true,
+          "$ref": "#/definitions/HarCacheRequest"
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true
         }
       }
     }

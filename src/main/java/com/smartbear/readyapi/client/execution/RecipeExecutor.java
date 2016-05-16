@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.ExecutionListener;
 import com.smartbear.readyapi.client.TestRecipe;
+import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
@@ -78,6 +79,10 @@ public class RecipeExecutor {
         ProjectResultReport projectResultReport = apiStub.cancelExecution(execution.getId(), authentication);
         execution.addResultReport(projectResultReport);
         return execution;
+    }
+
+    public HarLogRoot getTransactionLog(final Execution execution, String transactionId) {
+        return apiStub.getTransactionLog(execution.getId(), transactionId, authentication);
     }
 
     public List<Execution> getExecutions() {
