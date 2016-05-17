@@ -1,7 +1,7 @@
 package com.smartbear.readyapi.client;
 
 import com.smartbear.readyapi.client.model.Authentication;
-import com.smartbear.readyapi.client.model.Parameter;
+import com.smartbear.readyapi.client.model.RestParameter;
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.TestSteps;
@@ -16,14 +16,15 @@ import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.auth.Authentications.basic;
 import static com.smartbear.readyapi.client.auth.Authentications.kerberos;
 import static com.smartbear.readyapi.client.auth.Authentications.ntlm;
+import static com.smartbear.readyapi.client.model.RestParameter.TypeEnum.HEADER;
+import static com.smartbear.readyapi.client.model.RestParameter.TypeEnum.MATRIX;
+import static com.smartbear.readyapi.client.model.RestParameter.TypeEnum.PATH;
+import static com.smartbear.readyapi.client.model.RestParameter.TypeEnum.QUERY;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.deleteRequest;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.getRequest;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.postRequest;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.putRequest;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.restRequest;
-import static com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequest.ParameterType.HEADER;
-import static com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequest.ParameterType.MATRIX;
-import static com.smartbear.readyapi.client.teststeps.restrequest.BaseRestRequest.ParameterType.QUERY;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -152,10 +153,10 @@ public class RestRequestStepRecipeTest {
                 )
                 .buildTestRecipe();
 
-        Parameter parameter = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getParameters().get(0);
+        RestParameter parameter = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getParameters().get(0);
         assertThat(parameter.getName(), is("param1"));
         assertThat(parameter.getValue(), is("value1"));
-        assertThat(parameter.getType(), is(QUERY.name()));
+        assertThat(parameter.getType(), is(QUERY));
     }
 
     @Test
@@ -166,10 +167,10 @@ public class RestRequestStepRecipeTest {
                 )
                 .buildTestRecipe();
 
-        Parameter parameter = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getParameters().get(0);
+        RestParameter parameter = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getParameters().get(0);
         assertThat(parameter.getName(), is("param1"));
         assertThat(parameter.getValue(), is("value1"));
-        assertThat(parameter.getType(), is(HEADER.name()));
+        assertThat(parameter.getType(), is(HEADER));
     }
 
     @Test
@@ -180,10 +181,10 @@ public class RestRequestStepRecipeTest {
                 )
                 .buildTestRecipe();
 
-        Parameter parameter = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getParameters().get(0);
+        RestParameter parameter = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getParameters().get(0);
         assertThat(parameter.getName(), is("param1"));
         assertThat(parameter.getValue(), is("value1"));
-        assertThat(parameter.getType(), is("TEMPLATE"));
+        assertThat(parameter.getType(), is(PATH));
     }
 
     @Test
@@ -194,10 +195,10 @@ public class RestRequestStepRecipeTest {
                 )
                 .buildTestRecipe();
 
-        Parameter parameter = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getParameters().get(0);
+        RestParameter parameter = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getParameters().get(0);
         assertThat(parameter.getName(), is("param1"));
         assertThat(parameter.getValue(), is("value1"));
-        assertThat(parameter.getType(), is(MATRIX.name()));
+        assertThat(parameter.getType(), is(MATRIX));
     }
 
     @Test
@@ -230,9 +231,9 @@ public class RestRequestStepRecipeTest {
     public void buildsRestRequestTestStepRecipeWithRequestOptions() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(getRequest(URI)
+                    .postQueryString()
                         .followRedirects()
                         .entitizeParameters()
-                        .postQueryString()
                 )
                 .buildTestRecipe();
 
@@ -253,7 +254,7 @@ public class RestRequestStepRecipeTest {
                 .buildTestRecipe();
 
         RestTestRequestStep testStep = (RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0);
-        List<Parameter> parameters = testStep.getParameters();
+        List<RestParameter> parameters = testStep.getParameters();
         assertThat(parameters.size(), is(2));
 
         assertQueryParameter(parameters.get(0), "address", "1600+Amphitheatre+Parkway,+Mountain+View,+CA");
@@ -318,9 +319,9 @@ public class RestRequestStepRecipeTest {
         assertThat(authentication.getType(), is("SPNEGO/Kerberos"));
     }
 
-    private void assertQueryParameter(Parameter parameter, String paramName, String value) {
+    private void assertQueryParameter(RestParameter parameter, String paramName, String value) {
         assertThat(parameter.getName(), is(paramName));
         assertThat(parameter.getValue(), is(value));
-        assertThat(parameter.getType(), is(QUERY.name()));
+        assertThat(parameter.getType(), is(QUERY));
     }
 }
