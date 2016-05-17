@@ -182,7 +182,7 @@ public class ApiClientWrapper extends ApiClient {
         return null;
     }
 
-    private ObjectMapper getObjectMapper() {
+    public ObjectMapper getObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
