@@ -5,6 +5,7 @@ import com.smartbear.readyapi.client.model.SoapRequestTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import org.junit.Test;
 
+import java.net.URL;
 import java.util.List;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
@@ -18,7 +19,7 @@ public class SoapRequestStepRecipeTest {
     @Test
     public void testSoapRecipe() throws Exception {
         TestRecipe recipe = newTestRecipe()
-            .addStep(soapRequest("http://www.webservicex.com/globalweather.asmx?WSDL")
+            .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
                 .named("Soap Rulez")
                 .forBinding("GlobalWeatherSoap12")
                 .forOperation("GetWeather")
