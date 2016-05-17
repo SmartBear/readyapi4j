@@ -1,11 +1,14 @@
 package com.smartbear.readyapi.client.result;
 
+import com.smartbear.readyapi.client.execution.Execution;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
-import com.smartbear.readyapi.client.model.TestStepResultReport;
 
 import java.util.List;
 
 public interface RecipeExecutionResult {
+
+    Execution getExecution();
+
     long getTimeTaken();
 
     String getExecutionId();
@@ -16,17 +19,17 @@ public interface RecipeExecutionResult {
 
     int getResultCount();
 
-    TestStepResultReport getTestStepResult(int index);
+    TestStepResult getTestStepResult(int index);
 
-    TestStepResultReport getFirstTestStepResult(String testStepName);
+    TestStepResult getFirstTestStepResult(String testStepName);
 
-    TestStepResultReport getLastTestStepResult(String testStepName);
+    TestStepResult getLastTestStepResult(String testStepName);
 
-    List<TestStepResultReport> getTestStepResults();
+    List<TestStepResult> getTestStepResults();
 
-    List<TestStepResultReport> getTestStepResults(String testStepName);
+    List<TestStepResult> getTestStepResults(String testStepName);
 
-    List<TestStepResultReport> getFailedTestStepsResults();
+    List<TestStepResult> getFailedTestStepsResults();
 
-    List<TestStepResultReport> getFailedTestStepsResults(String testStepName);
+    List<TestStepResult> getFailedTestStepsResults(String testStepName);
 }
