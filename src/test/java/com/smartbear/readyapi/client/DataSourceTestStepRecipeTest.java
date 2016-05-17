@@ -1,12 +1,12 @@
 package com.smartbear.readyapi.client;
 
 import com.smartbear.readyapi.client.execution.ApiClientWrapper;
-import com.smartbear.readyapi.client.execution.CodegenBasedSmartestApiWrapper;
+import com.smartbear.readyapi.client.execution.CodegenBasedTestServerApi;
 import com.smartbear.readyapi.client.execution.Execution;
 import com.smartbear.readyapi.client.execution.RecipeExecutor;
 import com.smartbear.readyapi.client.execution.RecipeExecutorTestCreator;
 import com.smartbear.readyapi.client.execution.ServerDefaults;
-import com.smartbear.readyapi.client.execution.SmartestApiWrapper;
+import com.smartbear.readyapi.client.execution.TestServerApi;
 import com.smartbear.readyapi.client.model.DataSource;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.ExcelDataSource;
@@ -169,9 +169,9 @@ public class DataSourceTestStepRecipeTest {
                 .buildTestRecipe();
 
         ApiClientWrapper apiClientWrapper = mockApiClientWrapper();
-        SmartestApiWrapper smartestApiWrapper = new CodegenBasedSmartestApiWrapper(apiClientWrapper);
+        TestServerApi testServerApi = new CodegenBasedTestServerApi(apiClientWrapper);
         RecipeExecutor recipeExecutor = RecipeExecutorTestCreator.createRecipeExecutor(ServerDefaults.DEFAULT_SCHEME, "localhost", ServerDefaults.DEFAULT_PORT,
-                ServerDefaults.VERSION_PREFIX, smartestApiWrapper);
+                ServerDefaults.VERSION_PREFIX, testServerApi);
         recipeExecutor.setCredentials("user", "password");
         Execution execution = recipeExecutor.executeRecipe(recipe);
 
