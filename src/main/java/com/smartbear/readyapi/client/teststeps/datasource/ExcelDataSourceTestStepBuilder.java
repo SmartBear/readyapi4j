@@ -3,7 +3,7 @@ package com.smartbear.readyapi.client.teststeps.datasource;
 public class ExcelDataSourceTestStepBuilder extends DataSourceTestStepBuilder<ExcelDataSourceBuilder> {
 
     public ExcelDataSourceTestStepBuilder() {
-        addDataSource(new ExcelDataSourceBuilder());
+        setDataSource(new ExcelDataSourceBuilder());
     }
 
     public ExcelDataSourceTestStepBuilder addProperty(String propertyName) {
