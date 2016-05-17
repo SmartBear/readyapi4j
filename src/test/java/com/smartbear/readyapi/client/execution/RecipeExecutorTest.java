@@ -33,13 +33,13 @@ public class RecipeExecutorTest {
     private static final int PORT = 6234;
     private static final String BASE_PATH = "/custom_path";
 
-    private SmartestApiWrapper apiWrapper;
+    private TestServerApi apiWrapper;
     private RecipeExecutor executor;
     private TestRecipe recipeToSubmit;
 
     @Before
     public void setUp() throws Exception {
-        apiWrapper = mock(SmartestApiWrapper.class);
+        apiWrapper = mock(TestServerApi.class);
         executor = new RecipeExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, apiWrapper);
         executor.setCredentials("theUser", "thePassword");
         recipeToSubmit = new TestRecipe(new TestCase());

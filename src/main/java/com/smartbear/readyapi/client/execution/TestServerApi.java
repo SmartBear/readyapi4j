@@ -9,7 +9,7 @@ import io.swagger.client.auth.HttpBasicAuth;
 /**
  * Defines an API stub that can communicate with the Ready! API Server.
  */
-public interface SmartestApiWrapper {
+public interface TestServerApi {
     ProjectResultReport postTestRecipe(TestCase body, boolean async, HttpBasicAuth auth) throws ApiException;
 
     ProjectResultReport getExecutionStatus(String executionID, HttpBasicAuth auth) throws ApiException;

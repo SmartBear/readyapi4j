@@ -20,15 +20,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CodegenBasedSmartestApiWrapper implements SmartestApiWrapper {
+public class CodegenBasedTestServerApi implements TestServerApi {
 
     private ApiClientWrapper apiClient;
 
-    CodegenBasedSmartestApiWrapper() {
+    CodegenBasedTestServerApi() {
         this(new ApiClientWrapper());
     }
 
-    public CodegenBasedSmartestApiWrapper(ApiClientWrapper apiClientWrapper) {
+    public CodegenBasedTestServerApi(ApiClientWrapper apiClientWrapper) {
         apiClient = apiClientWrapper;
     }
 
