@@ -1102,6 +1102,9 @@
           "type": "integer",
           "format": "int64"
         },
+        "transactionId": {
+          "type": "string"
+        },
         "messages": {
           "type": "array",
           "items": {

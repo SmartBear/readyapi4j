@@ -21,12 +21,12 @@ public class TestSteps {
         return new SoapRequestStepBuilder().withWsdlAt(wsdlUrl);
     }
 
-    public static RestRequestStepBuilder restRequest() {
-        return new RestRequestStepBuilder(null, TestSteps.HttpMethod.GET);
+    public static RestRequestStepBuilder<RestRequestStepBuilder> restRequest() {
+        return new RestRequestStepBuilder<>(null, TestSteps.HttpMethod.GET);
     }
 
-    public static RestRequestStepBuilder getRequest(String uri) {
-        return new RestRequestStepBuilder(uri, TestSteps.HttpMethod.GET);
+    public static RestRequestStepBuilder<RestRequestStepBuilder> getRequest(String uri) {
+        return new RestRequestStepBuilder<>(uri, TestSteps.HttpMethod.GET);
     }
 
     public static RestRequestStepWithBodyBuilder postRequest(String uri) {
@@ -37,8 +37,8 @@ public class TestSteps {
         return new RestRequestStepWithBodyBuilder(uri, TestSteps.HttpMethod.PUT);
     }
 
-    public static RestRequestStepBuilder deleteRequest(String uri) {
-        return new RestRequestStepBuilder(uri, TestSteps.HttpMethod.DELETE);
+    public static RestRequestStepBuilder<RestRequestStepBuilder> deleteRequest(String uri) {
+        return new RestRequestStepBuilder<>(uri, TestSteps.HttpMethod.DELETE);
     }
 
     public static PropertyTransferTestStepBuilder propertyTransfer() {
