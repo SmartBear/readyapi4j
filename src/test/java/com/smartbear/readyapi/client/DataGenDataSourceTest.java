@@ -29,7 +29,7 @@ public class DataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withNumberOfRows(34)
-                        .addDataGenerator(
+                        .withProperty(
                                 booleanTypeProperty("property1")
                                         .duplicatedBy(1)
                                         .withYesNoFormat()
@@ -51,7 +51,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithBooleanDataGenWithDefaultFormat() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 booleanTypeProperty("property1")
                         )
                 )
@@ -69,7 +69,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithBooleanDataGenWithDigitsFormat() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 booleanTypeProperty("property1").withDigitsFormat()
                         )
                 )
