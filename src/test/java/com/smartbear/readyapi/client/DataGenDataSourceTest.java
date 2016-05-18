@@ -50,7 +50,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithCityDataGenDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .setNumberOfRows(13)
+                        .withNumberOfRows(13)
                         .addDataGenerator(
                                 cityTypeProperty("property1")
                                         .duplicatedBy(7)
