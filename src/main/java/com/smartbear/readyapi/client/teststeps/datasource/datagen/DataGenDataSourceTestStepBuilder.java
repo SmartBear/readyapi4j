@@ -6,7 +6,7 @@ import com.smartbear.readyapi.client.teststeps.datasource.DataSourceTestStepBuil
 public class DataGenDataSourceTestStepBuilder extends DataSourceTestStepBuilder<DataGenDataSourceBuilder> {
 
     public DataGenDataSourceTestStepBuilder() {
-        setDataSource(new DataGenDataSourceBuilder());
+        withDataSource(new DataGenDataSourceBuilder());
     }
 
     public DataGenDataSourceTestStepBuilder setNumberOfRows(int numberOfRows) {

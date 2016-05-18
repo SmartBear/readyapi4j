@@ -23,7 +23,7 @@ public class DataGenDataSourceTest {
                         .setNumberOfRows(34)
                         .addDataGenerator(
                                 booleanDataGenerator("property1")
-                                        .setDuplicationFactor(1)
+                                        .duplicatedBy(1)
                                         .setFormat(BooleanDataGeneratorBuilder.Format.YES_NO)
                         )
                 )

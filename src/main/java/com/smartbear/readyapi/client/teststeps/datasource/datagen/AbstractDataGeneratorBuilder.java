@@ -10,7 +10,7 @@ abstract class AbstractDataGeneratorBuilder<BuilderType> {
         this.property = property;
     }
 
-    public BuilderType setDuplicationFactor(int duplicationFactor) {
+    public BuilderType duplicatedBy(int duplicationFactor) {
         this.duplicationFactor = duplicationFactor;
         return (BuilderType) this;
     }

@@ -5,7 +5,7 @@ import java.util.List;
 public class GridDataSourceTestStepBuilder extends DataSourceTestStepBuilder<GridDataSourceBuilder> {
 
     public GridDataSourceTestStepBuilder() {
-        setDataSource(new GridDataSourceBuilder());
+        withDataSource(new GridDataSourceBuilder());
     }
 
     public GridDataSourceTestStepBuilder addProperty(String property, List<String> propertyValues) {
