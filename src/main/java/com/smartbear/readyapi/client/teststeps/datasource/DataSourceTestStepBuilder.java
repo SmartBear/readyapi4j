@@ -18,7 +18,7 @@ public class DataSourceTestStepBuilder<DataSourceBuilderType extends DataSourceB
         return this;
     }
 
-    public DataSourceTestStepBuilder addDataSource(DataSourceBuilderType dataSourceBuilder) {
+    public DataSourceTestStepBuilder withDataSource(DataSourceBuilderType dataSourceBuilder) {
         this.dataSourceBuilder = dataSourceBuilder;
         return this;
     }
