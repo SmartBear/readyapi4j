@@ -88,7 +88,7 @@ public class DataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withNumberOfRows(13)
-                        .addDataGenerator(
+                        .withProperty(
                                 cityTypeProperty("property1")
                                         .duplicatedBy(7)
                         )
@@ -108,7 +108,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithCountryDataGenDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 countryTypeProperty("property1")
                         )
                 )
@@ -121,7 +121,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithStreetAddressDataGenDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 addressTypeProperty("property1")
                         )
                 )
@@ -134,7 +134,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithEMailDataGenDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 emailTypeProperty("property1")
                         )
                 )
@@ -147,7 +147,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithGuidDataGenDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 guidTypeProperty("property1")
                         )
                 )
@@ -160,7 +160,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithSSNDataGenDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 ssnTypeProperty("property1")
                         )
                 )
@@ -173,7 +173,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithComputerAddressDataGenWithDefaultFormat() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 computerAddressTypeProperty("property1")
                         )
                 )
@@ -188,7 +188,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithComputerAddressDataGenWithIPv4Format() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 computerAddressTypeProperty("property1")
                                         .withIPv4Format()
                         )
@@ -204,7 +204,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithComputerAddressDataGenWithMac48Format() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .addDataGenerator(
+                        .withProperty(
                                 computerAddressTypeProperty("property1")
                                         .withMac48Format()
                         )
