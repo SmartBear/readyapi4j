@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client;
 
 import com.smartbear.readyapi.client.model.BooleanDataGenerator;
 import com.smartbear.readyapi.client.model.ComputerAddressDataGenerator;
+import com.smartbear.readyapi.client.model.CustomStringDataGenerator;
 import com.smartbear.readyapi.client.model.DataGenDataSource;
 import com.smartbear.readyapi.client.model.DataGenerator;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
@@ -16,6 +17,7 @@ import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGen
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.cityTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.computerAddressTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.countryTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.customStringTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.emailTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.guidTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.ssnTypeProperty;
@@ -36,7 +38,6 @@ public class DataGenDataSourceTest {
                         )
                 )
                 .buildTestRecipe();
-        System.out.println(recipe.toString());
         DataGenDataSource dataGenDataSource = getDataGenDataSource(recipe);
         BooleanDataGenerator dataGenerator = (BooleanDataGenerator) dataGenDataSource.getDataGenerators().get(0);
 
@@ -214,6 +215,22 @@ public class DataGenDataSourceTest {
         ComputerAddressDataGenerator dataGenerator = (ComputerAddressDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Computer Address"));
         assertThat(dataGenerator.getAddressType(), is(ComputerAddressDataGenerator.AddressTypeEnum.MAC48));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithCustomStringDataGen() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                customStringTypeProperty("property1")
+                                        .withValue("Custom Value")
+                        )
+                )
+                .buildTestRecipe();
+
+        CustomStringDataGenerator dataGenerator = (CustomStringDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("Custom String"));
+        assertThat(dataGenerator.getValue(), is("Custom Value"));
     }
 
 

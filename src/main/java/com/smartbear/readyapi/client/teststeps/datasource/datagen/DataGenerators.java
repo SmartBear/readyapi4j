@@ -32,4 +32,8 @@ public class DataGenerators {
     public static ComputerAddressDataGeneratorBuilder computerAddressTypeProperty(String propertyName) {
         return new ComputerAddressDataGeneratorBuilder(propertyName);
     }
+
+    public static CustomStringDataGeneratorBuilder customStringTypeProperty(String propertyName) {
+        return new CustomStringDataGeneratorBuilder(propertyName);
+    }
 }
