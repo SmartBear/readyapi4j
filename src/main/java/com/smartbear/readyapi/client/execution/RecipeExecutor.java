@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.ExecutionListener;
 import com.smartbear.readyapi.client.TestRecipe;
+import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
@@ -19,12 +20,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class RecipeExecutor {
 
     private static final int NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS = 3;
-    private final SmartestApiWrapper apiStub;
+    private final TestServerApi apiStub;
     private HttpBasicAuth authentication;
     private final List<ExecutionListener> executionListeners = new CopyOnWriteArrayList<>();
 
     public RecipeExecutor(Scheme scheme, String host, int port) {
-        this(scheme, host, port, ServerDefaults.VERSION_PREFIX, new CodegenBasedSmartestApiWrapper());
+        this(scheme, host, port, ServerDefaults.VERSION_PREFIX, new CodegenBasedTestServerApi());
     }
 
     public RecipeExecutor(String host, int port) {
@@ -36,7 +37,7 @@ public class RecipeExecutor {
     }
 
     // Used for testing
-    RecipeExecutor(Scheme scheme, String host, int port, String basePath, SmartestApiWrapper apiStub) {
+    RecipeExecutor(Scheme scheme, String host, int port, String basePath, TestServerApi apiStub) {
         this.apiStub = apiStub;
         apiStub.setBasePath(String.format("%s://%s:%d%s", scheme.getValue(), host, port, basePath));
     }
@@ -78,6 +79,10 @@ public class RecipeExecutor {
         ProjectResultReport projectResultReport = apiStub.cancelExecution(execution.getId(), authentication);
         execution.addResultReport(projectResultReport);
         return execution;
+    }
+
+    public HarLogRoot getTransactionLog(final Execution execution, String transactionId) {
+        return apiStub.getTransactionLog(execution.getId(), transactionId, authentication);
     }
 
     public List<Execution> getExecutions() {

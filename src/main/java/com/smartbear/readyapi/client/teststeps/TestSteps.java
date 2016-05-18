@@ -12,22 +12,24 @@ import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestStepBuilde
 import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestStepWithBodyBuilder;
 import com.smartbear.readyapi.client.teststeps.soaprequest.SoapRequestStepBuilder;
 
+import java.net.URL;
+
 public class TestSteps {
 
     public enum HttpMethod {
         GET, POST, PUT, DELETE, HEAD, OPTIONS, TRACE, PATCH
     }
 
-    public static SoapRequestStepBuilder soapRequest(String wsdlUrl) {
+    public static SoapRequestStepBuilder soapRequest(URL wsdlUrl) {
         return new SoapRequestStepBuilder().withWsdlAt(wsdlUrl);
     }
 
-    public static RestRequestStepBuilder restRequest() {
-        return new RestRequestStepBuilder(null, TestSteps.HttpMethod.GET);
+    public static RestRequestStepBuilder<RestRequestStepBuilder> restRequest() {
+        return new RestRequestStepBuilder<>(null, TestSteps.HttpMethod.GET);
     }
 
-    public static RestRequestStepBuilder getRequest(String uri) {
-        return new RestRequestStepBuilder(uri, TestSteps.HttpMethod.GET);
+    public static RestRequestStepBuilder<RestRequestStepBuilder> getRequest(String uri) {
+        return new RestRequestStepBuilder<>(uri, TestSteps.HttpMethod.GET);
     }
 
     public static RestRequestStepWithBodyBuilder postRequest(String uri) {
@@ -38,8 +40,8 @@ public class TestSteps {
         return new RestRequestStepWithBodyBuilder(uri, TestSteps.HttpMethod.PUT);
     }
 
-    public static RestRequestStepBuilder deleteRequest(String uri) {
-        return new RestRequestStepBuilder(uri, TestSteps.HttpMethod.DELETE);
+    public static RestRequestStepBuilder<RestRequestStepBuilder> deleteRequest(String uri) {
+        return new RestRequestStepBuilder<>(uri, TestSteps.HttpMethod.DELETE);
     }
 
     public static PropertyTransferTestStepBuilder propertyTransfer() {

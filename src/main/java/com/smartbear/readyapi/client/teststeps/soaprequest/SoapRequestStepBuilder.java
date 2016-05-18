@@ -8,6 +8,7 @@ import com.smartbear.readyapi.client.model.SoapRequestTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.request.HttpRequestStepBuilder;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
         return getTestStep();
     }
 
-    public SoapRequestStepBuilder withWsdlAt(String wsdlUrl) {
-        getTestStep().setWsdl(wsdlUrl);
+    public SoapRequestStepBuilder withWsdlAt(URL wsdlUrl) {
+        getTestStep().setWsdl(wsdlUrl.toString());
         return this;
     }
 
