@@ -17,7 +17,7 @@ class DataGenDataSourceBuilder implements DataSourceBuilder {
 
     DataGenDataSourceBuilder withNumberOfRows(int numberOfRows) {
         if (numberOfRows < 1) {
-            throw new IllegalStateException("Number of rows should be greater than 0, actual: " + numberOfRows);
+            throw new IllegalArgumentException("Number of rows should be greater than 0, actual: " + numberOfRows);
         }
         this.numberOfRows = numberOfRows;
         return this;

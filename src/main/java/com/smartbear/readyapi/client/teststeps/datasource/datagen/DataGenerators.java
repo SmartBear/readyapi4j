@@ -36,4 +36,8 @@ public class DataGenerators {
     public static CustomStringDataGeneratorBuilder customStringTypeProperty(String propertyName) {
         return new CustomStringDataGeneratorBuilder(propertyName);
     }
+
+    public static StringDataGeneratorBuilder stringTypeProperty(String propertyName) {
+        return new StringDataGeneratorBuilder(propertyName);
+    }
 }

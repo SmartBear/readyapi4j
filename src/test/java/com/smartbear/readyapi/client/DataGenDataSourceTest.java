@@ -6,6 +6,7 @@ import com.smartbear.readyapi.client.model.CustomStringDataGenerator;
 import com.smartbear.readyapi.client.model.DataGenDataSource;
 import com.smartbear.readyapi.client.model.DataGenerator;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
+import com.smartbear.readyapi.client.model.StringDataGenerator;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import org.junit.Test;
@@ -21,6 +22,7 @@ import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGen
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.emailTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.guidTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.ssnTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.stringTypeProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -231,6 +233,51 @@ public class DataGenDataSourceTest {
         CustomStringDataGenerator dataGenerator = (CustomStringDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Custom String"));
         assertThat(dataGenerator.getValue(), is("Custom Value"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithStringDataGenWithDefaultValues() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                stringTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        StringDataGenerator dataGenerator = (StringDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("String"));
+        assertStringDataGen(dataGenerator, 5, 10, true);
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithStringDataGen() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                stringTypeProperty("property1")
+                                        .withMinimumCharacters(3)
+                                        .withMaximumCharacters(15)
+                                        .withoutLetters()
+                                        .withoutDigits()
+                                        .withoutSpaces()
+                                        .withoutPunctuationMarks()
+                        )
+                )
+                .buildTestRecipe();
+
+        StringDataGenerator dataGenerator = (StringDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("String"));
+        assertStringDataGen(dataGenerator, 3, 15, false);
+    }
+
+    private void assertStringDataGen(StringDataGenerator dataGenerator, int minChars, int maxChars, boolean booleanValues) {
+        assertThat(dataGenerator.getMinimumCharacters(), is(minChars));
+        assertThat(dataGenerator.getMaximumCharacters(), is(maxChars));
+        assertThat(dataGenerator.getUseLetters(), is(booleanValues));
+        assertThat(dataGenerator.getUseDigits(), is(booleanValues));
+        assertThat(dataGenerator.getUseSpaces(), is(booleanValues));
+        assertThat(dataGenerator.getUsePunctuationsMarks(), is(booleanValues));
     }
 
 
