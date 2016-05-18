@@ -4,7 +4,7 @@ import com.smartbear.readyapi.client.model.DataGenerator;
 
 public abstract class AbstractDataGeneratorBuilder<BuilderType> {
     private final String property;
-    private int duplicationFactor;
+    private int duplicationFactor = 1; //default value
 
     AbstractDataGeneratorBuilder(String property) {
         this.property = property;

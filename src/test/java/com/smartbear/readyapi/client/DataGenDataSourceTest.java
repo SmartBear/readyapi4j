@@ -1,19 +1,20 @@
 package com.smartbear.readyapi.client;
 
 import com.smartbear.readyapi.client.model.BooleanDataGenerator;
+import com.smartbear.readyapi.client.model.ComputerAddressDataGenerator;
 import com.smartbear.readyapi.client.model.DataGenDataSource;
 import com.smartbear.readyapi.client.model.DataGenerator;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
-import com.smartbear.readyapi.client.teststeps.datasource.datagen.BooleanDataGeneratorBuilder;
 import org.junit.Test;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.addressTypeProperty;
-import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.booleanDataGenerator;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.booleanTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.cityTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.computerAddressTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.countryTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.emailTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.guidTypeProperty;
@@ -35,7 +36,7 @@ public class DataGenDataSourceTest {
                         )
                 )
                 .buildTestRecipe();
-
+        System.out.println(recipe.toString());
         DataGenDataSource dataGenDataSource = getDataGenDataSource(recipe);
         BooleanDataGenerator dataGenerator = (BooleanDataGenerator) dataGenDataSource.getDataGenerators().get(0);
 
@@ -167,6 +168,54 @@ public class DataGenDataSourceTest {
 
         assertThat(getDataGenerator(recipe).getType(), is("Social Security Number"));
     }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithComputerAddressDataGenWithDefaultFormat() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .addDataGenerator(
+                                computerAddressTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        ComputerAddressDataGenerator dataGenerator = (ComputerAddressDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("Computer Address"));
+        assertThat(dataGenerator.getAddressType(), is(ComputerAddressDataGenerator.AddressTypeEnum.IPV4));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithComputerAddressDataGenWithIPv4Format() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .addDataGenerator(
+                                computerAddressTypeProperty("property1")
+                                        .withIPv4Format()
+                        )
+                )
+                .buildTestRecipe();
+
+        ComputerAddressDataGenerator dataGenerator = (ComputerAddressDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("Computer Address"));
+        assertThat(dataGenerator.getAddressType(), is(ComputerAddressDataGenerator.AddressTypeEnum.IPV4));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithComputerAddressDataGenWithMac48Format() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .addDataGenerator(
+                                computerAddressTypeProperty("property1")
+                                        .withMac48Format()
+                        )
+                )
+                .buildTestRecipe();
+
+        ComputerAddressDataGenerator dataGenerator = (ComputerAddressDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("Computer Address"));
+        assertThat(dataGenerator.getAddressType(), is(ComputerAddressDataGenerator.AddressTypeEnum.MAC48));
+    }
+
 
     private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {
         TestStep testStep = recipe.getTestCase().getTestSteps().get(0);

@@ -28,4 +28,8 @@ public class DataGenerators {
     public static BasicDataGeneratorBuilder ssnTypeProperty(String propertyName) {
         return new BasicDataGeneratorBuilder("Social Security Number", propertyName);
     }
+
+    public static ComputerAddressDataGeneratorBuilder computerAddressTypeProperty(String propertyName) {
+        return new ComputerAddressDataGeneratorBuilder(propertyName);
+    }
 }

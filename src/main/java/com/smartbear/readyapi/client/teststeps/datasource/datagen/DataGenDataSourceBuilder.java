@@ -13,9 +13,12 @@ class DataGenDataSourceBuilder implements DataSourceBuilder {
 
     private final DataGenDataSource dataGenDataSource = new DataGenDataSource();
     private List<AbstractDataGeneratorBuilder> dataGeneratorBuilders = new ArrayList<>();
-    private int numberOfRows;
+    private int numberOfRows = 10; //default value
 
     DataGenDataSourceBuilder withNumberOfRows(int numberOfRows) {
+        if (numberOfRows < 1) {
+            throw new IllegalStateException("Number of rows should be greater than 0, actual: " + numberOfRows);
+        }
         this.numberOfRows = numberOfRows;
         return this;
     }
