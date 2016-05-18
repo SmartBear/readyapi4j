@@ -24,7 +24,7 @@ public class ComputerAddressDataGeneratorBuilder extends AbstractDataGeneratorBu
     }
 
     @Override
-    protected DataGenerator createDataGenerator() {
+    protected DataGenerator buildDataGenerator() {
         return computerAddressDataGenerator;
     }
 }

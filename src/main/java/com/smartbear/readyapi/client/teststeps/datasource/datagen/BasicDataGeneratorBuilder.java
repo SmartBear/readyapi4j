@@ -12,7 +12,7 @@ public class BasicDataGeneratorBuilder extends AbstractDataGeneratorBuilder<Basi
     }
 
     @Override
-    protected DataGenerator createDataGenerator() {
+    protected DataGenerator buildDataGenerator() {
         DataGenerator dataGenerator = new DataGenerator();
         dataGenerator.setType(type);
         return dataGenerator;

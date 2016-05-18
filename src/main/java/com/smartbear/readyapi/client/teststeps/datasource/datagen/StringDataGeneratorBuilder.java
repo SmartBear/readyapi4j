@@ -72,7 +72,7 @@ public class StringDataGeneratorBuilder extends AbstractDataGeneratorBuilder<Str
     }
 
     @Override
-    protected DataGenerator createDataGenerator() {
+    protected DataGenerator buildDataGenerator() {
         return stringDataGenerator;
     }
 }

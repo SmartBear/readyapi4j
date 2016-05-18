@@ -19,11 +19,11 @@ public abstract class AbstractDataGeneratorBuilder<BuilderType> {
     }
 
     public DataGenerator build() {
-        DataGenerator dataGenerator = createDataGenerator();
+        DataGenerator dataGenerator = buildDataGenerator();
         dataGenerator.setPropertyName(property);
         dataGenerator.setDuplicationFactor(duplicationFactor);
         return dataGenerator;
     }
 
-    protected abstract DataGenerator createDataGenerator();
+    protected abstract DataGenerator buildDataGenerator();
 }

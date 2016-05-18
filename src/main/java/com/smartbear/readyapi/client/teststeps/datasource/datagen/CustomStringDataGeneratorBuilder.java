@@ -17,7 +17,7 @@ public class CustomStringDataGeneratorBuilder extends AbstractDataGeneratorBuild
     }
 
     @Override
-    protected DataGenerator createDataGenerator() {
+    protected DataGenerator buildDataGenerator() {
         return customStringDataGenerator;
     }
 }
