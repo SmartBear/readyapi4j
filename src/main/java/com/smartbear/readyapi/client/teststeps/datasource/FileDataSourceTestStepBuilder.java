@@ -3,7 +3,7 @@ package com.smartbear.readyapi.client.teststeps.datasource;
 public class FileDataSourceTestStepBuilder extends DataSourceTestStepBuilder<FileDataSourceBuilder> {
 
     public FileDataSourceTestStepBuilder() {
-        addDataSource(new FileDataSourceBuilder());
+        withDataSource(new FileDataSourceBuilder());
     }
 
     public FileDataSourceTestStepBuilder addProperty(String propertyName) {

@@ -4,6 +4,7 @@ import com.smartbear.readyapi.client.teststeps.datasource.DataSourceTestStepBuil
 import com.smartbear.readyapi.client.teststeps.datasource.ExcelDataSourceTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.datasource.FileDataSourceTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.datasource.GridDataSourceTestStepBuilder;
+import com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenDataSourceTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.jdbcrequest.JdbcConnection;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferTestStepBuilder;
@@ -61,6 +62,10 @@ public class TestSteps {
 
     public static FileDataSourceTestStepBuilder fileDataSource() {
         return new FileDataSourceTestStepBuilder();
+    }
+
+    public static DataGenDataSourceTestStepBuilder dataGenDataSource() {
+        return new DataGenDataSourceTestStepBuilder();
     }
 
     public static GridDataSourceTestStepBuilder gridDataSource(String name) {
