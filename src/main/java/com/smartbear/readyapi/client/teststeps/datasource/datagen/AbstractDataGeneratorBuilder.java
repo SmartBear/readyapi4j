@@ -10,8 +10,11 @@ abstract class AbstractDataGeneratorBuilder<BuilderType> {
         this.property = property;
     }
 
-    public BuilderType duplicatedBy(int duplicationFactor) {
-        this.duplicationFactor = duplicationFactor;
+    public BuilderType duplicatedBy(int duplicatedBy) {
+        if (duplicatedBy <= 0) {
+            throw new IllegalArgumentException("Duplicated by should be greater than 0, actual : " + duplicatedBy);
+        }
+        this.duplicationFactor = duplicatedBy;
         return (BuilderType) this;
     }
 
