@@ -21,4 +21,8 @@ public interface TestServerApi {
     HarLogRoot getTransactionLog(String executionID, String transactionId, HttpBasicAuth auth) throws ApiException;
 
     void setBasePath(String basePath);
+
+    void setConnectTimeout(int connectionTimeout);
+
+    void setDebugging(boolean debugging);
 }
