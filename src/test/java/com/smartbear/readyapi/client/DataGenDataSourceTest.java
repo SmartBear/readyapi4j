@@ -27,7 +27,7 @@ public class DataGenDataSourceTest {
     public void buildsRecipeWithDataSourceTestStepWithBooleanDataGenDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
-                        .setNumberOfRows(34)
+                        .withNumberOfRows(34)
                         .addDataGenerator(
                                 booleanDataGenerator("property1")
                                         .duplicatedBy(1)

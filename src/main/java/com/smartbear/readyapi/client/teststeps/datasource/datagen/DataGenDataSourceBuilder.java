@@ -15,7 +15,7 @@ class DataGenDataSourceBuilder implements DataSourceBuilder {
     private List<AbstractDataGeneratorBuilder> dataGeneratorBuilders = new ArrayList<>();
     private int numberOfRows;
 
-    DataGenDataSourceBuilder setNumberOfRows(int numberOfRows) {
+    DataGenDataSourceBuilder withNumberOfRows(int numberOfRows) {
         this.numberOfRows = numberOfRows;
         return this;
     }

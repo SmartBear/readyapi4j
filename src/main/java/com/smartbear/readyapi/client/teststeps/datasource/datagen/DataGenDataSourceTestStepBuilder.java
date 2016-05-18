@@ -9,8 +9,8 @@ public class DataGenDataSourceTestStepBuilder extends DataSourceTestStepBuilder<
         withDataSource(new DataGenDataSourceBuilder());
     }
 
-    public DataGenDataSourceTestStepBuilder setNumberOfRows(int numberOfRows) {
-        getDataSourceBuilder().setNumberOfRows(numberOfRows);
+    public DataGenDataSourceTestStepBuilder withNumberOfRows(int numberOfRows) {
+        getDataSourceBuilder().withNumberOfRows(numberOfRows);
         return this;
     }
 
