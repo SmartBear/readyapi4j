@@ -64,4 +64,8 @@ public class DataGenerators {
     public static UKPostCodeDataGeneratorBuilder ukPostCodeTypeProperty(String propertyName) {
         return new UKPostCodeDataGeneratorBuilder(propertyName);
     }
+
+    public static USZipDataGeneratorBuilder usZipCodeTypeProperty(String propertyName) {
+        return new USZipDataGeneratorBuilder(propertyName);
+    }
 }
