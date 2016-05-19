@@ -60,4 +60,8 @@ public class DataGenerators {
     public static ValuesFromSetDataGeneratorBuilder valueFromSetTypeProperty(String propertyName) {
         return new ValuesFromSetDataGeneratorBuilder(propertyName);
     }
+
+    public static UKPostCodeDataGeneratorBuilder ukPostCodeTypeProperty(String propertyName) {
+        return new UKPostCodeDataGeneratorBuilder(propertyName);
+    }
 }
