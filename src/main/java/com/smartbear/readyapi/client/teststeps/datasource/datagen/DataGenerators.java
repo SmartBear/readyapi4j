@@ -56,4 +56,8 @@ public class DataGenerators {
     public static RealNumberDataGeneratorBuilder realNumberTypeProperty(String propertyName) {
         return new RealNumberDataGeneratorBuilder(propertyName);
     }
+
+    public static ValuesFromSetDataGeneratorBuilder valueFromSetTypeProperty(String propertyName) {
+        return new ValuesFromSetDataGeneratorBuilder(propertyName);
+    }
 }
