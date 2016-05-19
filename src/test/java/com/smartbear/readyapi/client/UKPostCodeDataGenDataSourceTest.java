@@ -4,7 +4,7 @@ import com.smartbear.readyapi.client.model.DataGenDataSource;
 import com.smartbear.readyapi.client.model.DataGenerator;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.TestStep;
-import com.smartbear.readyapi.client.model.UKPostCodeSetDataGenerator;
+import com.smartbear.readyapi.client.model.UKPostCodeDataGenerator;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import org.junit.Test;
 
@@ -26,9 +26,9 @@ public class UKPostCodeDataGenDataSourceTest {
                 )
                 .buildTestRecipe();
 
-        UKPostCodeSetDataGenerator dataGenerator = (UKPostCodeSetDataGenerator) getDataGenerator(recipe);
+        UKPostCodeDataGenerator dataGenerator = (UKPostCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United Kingdom Postcode"));
-        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeSetDataGenerator.CodeFormatEnum.ALL));
+        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeDataGenerator.CodeFormatEnum.ALL));
     }
 
     @Test
@@ -42,9 +42,9 @@ public class UKPostCodeDataGenDataSourceTest {
                 )
                 .buildTestRecipe();
 
-        UKPostCodeSetDataGenerator dataGenerator = (UKPostCodeSetDataGenerator) getDataGenerator(recipe);
+        UKPostCodeDataGenerator dataGenerator = (UKPostCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United Kingdom Postcode"));
-        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeSetDataGenerator.CodeFormatEnum.A9_9AA));
+        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeDataGenerator.CodeFormatEnum.A9_9AA));
     }
 
     @Test
@@ -58,9 +58,9 @@ public class UKPostCodeDataGenDataSourceTest {
                 )
                 .buildTestRecipe();
 
-        UKPostCodeSetDataGenerator dataGenerator = (UKPostCodeSetDataGenerator) getDataGenerator(recipe);
+        UKPostCodeDataGenerator dataGenerator = (UKPostCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United Kingdom Postcode"));
-        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeSetDataGenerator.CodeFormatEnum.A99_9AA));
+        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeDataGenerator.CodeFormatEnum.A99_9AA));
     }
 
     @Test
@@ -74,9 +74,9 @@ public class UKPostCodeDataGenDataSourceTest {
                 )
                 .buildTestRecipe();
 
-        UKPostCodeSetDataGenerator dataGenerator = (UKPostCodeSetDataGenerator) getDataGenerator(recipe);
+        UKPostCodeDataGenerator dataGenerator = (UKPostCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United Kingdom Postcode"));
-        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeSetDataGenerator.CodeFormatEnum.AA9_9AA));
+        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeDataGenerator.CodeFormatEnum.AA9_9AA));
     }
 
     @Test
@@ -90,9 +90,9 @@ public class UKPostCodeDataGenDataSourceTest {
                 )
                 .buildTestRecipe();
 
-        UKPostCodeSetDataGenerator dataGenerator = (UKPostCodeSetDataGenerator) getDataGenerator(recipe);
+        UKPostCodeDataGenerator dataGenerator = (UKPostCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United Kingdom Postcode"));
-        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeSetDataGenerator.CodeFormatEnum.A9A_9AA));
+        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeDataGenerator.CodeFormatEnum.A9A_9AA));
     }
 
     @Test
@@ -106,9 +106,9 @@ public class UKPostCodeDataGenDataSourceTest {
                 )
                 .buildTestRecipe();
 
-        UKPostCodeSetDataGenerator dataGenerator = (UKPostCodeSetDataGenerator) getDataGenerator(recipe);
+        UKPostCodeDataGenerator dataGenerator = (UKPostCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United Kingdom Postcode"));
-        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeSetDataGenerator.CodeFormatEnum.AA99_9AA));
+        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeDataGenerator.CodeFormatEnum.AA99_9AA));
     }
 
     @Test
@@ -122,9 +122,9 @@ public class UKPostCodeDataGenDataSourceTest {
                 )
                 .buildTestRecipe();
 
-        UKPostCodeSetDataGenerator dataGenerator = (UKPostCodeSetDataGenerator) getDataGenerator(recipe);
+        UKPostCodeDataGenerator dataGenerator = (UKPostCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United Kingdom Postcode"));
-        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeSetDataGenerator.CodeFormatEnum.AA9A_9AA));
+        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeDataGenerator.CodeFormatEnum.AA9A_9AA));
     }
 
 
@@ -139,9 +139,9 @@ public class UKPostCodeDataGenDataSourceTest {
                 )
                 .buildTestRecipe();
 
-        UKPostCodeSetDataGenerator dataGenerator = (UKPostCodeSetDataGenerator) getDataGenerator(recipe);
+        UKPostCodeDataGenerator dataGenerator = (UKPostCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United Kingdom Postcode"));
-        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeSetDataGenerator.CodeFormatEnum.ALL));
+        assertThat(dataGenerator.getCodeFormat(), is(UKPostCodeDataGenerator.CodeFormatEnum.ALL));
     }
 
     private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {

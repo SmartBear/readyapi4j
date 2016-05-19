@@ -4,7 +4,7 @@ import com.smartbear.readyapi.client.model.DataGenDataSource;
 import com.smartbear.readyapi.client.model.DataGenerator;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.TestStep;
-import com.smartbear.readyapi.client.model.USZIPCodeSetDataGenerator;
+import com.smartbear.readyapi.client.model.USZIPCodeDataGenerator;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import org.junit.Test;
 
@@ -26,9 +26,9 @@ public class USZipCodeDataGenDataSourceTest {
                 )
                 .buildTestRecipe();
 
-        USZIPCodeSetDataGenerator dataGenerator = (USZIPCodeSetDataGenerator) getDataGenerator(recipe);
+        USZIPCodeDataGenerator dataGenerator = (USZIPCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United States ZIP Code"));
-        assertThat(dataGenerator.getCodeFormat(), is(USZIPCodeSetDataGenerator.CodeFormatEnum.ALL));
+        assertThat(dataGenerator.getCodeFormat(), is(USZIPCodeDataGenerator.CodeFormatEnum.ALL));
     }
 
     @Test
@@ -37,14 +37,14 @@ public class USZipCodeDataGenDataSourceTest {
                 .addStep(dataGenDataSource()
                         .withProperty(
                                 usZipCodeTypeProperty("property1")
-                                .withFormatAll()
+                                        .withFormatAll()
                         )
                 )
                 .buildTestRecipe();
 
-        USZIPCodeSetDataGenerator dataGenerator = (USZIPCodeSetDataGenerator) getDataGenerator(recipe);
+        USZIPCodeDataGenerator dataGenerator = (USZIPCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United States ZIP Code"));
-        assertThat(dataGenerator.getCodeFormat(), is(USZIPCodeSetDataGenerator.CodeFormatEnum.ALL));
+        assertThat(dataGenerator.getCodeFormat(), is(USZIPCodeDataGenerator.CodeFormatEnum.ALL));
     }
 
     @Test
@@ -53,14 +53,14 @@ public class USZipCodeDataGenDataSourceTest {
                 .addStep(dataGenDataSource()
                         .withProperty(
                                 usZipCodeTypeProperty("property1")
-                                .withFormatXXXXX()
+                                        .withFormatXXXXX()
                         )
                 )
                 .buildTestRecipe();
 
-        USZIPCodeSetDataGenerator dataGenerator = (USZIPCodeSetDataGenerator) getDataGenerator(recipe);
+        USZIPCodeDataGenerator dataGenerator = (USZIPCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United States ZIP Code"));
-        assertThat(dataGenerator.getCodeFormat(), is(USZIPCodeSetDataGenerator.CodeFormatEnum.XXXXX));
+        assertThat(dataGenerator.getCodeFormat(), is(USZIPCodeDataGenerator.CodeFormatEnum.XXXXX));
     }
 
     @Test
@@ -69,14 +69,14 @@ public class USZipCodeDataGenDataSourceTest {
                 .addStep(dataGenDataSource()
                         .withProperty(
                                 usZipCodeTypeProperty("property1")
-                                .withFormatXXXXX_XXXX()
+                                        .withFormatXXXXX_XXXX()
                         )
                 )
                 .buildTestRecipe();
 
-        USZIPCodeSetDataGenerator dataGenerator = (USZIPCodeSetDataGenerator) getDataGenerator(recipe);
+        USZIPCodeDataGenerator dataGenerator = (USZIPCodeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("United States ZIP Code"));
-        assertThat(dataGenerator.getCodeFormat(), is(USZIPCodeSetDataGenerator.CodeFormatEnum.XXXXX_XXXX));
+        assertThat(dataGenerator.getCodeFormat(), is(USZIPCodeDataGenerator.CodeFormatEnum.XXXXX_XXXX));
     }
 
     private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {

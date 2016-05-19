@@ -1,49 +1,49 @@
 package com.smartbear.readyapi.client.teststeps.datasource.datagen;
 
 import com.smartbear.readyapi.client.model.DataGenerator;
-import com.smartbear.readyapi.client.model.UKPostCodeSetDataGenerator;
+import com.smartbear.readyapi.client.model.UKPostCodeDataGenerator;
 
 public class UKPostCodeDataGeneratorBuilder extends AbstractDataGeneratorBuilder<UKPostCodeDataGeneratorBuilder> {
-    private final UKPostCodeSetDataGenerator ukPostCodeSetDataGenerator = new UKPostCodeSetDataGenerator();
+    private final UKPostCodeDataGenerator ukPostCodeSetDataGenerator = new UKPostCodeDataGenerator();
 
     UKPostCodeDataGeneratorBuilder(String property) {
         super(property);
         ukPostCodeSetDataGenerator.setType("United Kingdom Postcode");
-        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeSetDataGenerator.CodeFormatEnum.ALL);
+        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeDataGenerator.CodeFormatEnum.ALL);
     }
 
     public UKPostCodeDataGeneratorBuilder withFormatAll() {
-        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeSetDataGenerator.CodeFormatEnum.ALL);
+        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeDataGenerator.CodeFormatEnum.ALL);
         return this;
     }
 
     public UKPostCodeDataGeneratorBuilder withFormatA9_9AA() {
-        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeSetDataGenerator.CodeFormatEnum.A9_9AA);
+        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeDataGenerator.CodeFormatEnum.A9_9AA);
         return this;
     }
 
     public UKPostCodeDataGeneratorBuilder withFormatA99_9AA() {
-        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeSetDataGenerator.CodeFormatEnum.A99_9AA);
+        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeDataGenerator.CodeFormatEnum.A99_9AA);
         return this;
     }
 
     public UKPostCodeDataGeneratorBuilder withFormatAA9_9AA() {
-        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeSetDataGenerator.CodeFormatEnum.AA9_9AA);
+        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeDataGenerator.CodeFormatEnum.AA9_9AA);
         return this;
     }
 
     public UKPostCodeDataGeneratorBuilder withFormatA9A_9AA() {
-        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeSetDataGenerator.CodeFormatEnum.A9A_9AA);
+        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeDataGenerator.CodeFormatEnum.A9A_9AA);
         return this;
     }
 
     public UKPostCodeDataGeneratorBuilder withFormatAA99_9AA() {
-        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeSetDataGenerator.CodeFormatEnum.AA99_9AA);
+        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeDataGenerator.CodeFormatEnum.AA99_9AA);
         return this;
     }
 
     public UKPostCodeDataGeneratorBuilder withFormatAA9A_9AA() {
-        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeSetDataGenerator.CodeFormatEnum.AA9A_9AA);
+        ukPostCodeSetDataGenerator.setCodeFormat(UKPostCodeDataGenerator.CodeFormatEnum.AA9A_9AA);
         return this;
     }
 
