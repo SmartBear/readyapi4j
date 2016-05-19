@@ -86,9 +86,12 @@ public class TestStepResult {
     public String getResponseContent() {
         HarEntry harEntry = getHarEntry();
         if( harEntry != null ){
-            HarContent content = getHarResponse().getContent();
-            if( content != null ){
-                return content.getText();
+            HarResponse harResponse = getHarResponse();
+            if( harResponse != null ) {
+                HarContent content = harResponse.getContent();
+                if (content != null) {
+                    return content.getText();
+                }
             }
         }
 
