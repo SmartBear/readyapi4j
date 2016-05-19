@@ -52,4 +52,8 @@ public class DataGenerators {
     public static IntegerDataGeneratorBuilder integerTypeProperty(String propertyName) {
         return new IntegerDataGeneratorBuilder(propertyName);
     }
+
+    public static RealNumberDataGeneratorBuilder realNumberTypeProperty(String propertyName) {
+        return new RealNumberDataGeneratorBuilder(propertyName);
+    }
 }
