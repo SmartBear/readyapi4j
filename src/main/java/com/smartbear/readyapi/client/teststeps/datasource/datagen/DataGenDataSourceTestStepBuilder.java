@@ -19,6 +19,13 @@ public class DataGenDataSourceTestStepBuilder extends DataSourceTestStepBuilder<
         return this;
     }
 
+    public DataGenDataSourceTestStepBuilder withProperties(AbstractDataGeneratorBuilder... dataGeneratorBuilders) {
+        for (AbstractDataGeneratorBuilder dataGeneratorBuilder : dataGeneratorBuilders) {
+            getDataSourceBuilder().addDataGenerator(dataGeneratorBuilder);
+        }
+        return this;
+    }
+
     public DataGenDataSourceTestStepBuilder andProperty(AbstractDataGeneratorBuilder dataGeneratorBuilder) {
         return withProperty(dataGeneratorBuilder);
     }

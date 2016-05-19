@@ -11,6 +11,8 @@ import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import org.junit.Test;
 
+import java.util.List;
+
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.addressTypeProperty;
@@ -118,6 +120,24 @@ public class DataGenDataSourceTest {
                 .buildTestRecipe();
 
         assertThat(getDataGenerator(recipe).getType(), is("Country"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithMultipleDataGenDataSources() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperties(
+                                countryTypeProperty("property1"),
+                                cityTypeProperty("property2")
+                        )
+                )
+                .buildTestRecipe();
+
+        DataGenDataSource dataGenDataSource = getDataGenDataSource(recipe);
+        List<DataGenerator> dataGenerators = dataGenDataSource.getDataGenerators();
+        assertThat(dataGenerators.size(), is(2));
+        assertThat(dataGenerators.get(0).getType(), is("Country"));
+        assertThat(dataGenerators.get(1).getType(), is("City"));
     }
 
     @Test
