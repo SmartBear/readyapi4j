@@ -6,6 +6,8 @@ import com.smartbear.readyapi.client.model.TestCaseResultReport;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 import com.smartbear.readyapi.client.model.TestSuiteResultReport;
 import com.smartbear.readyapi.client.result.RecipeExecutionResult;
+import com.smartbear.readyapi.client.result.TestStepResult;
+import io.swagger.client.auth.HttpBasicAuth;
 
 import java.util.Collections;
 import java.util.Deque;
@@ -19,8 +21,12 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class Execution {
     private final Deque<ProjectResultReport> executionStatusReports = new ConcurrentLinkedDeque<>();
     private final String id;
+    private final TestServerApi testServerApi;
+    private final HttpBasicAuth auth;
 
-    public Execution(ProjectResultReport projectResultReport) {
+    public Execution(TestServerApi testServerApi, HttpBasicAuth auth, ProjectResultReport projectResultReport) {
+        this.testServerApi = testServerApi;
+        this.auth = auth;
         executionStatusReports.add(projectResultReport);
         this.id = projectResultReport.getExecutionID();
     }
@@ -35,6 +41,14 @@ public class Execution {
 
     public ProjectResultReport getCurrentReport() {
         return executionStatusReports.getLast();
+    }
+
+    public TestServerApi getTestServerApi() {
+        return testServerApi;
+    }
+
+    public HttpBasicAuth getAuth() {
+        return auth;
     }
 
     void addResultReport(ProjectResultReport newReport) {
@@ -64,17 +78,17 @@ public class Execution {
         return result;
     }
 
-    static class ProjectRecipeExecutionResult implements RecipeExecutionResult {
+     public class ProjectRecipeExecutionResult implements RecipeExecutionResult {
         private final ProjectResultReport report;
-        private final List<TestStepResultReport> results = Lists.newArrayList();
+        private final List<TestStepResult> results = Lists.newArrayList();
 
-        public ProjectRecipeExecutionResult(ProjectResultReport currentReport) {
+        private ProjectRecipeExecutionResult(ProjectResultReport currentReport ) {
             report = currentReport;
 
             for (TestSuiteResultReport testSuiteReport : report.getTestSuiteResultReports()) {
                 for (TestCaseResultReport testCaseResultReport : testSuiteReport.getTestCaseResultReports()) {
                     for (TestStepResultReport testStepResultReport : testCaseResultReport.getTestStepResultReports()) {
-                        results.add(testStepResultReport);
+                        results.add(new TestStepResult(testStepResultReport, Execution.this ));
                     }
                 }
             }
@@ -103,7 +117,7 @@ public class Execution {
         public List<String> getErrorMessages() {
             List<String> result = Lists.newArrayList();
 
-            for (TestStepResultReport testStepResultReport : results) {
+            for (TestStepResult testStepResultReport : results) {
                 if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
                     result.addAll(testStepResultReport.getMessages());
                 }
@@ -113,8 +127,8 @@ public class Execution {
         }
 
         @Override
-        public TestStepResultReport getFirstTestStepResult(String name) {
-            for (TestStepResultReport testStepResultReport : results) {
+        public TestStepResult getFirstTestStepResult(String name) {
+            for (TestStepResult testStepResultReport : results) {
                 if (testStepResultReport.getTestStepName().equalsIgnoreCase(name)) {
                     return testStepResultReport;
                 }
@@ -124,8 +138,8 @@ public class Execution {
         }
 
         @Override
-        public TestStepResultReport getLastTestStepResult(String testStepName) {
-            for (TestStepResultReport testStepResultReport : Lists.reverse(results)) {
+        public TestStepResult getLastTestStepResult(String testStepName) {
+            for (TestStepResult testStepResultReport : Lists.reverse(results)) {
                 if (testStepResultReport.getTestStepName().equalsIgnoreCase(testStepName)) {
                     return testStepResultReport;
                 }
@@ -135,15 +149,15 @@ public class Execution {
         }
 
         @Override
-        public List<TestStepResultReport> getTestStepResults() {
+        public List<TestStepResult> getTestStepResults() {
             return Collections.unmodifiableList(results);
         }
 
         @Override
-        public List<TestStepResultReport> getFailedTestStepsResults() {
-            List<TestStepResultReport> result = Lists.newArrayList();
+        public List<TestStepResult> getFailedTestStepsResults() {
+            List<TestStepResult> result = Lists.newArrayList();
 
-            for (TestStepResultReport testStepResultReport : results) {
+            for (TestStepResult testStepResultReport : results) {
                 if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
                     result.add(testStepResultReport);
                 }
@@ -153,10 +167,10 @@ public class Execution {
         }
 
         @Override
-        public List<TestStepResultReport> getFailedTestStepsResults(String testStepName) {
-            List<TestStepResultReport> result = Lists.newArrayList();
+        public List<TestStepResult> getFailedTestStepsResults(String testStepName) {
+            List<TestStepResult> result = Lists.newArrayList();
 
-            for (TestStepResultReport testStepResultReport : results) {
+            for (TestStepResult testStepResultReport : results) {
                 if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED &&
                     testStepResultReport.getTestStepName().equalsIgnoreCase(testStepName)) {
                     result.add(testStepResultReport);
@@ -167,10 +181,10 @@ public class Execution {
         }
 
         @Override
-        public List<TestStepResultReport> getTestStepResults(String testStepName) {
-            List<TestStepResultReport> result = Lists.newArrayList();
+        public List<TestStepResult> getTestStepResults(String testStepName) {
+            List<TestStepResult> result = Lists.newArrayList();
 
-            for (TestStepResultReport testStepResultReport : results) {
+            for (TestStepResult testStepResultReport : results) {
                 if (testStepResultReport.getTestStepName().equalsIgnoreCase(testStepName)) {
                     result.add(testStepResultReport);
                 }
@@ -180,7 +194,7 @@ public class Execution {
         }
 
         @Override
-        public TestStepResultReport getTestStepResult(int index) {
+        public TestStepResult getTestStepResult(int index) {
             return results.get(index);
         }
     }

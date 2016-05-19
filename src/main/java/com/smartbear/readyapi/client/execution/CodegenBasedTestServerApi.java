@@ -79,6 +79,18 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         }
     }
 
+    public void setConnectTimeout(int connectionTimeout) {
+        apiClient.setConnectTimeout(connectionTimeout);
+    }
+
+    public void setDebugging(boolean debugging) {
+        apiClient.setDebugging(debugging);
+    }
+
+    public ApiClientWrapper getApiClient() {
+        return apiClient;
+    }
+
     private ProjectResultReport sendFilesForDataSources(TestCase body, ProjectResultReport projectResultReport, List<Pair> queryParams) {
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions/" + projectResultReport.getExecutionID() + "/files";
 
