@@ -24,7 +24,7 @@ public class TestStepResult {
 
     private static final List<HarHeader> noHeadersList = Collections.unmodifiableList(Lists.<HarHeader>newArrayList());
 
-    public TestStepResult(TestStepResultReport testStepResultReport, Execution execution){
+    public TestStepResult(TestStepResultReport testStepResultReport, Execution execution) {
 
         this.testStepResultReport = testStepResultReport;
         this.execution = execution;
@@ -54,21 +54,21 @@ public class TestStepResult {
         return testStepResultReport.getMessages();
     }
 
-    public boolean hasTransactionData(){
+    public boolean hasTransactionData() {
         return getHarEntry() != null;
     }
 
-    public HarResponse getHarResponse(){
+    public HarResponse getHarResponse() {
         HarEntry harEntry = getHarEntry();
         return harEntry == null ? null : harEntry.getResponse();
     }
 
     public HarEntry getHarEntry() {
-        if( harEntry == null && !hasCheckedForHarEntry ) {
+        if (harEntry == null && !hasCheckedForHarEntry) {
             HarLogRoot logRoot = execution.getTestServerApi().getTransactionLog(execution.getId(),
-                testStepResultReport.getTransactionId(), execution.getAuth());
+                    testStepResultReport.getTransactionId(), execution.getAuth());
 
-            if( hasHarEntry(logRoot)) {
+            if (hasHarEntry(logRoot)) {
                 harEntry = logRoot.getLog().getEntries().get(0);
             }
 
@@ -80,33 +80,22 @@ public class TestStepResult {
 
     private boolean hasHarEntry(HarLogRoot logRoot) {
         return logRoot != null && logRoot.getLog() != null && logRoot.getLog().getEntries() != null &&
-            logRoot.getLog().getEntries().size() > 0;
+                logRoot.getLog().getEntries().size() > 0;
     }
 
     public String getResponseContent() {
-        HarEntry harEntry = getHarEntry();
-        if( harEntry != null ){
-            HarResponse harResponse = getHarResponse();
-            if( harResponse != null ) {
-                HarContent content = harResponse.getContent();
-                if (content != null) {
-                    return content.getText();
-                }
+        HarResponse harResponse = getHarResponse();
+        if (harResponse != null) {
+            HarContent content = harResponse.getContent();
+            if (content != null) {
+                return content.getText();
             }
         }
-
         return null;
     }
 
     public List<HarHeader> getResponseHeaders() {
-        HarEntry harEntry = getHarEntry();
-        if( harEntry != null ){
-            HarResponse harResponse = harEntry.getResponse();
-            if( harResponse != null ){
-                return harResponse.getHeaders();
-            }
-        }
-
-        return noHeadersList;
+        HarResponse harResponse = getHarResponse();
+        return harResponse == null ? noHeadersList : harResponse.getHeaders();
     }
 }
