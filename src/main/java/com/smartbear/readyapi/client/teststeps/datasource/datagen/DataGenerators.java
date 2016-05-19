@@ -40,4 +40,8 @@ public class DataGenerators {
     public static StringDataGeneratorBuilder stringTypeProperty(String propertyName) {
         return new StringDataGeneratorBuilder(propertyName);
     }
+
+    public static StateNameDataGeneratorBuilder stateNameTypeProperty(String propertyName) {
+        return new StateNameDataGeneratorBuilder(propertyName);
+    }
 }
