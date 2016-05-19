@@ -48,4 +48,8 @@ public class DataGenerators {
     public static NameDataGeneratorBuilder nameTypeProperty(String propertyName) {
         return new NameDataGeneratorBuilder(propertyName);
     }
+
+    public static IntegerDataGeneratorBuilder integerTypeProperty(String propertyName) {
+        return new IntegerDataGeneratorBuilder(propertyName);
+    }
 }
