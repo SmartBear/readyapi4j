@@ -1,13 +1,10 @@
 package com.smartbear.readyapi.client.result;
 
-import com.smartbear.readyapi.client.execution.Execution;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 
 import java.util.List;
 
 public interface RecipeExecutionResult {
-
-    Execution getExecution();
 
     long getTimeTaken();
 

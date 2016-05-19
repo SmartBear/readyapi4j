@@ -78,11 +78,11 @@ public class Execution {
         return result;
     }
 
-     class ProjectRecipeExecutionResult implements RecipeExecutionResult {
+     public class ProjectRecipeExecutionResult implements RecipeExecutionResult {
         private final ProjectResultReport report;
         private final List<TestStepResult> results = Lists.newArrayList();
 
-        public ProjectRecipeExecutionResult(ProjectResultReport currentReport ) {
+        private ProjectRecipeExecutionResult(ProjectResultReport currentReport ) {
             report = currentReport;
 
             for (TestSuiteResultReport testSuiteReport : report.getTestSuiteResultReports()) {
@@ -196,11 +196,6 @@ public class Execution {
         @Override
         public TestStepResult getTestStepResult(int index) {
             return results.get(index);
-        }
-
-        @Override
-        public Execution getExecution() {
-            return Execution.this;
         }
     }
 }
