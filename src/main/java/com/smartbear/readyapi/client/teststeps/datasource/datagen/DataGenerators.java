@@ -68,4 +68,8 @@ public class DataGenerators {
     public static USZipDataGeneratorBuilder usZipCodeTypeProperty(String propertyName) {
         return new USZipDataGeneratorBuilder(propertyName);
     }
+
+    public static PhoneNumberDataGeneratorBuilder phoneNumberTypeProperty(String propertyName) {
+        return new PhoneNumberDataGeneratorBuilder(propertyName);
+    }
 }
