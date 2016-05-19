@@ -100,6 +100,13 @@ public class TestStepResult {
 
     public List<HarHeader> getResponseHeaders() {
         HarEntry harEntry = getHarEntry();
-        return harEntry == null ? noHeadersList : harEntry.getResponse().getHeaders();
+        if( harEntry != null ){
+            HarResponse harResponse = harEntry.getResponse();
+            if( harResponse != null ){
+                return harResponse.getHeaders();
+            }
+        }
+
+        return noHeadersList;
     }
 }
