@@ -89,7 +89,7 @@ public class RecipeExecutor {
         List<Execution> executions = new ArrayList<>();
         ProjectResultReports projectResultReport = apiStub.getExecutions(authentication);
         for (ProjectResultReport resultReport : projectResultReport.getProjectResultReports()) {
-            executions.add(new Execution(resultReport));
+            executions.add(new Execution(apiStub, authentication, resultReport));
         }
         return executions;
     }
@@ -97,7 +97,7 @@ public class RecipeExecutor {
     private Execution doExecuteTestCase(TestCase testCase, boolean async) {
         try {
             ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
-            return new Execution(projectResultReport);
+            return new Execution(apiStub, authentication, projectResultReport);
         } catch (Exception e) {
             for (ExecutionListener executionListener : executionListeners) {
                 executionListener.errorOccurred(e);
@@ -150,6 +150,5 @@ public class RecipeExecutor {
                 }
             }
         }
-
     }
 }

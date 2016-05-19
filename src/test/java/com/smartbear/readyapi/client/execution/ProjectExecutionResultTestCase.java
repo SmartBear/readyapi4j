@@ -1,24 +1,40 @@
 package com.smartbear.readyapi.client.execution;
 
+import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
+import com.smartbear.readyapi.client.result.RecipeExecutionResult;
+import io.swagger.client.auth.HttpBasicAuth;
 import io.swagger.util.Json;
 import org.junit.Test;
+import org.mockito.Matchers;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ProjectExecutionResultTestCase {
 
     @Test
     public void testExecutionResult() throws IOException {
+
         ProjectResultReport resultReport =
             Json.mapper().readValue(new FileInputStream("src/test/resources/project-result-report.json"),
                 ProjectResultReport.class);
 
-        Execution.ProjectRecipeExecutionResult result = new Execution.ProjectRecipeExecutionResult(resultReport);
+        HarLogRoot harLogRoot =
+            Json.mapper().readValue(new FileInputStream("src/test/resources/single-entry-har-log.json"),
+                HarLogRoot.class);
+
+        TestServerApi apiMock = mock( TestServerApi.class );
+        when( apiMock.getTransactionLog(Matchers.anyString(), Matchers.anyString(), (HttpBasicAuth) Matchers.any())).thenReturn( harLogRoot );
+
+        Execution execution = new Execution( apiMock, new HttpBasicAuth(), resultReport );
+        RecipeExecutionResult result = execution.getExecutionResult();
 
         assertEquals(ProjectResultReport.StatusEnum.FINISHED, result.getStatus());
         assertEquals(215, result.getTimeTaken());
@@ -33,5 +49,8 @@ public class ProjectExecutionResultTestCase {
         assertNotNull(result.getFirstTestStepResult("get request 1"));
         assertNotNull(result.getLastTestStepResult("get request 1"));
         assertEquals(1, result.getFailedTestStepsResults("GET request 1").size());
+
+        assertTrue( result.getTestStepResult( 0 ).hasTransactionData());
+        assertEquals( "Test response", result.getTestStepResult( 0 ).getResponseContent());
     }
 }
