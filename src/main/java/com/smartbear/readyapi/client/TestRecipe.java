@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartbear.readyapi.client.execution.ApiException;
@@ -19,7 +20,11 @@ public class TestRecipe {
     @Override
     public String toString() {
         try {
-            return new ObjectMapper().writeValueAsString(testCase);
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+            return objectMapper.writeValueAsString(testCase);
         } catch (JsonProcessingException e) {
             throw new ApiException(e);
         }

@@ -1,15 +1,30 @@
 package com.smartbear.readyapi.client;
 
 import com.smartbear.readyapi.client.model.BooleanDataGenerator;
+import com.smartbear.readyapi.client.model.ComputerAddressDataGenerator;
+import com.smartbear.readyapi.client.model.CustomStringDataGenerator;
 import com.smartbear.readyapi.client.model.DataGenDataSource;
+import com.smartbear.readyapi.client.model.DataGenerator;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
+import com.smartbear.readyapi.client.model.StringDataGenerator;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import org.junit.Test;
 
+import java.util.List;
+
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.addressTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.booleanTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.cityTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.computerAddressTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.countryTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.customStringTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.emailTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.guidTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.ssnTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.stringTypeProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -27,13 +42,10 @@ public class DataGenDataSourceTest {
                         )
                 )
                 .buildTestRecipe();
-
-        TestStep testStep = recipe.getTestCase().getTestSteps().get(0);
-        assertThat(testStep.getType(), is(TestStepTypes.DATA_SOURCE.getName()));
-
-        DataGenDataSource dataGenDataSource = ((DataSourceTestStep) testStep).getDataSource().getDataGen();
-        assertThat(dataGenDataSource.getNumberOfRows(), is(34));
+        DataGenDataSource dataGenDataSource = getDataGenDataSource(recipe);
         BooleanDataGenerator dataGenerator = (BooleanDataGenerator) dataGenDataSource.getDataGenerators().get(0);
+
+        assertThat(dataGenDataSource.getNumberOfRows(), is(34));
         assertThat(dataGenerator.getType(), is("Boolean"));
         assertThat(dataGenerator.getFormat(), is(BooleanDataGenerator.FormatEnum.YES_NO));
         assertThat(dataGenerator.getDuplicationFactor(), is(1));
@@ -76,4 +88,228 @@ public class DataGenDataSourceTest {
         assertThat(dataGenerator.getFormat(), is(BooleanDataGenerator.FormatEnum._1_0));
     }
 
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithCityDataGenDataSource() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withNumberOfRows(13)
+                        .withProperty(
+                                cityTypeProperty("property1")
+                                        .duplicatedBy(7)
+                        )
+                )
+                .buildTestRecipe();
+
+        DataGenDataSource dataGenDataSource = getDataGenDataSource(recipe);
+        DataGenerator dataGenerator = dataGenDataSource.getDataGenerators().get(0);
+
+        assertThat(dataGenDataSource.getNumberOfRows(), is(13));
+        assertThat(dataGenerator.getType(), is("City"));
+        assertThat(dataGenerator.getDuplicationFactor(), is(7));
+        assertThat(dataGenerator.getPropertyName(), is("property1"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithCountryDataGenDataSource() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                countryTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        assertThat(getDataGenerator(recipe).getType(), is("Country"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithMultipleDataGenDataSources() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperties(
+                                countryTypeProperty("property1"),
+                                cityTypeProperty("property2")
+                        )
+                )
+                .buildTestRecipe();
+
+        DataGenDataSource dataGenDataSource = getDataGenDataSource(recipe);
+        List<DataGenerator> dataGenerators = dataGenDataSource.getDataGenerators();
+        assertThat(dataGenerators.size(), is(2));
+        assertThat(dataGenerators.get(0).getType(), is("Country"));
+        assertThat(dataGenerators.get(1).getType(), is("City"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithStreetAddressDataGenDataSource() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                addressTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        assertThat(getDataGenerator(recipe).getType(), is("Street Address"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithEMailDataGenDataSource() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                emailTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        assertThat(getDataGenerator(recipe).getType(), is("E-Mail"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithGuidDataGenDataSource() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                guidTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        assertThat(getDataGenerator(recipe).getType(), is("Guid"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithSSNDataGenDataSource() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                ssnTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        assertThat(getDataGenerator(recipe).getType(), is("Social Security Number"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithComputerAddressDataGenWithDefaultFormat() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                computerAddressTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        ComputerAddressDataGenerator dataGenerator = (ComputerAddressDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("Computer Address"));
+        assertThat(dataGenerator.getAddressType(), is(ComputerAddressDataGenerator.AddressTypeEnum.IPV4));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithComputerAddressDataGenWithIPv4Format() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                computerAddressTypeProperty("property1")
+                                        .withIPv4Format()
+                        )
+                )
+                .buildTestRecipe();
+
+        ComputerAddressDataGenerator dataGenerator = (ComputerAddressDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("Computer Address"));
+        assertThat(dataGenerator.getAddressType(), is(ComputerAddressDataGenerator.AddressTypeEnum.IPV4));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithComputerAddressDataGenWithMac48Format() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                computerAddressTypeProperty("property1")
+                                        .withMac48Format()
+                        )
+                )
+                .buildTestRecipe();
+
+        ComputerAddressDataGenerator dataGenerator = (ComputerAddressDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("Computer Address"));
+        assertThat(dataGenerator.getAddressType(), is(ComputerAddressDataGenerator.AddressTypeEnum.MAC48));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithCustomStringDataGen() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                customStringTypeProperty("property1")
+                                        .withValue("Custom Value")
+                        )
+                )
+                .buildTestRecipe();
+
+        CustomStringDataGenerator dataGenerator = (CustomStringDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("Custom String"));
+        assertThat(dataGenerator.getValue(), is("Custom Value"));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithStringDataGenWithDefaultValues() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                stringTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        StringDataGenerator dataGenerator = (StringDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("String"));
+        assertStringDataGen(dataGenerator, 5, 10, true);
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithStringDataGen() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                stringTypeProperty("property1")
+                                        .withMinimumCharacters(3)
+                                        .withMaximumCharacters(15)
+                                        .withoutLetters()
+                                        .withoutDigits()
+                                        .withoutSpaces()
+                                        .withoutPunctuationMarks()
+                        )
+                )
+                .buildTestRecipe();
+
+        StringDataGenerator dataGenerator = (StringDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("String"));
+        assertStringDataGen(dataGenerator, 3, 15, false);
+    }
+
+    private void assertStringDataGen(StringDataGenerator dataGenerator, int minChars, int maxChars, boolean booleanValues) {
+        assertThat(dataGenerator.getMinimumCharacters(), is(minChars));
+        assertThat(dataGenerator.getMaximumCharacters(), is(maxChars));
+        assertThat(dataGenerator.getUseLetters(), is(booleanValues));
+        assertThat(dataGenerator.getUseDigits(), is(booleanValues));
+        assertThat(dataGenerator.getUseSpaces(), is(booleanValues));
+        assertThat(dataGenerator.getUsePunctuationsMarks(), is(booleanValues));
+    }
+
+
+    private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {
+        TestStep testStep = recipe.getTestCase().getTestSteps().get(0);
+        assertThat(testStep.getType(), is(TestStepTypes.DATA_SOURCE.getName()));
+
+        return ((DataSourceTestStep) testStep).getDataSource().getDataGen();
+    }
+
+    private DataGenerator getDataGenerator(TestRecipe recipe) {
+        DataGenDataSource dataGenDataSource = getDataGenDataSource(recipe);
+        return dataGenDataSource.getDataGenerators().get(0);
+    }
 }

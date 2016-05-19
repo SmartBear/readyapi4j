@@ -29,7 +29,7 @@ public class BooleanDataGeneratorBuilder extends AbstractDataGeneratorBuilder<Bo
     }
 
     @Override
-    protected DataGenerator createDataGenerator() {
+    protected DataGenerator buildDataGenerator() {
         return booleanDataGenerator;
     }
 }

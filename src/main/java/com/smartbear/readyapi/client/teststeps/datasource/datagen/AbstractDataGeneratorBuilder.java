@@ -2,11 +2,11 @@ package com.smartbear.readyapi.client.teststeps.datasource.datagen;
 
 import com.smartbear.readyapi.client.model.DataGenerator;
 
-abstract class AbstractDataGeneratorBuilder<BuilderType> {
+public abstract class AbstractDataGeneratorBuilder<BuilderType> {
     private final String property;
-    private int duplicationFactor;
+    private int duplicationFactor = 1; //default value
 
-    public AbstractDataGeneratorBuilder(String property) {
+    AbstractDataGeneratorBuilder(String property) {
         this.property = property;
     }
 
@@ -19,11 +19,11 @@ abstract class AbstractDataGeneratorBuilder<BuilderType> {
     }
 
     public DataGenerator build() {
-        DataGenerator dataGenerator = createDataGenerator();
+        DataGenerator dataGenerator = buildDataGenerator();
         dataGenerator.setPropertyName(property);
         dataGenerator.setDuplicationFactor(duplicationFactor);
         return dataGenerator;
     }
 
-    protected abstract DataGenerator createDataGenerator();
+    protected abstract DataGenerator buildDataGenerator();
 }
