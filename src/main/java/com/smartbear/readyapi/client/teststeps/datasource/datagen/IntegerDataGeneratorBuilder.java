@@ -9,7 +9,7 @@ public class IntegerDataGeneratorBuilder extends AbstractDataGeneratorBuilder<In
     IntegerDataGeneratorBuilder(String property) {
         super(property);
         integerDataGenerator.setType("Integer");
-        integerDataGenerator.setGenrationMode(IntegerDataGenerator.GenrationModeEnum.RANDOM);
+        integerDataGenerator.setGenerationMode(IntegerDataGenerator.GenerationModeEnum.RANDOM);
         integerDataGenerator.setMinimumValue(1);
         integerDataGenerator.setMaximumValue(100);
     }
@@ -25,12 +25,12 @@ public class IntegerDataGeneratorBuilder extends AbstractDataGeneratorBuilder<In
     }
 
     IntegerDataGeneratorBuilder withRandomValues() {
-        integerDataGenerator.setGenrationMode(IntegerDataGenerator.GenrationModeEnum.RANDOM);
+        integerDataGenerator.setGenerationMode(IntegerDataGenerator.GenerationModeEnum.RANDOM);
         return this;
     }
 
     IntegerDataGeneratorBuilder withSequentialValues() {
-        integerDataGenerator.setGenrationMode(IntegerDataGenerator.GenrationModeEnum.SEQUENTIAL);
+        integerDataGenerator.setGenerationMode(IntegerDataGenerator.GenerationModeEnum.SEQUENTIAL);
         return this;
     }
 

@@ -33,7 +33,7 @@ public class RealNumberDataGenDataSourceTest {
         assertThat(dataGenerator.getType(), is("Real"));
         assertThat(dataGenerator.getMinimumValue(), is(new BigDecimal(1)));
         assertThat(dataGenerator.getMaximumValue(), is(new BigDecimal(100)));
-        assertThat(dataGenerator.getGenrationMode(), is(RealNumberDataGenerator.GenrationModeEnum.RANDOM));
+        assertThat(dataGenerator.getGenerationMode(), is(RealNumberDataGenerator.GenerationModeEnum.RANDOM));
         assertThat(dataGenerator.getDecimalPlaces(), is(2));
     }
 
@@ -54,7 +54,7 @@ public class RealNumberDataGenDataSourceTest {
         assertThat(dataGenerator.getType(), is("Real"));
         assertThat(dataGenerator.getMinimumValue(), is(new BigDecimal(11)));
         assertThat(dataGenerator.getMaximumValue(), is(new BigDecimal(111)));
-        assertThat(dataGenerator.getGenrationMode(), is(RealNumberDataGenerator.GenrationModeEnum.RANDOM));
+        assertThat(dataGenerator.getGenerationMode(), is(RealNumberDataGenerator.GenerationModeEnum.RANDOM));
         assertThat(dataGenerator.getDecimalPlaces(), is(4));
     }
 
@@ -70,7 +70,7 @@ public class RealNumberDataGenDataSourceTest {
 
         RealNumberDataGenerator dataGenerator = (RealNumberDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Real"));
-        assertThat(dataGenerator.getGenrationMode(), is(RealNumberDataGenerator.GenrationModeEnum.SEQUENTIAL));
+        assertThat(dataGenerator.getGenerationMode(), is(RealNumberDataGenerator.GenerationModeEnum.SEQUENTIAL));
     }
 
     private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {

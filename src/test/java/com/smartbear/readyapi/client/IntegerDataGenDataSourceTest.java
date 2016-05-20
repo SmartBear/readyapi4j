@@ -31,7 +31,7 @@ public class IntegerDataGenDataSourceTest {
         assertThat(dataGenerator.getType(), is("Integer"));
         assertThat(dataGenerator.getMinimumValue(), is(1));
         assertThat(dataGenerator.getMaximumValue(), is(100));
-        assertThat(dataGenerator.getGenrationMode(), is(IntegerDataGenerator.GenrationModeEnum.RANDOM));
+        assertThat(dataGenerator.getGenerationMode(), is(IntegerDataGenerator.GenerationModeEnum.RANDOM));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class IntegerDataGenDataSourceTest {
         assertThat(dataGenerator.getType(), is("Integer"));
         assertThat(dataGenerator.getMinimumValue(), is(11));
         assertThat(dataGenerator.getMaximumValue(), is(111));
-        assertThat(dataGenerator.getGenrationMode(), is(IntegerDataGenerator.GenrationModeEnum.RANDOM));
+        assertThat(dataGenerator.getGenerationMode(), is(IntegerDataGenerator.GenerationModeEnum.RANDOM));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class IntegerDataGenDataSourceTest {
 
         IntegerDataGenerator dataGenerator = (IntegerDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Integer"));
-        assertThat(dataGenerator.getGenrationMode(), is(IntegerDataGenerator.GenrationModeEnum.SEQUENTIAL));
+        assertThat(dataGenerator.getGenerationMode(), is(IntegerDataGenerator.GenerationModeEnum.SEQUENTIAL));
     }
 
     private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {

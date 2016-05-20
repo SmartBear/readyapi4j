@@ -330,7 +330,7 @@ public class DataGenDataSourceTest {
         assertThat(dataGenerator.getUseLetters(), is(booleanValues));
         assertThat(dataGenerator.getUseDigits(), is(booleanValues));
         assertThat(dataGenerator.getUseSpaces(), is(booleanValues));
-        assertThat(dataGenerator.getUsePunctuationsMarks(), is(booleanValues));
+        assertThat(dataGenerator.getUsePunctuationMarks(), is(booleanValues));
     }
 
 

@@ -62,12 +62,12 @@ public class StringDataGeneratorBuilder extends AbstractDataGeneratorBuilder<Str
     }
 
     public StringDataGeneratorBuilder withPunctuationMarks() {
-        stringDataGenerator.setUsePunctuationsMarks(true);
+        stringDataGenerator.setUsePunctuationMarks(true);
         return this;
     }
 
     public StringDataGeneratorBuilder withoutPunctuationMarks() {
-        stringDataGenerator.setUsePunctuationsMarks(false);
+        stringDataGenerator.setUsePunctuationMarks(false);
         return this;
     }
 
