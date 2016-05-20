@@ -53,8 +53,16 @@ public class DataGenerators {
         return new IntegerDataGeneratorBuilder(propertyName);
     }
 
-    public static RealNumberDataGeneratorBuilder realNumberTypeProperty(String propertyName) {
-        return new RealNumberDataGeneratorBuilder(propertyName);
+    public static RealNumberDataGeneratorBuilder randomRealNumberTypeProperty(String propertyName) {
+        RealNumberDataGeneratorBuilder realNumberDataGeneratorBuilder = new RealNumberDataGeneratorBuilder(propertyName);
+        realNumberDataGeneratorBuilder.withRandomValues();
+        return realNumberDataGeneratorBuilder;
+    }
+
+    public static RealNumberDataGeneratorBuilder sequentialRealNumberTypeProperty(String propertyName) {
+        RealNumberDataGeneratorBuilder realNumberDataGeneratorBuilder = new RealNumberDataGeneratorBuilder(propertyName);
+        realNumberDataGeneratorBuilder.withSequentialValues();
+        return realNumberDataGeneratorBuilder;
     }
 
     public static ValuesFromSetDataGeneratorBuilder randomValueFromSetTypeProperty(String propertyName) {

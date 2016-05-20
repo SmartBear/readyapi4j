@@ -12,7 +12,8 @@ import java.math.BigDecimal;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
-import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.realNumberTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.randomRealNumberTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.sequentialRealNumberTypeProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -23,7 +24,7 @@ public class RealNumberDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                realNumberTypeProperty("property1")
+                                randomRealNumberTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
@@ -41,8 +42,7 @@ public class RealNumberDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                realNumberTypeProperty("property1")
-                                        .withRandomValues()
+                                randomRealNumberTypeProperty("property1")
                                         .withMinimumValue(new BigDecimal(11))
                                         .withMaximumValue(new BigDecimal(111))
                                         .withDecimalPlaces(4)
@@ -63,8 +63,7 @@ public class RealNumberDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                realNumberTypeProperty("property1")
-                                        .withSequentialValues()
+                                sequentialRealNumberTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
