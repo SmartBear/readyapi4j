@@ -31,7 +31,7 @@ public class ValuesFromSetDataGenDataSourceTest {
 
         ValuesFromSetDataGenerator dataGenerator = (ValuesFromSetDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Value from Set"));
-        assertThat(dataGenerator.getGenrationMode(), is(ValuesFromSetDataGenerator.GenrationModeEnum.RANDOM));
+        assertThat(dataGenerator.getGenerationMode(), is(ValuesFromSetDataGenerator.GenerationModeEnum.RANDOM));
         assertThat(dataGenerator.getValues().size(), is(0));
     }
 
@@ -48,7 +48,7 @@ public class ValuesFromSetDataGenDataSourceTest {
 
         ValuesFromSetDataGenerator dataGenerator = (ValuesFromSetDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Value from Set"));
-        assertThat(dataGenerator.getGenrationMode(), is(ValuesFromSetDataGenerator.GenrationModeEnum.SEQUENTIAL));
+        assertThat(dataGenerator.getGenerationMode(), is(ValuesFromSetDataGenerator.GenerationModeEnum.SEQUENTIAL));
         assertThat(dataGenerator.getValues().size(), is(2));
     }
 
@@ -66,7 +66,7 @@ public class ValuesFromSetDataGenDataSourceTest {
 
         ValuesFromSetDataGenerator dataGenerator = (ValuesFromSetDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Value from Set"));
-        assertThat(dataGenerator.getGenrationMode(), is(ValuesFromSetDataGenerator.GenrationModeEnum.RANDOM));
+        assertThat(dataGenerator.getGenerationMode(), is(ValuesFromSetDataGenerator.GenerationModeEnum.RANDOM));
         assertThat(dataGenerator.getValues().size(), is(2));
     }
 

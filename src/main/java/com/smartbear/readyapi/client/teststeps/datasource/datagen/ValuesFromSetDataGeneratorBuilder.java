@@ -16,7 +16,7 @@ public class ValuesFromSetDataGeneratorBuilder extends AbstractDataGeneratorBuil
     ValuesFromSetDataGeneratorBuilder(String property) {
         super(property);
         valuesFromSetDataGenerator.setType("Value from Set");
-        valuesFromSetDataGenerator.setGenrationMode(ValuesFromSetDataGenerator.GenrationModeEnum.RANDOM);
+        valuesFromSetDataGenerator.setGenerationMode(ValuesFromSetDataGenerator.GenerationModeEnum.RANDOM);
     }
 
     public ValuesFromSetDataGeneratorBuilder withValues(Collection<String> values) {
@@ -35,12 +35,12 @@ public class ValuesFromSetDataGeneratorBuilder extends AbstractDataGeneratorBuil
     }
 
     ValuesFromSetDataGeneratorBuilder withRandomValues() {
-        valuesFromSetDataGenerator.setGenrationMode(ValuesFromSetDataGenerator.GenrationModeEnum.RANDOM);
+        valuesFromSetDataGenerator.setGenerationMode(ValuesFromSetDataGenerator.GenerationModeEnum.RANDOM);
         return this;
     }
 
     ValuesFromSetDataGeneratorBuilder withSequentialValues() {
-        valuesFromSetDataGenerator.setGenrationMode(ValuesFromSetDataGenerator.GenrationModeEnum.SEQUENTIAL);
+        valuesFromSetDataGenerator.setGenerationMode(ValuesFromSetDataGenerator.GenerationModeEnum.SEQUENTIAL);
         return this;
     }
 
