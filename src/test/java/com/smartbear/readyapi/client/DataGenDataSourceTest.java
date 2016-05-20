@@ -6,6 +6,7 @@ import com.smartbear.readyapi.client.model.CustomStringDataGenerator;
 import com.smartbear.readyapi.client.model.DataGenDataSource;
 import com.smartbear.readyapi.client.model.DataGenerator;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
+import com.smartbear.readyapi.client.model.StateNameDataGenerator;
 import com.smartbear.readyapi.client.model.StringDataGenerator;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
@@ -22,7 +23,9 @@ import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGen
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.countryTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.customStringTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.emailTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.fullStateNameTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.guidTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.shortStateNameTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.ssnTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.stringTypeProperty;
 import static org.hamcrest.CoreMatchers.is;
@@ -240,6 +243,36 @@ public class DataGenDataSourceTest {
     }
 
     @Test
+    public void buildsRecipeWithDataSourceTestStepWithStateNameDataGenWithFullNames() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                fullStateNameTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        StateNameDataGenerator dataGenerator = (StateNameDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("State"));
+        assertThat(dataGenerator.getNameFormat(), is(StateNameDataGenerator.NameFormatEnum.FULL));
+    }
+
+    @Test
+    public void buildsRecipeWithDataSourceTestStepWithStateNameDataGenWithAbbreviatedNames() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(dataGenDataSource()
+                        .withProperty(
+                                shortStateNameTypeProperty("property1")
+                        )
+                )
+                .buildTestRecipe();
+
+        StateNameDataGenerator dataGenerator = (StateNameDataGenerator) getDataGenerator(recipe);
+        assertThat(dataGenerator.getType(), is("State"));
+        assertThat(dataGenerator.getNameFormat(), is(StateNameDataGenerator.NameFormatEnum.ABBREVIATED));
+    }
+
+    @Test
     public void buildsRecipeWithDataSourceTestStepWithCustomStringDataGen() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
@@ -297,7 +330,7 @@ public class DataGenDataSourceTest {
         assertThat(dataGenerator.getUseLetters(), is(booleanValues));
         assertThat(dataGenerator.getUseDigits(), is(booleanValues));
         assertThat(dataGenerator.getUseSpaces(), is(booleanValues));
-        assertThat(dataGenerator.getUsePunctuationsMarks(), is(booleanValues));
+        assertThat(dataGenerator.getUsePunctuationMarks(), is(booleanValues));
     }
 
 
