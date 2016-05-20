@@ -1,8 +1,20 @@
 package com.smartbear.readyapi.client.teststeps.datasource.datagen;
 
 public class DataGenerators {
-    public static BooleanDataGeneratorBuilder booleanTypeProperty(String propertyName) {
+    public static BooleanDataGeneratorBuilder trueFalseBooleanTypeProperty(String propertyName) {
         return new BooleanDataGeneratorBuilder(propertyName);
+    }
+
+    public static BooleanDataGeneratorBuilder yesNoBooleanTypeProperty(String propertyName) {
+        BooleanDataGeneratorBuilder booleanDataGeneratorBuilder = new BooleanDataGeneratorBuilder(propertyName);
+        booleanDataGeneratorBuilder.withYesNoFormat();
+        return booleanDataGeneratorBuilder;
+    }
+
+    public static BooleanDataGeneratorBuilder digitsBooleanTypeProperty(String propertyName) {
+        BooleanDataGeneratorBuilder booleanDataGeneratorBuilder = new BooleanDataGeneratorBuilder(propertyName);
+        booleanDataGeneratorBuilder.withDigitsFormat();
+        return booleanDataGeneratorBuilder;
     }
 
     public static BasicDataGeneratorBuilder cityTypeProperty(String propertyName) {
@@ -29,8 +41,14 @@ public class DataGenerators {
         return new BasicDataGeneratorBuilder("Social Security Number", propertyName);
     }
 
-    public static ComputerAddressDataGeneratorBuilder computerAddressTypeProperty(String propertyName) {
+    public static ComputerAddressDataGeneratorBuilder ipv4ComputerAddressTypeProperty(String propertyName) {
         return new ComputerAddressDataGeneratorBuilder(propertyName);
+    }
+
+    public static ComputerAddressDataGeneratorBuilder mac48ComputerAddressTypeProperty(String propertyName) {
+        ComputerAddressDataGeneratorBuilder computerAddressDataGeneratorBuilder = new ComputerAddressDataGeneratorBuilder(propertyName);
+        computerAddressDataGeneratorBuilder.withMac48Format();
+        return computerAddressDataGeneratorBuilder;
     }
 
     public static CustomStringDataGeneratorBuilder customStringTypeProperty(String propertyName) {

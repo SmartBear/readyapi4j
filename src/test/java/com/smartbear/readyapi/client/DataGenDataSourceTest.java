@@ -17,17 +17,20 @@ import java.util.List;
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.addressTypeProperty;
-import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.booleanTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.cityTypeProperty;
-import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.computerAddressTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.countryTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.customStringTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.digitsBooleanTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.emailTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.fullStateNameTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.guidTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.ipv4ComputerAddressTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.mac48ComputerAddressTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.shortStateNameTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.ssnTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.stringTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.trueFalseBooleanTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.yesNoBooleanTypeProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -39,9 +42,8 @@ public class DataGenDataSourceTest {
                 .addStep(dataGenDataSource()
                         .withNumberOfRows(34)
                         .withProperty(
-                                booleanTypeProperty("property1")
+                                yesNoBooleanTypeProperty("property1")
                                         .duplicatedBy(1)
-                                        .withYesNoFormat()
                         )
                 )
                 .buildTestRecipe();
@@ -60,7 +62,7 @@ public class DataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                booleanTypeProperty("property1")
+                                trueFalseBooleanTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
@@ -78,7 +80,7 @@ public class DataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                booleanTypeProperty("property1").withDigitsFormat()
+                                digitsBooleanTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
@@ -200,7 +202,7 @@ public class DataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                computerAddressTypeProperty("property1")
+                                ipv4ComputerAddressTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
@@ -215,8 +217,7 @@ public class DataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                computerAddressTypeProperty("property1")
-                                        .withIPv4Format()
+                                ipv4ComputerAddressTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
@@ -231,8 +232,7 @@ public class DataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                computerAddressTypeProperty("property1")
-                                        .withMac48Format()
+                                mac48ComputerAddressTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
