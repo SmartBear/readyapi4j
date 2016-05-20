@@ -164,4 +164,14 @@ public class DataGenerators {
     public static PhoneNumberDataGeneratorBuilder phoneNumberTypeProperty(String propertyName) {
         return new PhoneNumberDataGeneratorBuilder(propertyName);
     }
+
+    public static DateAndTimeDataGeneratorBuilder randomDateAndTimeTypeProperty(String propertyName) {
+        return new DateAndTimeDataGeneratorBuilder(propertyName);
+    }
+
+    public static DateAndTimeDataGeneratorBuilder sequentialDateAndTimeTypeProperty(String propertyName) {
+        DateAndTimeDataGeneratorBuilder dateAndTimeDataGeneratorBuilder = new DateAndTimeDataGeneratorBuilder(propertyName);
+        dateAndTimeDataGeneratorBuilder.withSequentialValues();
+        return dateAndTimeDataGeneratorBuilder;
+    }
 }
