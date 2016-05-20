@@ -13,32 +13,32 @@ public class NameDataGeneratorBuilder extends AbstractDataGeneratorBuilder<NameD
         nameDataGenerator.setNameType(NameDataGenerator.NameTypeEnum.FULL);
     }
 
-    public NameDataGeneratorBuilder withGenderAny() {
+    NameDataGeneratorBuilder withGenderAny() {
         nameDataGenerator.setGender(NameDataGenerator.GenderEnum.ANY);
         return this;
     }
 
-    public NameDataGeneratorBuilder withGenderMale() {
+    NameDataGeneratorBuilder withGenderMale() {
         nameDataGenerator.setGender(NameDataGenerator.GenderEnum.MALE);
         return this;
     }
 
-    public NameDataGeneratorBuilder withGenderFemale() {
+    NameDataGeneratorBuilder withGenderFemale() {
         nameDataGenerator.setGender(NameDataGenerator.GenderEnum.FEMALE);
         return this;
     }
 
-    public NameDataGeneratorBuilder withFullNames() {
+    NameDataGeneratorBuilder withFullNames() {
         nameDataGenerator.setNameType(NameDataGenerator.NameTypeEnum.FULL);
         return this;
     }
 
-    public NameDataGeneratorBuilder withFirstNames() {
+    NameDataGeneratorBuilder withFirstNames() {
         nameDataGenerator.setNameType(NameDataGenerator.NameTypeEnum.FIRSTNAME);
         return this;
     }
 
-    public NameDataGeneratorBuilder withLatsNames() {
+    NameDataGeneratorBuilder withLatsNames() {
         nameDataGenerator.setNameType(NameDataGenerator.NameTypeEnum.LASTNAME);
         return this;
     }

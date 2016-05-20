@@ -53,8 +53,67 @@ public class DataGenerators {
         return stateNameDataGeneratorBuilder;
     }
 
-    public static NameDataGeneratorBuilder nameTypeProperty(String propertyName) {
-        return new NameDataGeneratorBuilder(propertyName);
+    public static NameDataGeneratorBuilder anyGenderFullNameTypeProperty(String propertyName) {
+        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
+        nameDataGeneratorBuilder.withGenderAny();
+        nameDataGeneratorBuilder.withFullNames();
+        return nameDataGeneratorBuilder;
+    }
+
+    public static NameDataGeneratorBuilder anyGenderFirstNameTypeProperty(String propertyName) {
+        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
+        nameDataGeneratorBuilder.withGenderAny();
+        nameDataGeneratorBuilder.withFirstNames();
+        return nameDataGeneratorBuilder;
+    }
+
+    public static NameDataGeneratorBuilder anyGenderLastNameTypeProperty(String propertyName) {
+        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
+        nameDataGeneratorBuilder.withGenderAny();
+        nameDataGeneratorBuilder.withLatsNames();
+        return nameDataGeneratorBuilder;
+    }
+
+    public static NameDataGeneratorBuilder maleFullNameTypeProperty(String propertyName) {
+        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
+        nameDataGeneratorBuilder.withGenderMale();
+        nameDataGeneratorBuilder.withFullNames();
+        return nameDataGeneratorBuilder;
+    }
+
+    public static NameDataGeneratorBuilder maleFirstNameTypeProperty(String propertyName) {
+        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
+        nameDataGeneratorBuilder.withGenderMale();
+        nameDataGeneratorBuilder.withFirstNames();
+        return nameDataGeneratorBuilder;
+    }
+
+    public static NameDataGeneratorBuilder maleLastNameTypeProperty(String propertyName) {
+        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
+        nameDataGeneratorBuilder.withGenderMale();
+        nameDataGeneratorBuilder.withLatsNames();
+        return nameDataGeneratorBuilder;
+    }
+
+    public static NameDataGeneratorBuilder femaleFullNameTypeProperty(String propertyName) {
+        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
+        nameDataGeneratorBuilder.withGenderFemale();
+        nameDataGeneratorBuilder.withFullNames();
+        return nameDataGeneratorBuilder;
+    }
+
+    public static NameDataGeneratorBuilder femaleFirstNameTypeProperty(String propertyName) {
+        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
+        nameDataGeneratorBuilder.withGenderFemale();
+        nameDataGeneratorBuilder.withFirstNames();
+        return nameDataGeneratorBuilder;
+    }
+
+    public static NameDataGeneratorBuilder femaleLastNameTypeProperty(String propertyName) {
+        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
+        nameDataGeneratorBuilder.withGenderFemale();
+        nameDataGeneratorBuilder.withLatsNames();
+        return nameDataGeneratorBuilder;
     }
 
     public static IntegerDataGeneratorBuilder randomIntegerTypeProperty(String propertyName) {
