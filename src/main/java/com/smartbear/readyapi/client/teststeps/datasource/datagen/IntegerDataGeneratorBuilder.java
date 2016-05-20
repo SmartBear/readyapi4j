@@ -24,12 +24,12 @@ public class IntegerDataGeneratorBuilder extends AbstractDataGeneratorBuilder<In
         return this;
     }
 
-    public IntegerDataGeneratorBuilder withRandomValues() {
+    IntegerDataGeneratorBuilder withRandomValues() {
         integerDataGenerator.setGenrationMode(IntegerDataGenerator.GenrationModeEnum.RANDOM);
         return this;
     }
 
-    public IntegerDataGeneratorBuilder withSequentialValues() {
+    IntegerDataGeneratorBuilder withSequentialValues() {
         integerDataGenerator.setGenrationMode(IntegerDataGenerator.GenrationModeEnum.SEQUENTIAL);
         return this;
     }

@@ -10,7 +10,8 @@ import org.junit.Test;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
-import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.integerTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.randomIntegerTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.sequentialIntegerTypeProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -21,7 +22,7 @@ public class IntegerDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                integerTypeProperty("property1")
+                                randomIntegerTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
@@ -38,8 +39,7 @@ public class IntegerDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                integerTypeProperty("property1")
-                                        .withRandomValues()
+                                randomIntegerTypeProperty("property1")
                                         .withMinimumValue(11)
                                         .withMaximumValue(111)
                         )
@@ -58,8 +58,7 @@ public class IntegerDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                integerTypeProperty("property1")
-                                        .withSequentialValues()
+                                sequentialIntegerTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();

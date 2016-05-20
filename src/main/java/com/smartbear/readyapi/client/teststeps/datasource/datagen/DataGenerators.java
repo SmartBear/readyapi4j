@@ -49,8 +49,17 @@ public class DataGenerators {
         return new NameDataGeneratorBuilder(propertyName);
     }
 
-    public static IntegerDataGeneratorBuilder integerTypeProperty(String propertyName) {
-        return new IntegerDataGeneratorBuilder(propertyName);
+    public static IntegerDataGeneratorBuilder randomIntegerTypeProperty(String propertyName) {
+        IntegerDataGeneratorBuilder integerDataGeneratorBuilder = new IntegerDataGeneratorBuilder(propertyName);
+        integerDataGeneratorBuilder.withRandomValues();
+        return integerDataGeneratorBuilder;
+    }
+
+
+    public static IntegerDataGeneratorBuilder sequentialIntegerTypeProperty(String propertyName) {
+        IntegerDataGeneratorBuilder integerDataGeneratorBuilder = new IntegerDataGeneratorBuilder(propertyName);
+        integerDataGeneratorBuilder.withSequentialValues();
+        return integerDataGeneratorBuilder;
     }
 
     public static RealNumberDataGeneratorBuilder randomRealNumberTypeProperty(String propertyName) {
