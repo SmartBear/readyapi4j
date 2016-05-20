@@ -23,9 +23,10 @@ import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGen
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.countryTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.customStringTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.emailTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.fullStateNameTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.guidTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.shortStateNameTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.ssnTypeProperty;
-import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.stateNameTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.stringTypeProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -246,8 +247,7 @@ public class DataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                stateNameTypeProperty("property1")
-                                        .withFullNames()
+                                fullStateNameTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
@@ -262,8 +262,7 @@ public class DataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                stateNameTypeProperty("property1")
-                                        .withAbbreviatedNames()
+                                shortStateNameTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();

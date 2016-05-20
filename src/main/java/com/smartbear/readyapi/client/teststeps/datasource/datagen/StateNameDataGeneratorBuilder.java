@@ -12,12 +12,12 @@ public class StateNameDataGeneratorBuilder extends AbstractDataGeneratorBuilder<
         stateNameDataGenerator.setNameFormat(StateNameDataGenerator.NameFormatEnum.FULL);
     }
 
-    public StateNameDataGeneratorBuilder withFullNames() {
+    StateNameDataGeneratorBuilder withFullNames() {
         stateNameDataGenerator.setNameFormat(StateNameDataGenerator.NameFormatEnum.FULL);
         return this;
     }
 
-    public StateNameDataGeneratorBuilder withAbbreviatedNames() {
+    StateNameDataGeneratorBuilder withAbbreviatedNames() {
         stateNameDataGenerator.setNameFormat(StateNameDataGenerator.NameFormatEnum.ABBREVIATED);
         return this;
     }

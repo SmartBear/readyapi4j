@@ -41,8 +41,16 @@ public class DataGenerators {
         return new StringDataGeneratorBuilder(propertyName);
     }
 
-    public static StateNameDataGeneratorBuilder stateNameTypeProperty(String propertyName) {
-        return new StateNameDataGeneratorBuilder(propertyName);
+    public static StateNameDataGeneratorBuilder fullStateNameTypeProperty(String propertyName) {
+        StateNameDataGeneratorBuilder stateNameDataGeneratorBuilder = new StateNameDataGeneratorBuilder(propertyName);
+        stateNameDataGeneratorBuilder.withFullNames();
+        return stateNameDataGeneratorBuilder;
+    }
+
+    public static StateNameDataGeneratorBuilder shortStateNameTypeProperty(String propertyName) {
+        StateNameDataGeneratorBuilder stateNameDataGeneratorBuilder = new StateNameDataGeneratorBuilder(propertyName);
+        stateNameDataGeneratorBuilder.withAbbreviatedNames();
+        return stateNameDataGeneratorBuilder;
     }
 
     public static NameDataGeneratorBuilder nameTypeProperty(String propertyName) {
