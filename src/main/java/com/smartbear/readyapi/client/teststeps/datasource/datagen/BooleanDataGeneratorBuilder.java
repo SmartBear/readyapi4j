@@ -18,11 +18,6 @@ public class BooleanDataGeneratorBuilder extends AbstractDataGeneratorBuilder<Bo
         return this;
     }
 
-    public BooleanDataGeneratorBuilder withTrueFalseFormat() {
-        booleanDataGenerator.setFormat(BooleanDataGenerator.FormatEnum.TRUE_FALSE);
-        return this;
-    }
-
     public BooleanDataGeneratorBuilder withDigitsFormat() {
         booleanDataGenerator.setFormat(BooleanDataGenerator.FormatEnum._1_0);
         return this;

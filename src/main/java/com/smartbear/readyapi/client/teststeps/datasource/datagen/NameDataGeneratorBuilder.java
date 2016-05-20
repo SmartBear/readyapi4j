@@ -13,11 +13,6 @@ public class NameDataGeneratorBuilder extends AbstractDataGeneratorBuilder<NameD
         nameDataGenerator.setNameType(NameDataGenerator.NameTypeEnum.FULL);
     }
 
-    NameDataGeneratorBuilder withGenderAny() {
-        nameDataGenerator.setGender(NameDataGenerator.GenderEnum.ANY);
-        return this;
-    }
-
     NameDataGeneratorBuilder withGenderMale() {
         nameDataGenerator.setGender(NameDataGenerator.GenderEnum.MALE);
         return this;
@@ -25,11 +20,6 @@ public class NameDataGeneratorBuilder extends AbstractDataGeneratorBuilder<NameD
 
     NameDataGeneratorBuilder withGenderFemale() {
         nameDataGenerator.setGender(NameDataGenerator.GenderEnum.FEMALE);
-        return this;
-    }
-
-    NameDataGeneratorBuilder withFullNames() {
-        nameDataGenerator.setNameType(NameDataGenerator.NameTypeEnum.FULL);
         return this;
     }
 

@@ -34,11 +34,6 @@ public class ValuesFromSetDataGeneratorBuilder extends AbstractDataGeneratorBuil
         return this;
     }
 
-    ValuesFromSetDataGeneratorBuilder withRandomValues() {
-        valuesFromSetDataGenerator.setGenerationMode(ValuesFromSetDataGenerator.GenerationModeEnum.RANDOM);
-        return this;
-    }
-
     ValuesFromSetDataGeneratorBuilder withSequentialValues() {
         valuesFromSetDataGenerator.setGenerationMode(ValuesFromSetDataGenerator.GenerationModeEnum.SEQUENTIAL);
         return this;

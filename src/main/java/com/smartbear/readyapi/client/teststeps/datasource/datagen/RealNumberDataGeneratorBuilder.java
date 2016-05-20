@@ -34,11 +34,6 @@ public class RealNumberDataGeneratorBuilder extends AbstractDataGeneratorBuilder
         return this;
     }
 
-    RealNumberDataGeneratorBuilder withRandomValues() {
-        realNumberDataGenerator.setGenerationMode(RealNumberDataGenerator.GenerationModeEnum.RANDOM);
-        return this;
-    }
-
     RealNumberDataGeneratorBuilder withSequentialValues() {
         realNumberDataGenerator.setGenerationMode(RealNumberDataGenerator.GenerationModeEnum.SEQUENTIAL);
         return this;
