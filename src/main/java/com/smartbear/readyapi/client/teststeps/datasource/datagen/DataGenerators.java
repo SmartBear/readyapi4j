@@ -57,8 +57,16 @@ public class DataGenerators {
         return new RealNumberDataGeneratorBuilder(propertyName);
     }
 
-    public static ValuesFromSetDataGeneratorBuilder valueFromSetTypeProperty(String propertyName) {
-        return new ValuesFromSetDataGeneratorBuilder(propertyName);
+    public static ValuesFromSetDataGeneratorBuilder randomValueFromSetTypeProperty(String propertyName) {
+        ValuesFromSetDataGeneratorBuilder dataGeneratorBuilder = new ValuesFromSetDataGeneratorBuilder(propertyName);
+        dataGeneratorBuilder.withRandomValues();
+        return dataGeneratorBuilder;
+    }
+
+    public static ValuesFromSetDataGeneratorBuilder sequentialValueFromSetTypeProperty(String propertyName) {
+        ValuesFromSetDataGeneratorBuilder dataGeneratorBuilder = new ValuesFromSetDataGeneratorBuilder(propertyName);
+        dataGeneratorBuilder.withSequentialValues();
+        return dataGeneratorBuilder;
     }
 
     public static UKPostCodeDataGeneratorBuilder ukPostCodeTypeProperty(String propertyName) {

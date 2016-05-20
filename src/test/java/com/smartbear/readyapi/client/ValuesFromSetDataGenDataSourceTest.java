@@ -12,7 +12,8 @@ import java.util.Arrays;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
-import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.valueFromSetTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.randomValueFromSetTypeProperty;
+import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.sequentialValueFromSetTypeProperty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -23,7 +24,7 @@ public class ValuesFromSetDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                valueFromSetTypeProperty("property1")
+                                randomValueFromSetTypeProperty("property1")
                         )
                 )
                 .buildTestRecipe();
@@ -39,9 +40,8 @@ public class ValuesFromSetDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                valueFromSetTypeProperty("property1")
+                                sequentialValueFromSetTypeProperty("property1")
                                         .withValues(Arrays.asList("Value 1", "Value 2"))
-                                        .withSequentialValues()
                         )
                 )
                 .buildTestRecipe();
@@ -58,9 +58,8 @@ public class ValuesFromSetDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                valueFromSetTypeProperty("property1")
+                                randomValueFromSetTypeProperty("property1")
                                         .withValues("Value 1", "Value 2")
-                                        .withRandomValues()
                         )
                 )
                 .buildTestRecipe();
@@ -76,7 +75,7 @@ public class ValuesFromSetDataGenDataSourceTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
-                                valueFromSetTypeProperty("property1")
+                                randomValueFromSetTypeProperty("property1")
                                         .addValue("Value 1")
                                         .addValue("Value 2")
                         )
