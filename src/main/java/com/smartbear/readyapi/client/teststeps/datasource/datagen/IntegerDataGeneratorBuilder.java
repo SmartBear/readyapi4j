@@ -24,11 +24,6 @@ public class IntegerDataGeneratorBuilder extends AbstractDataGeneratorBuilder<In
         return this;
     }
 
-    IntegerDataGeneratorBuilder withRandomValues() {
-        integerDataGenerator.setGenerationMode(IntegerDataGenerator.GenerationModeEnum.RANDOM);
-        return this;
-    }
-
     IntegerDataGeneratorBuilder withSequentialValues() {
         integerDataGenerator.setGenerationMode(IntegerDataGenerator.GenerationModeEnum.SEQUENTIAL);
         return this;

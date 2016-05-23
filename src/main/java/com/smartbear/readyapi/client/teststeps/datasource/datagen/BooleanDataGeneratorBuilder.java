@@ -13,17 +13,12 @@ public class BooleanDataGeneratorBuilder extends AbstractDataGeneratorBuilder<Bo
         booleanDataGenerator.setFormat(BooleanDataGenerator.FormatEnum.TRUE_FALSE);
     }
 
-    public BooleanDataGeneratorBuilder withYesNoFormat() {
+    BooleanDataGeneratorBuilder withYesNoFormat() {
         booleanDataGenerator.setFormat(BooleanDataGenerator.FormatEnum.YES_NO);
         return this;
     }
 
-    public BooleanDataGeneratorBuilder withTrueFalseFormat() {
-        booleanDataGenerator.setFormat(BooleanDataGenerator.FormatEnum.TRUE_FALSE);
-        return this;
-    }
-
-    public BooleanDataGeneratorBuilder withDigitsFormat() {
+    BooleanDataGeneratorBuilder withDigitsFormat() {
         booleanDataGenerator.setFormat(BooleanDataGenerator.FormatEnum._1_0);
         return this;
     }

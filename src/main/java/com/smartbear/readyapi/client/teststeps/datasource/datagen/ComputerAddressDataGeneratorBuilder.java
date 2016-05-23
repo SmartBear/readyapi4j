@@ -13,12 +13,7 @@ public class ComputerAddressDataGeneratorBuilder extends AbstractDataGeneratorBu
         computerAddressDataGenerator.setAddressType(ComputerAddressDataGenerator.AddressTypeEnum.IPV4);
     }
 
-    public ComputerAddressDataGeneratorBuilder withIPv4Format() {
-        computerAddressDataGenerator.setAddressType(ComputerAddressDataGenerator.AddressTypeEnum.IPV4);
-        return this;
-    }
-
-    public ComputerAddressDataGeneratorBuilder withMac48Format() {
+    ComputerAddressDataGeneratorBuilder withMac48Format() {
         computerAddressDataGenerator.setAddressType(ComputerAddressDataGenerator.AddressTypeEnum.MAC48);
         return this;
     }

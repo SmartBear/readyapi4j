@@ -1,8 +1,20 @@
 package com.smartbear.readyapi.client.teststeps.datasource.datagen;
 
 public class DataGenerators {
-    public static BooleanDataGeneratorBuilder booleanTypeProperty(String propertyName) {
+    public static BooleanDataGeneratorBuilder trueFalseBooleanTypeProperty(String propertyName) {
         return new BooleanDataGeneratorBuilder(propertyName);
+    }
+
+    public static BooleanDataGeneratorBuilder yesNoBooleanTypeProperty(String propertyName) {
+        BooleanDataGeneratorBuilder booleanDataGeneratorBuilder = new BooleanDataGeneratorBuilder(propertyName);
+        booleanDataGeneratorBuilder.withYesNoFormat();
+        return booleanDataGeneratorBuilder;
+    }
+
+    public static BooleanDataGeneratorBuilder digitsBooleanTypeProperty(String propertyName) {
+        BooleanDataGeneratorBuilder booleanDataGeneratorBuilder = new BooleanDataGeneratorBuilder(propertyName);
+        booleanDataGeneratorBuilder.withDigitsFormat();
+        return booleanDataGeneratorBuilder;
     }
 
     public static BasicDataGeneratorBuilder cityTypeProperty(String propertyName) {
@@ -29,8 +41,14 @@ public class DataGenerators {
         return new BasicDataGeneratorBuilder("Social Security Number", propertyName);
     }
 
-    public static ComputerAddressDataGeneratorBuilder computerAddressTypeProperty(String propertyName) {
+    public static ComputerAddressDataGeneratorBuilder ipv4ComputerAddressTypeProperty(String propertyName) {
         return new ComputerAddressDataGeneratorBuilder(propertyName);
+    }
+
+    public static ComputerAddressDataGeneratorBuilder mac48ComputerAddressTypeProperty(String propertyName) {
+        ComputerAddressDataGeneratorBuilder computerAddressDataGeneratorBuilder = new ComputerAddressDataGeneratorBuilder(propertyName);
+        computerAddressDataGeneratorBuilder.withMac48Format();
+        return computerAddressDataGeneratorBuilder;
     }
 
     public static CustomStringDataGeneratorBuilder customStringTypeProperty(String propertyName) {
@@ -42,9 +60,7 @@ public class DataGenerators {
     }
 
     public static StateNameDataGeneratorBuilder fullStateNameTypeProperty(String propertyName) {
-        StateNameDataGeneratorBuilder stateNameDataGeneratorBuilder = new StateNameDataGeneratorBuilder(propertyName);
-        stateNameDataGeneratorBuilder.withFullNames();
-        return stateNameDataGeneratorBuilder;
+        return new StateNameDataGeneratorBuilder(propertyName);
     }
 
     public static StateNameDataGeneratorBuilder shortStateNameTypeProperty(String propertyName) {
@@ -54,22 +70,17 @@ public class DataGenerators {
     }
 
     public static NameDataGeneratorBuilder anyGenderFullNameTypeProperty(String propertyName) {
-        NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
-        nameDataGeneratorBuilder.withGenderAny();
-        nameDataGeneratorBuilder.withFullNames();
-        return nameDataGeneratorBuilder;
+        return new NameDataGeneratorBuilder(propertyName);
     }
 
     public static NameDataGeneratorBuilder anyGenderFirstNameTypeProperty(String propertyName) {
         NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
-        nameDataGeneratorBuilder.withGenderAny();
         nameDataGeneratorBuilder.withFirstNames();
         return nameDataGeneratorBuilder;
     }
 
     public static NameDataGeneratorBuilder anyGenderLastNameTypeProperty(String propertyName) {
         NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
-        nameDataGeneratorBuilder.withGenderAny();
         nameDataGeneratorBuilder.withLatsNames();
         return nameDataGeneratorBuilder;
     }
@@ -77,7 +88,6 @@ public class DataGenerators {
     public static NameDataGeneratorBuilder maleFullNameTypeProperty(String propertyName) {
         NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
         nameDataGeneratorBuilder.withGenderMale();
-        nameDataGeneratorBuilder.withFullNames();
         return nameDataGeneratorBuilder;
     }
 
@@ -98,7 +108,6 @@ public class DataGenerators {
     public static NameDataGeneratorBuilder femaleFullNameTypeProperty(String propertyName) {
         NameDataGeneratorBuilder nameDataGeneratorBuilder = new NameDataGeneratorBuilder(propertyName);
         nameDataGeneratorBuilder.withGenderFemale();
-        nameDataGeneratorBuilder.withFullNames();
         return nameDataGeneratorBuilder;
     }
 
@@ -117,9 +126,7 @@ public class DataGenerators {
     }
 
     public static IntegerDataGeneratorBuilder randomIntegerTypeProperty(String propertyName) {
-        IntegerDataGeneratorBuilder integerDataGeneratorBuilder = new IntegerDataGeneratorBuilder(propertyName);
-        integerDataGeneratorBuilder.withRandomValues();
-        return integerDataGeneratorBuilder;
+        return new IntegerDataGeneratorBuilder(propertyName);
     }
 
 
@@ -130,9 +137,7 @@ public class DataGenerators {
     }
 
     public static RealNumberDataGeneratorBuilder randomRealNumberTypeProperty(String propertyName) {
-        RealNumberDataGeneratorBuilder realNumberDataGeneratorBuilder = new RealNumberDataGeneratorBuilder(propertyName);
-        realNumberDataGeneratorBuilder.withRandomValues();
-        return realNumberDataGeneratorBuilder;
+        return new RealNumberDataGeneratorBuilder(propertyName);
     }
 
     public static RealNumberDataGeneratorBuilder sequentialRealNumberTypeProperty(String propertyName) {
@@ -142,9 +147,7 @@ public class DataGenerators {
     }
 
     public static ValuesFromSetDataGeneratorBuilder randomValueFromSetTypeProperty(String propertyName) {
-        ValuesFromSetDataGeneratorBuilder dataGeneratorBuilder = new ValuesFromSetDataGeneratorBuilder(propertyName);
-        dataGeneratorBuilder.withRandomValues();
-        return dataGeneratorBuilder;
+        return new ValuesFromSetDataGeneratorBuilder(propertyName);
     }
 
     public static ValuesFromSetDataGeneratorBuilder sequentialValueFromSetTypeProperty(String propertyName) {
@@ -163,5 +166,15 @@ public class DataGenerators {
 
     public static PhoneNumberDataGeneratorBuilder phoneNumberTypeProperty(String propertyName) {
         return new PhoneNumberDataGeneratorBuilder(propertyName);
+    }
+
+    public static DateAndTimeDataGeneratorBuilder randomDateAndTimeTypeProperty(String propertyName) {
+        return new DateAndTimeDataGeneratorBuilder(propertyName);
+    }
+
+    public static DateAndTimeDataGeneratorBuilder sequentialDateAndTimeTypeProperty(String propertyName) {
+        DateAndTimeDataGeneratorBuilder dateAndTimeDataGeneratorBuilder = new DateAndTimeDataGeneratorBuilder(propertyName);
+        dateAndTimeDataGeneratorBuilder.withSequentialValues();
+        return dateAndTimeDataGeneratorBuilder;
     }
 }
