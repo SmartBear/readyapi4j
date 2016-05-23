@@ -36,12 +36,12 @@ public class DateAndTimeDataGeneratorBuilder extends AbstractDataGeneratorBuilde
         return this;
     }
 
-    public DateAndTimeDataGeneratorBuilder withStartDate(Date startDate) {
+    public DateAndTimeDataGeneratorBuilder startingAt(Date startDate) {
         dateAndTimeDataGenerator.setMinimumValue(startDate);
         return this;
     }
 
-    public DateAndTimeDataGeneratorBuilder withEndDate(Date endDate) {
+    public DateAndTimeDataGeneratorBuilder endingAt(Date endDate) {
         dateAndTimeDataGenerator.setMaximumValue(endDate);
         return this;
     }
@@ -102,7 +102,7 @@ public class DateAndTimeDataGeneratorBuilder extends AbstractDataGeneratorBuilde
      * @param milliSeconds increment value in milliseconds
      * @return DateAndTimeDataGeneratorBuilder
      */
-    public DateAndTimeDataGeneratorBuilder incrementWith(long milliSeconds) {
+    public DateAndTimeDataGeneratorBuilder incrementBy(long milliSeconds) {
         if (milliSeconds < 1000) {
             throw new IllegalArgumentException("Increment value should be greater than or equal to 1000 (1 second), actual: " + milliSeconds);
         }
@@ -120,10 +120,6 @@ public class DateAndTimeDataGeneratorBuilder extends AbstractDataGeneratorBuilde
         dateAndTimeDataGenerator.setIncrementValueMinute(minuteIncrement);
         dateAndTimeDataGenerator.setIncrementValueSecond(secondIncrement);
         return this;
-    }
-
-    private int getUnitIncrementValue(long milliSeconds, long unitMilliSeconds) {
-        return milliSeconds > unitMilliSeconds ? (int) (milliSeconds / unitMilliSeconds) : 0;
     }
 
     @Override

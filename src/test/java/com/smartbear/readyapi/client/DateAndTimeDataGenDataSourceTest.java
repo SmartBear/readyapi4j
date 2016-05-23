@@ -61,7 +61,7 @@ public class DateAndTimeDataGenDataSourceTest {
                         .withProperty(
                                 sequentialDateAndTimeTypeProperty("property1")
                                         // 2 day, 3 hours, 4 minutes, 5 seconds
-                                        .incrementWith(((2 * 24 * 60 * 60) + (3 * 60 * 60) + (4 * 60) + 5) * 1000)
+                                        .incrementBy(((2 * 24 * 60 * 60) + (3 * 60 * 60) + (4 * 60) + 5) * 1000)
                         )
                 )
                 .buildTestRecipe();
@@ -83,8 +83,8 @@ public class DateAndTimeDataGenDataSourceTest {
                 .addStep(dataGenDataSource()
                         .withProperty(
                                 sequentialDateAndTimeTypeProperty("property1")
-                                        .withStartDate(startDate)
-                                        .withEndDate(endDate)
+                                        .startingAt(startDate)
+                                        .endingAt(endDate)
                         )
                 )
                 .buildTestRecipe();
