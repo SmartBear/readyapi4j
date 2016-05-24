@@ -1,9 +1,8 @@
 # Java Client Library for Ready! API TestServer
 
-This repository contains source file for the Java Client library for [Ready! API TestServer](http://readyapi.smartbear.com/testserver/start) 
-- a standalone server that exposes a REST API for running API tests. 
+This repository contains source file for the Java Client library for [Ready! API TestServer](http://readyapi.smartbear.com/testserver/start), a standalone server that exposes a REST API for running API tests. 
 
-TestServer receives and runs *test recipes*; special JSON requests that describe API tests to be executed. 
+TestServer receives and runs *test recipes*; special JSON request that describe API tests to be executed. 
 This **Java Client** library lets you create and run test recipes from within your Java code, without installing 
 Ready! API or any other API testing tool on your computer.
 
