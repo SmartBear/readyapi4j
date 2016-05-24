@@ -60,6 +60,9 @@ Ready! API or any other API testing tool on your computer.
     Actual   :FAILED
     ```
 
+4. [Dive into the javadocs](http://smartbear.github.io/ready-api-testserver-client/apidocs/) to get an overview of the Java API
+
+
 ## More samples / tutorials
 
 Tutorial in the Ready! API TestServer documentation: 
@@ -67,8 +70,6 @@ Tutorial in the Ready! API TestServer documentation:
 
 The [TestServer Samples Project](https://github.com/SmartBear/ready-api-testserver-samples) here on GitHub contains a 
 number of JUnit and CucumberJVM samples using this library.
-
-And of course there are [javaodcs](http://smartbear.github.io/ready-api-testserver-client/apidocs/)!
 
 ## Learn More about TestServer
 
