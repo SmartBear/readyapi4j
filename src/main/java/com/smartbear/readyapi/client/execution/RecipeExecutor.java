@@ -6,8 +6,11 @@ import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi.client.model.UnresolvedFile;
 import io.swagger.client.auth.HttpBasicAuth;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -97,6 +100,7 @@ public class RecipeExecutor {
     private Execution doExecuteTestCase(TestCase testCase, boolean async) {
         try {
             ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
+            cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, testCase);
             return new Execution(apiStub, authentication, projectResultReport);
         } catch (Exception e) {
             for (ExecutionListener executionListener : executionListeners) {
@@ -106,6 +110,21 @@ public class RecipeExecutor {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(ProjectResultReport projectResultReport, TestCase testCase) {
+        if (StringUtils.isNotEmpty(testCase.getClientCertFileName())) {
+            String clientCertificateFileName = new File(testCase.getClientCertFileName()).getName();
+            if (ProjectResultReport.StatusEnum.PENDING.equals(projectResultReport.getStatus())) {
+                List<UnresolvedFile> unresolvedFiles = projectResultReport.getUnresolvedFiles();
+                for (UnresolvedFile unresolvedFile : unresolvedFiles) {
+                    if (unresolvedFile.getFileName().equals(clientCertificateFileName)) {
+                        apiStub.cancelExecution(projectResultReport.getExecutionID(), authentication);
+                        throw new ApiException(400, "Couldn't find client certificate file");
+                    }
+                }
+            }
+        }
     }
 
     private void notifyExecutionFinished(ProjectResultReport executionStatus) {
