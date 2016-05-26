@@ -23,7 +23,7 @@ public class TestRecipeBuilder {
 
     /**
      * Certificate file can be added on the TestServer in allowedFilePath directory. Otherwise it should be provided by the client.
-     * Client will throw an exception if file is not doesn't exist on client and on server.
+     * Client will throw an exception if file doesn't exist on client and on server.
      *
      * @param filePath Certificate file path
      */
