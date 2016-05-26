@@ -1,11 +1,8 @@
 package com.smartbear.readyapi.client.execution;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import javax.ws.rs.core.MultivaluedMap;
 
 public class ApiException extends RuntimeException {
-    private String message;
     private int statusCode;
     private String responseBody;
     private MultivaluedMap<String, String> headers;
@@ -17,8 +14,8 @@ public class ApiException extends RuntimeException {
     }
 
     public ApiException(int statusCode, String message) {
+        super(message);
         this.statusCode = statusCode;
-        this.message = message;
     }
 
     public ApiException(Exception e) {
@@ -29,7 +26,7 @@ public class ApiException extends RuntimeException {
     public String toString() {
         return getClass().getName() + "{" +
                 "code=" + statusCode +
-                ", message=" + message != null ? message : responseBody +
+                ", message=" + getMessage() != null ? getMessage() : responseBody +
                 ", responseHeaders=" + headers +
                 ", responseBody='" + responseBody + '\'' +
                 '}';

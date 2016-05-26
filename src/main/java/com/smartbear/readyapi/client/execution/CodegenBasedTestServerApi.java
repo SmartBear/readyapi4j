@@ -13,6 +13,7 @@ import com.smartbear.readyapi.client.teststeps.TestSteps;
 import com.sun.jersey.api.client.GenericType;
 import io.swagger.client.Pair;
 import io.swagger.client.auth.HttpBasicAuth;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         Map<String, File> formParams = new HashMap<>();
 
         ProjectResultReport projectResultReport = invokeAPI(path, TestSteps.HttpMethod.POST.name(), testCase, APPLICATION_JSON, queryParams, formParams);
-        return sendFilesForDataSources(testCase, projectResultReport, queryParams);
+        return sendPendingFiles(testCase, projectResultReport, queryParams);
     }
 
     private void verifyDataSourceFilesExist(TestCase testCase) {
@@ -91,14 +92,27 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         return apiClient;
     }
 
-    private ProjectResultReport sendFilesForDataSources(TestCase body, ProjectResultReport projectResultReport, List<Pair> queryParams) {
+    private ProjectResultReport sendPendingFiles(TestCase body, ProjectResultReport projectResultReport, List<Pair> queryParams) {
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions/" + projectResultReport.getExecutionID() + "/files";
 
-        Map<String, File> formParams = buildFormParameters(body);
+        Map<String, File> formParams = buildFormParametersForDataSourceFiles(body);
+        addClientCertificateFile(body, formParams);
         if (formParams.isEmpty()) {
             return projectResultReport;
         }
         return invokeAPI(path, TestSteps.HttpMethod.POST.name(), body, "multipart/form-data", queryParams, formParams);
+    }
+
+    private void addClientCertificateFile(TestCase body, Map<String, File> formParams) {
+        if (StringUtils.isNotEmpty(body.getClientCertFileName())) {
+            File certificateFile = new File(body.getClientCertFileName());
+            if (certificateFile.exists()) {
+                formParams.put(certificateFile.getName(), certificateFile);
+            } else {
+                System.out.println("WARN: Client certificate file not found, file path: " + body.getClientCertFileName());
+                System.out.println("Execution will fail unless file exists on TestServer and file path added to allowed file paths.");
+            }
+        }
     }
 
     /**
@@ -157,7 +171,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
     }
 
-    private Map<String, File> buildFormParameters(TestCase testCase) {
+    private Map<String, File> buildFormParametersForDataSourceFiles(TestCase testCase) {
         Map<String, File> formParams = new HashMap<>();
         for (TestStep testStep : testCase.getTestSteps()) {
             if (testStep instanceof DataSourceTestStep) {

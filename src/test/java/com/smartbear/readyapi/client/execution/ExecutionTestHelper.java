@@ -3,6 +3,7 @@ package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
+import com.smartbear.readyapi.client.model.UnresolvedFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,25 @@ public class ExecutionTestHelper {
         ProjectResultReport startReport = new ProjectResultReport();
         startReport.setExecutionID(executionID);
         startReport.setStatus(ProjectResultReport.StatusEnum.CANCELED);
+        return startReport;
+    }
+
+    public static ProjectResultReport makePendingReportWithUnresolvedFiles(String exceutionId, String... fileNames) {
+        ProjectResultReport pendingReport = makePendingReport(exceutionId);
+        List<UnresolvedFile> unresolvedFiles = new ArrayList<>();
+        for (String fileName : fileNames) {
+            UnresolvedFile unresolvedFile = new UnresolvedFile();
+            unresolvedFile.setFileName(fileName);
+            unresolvedFiles.add(unresolvedFile);
+        }
+        pendingReport.setUnresolvedFiles(unresolvedFiles);
+        return pendingReport;
+    }
+
+    public static ProjectResultReport makePendingReport(String executionID) {
+        ProjectResultReport startReport = new ProjectResultReport();
+        startReport.setExecutionID(executionID);
+        startReport.setStatus(ProjectResultReport.StatusEnum.PENDING);
         return startReport;
     }
 

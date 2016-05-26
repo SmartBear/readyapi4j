@@ -3,10 +3,12 @@ package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.ExecutionListener;
 import com.smartbear.readyapi.client.TestRecipe;
+import com.smartbear.readyapi.client.TestRecipeBuilder;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
 import io.swagger.client.auth.HttpBasicAuth;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makeCancelledReport;
 import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makeFinishedReport;
+import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makePendingReportWithUnresolvedFiles;
 import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makeProjectResultReports;
 import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makeRunningReport;
 import static org.hamcrest.CoreMatchers.is;
@@ -32,6 +35,7 @@ public class RecipeExecutorTest {
     private static final String HOST = "thehost";
     private static final int PORT = 6234;
     private static final String BASE_PATH = "/custom_path";
+    private static final String CLIENT_CERTIFICATE_FILE_NAME = "ClientCertificate.cert";
 
     private TestServerApi apiWrapper;
     private RecipeExecutor executor;
@@ -123,5 +127,37 @@ public class RecipeExecutorTest {
 
         execution = executor.cancelExecution(execution);
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.CANCELED));
+    }
+
+    @Test
+    public void throwsExceptionAndExecutionIsNullIfClientCertificateNotProvidedAndNotFoundOnServer() throws Exception {
+        TestRecipe testRecipe = new TestRecipeBuilder()
+                .withClientCertificate(CLIENT_CERTIFICATE_FILE_NAME)
+                .withClientCertificatePassword("password")
+                .buildTestRecipe();
+
+        ProjectResultReport pendingReport = makePendingReportWithUnresolvedFiles("executionId", CLIENT_CERTIFICATE_FILE_NAME);
+        when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
+
+        executor.addExecutionListener(new ExecutionListener() {
+            @Override
+            public void requestSent(ProjectResultReport projectResultReport) {
+
+            }
+
+            @Override
+            public void executionFinished(ProjectResultReport projectResultReport) {
+
+            }
+
+            @Override
+            public void errorOccurred(Exception exception) {
+                assertThat(exception.getMessage(), is("Couldn't find client certificate file"));
+            }
+        });
+
+
+        Execution execution = executor.submitRecipe(testRecipe);
+        assertThat(execution, is(CoreMatchers.<Execution>nullValue()));
     }
 }
