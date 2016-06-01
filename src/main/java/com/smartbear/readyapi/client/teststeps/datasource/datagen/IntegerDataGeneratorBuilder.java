@@ -29,6 +29,17 @@ public class IntegerDataGeneratorBuilder extends AbstractDataGeneratorBuilder<In
         return this;
     }
 
+    /**
+     * Increment value for generation of sequential values when generationMode is Sequential. Ignored if generationMode is Random.
+     *
+     * @param incrementBy increment value
+     * @return IntegerDataGeneratorBuilder
+     */
+    public IntegerDataGeneratorBuilder incrementBy(int incrementBy) {
+        integerDataGenerator.setIncrementBy(incrementBy);
+        return this;
+    }
+
     @Override
     protected DataGenerator buildDataGenerator() {
         return integerDataGenerator;
