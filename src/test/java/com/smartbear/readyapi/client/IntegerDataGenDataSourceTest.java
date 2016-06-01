@@ -59,6 +59,7 @@ public class IntegerDataGenDataSourceTest {
                 .addStep(dataGenDataSource()
                         .withProperty(
                                 sequentialIntegerTypeProperty("property1")
+                                        .incrementBy(2)
                         )
                 )
                 .buildTestRecipe();
@@ -66,6 +67,7 @@ public class IntegerDataGenDataSourceTest {
         IntegerDataGenerator dataGenerator = (IntegerDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Integer"));
         assertThat(dataGenerator.getGenerationMode(), is(IntegerDataGenerator.GenerationModeEnum.SEQUENTIAL));
+        assertThat(dataGenerator.getIncrementBy(), is(2));
     }
 
     private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {

@@ -64,6 +64,7 @@ public class RealNumberDataGenDataSourceTest {
                 .addStep(dataGenDataSource()
                         .withProperty(
                                 sequentialRealNumberTypeProperty("property1")
+                                .incrementBy(1.3)
                         )
                 )
                 .buildTestRecipe();
@@ -71,6 +72,7 @@ public class RealNumberDataGenDataSourceTest {
         RealNumberDataGenerator dataGenerator = (RealNumberDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Real"));
         assertThat(dataGenerator.getGenerationMode(), is(RealNumberDataGenerator.GenerationModeEnum.SEQUENTIAL));
+        assertThat(dataGenerator.getIncrementBy(), is(new BigDecimal(1.3)));
     }
 
     private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {
