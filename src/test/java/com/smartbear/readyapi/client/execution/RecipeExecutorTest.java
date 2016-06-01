@@ -7,6 +7,7 @@ import com.smartbear.readyapi.client.TestRecipeBuilder;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi.client.teststeps.TestSteps;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -139,25 +140,41 @@ public class RecipeExecutorTest {
         ProjectResultReport pendingReport = makePendingReportWithUnresolvedFiles("executionId", CLIENT_CERTIFICATE_FILE_NAME);
         when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
 
-        executor.addExecutionListener(new ExecutionListener() {
+        executor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find client certificate file"));
+        Execution execution = executor.submitRecipe(testRecipe);
+        assertThat(execution, is(CoreMatchers.<Execution>nullValue()));
+    }
+
+    @Test
+    public void throwsExceptionIfTestStepClientCertificateNotProvidedAndNotFoundOnServer() throws Exception {
+        TestRecipe testRecipe = new TestRecipeBuilder()
+                .addStep(TestSteps.getRequest("http://localhost:8080")
+                        .withClientCertificate("clientCertificate.jks")
+                )
+                .buildTestRecipe();
+
+        ProjectResultReport pendingReport = makePendingReportWithUnresolvedFiles("executionId", "clientCertificate.jks");
+        when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
+
+        executor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find test step client certificate file: clientCertificate.jks"));
+        Execution execution = executor.submitRecipe(testRecipe);
+        assertThat(execution, is(CoreMatchers.<Execution>nullValue()));
+    }
+
+    private ExecutionListener createExecutionListenerWithExpectedErrorMessage(final String expectedErrorMessage) {
+        return new ExecutionListener() {
             @Override
             public void requestSent(ProjectResultReport projectResultReport) {
-
             }
 
             @Override
             public void executionFinished(ProjectResultReport projectResultReport) {
-
             }
 
             @Override
             public void errorOccurred(Exception exception) {
-                assertThat(exception.getMessage(), is("Couldn't find client certificate file"));
+                assertThat(exception.getMessage(), is(expectedErrorMessage));
             }
-        });
-
-
-        Execution execution = executor.submitRecipe(testRecipe);
-        assertThat(execution, is(CoreMatchers.<Execution>nullValue()));
+        };
     }
 }

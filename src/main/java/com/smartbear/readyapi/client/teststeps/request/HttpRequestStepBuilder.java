@@ -41,6 +41,22 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         return headers;
     }
 
+    /**
+     * Test Step specific Certificate file can be added on the TestServer in allowedFilePath directory. Otherwise it should be provided by the client.
+     * Client will throw an exception if file doesn't exist on client and on server.
+     *
+     * @param filePath Certificate file path
+     */
+    public RequestBuilderType withClientCertificate(String filePath) {
+        testStep.setClientCertificateFileName(filePath);
+        return (RequestBuilderType) this;
+    }
+
+    public RequestBuilderType withClientCertificatePassword(String password) {
+        testStep.setClientCertificatePassword(password);
+        return (RequestBuilderType) this;
+    }
+
     public RequestBuilderType named(String name) {
         testStep.setName(name);
         return (RequestBuilderType) this;

@@ -69,6 +69,8 @@ public class TransactionLogTest {
                         .named("Rest Request")
                         .assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
                         .assertValidStatusCodes(200)
+                        .withClientCertificate("C:\\cygwin64\\home\\Prakash\\ClientCertificateStore.jks")
+                        .withClientCertificatePassword("password")
                 )
                 .buildTestRecipe();
 
