@@ -102,14 +102,23 @@ public class RecipeExecutor {
             ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, testCase);
             return new Execution(apiStub, authentication, projectResultReport);
+        } catch (ApiException e) {
+            invokeListeners(e);
+            System.err.println("An error occurred when sending test recipe to server");
+            System.err.println(e.toString());
+            throw e;
         } catch (Exception e) {
-            for (ExecutionListener executionListener : executionListeners) {
-                executionListener.errorOccurred(e);
-            }
-            System.err.println("Error received when sending test recipe to server");
+            invokeListeners(e);
+            System.err.println("An error occurred when sending test recipe to server");
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void invokeListeners(Exception e) {
+        for (ExecutionListener executionListener : executionListeners) {
+            executionListener.errorOccurred(e);
+        }
     }
 
     private void cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(ProjectResultReport projectResultReport, TestCase testCase) {
