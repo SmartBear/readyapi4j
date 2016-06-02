@@ -9,6 +9,8 @@ import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.UnresolvedFile;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Responsible for executing test recipes on a Ready! API Server, synchronously or asynchronously.
  */
 public class RecipeExecutor {
+
+    private static Logger logger = LoggerFactory.getLogger(RecipeExecutor.class);
 
     private static final int NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS = 3;
     private final TestServerApi apiStub;
@@ -104,13 +108,11 @@ public class RecipeExecutor {
             return new Execution(apiStub, authentication, projectResultReport);
         } catch (ApiException e) {
             invokeListeners(e);
-            System.err.println("An error occurred when sending test recipe to server");
-            System.err.println(e.toString());
-            throw e;
+            logger.debug("An error occurred when sending test recipe to server");
+            logger.debug(e.toString());
         } catch (Exception e) {
             invokeListeners(e);
-            System.err.println("An error occurred when sending test recipe to server");
-            e.printStackTrace();
+            logger.debug("An error occurred when sending test recipe to server", e);
         }
         return null;
     }
@@ -173,7 +175,7 @@ public class RecipeExecutor {
                     if (errorCount > NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS) {
                         timer.cancel();
                     }
-                    e.printStackTrace();
+                    logger.debug("Error while checking for execution status", e);
                     errorCount++;
                 }
             }
