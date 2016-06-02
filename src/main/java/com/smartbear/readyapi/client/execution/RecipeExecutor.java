@@ -5,7 +5,9 @@ import com.smartbear.readyapi.client.TestRecipe;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
+import com.smartbear.readyapi.client.model.RequestTestStepBase;
 import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.model.UnresolvedFile;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.apache.commons.lang3.StringUtils;
@@ -124,15 +126,26 @@ public class RecipeExecutor {
     }
 
     private void cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(ProjectResultReport projectResultReport, TestCase testCase) {
-        if (StringUtils.isNotEmpty(testCase.getClientCertFileName())) {
-            String clientCertificateFileName = new File(testCase.getClientCertFileName()).getName();
-            if (ProjectResultReport.StatusEnum.PENDING.equals(projectResultReport.getStatus())) {
-                List<UnresolvedFile> unresolvedFiles = projectResultReport.getUnresolvedFiles();
-                for (UnresolvedFile unresolvedFile : unresolvedFiles) {
-                    if (unresolvedFile.getFileName().equals(clientCertificateFileName)) {
-                        apiStub.cancelExecution(projectResultReport.getExecutionID(), authentication);
-                        throw new ApiException(400, "Couldn't find client certificate file");
-                    }
+        if (ProjectResultReport.StatusEnum.PENDING.equals(projectResultReport.getStatus())) {
+            List<UnresolvedFile> unresolvedFiles = projectResultReport.getUnresolvedFiles();
+            if (unresolvedFiles.size() > 0) {
+                apiStub.cancelExecution(projectResultReport.getExecutionID(), authentication);
+            }
+            for (UnresolvedFile unresolvedFile : unresolvedFiles) {
+                if (unresolvedFile.getFileName().equals(testCase.getClientCertFileName())) {
+                    throw new ApiException(400, "Couldn't find client certificate file");
+                }
+                throwExceptionIfTestStepCertificateIsUnresolved(projectResultReport, testCase, unresolvedFile);
+            }
+        }
+    }
+
+    private void throwExceptionIfTestStepCertificateIsUnresolved(ProjectResultReport projectResultReport, TestCase testCase, UnresolvedFile unresolvedFile) {
+        for (TestStep testStep : testCase.getTestSteps()) {
+            if (testStep instanceof RequestTestStepBase) {
+                RequestTestStepBase requestTestStepBase = (RequestTestStepBase) testStep;
+                if (unresolvedFile.getFileName().equals(requestTestStepBase.getClientCertificateFileName())) {
+                    throw new ApiException(400, "Couldn't find test step client certificate file: " + requestTestStepBase.getClientCertificateFileName());
                 }
             }
         }

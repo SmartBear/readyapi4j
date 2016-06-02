@@ -231,7 +231,7 @@ public class RestRequestStepRecipeTest {
     public void buildsRestRequestTestStepRecipeWithRequestOptions() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(getRequest(URI)
-                    .postQueryString()
+                        .postQueryString()
                         .followRedirects()
                         .entitizeParameters()
                 )
@@ -317,6 +317,21 @@ public class RestRequestStepRecipeTest {
         assertThat(authentication.getPassword(), is("password"));
         assertThat(authentication.getDomain(), is("domain1"));
         assertThat(authentication.getType(), is("SPNEGO/Kerberos"));
+    }
+
+    @Test
+    public void buildsRestRequestTestStepRecipeWithClientCertificate() throws Exception {
+        TestRecipe recipe = newTestRecipe()
+                .addStep(restRequest()
+                        .get(URI)
+                        .withClientCertificate("clientCertificate.jks")
+                        .withClientCertificatePassword("password")
+                )
+                .buildTestRecipe();
+
+        RestTestRequestStep testStep = (RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0);
+        assertThat(testStep.getClientCertificateFileName(), is("clientCertificate.jks"));
+        assertThat(testStep.getClientCertificatePassword(), is("password"));
     }
 
     private void assertQueryParameter(RestParameter parameter, String paramName, String value) {
