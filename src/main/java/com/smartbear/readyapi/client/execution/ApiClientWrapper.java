@@ -194,7 +194,7 @@ public class ApiClientWrapper extends ApiClient {
         for (String authName : authNames) {
             Authentication auth = getAuthentications().get(authName);
             if (auth == null) {
-                throw new RuntimeException("Authentication undefined: " + authName);
+                throw new ApiException(400, "Authentication undefined: " + authName);
             }
             auth.applyToParams(queryParams, headerParams);
         }

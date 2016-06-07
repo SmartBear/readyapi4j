@@ -81,7 +81,7 @@ public class RecipeExecutor {
         return execution;
     }
 
-    public Execution executeRecipe(TestRecipe recipe) {
+    public Execution executeRecipe(TestRecipe recipe) throws ApiException {
         Execution execution = doExecuteTestCase(recipe.getTestCase(), false);
         if (execution != null) {
             notifyExecutionFinished(execution.getCurrentReport());
@@ -108,7 +108,7 @@ public class RecipeExecutor {
         return executions;
     }
 
-    private Execution doExecuteTestCase(TestCase testCase, boolean async) {
+    private Execution doExecuteTestCase(TestCase testCase, boolean async) throws ApiException {
         try {
             ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, testCase);
@@ -116,9 +116,15 @@ public class RecipeExecutor {
         } catch (ApiException e) {
             invokeListeners(e);
             logger.debug("An error occurred when sending test recipe to server. Details: " + e.toString());
+            if (!async) {
+                throw e;
+            }
         } catch (Exception e) {
             invokeListeners(e);
             logger.debug("An error occurred when sending test recipe to server", e);
+            if (!async) {
+                throw new ApiException(e);
+            }
         }
         return null;
     }

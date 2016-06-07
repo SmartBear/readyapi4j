@@ -199,7 +199,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
     private void verifyFileExists(String filePath) {
         if (!new File(filePath).exists()) {
-            throw new IllegalStateException("Data source file not found: " + filePath);
+            throw new ApiException(400, "Data source file not found: " + filePath);
         }
     }
 
