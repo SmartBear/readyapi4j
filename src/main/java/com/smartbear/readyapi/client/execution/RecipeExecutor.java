@@ -70,7 +70,7 @@ public class RecipeExecutor {
         executionListeners.remove(listener);
     }
 
-    public Execution submitRecipe(TestRecipe recipe) {
+    public Execution submitRecipe(TestRecipe recipe) throws ApiException {
         Execution execution = doExecuteTestCase(recipe.getTestCase(), true);
         if (execution != null) {
             for (ExecutionListener executionListener : executionListeners) {
@@ -116,17 +116,12 @@ public class RecipeExecutor {
         } catch (ApiException e) {
             invokeListeners(e);
             logger.debug("An error occurred when sending test recipe to server. Details: " + e.toString());
-            if (!async) {
-                throw e;
-            }
+            throw e;
         } catch (Exception e) {
             invokeListeners(e);
             logger.debug("An error occurred when sending test recipe to server", e);
-            if (!async) {
-                throw new ApiException(e);
-            }
+            throw new ApiException(e);
         }
-        return null;
     }
 
     private void invokeListeners(Exception e) {
