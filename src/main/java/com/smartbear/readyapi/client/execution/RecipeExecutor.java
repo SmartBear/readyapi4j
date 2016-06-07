@@ -10,6 +10,8 @@ import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.model.UnresolvedFile;
 import io.swagger.client.auth.HttpBasicAuth;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Responsible for executing test recipes on a Ready! API Server, synchronously or asynchronously.
  */
 public class RecipeExecutor {
+
+    private static Logger logger;
+
+    static {
+        if (System.getProperty("org.slf4j.simpleLogger.defaultLogLevel") == null) { //Don't set if user has defined the log level
+            System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
+        }
+        logger = LoggerFactory.getLogger(RecipeExecutor.class);
+    }
 
     private static final int NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS = 3;
     private final TestServerApi apiStub;
@@ -102,14 +113,20 @@ public class RecipeExecutor {
             ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, testCase);
             return new Execution(apiStub, authentication, projectResultReport);
+        } catch (ApiException e) {
+            invokeListeners(e);
+            logger.debug("An error occurred when sending test recipe to server. Details: " + e.toString());
         } catch (Exception e) {
-            for (ExecutionListener executionListener : executionListeners) {
-                executionListener.errorOccurred(e);
-            }
-            System.err.println("Error received when sending test recipe to server");
-            e.printStackTrace();
+            invokeListeners(e);
+            logger.debug("An error occurred when sending test recipe to server", e);
         }
         return null;
+    }
+
+    private void invokeListeners(Exception e) {
+        for (ExecutionListener executionListener : executionListeners) {
+            executionListener.errorOccurred(e);
+        }
     }
 
     private void cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(ProjectResultReport projectResultReport, TestCase testCase) {
@@ -175,7 +192,7 @@ public class RecipeExecutor {
                     if (errorCount > NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS) {
                         timer.cancel();
                     }
-                    e.printStackTrace();
+                    logger.debug("Error while checking for execution status", e);
                     errorCount++;
                 }
             }
