@@ -22,6 +22,7 @@ import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makePr
 import static com.smartbear.readyapi.client.execution.ExecutionTestHelper.makeRunningReport;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -141,8 +142,12 @@ public class RecipeExecutorTest {
         when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
 
         executor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find client certificate file"));
-        Execution execution = executor.submitRecipe(testRecipe);
-        assertThat(execution, is(CoreMatchers.<Execution>nullValue()));
+        try {
+            Execution execution = executor.submitRecipe(testRecipe);
+            assertTrue(false);
+        }
+        catch( com.smartbear.readyapi.client.execution.ApiException e ){
+        }
     }
 
     @Test
@@ -157,8 +162,13 @@ public class RecipeExecutorTest {
         when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
 
         executor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find test step client certificate file: clientCertificate.jks"));
-        Execution execution = executor.submitRecipe(testRecipe);
-        assertThat(execution, is(CoreMatchers.<Execution>nullValue()));
+
+        try {
+            executor.submitRecipe(testRecipe);
+            assertTrue(false);
+        }
+        catch( com.smartbear.readyapi.client.execution.ApiException e ){
+        }
     }
 
     private ExecutionListener createExecutionListenerWithExpectedErrorMessage(final String expectedErrorMessage) {

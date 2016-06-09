@@ -31,7 +31,9 @@ import static com.smartbear.readyapi.client.teststeps.TestSteps.fileDataSource;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.getRequest;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.gridDataSource;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyMap;
@@ -148,7 +150,13 @@ public class DataSourceTestStepRecipeTest {
                 assertThat(exception.getMessage(), is("Data source file not found: abc.xlsx"));
             }
         });
-        recipeExecutor.submitRecipe(recipe);
+
+        try {
+            recipeExecutor.submitRecipe(recipe);
+            assertTrue(false);
+        }
+        catch( com.smartbear.readyapi.client.execution.ApiException e ){
+        }
     }
 
     @Test
