@@ -1,6 +1,7 @@
 package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.ExecutionListener;
+import com.smartbear.readyapi.client.RecipeFilter;
 import com.smartbear.readyapi.client.TestRecipe;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
@@ -37,6 +38,7 @@ public class RecipeExecutor {
     private final TestServerApi apiStub;
     private HttpBasicAuth authentication;
     private final List<ExecutionListener> executionListeners = new CopyOnWriteArrayList<>();
+    private final List<RecipeFilter> recipeFilters = new CopyOnWriteArrayList<>();
 
     public RecipeExecutor(Scheme scheme, String host, int port) {
         this(scheme, host, port, ServerDefaults.VERSION_PREFIX, new CodegenBasedTestServerApi());
@@ -62,6 +64,14 @@ public class RecipeExecutor {
         authentication.setPassword(password);
     }
 
+    public void addRecipeFilter(RecipeFilter recipeFilter) {
+        recipeFilters.add(recipeFilter);
+    }
+
+    public void removeRecipeFilter(RecipeFilter recipeFilter) {
+        recipeFilters.remove(recipeFilter);
+    }
+
     public void addExecutionListener(ExecutionListener listener) {
         executionListeners.add(listener);
     }
@@ -71,6 +81,11 @@ public class RecipeExecutor {
     }
 
     public Execution submitRecipe(TestRecipe recipe) throws ApiException {
+
+        for (RecipeFilter recipeFilter : recipeFilters) {
+            recipeFilter.filterRecipe(recipe);
+        }
+
         Execution execution = doExecuteTestCase(recipe.getTestCase(), true);
         if (execution != null) {
             for (ExecutionListener executionListener : executionListeners) {
