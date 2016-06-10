@@ -15,6 +15,8 @@ import com.sun.jersey.api.client.GenericType;
 import io.swagger.client.Pair;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 public class CodegenBasedTestServerApi implements TestServerApi {
+
+    private static final Logger logger = LoggerFactory.getLogger(CodegenBasedTestServerApi.class);
 
     private ApiClientWrapper apiClient;
 
@@ -120,8 +124,8 @@ public class CodegenBasedTestServerApi implements TestServerApi {
             if (certificateFile.exists()) {
                 formParams.put(certificateFile.getName(), certificateFile);
             } else {
-                System.out.println("WARN: Client certificate file not found, file path: " + clientCertFileName);
-                System.out.println("Execution will fail unless file exists on TestServer and file path added to allowed file paths.");
+                logger.warn("Client certificate file not found, file path: " + clientCertFileName +
+                        "Execution will fail unless file exists on TestServer and file path added to allowed file paths.");
             }
         }
     }
