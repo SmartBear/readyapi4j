@@ -64,6 +64,14 @@ public class RecipeExecutor {
         authentication.setPassword(password);
     }
 
+    public void addRecipeFilter(RecipeFilter recipeFilter) {
+        recipeFilters.add(recipeFilter);
+    }
+
+    public void removeRecipeFilter(RecipeFilter recipeFilter) {
+        recipeFilters.remove(recipeFilter);
+    }
+
     public void addExecutionListener(ExecutionListener listener) {
         executionListeners.add(listener);
     }
@@ -74,8 +82,8 @@ public class RecipeExecutor {
 
     public Execution submitRecipe(TestRecipe recipe) throws ApiException {
 
-        for( RecipeFilter recipeFilter : recipeFilters ){
-            recipeFilter.filterRecipe( recipe );
+        for (RecipeFilter recipeFilter : recipeFilters) {
+            recipeFilter.filterRecipe(recipe);
         }
 
         Execution execution = doExecuteTestCase(recipe.getTestCase(), true);

@@ -1,6 +1,5 @@
 package com.smartbear.readyapi.client.execution;
 
-
 import com.smartbear.readyapi.client.ExecutionListener;
 import com.smartbear.readyapi.client.TestRecipe;
 import com.smartbear.readyapi.client.TestRecipeBuilder;
@@ -9,7 +8,6 @@ import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.teststeps.TestSteps;
 import io.swagger.client.auth.HttpBasicAuth;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -134,9 +132,9 @@ public class RecipeExecutorTest {
     @Test
     public void throwsExceptionAndExecutionIsNullIfClientCertificateNotProvidedAndNotFoundOnServer() throws Exception {
         TestRecipe testRecipe = new TestRecipeBuilder()
-                .withClientCertificate(CLIENT_CERTIFICATE_FILE_NAME)
-                .withClientCertificatePassword("password")
-                .buildTestRecipe();
+            .withClientCertificate(CLIENT_CERTIFICATE_FILE_NAME)
+            .withClientCertificatePassword("password")
+            .buildTestRecipe();
 
         ProjectResultReport pendingReport = makePendingReportWithUnresolvedFiles("executionId", CLIENT_CERTIFICATE_FILE_NAME);
         when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
@@ -145,18 +143,17 @@ public class RecipeExecutorTest {
         try {
             Execution execution = executor.submitRecipe(testRecipe);
             assertTrue(false);
-        }
-        catch( com.smartbear.readyapi.client.execution.ApiException e ){
+        } catch (com.smartbear.readyapi.client.execution.ApiException e) {
         }
     }
 
     @Test
     public void throwsExceptionIfTestStepClientCertificateNotProvidedAndNotFoundOnServer() throws Exception {
         TestRecipe testRecipe = new TestRecipeBuilder()
-                .addStep(TestSteps.getRequest("http://localhost:8080")
-                        .withClientCertificate("clientCertificate.jks")
-                )
-                .buildTestRecipe();
+            .addStep(TestSteps.getRequest("http://localhost:8080")
+                .withClientCertificate("clientCertificate.jks")
+            )
+            .buildTestRecipe();
 
         ProjectResultReport pendingReport = makePendingReportWithUnresolvedFiles("executionId", "clientCertificate.jks");
         when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
@@ -166,8 +163,7 @@ public class RecipeExecutorTest {
         try {
             executor.submitRecipe(testRecipe);
             assertTrue(false);
-        }
-        catch( com.smartbear.readyapi.client.execution.ApiException e ){
+        } catch (com.smartbear.readyapi.client.execution.ApiException e) {
         }
     }
 
