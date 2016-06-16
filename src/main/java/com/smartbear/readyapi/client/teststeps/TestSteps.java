@@ -7,6 +7,7 @@ import com.smartbear.readyapi.client.teststeps.datasource.GridDataSourceTestStep
 import com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenDataSourceTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.jdbcrequest.JdbcConnection;
+import com.smartbear.readyapi.client.teststeps.plugin.PluginTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.restrequest.RestRequestStepWithBodyBuilder;
@@ -89,4 +90,12 @@ public class TestSteps {
         return new JdbcConnection(driver, connectionString);
     }
 
+    /**
+     * @param pluginTestStepType test step type defined by plugin. For example one of 'MQTTPublishTestStep',
+     *                           'MQTTDropConnectionTestStep' or 'MQTTReceiveTestStep' defined by MQTT Ready! API plugin.
+     * @return PluginTestStepBuilder
+     */
+    public static PluginTestStepBuilder pluginTestStep(String pluginTestStepType) {
+        return new PluginTestStepBuilder(pluginTestStepType);
+    }
 }
