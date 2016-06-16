@@ -14,6 +14,7 @@ public class PluginTestStepBuilderTest {
     public void buildsRecipeWithPluginTestStep() throws Exception {
         TestRecipe testRecipe = newTestRecipe()
                 .addStep(pluginTestStep("MQTTPublishTestStep")
+                        .named("MQTT Publish Test Step")
                         .withConfigProperty("config", new TestStepConfig())
                         .andWithConfigProperty("ClientID", "Client1")
                 )

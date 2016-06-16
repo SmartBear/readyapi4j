@@ -10,6 +10,11 @@ public class PluginTestStepBuilder implements TestStepBuilder<PluginTestStep> {
         pluginTestStep.setType(pluginTestStepType);
     }
 
+    public PluginTestStepBuilder named(String testStepName) {
+        pluginTestStep.setName(testStepName);
+        return this;
+    }
+
     public PluginTestStepBuilder withConfigProperty(String propertyName, Object value) {
         pluginTestStep.getConfiguration().put(propertyName, value);
         return this;
