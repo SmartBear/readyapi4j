@@ -168,18 +168,20 @@ public class ApiClientWrapper extends ApiClient {
         return this.client;
     }
 
-    public String serialize(Object obj, String contentType) throws ApiException {
+    public Object serialize(Object obj, String contentType) throws ApiException {
         try {
-            ObjectMapper mapper = getObjectMapper();
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
             if (contentType.startsWith("application/json")) {
+                ObjectMapper mapper = getObjectMapper();
+                mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
                 return mapper.writeValueAsString(obj);
+            }
+            else {
+                return obj;
             }
         } catch (JsonProcessingException e) {
             throw new ApiException(400, "can not serialize object into Content-Type: " + contentType);
         }
-        return null;
     }
 
     public ObjectMapper getObjectMapper() {

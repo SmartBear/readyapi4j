@@ -139,7 +139,7 @@ public class RecipeExecutorTest {
         ProjectResultReport pendingReport = makePendingReportWithUnresolvedFiles("executionId", CLIENT_CERTIFICATE_FILE_NAME);
         when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
 
-        executor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find client certificate file"));
+        executor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find client certificate file: " + CLIENT_CERTIFICATE_FILE_NAME));
         try {
             Execution execution = executor.submitRecipe(testRecipe);
             assertTrue(false);
