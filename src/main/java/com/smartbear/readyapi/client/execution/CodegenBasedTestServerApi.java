@@ -294,6 +294,10 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     @Override
     public ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth) throws ApiException {
 
+        if (!file.exists()) {
+            throw new ApiException(404, "File [" + file.toString() + "] not found");
+        }
+
         setAuthentication(auth);
 
         List<Pair> queryParams = new ArrayList<>();
@@ -326,32 +330,31 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
         byte[] buffer = new byte[1024];
 
-        FileOutputStream fout = new FileOutputStream(zipFile);
-        ZipOutputStream zout = new ZipOutputStream(fout);
+        try (
+            FileOutputStream fout = new FileOutputStream(zipFile);
+            ZipOutputStream zout = new ZipOutputStream(fout)) {
 
-        List<String> files = Lists.newArrayList();
+            List<String> files = Lists.newArrayList();
+            populateFilesList(dir, files);
 
-        populateFilesList(dir, files);
+            for (String fileName : files) {
+                File file = new File(fileName);
 
-        for (String fileName : files) {
+                try (FileInputStream fin = new FileInputStream(file)) {
+                    String zipEntryName = fileName.substring(dir.getAbsolutePath().length());
+                    zout.putNextEntry(new ZipEntry(zipEntryName));
 
-            File file = new File(fileName);
-            FileInputStream fin = new FileInputStream(file);
+                    int length;
 
-            String zipEntryName = fileName.substring(dir.getAbsolutePath().length());
-            zout.putNextEntry(new ZipEntry(zipEntryName));
+                    while ((length = fin.read(buffer)) > 0) {
+                        zout.write(buffer, 0, length);
+                    }
 
-            int length;
-
-            while ((length = fin.read(buffer)) > 0) {
-                zout.write(buffer, 0, length);
+                    zout.closeEntry();
+                }
             }
-
-            zout.closeEntry();
-            fin.close();
         }
 
-        zout.close();
         return zipFile;
     }
 
