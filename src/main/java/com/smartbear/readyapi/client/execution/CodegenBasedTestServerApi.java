@@ -303,7 +303,6 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         String type = "application/xml";
 
         try {
-
             // composite project?
             if (file.isDirectory()) {
                 file = zipCompositeProject(file);
@@ -317,8 +316,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
             return invokeAPI(path, TestSteps.HttpMethod.POST.name(), data,
                 type, queryParams, null);
-        }
-        catch( IOException e ){
+        } catch (IOException e) {
             throw new ApiException(500, "Failed to read project; " + e.toString());
         }
     }
