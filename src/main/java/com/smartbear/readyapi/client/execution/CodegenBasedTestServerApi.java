@@ -292,7 +292,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     }
 
     @Override
-    public ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth) throws ApiException {
+    public ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth, String testCaseName, String testSuiteName, String environment) throws ApiException {
 
         if (!file.exists()) {
             throw new ApiException(404, "File [" + file.toString() + "] not found");
@@ -302,6 +302,15 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(async)));
+        if (testCaseName != null) {
+            queryParams.add(new Pair("testCaseName", testCaseName));
+        }
+        if (testSuiteName != null) {
+            queryParams.add(new Pair("testSuiteName", testSuiteName));
+        }
+        if (environment != null) {
+            queryParams.add(new Pair("environment", environment));
+        }
 
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions";
         String type = "application/xml";

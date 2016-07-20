@@ -6,6 +6,7 @@ import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
 import io.swagger.client.auth.HttpBasicAuth;
 
+import javax.annotation.Nullable;
 import java.io.File;
 
 /**
@@ -13,7 +14,7 @@ import java.io.File;
  */
 public interface TestServerApi {
 
-    ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth) throws ApiException;
+    ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException;
 
     ProjectResultReport postTestRecipe(TestCase body, boolean async, HttpBasicAuth auth) throws ApiException;
 
