@@ -14,6 +14,8 @@ import io.swagger.client.auth.HttpBasicAuth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -21,7 +23,7 @@ import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Responsible for executing test recipes on a Ready! API Server, synchronously or asynchronously.
+ * Responsible for executing test recipes and projects on a Ready! API Server, synchronously or asynchronously.
  */
 public class RecipeExecutor {
 
@@ -80,6 +82,34 @@ public class RecipeExecutor {
         executionListeners.remove(listener);
     }
 
+    public Execution submitProject(File project) {
+        return submitProject(project, null, null, null);
+    }
+
+    public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException {
+        Execution execution = doExecuteProject(project, true, testCaseName, testSuiteName, environment);
+        if (execution != null) {
+            for (ExecutionListener executionListener : executionListeners) {
+                executionListener.requestSent(execution.getCurrentReport());
+            }
+            new ExecutionStatusChecker(execution).start();
+        }
+        return execution;
+
+    }
+
+    public Execution executeProject(File project) {
+        return executeProject(project, null, null, null);
+    }
+
+    public Execution executeProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException {
+        Execution execution = doExecuteProject(project, false, testCaseName, testSuiteName, environment);
+        if (execution != null) {
+            notifyExecutionFinished(execution.getCurrentReport());
+        }
+        return execution;
+    }
+
     public Execution submitRecipe(TestRecipe recipe) throws ApiException {
 
         for (RecipeFilter recipeFilter : recipeFilters) {
@@ -123,6 +153,22 @@ public class RecipeExecutor {
         return executions;
     }
 
+    private Execution doExecuteProject(File project, boolean async, String testCaseName, String testSuiteName, String environment) throws ApiException {
+        try {
+            ProjectResultReport projectResultReport = apiStub.postProject(project, async, authentication, testCaseName, testSuiteName, environment);
+            cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, null);
+            return new Execution(apiStub, authentication, projectResultReport);
+        } catch (ApiException e) {
+            invokeListeners(e);
+            logger.debug("An error occurred when sending project to server. Details: " + e.toString());
+            throw e;
+        } catch (Exception e) {
+            invokeListeners(e);
+            logger.debug("An error occurred when sending project to server", e);
+            throw new ApiException(e);
+        }
+    }
+
     private Execution doExecuteTestCase(TestCase testCase, boolean async) throws ApiException {
         try {
             ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
@@ -152,8 +198,8 @@ public class RecipeExecutor {
                 apiStub.cancelExecution(projectResultReport.getExecutionID(), authentication);
             }
             for (UnresolvedFile unresolvedFile : unresolvedFiles) {
-                if (unresolvedFile.getFileName().equals(testCase.getClientCertFileName())) {
-                    throw new ApiException(400, "Couldn't find client certificate file");
+                if (testCase == null || unresolvedFile.getFileName().equals(testCase.getClientCertFileName())) {
+                    throw new ApiException(400, "Couldn't find client certificate file: " + unresolvedFile.getFileName());
                 }
                 throwExceptionIfTestStepCertificateIsUnresolved(projectResultReport, testCase, unresolvedFile);
             }

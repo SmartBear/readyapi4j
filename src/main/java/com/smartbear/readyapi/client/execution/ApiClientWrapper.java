@@ -135,10 +135,10 @@ public class ApiClientWrapper extends ApiClient {
             }
         } else if (response.getStatusInfo().getStatusCode() == 429) {
             throw new UsageLimitException(response.getStatusInfo().getStatusCode(), getResponseBody(response),
-                    response.getHeaders());
+                response.getHeaders());
         } else {
             throw new ApiException(response.getStatusInfo().getStatusCode(), getResponseBody(response),
-                    response.getHeaders());
+                response.getHeaders());
         }
     }
 
@@ -168,18 +168,19 @@ public class ApiClientWrapper extends ApiClient {
         return this.client;
     }
 
-    public String serialize(Object obj, String contentType) throws ApiException {
+    public Object serialize(Object obj, String contentType) throws ApiException {
         try {
-            ObjectMapper mapper = getObjectMapper();
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
             if (contentType.startsWith("application/json")) {
+                ObjectMapper mapper = getObjectMapper();
+                mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
                 return mapper.writeValueAsString(obj);
+            } else {
+                return obj;
             }
         } catch (JsonProcessingException e) {
             throw new ApiException(400, "can not serialize object into Content-Type: " + contentType);
         }
-        return null;
     }
 
     public ObjectMapper getObjectMapper() {
@@ -240,22 +241,22 @@ public class ApiClientWrapper extends ApiClient {
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
         TrustManager[] certs = new TrustManager[]{
-                new X509TrustManager() {
-                    @Override
-                    public X509Certificate[] getAcceptedIssuers() {
-                        return null;
-                    }
-
-                    @Override
-                    public void checkServerTrusted(X509Certificate[] chain, String authType)
-                            throws CertificateException {
-                    }
-
-                    @Override
-                    public void checkClientTrusted(X509Certificate[] chain, String authType)
-                            throws CertificateException {
-                    }
+            new X509TrustManager() {
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
                 }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] chain, String authType)
+                    throws CertificateException {
+                }
+
+                @Override
+                public void checkClientTrusted(X509Certificate[] chain, String authType)
+                    throws CertificateException {
+                }
+            }
         };
         sslContext.init(null, certs, new SecureRandom());
 
@@ -263,13 +264,13 @@ public class ApiClientWrapper extends ApiClient {
 
         ClientConfig config = new DefaultClientConfig();
         config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
-                new HTTPSProperties(new HostnameVerifier() {
+            new HTTPSProperties(new HostnameVerifier() {
 
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                }, sslContext));
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            }, sslContext));
 
         return config;
     }

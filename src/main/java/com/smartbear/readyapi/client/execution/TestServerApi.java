@@ -6,10 +6,16 @@ import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
 import io.swagger.client.auth.HttpBasicAuth;
 
+import javax.annotation.Nullable;
+import java.io.File;
+
 /**
  * Defines an API stub that can communicate with the Ready! API Server.
  */
 public interface TestServerApi {
+
+    ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException;
+
     ProjectResultReport postTestRecipe(TestCase body, boolean async, HttpBasicAuth auth) throws ApiException;
 
     ProjectResultReport getExecutionStatus(String executionID, HttpBasicAuth auth) throws ApiException;
