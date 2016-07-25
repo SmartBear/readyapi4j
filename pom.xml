@@ -54,7 +54,7 @@
         <junit-version>4.8.1</junit-version>
         <swagger-codegen.version>2.1.6</swagger-codegen.version>
 
-        <codegen.swagger.path>https://api.swaggerhub.com/apis/smartbear/ready-api-testserver/1.2.0
+        <codegen.swagger.path>https://api.swaggerhub.com/apis/smartbear/ready-api-testserver/1.2.1
         </codegen.swagger.path>
     </properties>
 

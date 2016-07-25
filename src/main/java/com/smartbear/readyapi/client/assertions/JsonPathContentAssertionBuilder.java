@@ -12,6 +12,11 @@ public class JsonPathContentAssertionBuilder extends AbstractAssertionBuilder<Js
         jsonPathContentAssertion.setExpectedContent(expectedContent);
     }
 
+    public JsonPathContentAssertionBuilder named(String name) {
+        jsonPathContentAssertion.setName(name);
+        return this;
+    }
+
     @Override
     public JsonPathAssertionBuilder allowWildcards() {
         jsonPathContentAssertion.setAllowWildcards(true);

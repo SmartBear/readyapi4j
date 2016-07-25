@@ -12,6 +12,11 @@ public class XQueryContainsAssertionBuilder extends AbstractAssertionBuilder<XQu
         xQueryContainsAssertion.setExpectedContent(expectedContent);
     }
 
+    public XQueryContainsAssertionBuilder named(String name) {
+        xQueryContainsAssertion.setName(name);
+        return this;
+    }
+
     @Override
     public XQueryContainsAssertionBuilder allowWildcards() {
         xQueryContainsAssertion.setAllowWildcards(true);
@@ -26,7 +31,7 @@ public class XQueryContainsAssertionBuilder extends AbstractAssertionBuilder<XQu
         return xQueryContainsAssertion;
     }
 
-    public final static XQueryContainsAssertion create(){
+    public final static XQueryContainsAssertion create() {
         XQueryContainsAssertion assertion = new XQueryContainsAssertion();
         assertion.setType(Assertions.XQUERY_MATCH_TYPE);
         return assertion;
