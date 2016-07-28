@@ -12,6 +12,7 @@ public class JsonPathContentAssertionBuilder extends AbstractAssertionBuilder<Js
         jsonPathContentAssertion.setExpectedContent(expectedContent);
     }
 
+    @Override
     public JsonPathContentAssertionBuilder named(String name) {
         jsonPathContentAssertion.setName(name);
         return this;

@@ -4,13 +4,15 @@ import com.smartbear.readyapi.client.model.ResponseSLAAssertion;
 
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 
-public class DefaultResponseSLAAssertionBuilder extends AbstractAssertionBuilder<ResponseSLAAssertion> {
+public class DefaultResponseSLAAssertionBuilder extends AbstractAssertionBuilder<ResponseSLAAssertion>
+        implements ResponseSLAAssertionBuilder {
     private ResponseSLAAssertion responseSLAAssertion = new ResponseSLAAssertion();
 
     public DefaultResponseSLAAssertionBuilder(int maxResponseTime) {
         responseSLAAssertion.setMaxResponseTime(maxResponseTime);
     }
 
+    @Override
     public DefaultResponseSLAAssertionBuilder named(String name) {
         responseSLAAssertion.setName(name);
         return this;
@@ -23,7 +25,7 @@ public class DefaultResponseSLAAssertionBuilder extends AbstractAssertionBuilder
         return responseSLAAssertion;
     }
 
-    public final static ResponseSLAAssertion create(){
+    public final static ResponseSLAAssertion create() {
         ResponseSLAAssertion assertion = new ResponseSLAAssertion();
         assertion.setType(Assertions.RESPONSE_SLA_TYPE);
         return assertion;

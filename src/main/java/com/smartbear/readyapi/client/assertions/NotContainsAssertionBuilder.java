@@ -10,11 +10,6 @@ public class NotContainsAssertionBuilder extends DefaultContainsAssertionBuilder
         super(token);
     }
 
-    public NotContainsAssertionBuilder named(String name) {
-        containsAssertion.setName(name);
-        return this;
-    }
-
     @Override
     public SimpleContainsAssertion build() {
         validateNotEmpty(containsAssertion.getToken(), "Missing token, it's a mandatory parameter for NotContainsAssertion");

@@ -6,4 +6,6 @@ public interface ContainsAssertionBuilder extends AssertionBuilder<SimpleContain
     ContainsAssertionBuilder useRegEx();
 
     ContainsAssertionBuilder ignoreCase();
+
+    ContainsAssertionBuilder named(String assertionName);
 }

@@ -8,4 +8,6 @@ public interface XPathAssertionBuilder extends AssertionBuilder<XPathContainsAss
     XPathAssertionBuilder ignoreComments();
 
     XPathContainsAssertionBuilder ignoreNamespaces();
+
+    XPathAssertionBuilder named(String assertionName);
 }

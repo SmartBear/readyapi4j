@@ -12,6 +12,7 @@ public class XQueryContainsAssertionBuilder extends AbstractAssertionBuilder<XQu
         xQueryContainsAssertion.setExpectedContent(expectedContent);
     }
 
+    @Override
     public XQueryContainsAssertionBuilder named(String name) {
         xQueryContainsAssertion.setName(name);
         return this;

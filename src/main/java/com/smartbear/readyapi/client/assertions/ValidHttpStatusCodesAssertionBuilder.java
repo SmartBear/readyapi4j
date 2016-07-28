@@ -24,6 +24,7 @@ public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion> extends A
         return this;
     }
 
+    @Override
     public ValidHttpStatusCodesAssertionBuilder named(String name) {
         this.name = name;
         return this;
