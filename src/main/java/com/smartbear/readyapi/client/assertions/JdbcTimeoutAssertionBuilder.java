@@ -6,26 +6,30 @@ import java.util.Objects;
 
 public class JdbcTimeoutAssertionBuilder extends AbstractAssertionBuilder<JdbcTimeoutAssertion> {
 
-    private final Object timeout;
+    private final JdbcTimeoutAssertion timeoutAssertion;
 
     public JdbcTimeoutAssertionBuilder(long timeout) {
-        this.timeout = timeout;
+        this(String.valueOf(timeout));
     }
 
     public JdbcTimeoutAssertionBuilder(String timeout) {
         Objects.requireNonNull(timeout);
-        this.timeout = timeout;
+        timeoutAssertion = new JdbcTimeoutAssertion();
+        timeoutAssertion.setTimeout(timeout);
+        timeoutAssertion.setType(Assertions.JDBC_TIMEOUT_TYPE);
+    }
+
+    public JdbcTimeoutAssertionBuilder named(String name) {
+        timeoutAssertion.setName(name);
+        return this;
     }
 
     @Override
     public JdbcTimeoutAssertion build() {
-        JdbcTimeoutAssertion timeoutAssertion = new JdbcTimeoutAssertion();
-        timeoutAssertion.setTimeout(String.valueOf(timeout));
-        timeoutAssertion.setType(Assertions.JDBC_TIMEOUT_TYPE);
         return timeoutAssertion;
     }
 
-    public final static JdbcTimeoutAssertion create(){
+    public final static JdbcTimeoutAssertion create() {
         JdbcTimeoutAssertion assertion = new JdbcTimeoutAssertion();
         assertion.setType(Assertions.JDBC_TIMEOUT_TYPE);
         return assertion;

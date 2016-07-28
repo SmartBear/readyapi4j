@@ -4,11 +4,17 @@ import com.smartbear.readyapi.client.model.NotSoapFaultAssertion;
 
 public class NotSoapFaultAssertionBuilder extends AbstractAssertionBuilder<NotSoapFaultAssertion> {
 
+    private final NotSoapFaultAssertion notSoapFaultAssertion = new NotSoapFaultAssertion();
+
+    public NotSoapFaultAssertionBuilder named(String name) {
+        notSoapFaultAssertion.setName(name);
+        return this;
+    }
+
     @Override
     public NotSoapFaultAssertion build() {
-        NotSoapFaultAssertion assertion = new NotSoapFaultAssertion();
-        assertion.setType(Assertions.NOT_SOAP_FAULT_TYPE);
-        return assertion;
+        notSoapFaultAssertion.setType(Assertions.NOT_SOAP_FAULT_TYPE);
+        return notSoapFaultAssertion;
     }
 
     public final static NotSoapFaultAssertion create() {

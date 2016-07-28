@@ -12,6 +12,11 @@ public class XPathContainsAssertionBuilder extends AbstractAssertionBuilder<XPat
         xPathContainsAssertion.setExpectedContent(expectedContent);
     }
 
+    public XPathContainsAssertionBuilder named(String name) {
+        xPathContainsAssertion.setName(name);
+        return this;
+    }
+
     @Override
     public XPathContainsAssertionBuilder allowWildCards() {
         xPathContainsAssertion.setAllowWildcards(true);
@@ -38,7 +43,7 @@ public class XPathContainsAssertionBuilder extends AbstractAssertionBuilder<XPat
         return xPathContainsAssertion;
     }
 
-    public final static XPathContainsAssertion create(){
+    public final static XPathContainsAssertion create() {
         XPathContainsAssertion assertion = new XPathContainsAssertion();
         assertion.setType(Assertions.XPATH_MATCH_TYPE);
         return assertion;

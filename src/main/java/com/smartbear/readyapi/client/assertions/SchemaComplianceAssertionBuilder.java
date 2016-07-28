@@ -4,11 +4,17 @@ import com.smartbear.readyapi.client.model.SchemaComplianceAssertion;
 
 public class SchemaComplianceAssertionBuilder extends AbstractAssertionBuilder<SchemaComplianceAssertion> {
 
+    private final SchemaComplianceAssertion schemaComplianceAssertion = new SchemaComplianceAssertion();
+
+    public SchemaComplianceAssertionBuilder named(String name) {
+        schemaComplianceAssertion.setName(name);
+        return this;
+    }
+
     @Override
     public SchemaComplianceAssertion build() {
-        SchemaComplianceAssertion assertion = new SchemaComplianceAssertion();
-        assertion.setType(Assertions.SCHEMA_COMPLIANCE_TYPE);
-        return assertion;
+        schemaComplianceAssertion.setType(Assertions.SCHEMA_COMPLIANCE_TYPE);
+        return schemaComplianceAssertion;
     }
 
     public final static SchemaComplianceAssertion create() {

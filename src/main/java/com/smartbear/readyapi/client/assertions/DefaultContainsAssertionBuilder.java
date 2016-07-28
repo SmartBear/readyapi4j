@@ -23,6 +23,11 @@ public class DefaultContainsAssertionBuilder extends AbstractAssertionBuilder<Si
         return this;
     }
 
+    public ContainsAssertionBuilder named(String name) {
+        containsAssertion.setName(name);
+        return this;
+    }
+
     @Override
     public SimpleContainsAssertion build() {
         validateNotEmpty(containsAssertion.getToken(), "Missing token, it's a mandatory parameter for ContainsAssertion");
@@ -30,7 +35,7 @@ public class DefaultContainsAssertionBuilder extends AbstractAssertionBuilder<Si
         return containsAssertion;
     }
 
-    public static SimpleContainsAssertion create(){
+    public static SimpleContainsAssertion create() {
         SimpleContainsAssertion assertion = new SimpleContainsAssertion();
         assertion.setType(Assertions.CONTAINS_ASSERTION_TYPE);
         return assertion;

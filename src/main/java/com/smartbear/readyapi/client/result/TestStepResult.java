@@ -50,6 +50,15 @@ public class TestStepResult {
         return testStepResultReport.getAssertionStatus();
     }
 
+    public TestStepResultReport.AssertionStatusEnum getStatusForAssertion(String assertionName) {
+        for (String message : testStepResultReport.getMessages()) {
+            if (message.startsWith("[" + assertionName + "]")) {
+                return TestStepResultReport.AssertionStatusEnum.FAILED;
+            }
+        }
+        return TestStepResultReport.AssertionStatusEnum.OK;
+    }
+
     public List<String> getMessages() {
         return testStepResultReport.getMessages();
     }

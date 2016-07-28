@@ -11,6 +11,11 @@ public class DefaultResponseSLAAssertionBuilder extends AbstractAssertionBuilder
         responseSLAAssertion.setMaxResponseTime(maxResponseTime);
     }
 
+    public DefaultResponseSLAAssertionBuilder named(String name) {
+        responseSLAAssertion.setName(name);
+        return this;
+    }
+
     @Override
     public ResponseSLAAssertion build() {
         validateNotEmpty(responseSLAAssertion.getMaxResponseTime(), "Missing max response time, it's a mandatory parameter for ResponseSLAAssertion");
