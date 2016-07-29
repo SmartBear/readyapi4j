@@ -12,6 +12,7 @@ public class JsonPathCountAssertionBuilder extends AbstractAssertionBuilder<Json
         jsonPathCountAssertion.setExpectedCount(expectedCount);
     }
 
+    @Override
     public JsonPathCountAssertionBuilder named(String name) {
         jsonPathCountAssertion.setName(name);
         return this;

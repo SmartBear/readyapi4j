@@ -1,8 +1,8 @@
 package com.smartbear.readyapi.client.teststeps.soaprequest;
 
-import com.smartbear.readyapi.client.assertions.NotSoapFaultAssertionBuilder;
-import com.smartbear.readyapi.client.assertions.SchemaComplianceAssertionBuilder;
-import com.smartbear.readyapi.client.assertions.SoapFaultAssertionBuilder;
+import com.smartbear.readyapi.client.assertions.DefaultNotSoapFaultAssertionBuilder;
+import com.smartbear.readyapi.client.assertions.DefaultSchemaComplianceAssertionBuilder;
+import com.smartbear.readyapi.client.assertions.DefaultSoapFaultAssertionBuilder;
 import com.smartbear.readyapi.client.model.SoapParameter;
 import com.smartbear.readyapi.client.model.SoapRequestTestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
@@ -56,15 +56,15 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
     }
 
     public SoapRequestStepBuilder assertSchemaCompliance() {
-        return addAssertion(new SchemaComplianceAssertionBuilder());
+        return addAssertion(new DefaultSchemaComplianceAssertionBuilder());
     }
 
     public SoapRequestStepBuilder assertSoapFaultResponse() {
-        return addAssertion(new SoapFaultAssertionBuilder());
+        return addAssertion(new DefaultSoapFaultAssertionBuilder());
     }
 
     public SoapRequestStepBuilder assertSoapOkResponse() {
-        return addAssertion(new NotSoapFaultAssertionBuilder());
+        return addAssertion(new DefaultNotSoapFaultAssertionBuilder());
     }
 
     public SoapRequestStepBuilder withParameter(String name, String value) {

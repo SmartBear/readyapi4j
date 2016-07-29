@@ -8,4 +8,6 @@ public interface HttpStatusCodeAssertionBuilder extends AssertionBuilder<Asserti
     HttpStatusCodeAssertionBuilder addStatusCode(int statusCode);
 
     HttpStatusCodeAssertionBuilder addStatusCodes(List<Integer> statusCodes);
+
+    HttpStatusCodeAssertionBuilder named(String assertionName);
 }

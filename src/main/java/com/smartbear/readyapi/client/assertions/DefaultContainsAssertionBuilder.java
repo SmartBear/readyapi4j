@@ -23,6 +23,7 @@ public class DefaultContainsAssertionBuilder extends AbstractAssertionBuilder<Si
         return this;
     }
 
+    @Override
     public ContainsAssertionBuilder named(String name) {
         containsAssertion.setName(name);
         return this;

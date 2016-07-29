@@ -12,6 +12,7 @@ public class XPathContainsAssertionBuilder extends AbstractAssertionBuilder<XPat
         xPathContainsAssertion.setExpectedContent(expectedContent);
     }
 
+    @Override
     public XPathContainsAssertionBuilder named(String name) {
         xPathContainsAssertion.setName(name);
         return this;

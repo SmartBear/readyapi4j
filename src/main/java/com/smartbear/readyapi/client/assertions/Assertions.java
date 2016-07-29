@@ -35,7 +35,7 @@ public class Assertions {
         return new NotContainsAssertionBuilder(token);
     }
 
-    public static AssertionBuilder script(String script) {
+    public static GroovyScriptAssertionBuilder script(String script) {
         return new DefaultGroovyScriptAssertionBuilder(script);
     }
 
@@ -58,12 +58,12 @@ public class Assertions {
         return new XQueryContainsAssertionBuilder(xQuery, expectedContent);
     }
 
-    public static AssertionBuilder responseSLA(int maxResponseTime) {
+    public static ResponseSLAAssertionBuilder responseSLA(int maxResponseTime) {
         return new DefaultResponseSLAAssertionBuilder(maxResponseTime);
     }
 
-    public static AssertionBuilder jdbcRequestTimeout(long timeout) {
-        return new JdbcTimeoutAssertionBuilder(timeout);
+    public static JdbcTimeoutAssertionBuilder jdbcRequestTimeout(long timeout) {
+        return new DefaultJdbcTimeoutAssertionBuilder(timeout);
     }
 
     /**
@@ -72,11 +72,11 @@ public class Assertions {
      * @return a builder that will construct the JDBC Timeout assertion
      */
 
-    public static AssertionBuilder jdbcRequestTimeout(String timeout) {
-        return new JdbcTimeoutAssertionBuilder(timeout);
+    public static JdbcTimeoutAssertionBuilder jdbcRequestTimeout(String timeout) {
+        return new DefaultJdbcTimeoutAssertionBuilder(timeout);
     }
 
-    public static AssertionBuilder jdbcRequestStatusOk() {
-        return new JdbcStatusAssertionBuilder();
+    public static JdbcStatusAssertionBuilder jdbcRequestStatusOk() {
+        return new DefaultJdbcStatusAssertionBuilder();
     }
 }
