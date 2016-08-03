@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.ExecutionListener;
 import com.smartbear.readyapi.client.RecipeFilter;
+import com.smartbear.readyapi.client.RepositoryProjectExecutionRequest;
 import com.smartbear.readyapi.client.TestRecipe;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
@@ -86,16 +87,24 @@ public class RecipeExecutor {
         return submitProject(project, null, null, null);
     }
 
-    public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException {
-        Execution execution = doExecuteProject(project, true, testCaseName, testSuiteName, environment);
+    public Execution submitRepositoryProject(RepositoryProjectExecutionRequest executionRequest) {
+        Execution execution = doExecuteProjectFromRepository(executionRequest, true);
+        notifyRequestSubmitted(execution);
+        return execution;
+    }
+
+    public Execution executeRepositoryProject(RepositoryProjectExecutionRequest executionRequest) {
+        Execution execution = doExecuteProjectFromRepository(executionRequest, false);
         if (execution != null) {
-            for (ExecutionListener executionListener : executionListeners) {
-                executionListener.requestSent(execution.getCurrentReport());
-            }
-            new ExecutionStatusChecker(execution).start();
+            notifyExecutionFinished(execution.getCurrentReport());
         }
         return execution;
+    }
 
+    public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException {
+        Execution execution = doExecuteProject(project, true, testCaseName, testSuiteName, environment);
+        notifyRequestSubmitted(execution);
+        return execution;
     }
 
     public Execution executeProject(File project) {
@@ -117,12 +126,7 @@ public class RecipeExecutor {
         }
 
         Execution execution = doExecuteTestCase(recipe.getTestCase(), true);
-        if (execution != null) {
-            for (ExecutionListener executionListener : executionListeners) {
-                executionListener.requestSent(execution.getCurrentReport());
-            }
-            new ExecutionStatusChecker(execution).start();
-        }
+        notifyRequestSubmitted(execution);
         return execution;
     }
 
@@ -153,17 +157,54 @@ public class RecipeExecutor {
         return executions;
     }
 
+    private void notifyRequestSubmitted(Execution execution) {
+        if (execution != null) {
+            for (ExecutionListener executionListener : executionListeners) {
+                executionListener.requestSent(execution.getCurrentReport());
+            }
+            new ExecutionStatusChecker(execution).start();
+        }
+    }
+
+    private void notifyErrorOccurred(Exception e) {
+        for (ExecutionListener executionListener : executionListeners) {
+            executionListener.errorOccurred(e);
+        }
+    }
+
+    private void notifyExecutionFinished(ProjectResultReport executionStatus) {
+        for (ExecutionListener executionListener : executionListeners) {
+            executionListener.executionFinished(executionStatus);
+        }
+    }
+
+    private Execution doExecuteProjectFromRepository(RepositoryProjectExecutionRequest executionRequest, boolean async) {
+        try {
+            ProjectResultReport projectResultReport = apiStub.postRepositoryProject(executionRequest, async, authentication);
+            cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, null);
+            return new Execution(apiStub, authentication, projectResultReport);
+        } catch (ApiException e) {
+            notifyErrorOccurred(e);
+            logger.debug("An error occurred when sending project to server. Details: " + e.toString());
+            throw e;
+        } catch (Exception e) {
+            notifyErrorOccurred(e);
+            logger.debug("An error occurred when sending project to server", e);
+            throw new ApiException(e);
+        }
+    }
+
     private Execution doExecuteProject(File project, boolean async, String testCaseName, String testSuiteName, String environment) throws ApiException {
         try {
             ProjectResultReport projectResultReport = apiStub.postProject(project, async, authentication, testCaseName, testSuiteName, environment);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, null);
             return new Execution(apiStub, authentication, projectResultReport);
         } catch (ApiException e) {
-            invokeListeners(e);
+            notifyErrorOccurred(e);
             logger.debug("An error occurred when sending project to server. Details: " + e.toString());
             throw e;
         } catch (Exception e) {
-            invokeListeners(e);
+            notifyErrorOccurred(e);
             logger.debug("An error occurred when sending project to server", e);
             throw new ApiException(e);
         }
@@ -175,19 +216,13 @@ public class RecipeExecutor {
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, testCase);
             return new Execution(apiStub, authentication, projectResultReport);
         } catch (ApiException e) {
-            invokeListeners(e);
+            notifyErrorOccurred(e);
             logger.debug("An error occurred when sending test recipe to server. Details: " + e.toString());
             throw e;
         } catch (Exception e) {
-            invokeListeners(e);
+            notifyErrorOccurred(e);
             logger.debug("An error occurred when sending test recipe to server", e);
             throw new ApiException(e);
-        }
-    }
-
-    private void invokeListeners(Exception e) {
-        for (ExecutionListener executionListener : executionListeners) {
-            executionListener.errorOccurred(e);
         }
     }
 
@@ -214,12 +249,6 @@ public class RecipeExecutor {
                     throw new ApiException(400, "Couldn't find test step client certificate file: " + requestTestStepBase.getClientCertificateFileName());
                 }
             }
-        }
-    }
-
-    private void notifyExecutionFinished(ProjectResultReport executionStatus) {
-        for (ExecutionListener executionListener : executionListeners) {
-            executionListener.executionFinished(executionStatus);
         }
     }
 

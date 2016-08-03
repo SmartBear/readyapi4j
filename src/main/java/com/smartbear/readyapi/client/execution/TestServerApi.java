@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client.execution;
 
+import com.smartbear.readyapi.client.RepositoryProjectExecutionRequest;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
@@ -15,6 +16,17 @@ import java.io.File;
 public interface TestServerApi {
 
     ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException;
+
+    /**
+     * Executes a project from an existing repository on TestServer
+     *
+     * @param executionRequest request with execution details
+     * @param async            true if request should be executed asynchronously
+     * @param auth             credentials container
+     * @return ProjectResultReport with current state of the execution.
+     * @throws ApiException
+     */
+    ProjectResultReport postRepositoryProject(RepositoryProjectExecutionRequest executionRequest, boolean async, HttpBasicAuth auth) throws ApiException;
 
     ProjectResultReport postTestRecipe(TestCase body, boolean async, HttpBasicAuth auth) throws ApiException;
 

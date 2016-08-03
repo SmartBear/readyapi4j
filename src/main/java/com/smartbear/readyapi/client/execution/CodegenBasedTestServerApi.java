@@ -1,6 +1,7 @@
 package com.smartbear.readyapi.client.execution;
 
 import com.google.common.collect.Lists;
+import com.smartbear.readyapi.client.RepositoryProjectExecutionRequest;
 import com.smartbear.readyapi.client.model.DataSource;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.ExcelDataSource;
@@ -133,7 +134,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
                 formParams.put(certificateFile.getName(), certificateFile);
             } else {
                 logger.warn("Client certificate file not found, file path: " + clientCertFileName +
-                    ". Execution will fail unless file exists on TestServer and file path added to allowed file paths.");
+                        ". Execution will fail unless file exists on TestServer and file path added to allowed file paths.");
             }
         }
     }
@@ -153,7 +154,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         GenericType returnType = new GenericType<ProjectResultReports>() {
         };
         return (ProjectResultReports) apiClient.invokeAPI(path, TestSteps.HttpMethod.GET.name(), queryParams, null, formParams,
-            APPLICATION_JSON, APPLICATION_JSON, getAuthNames(), returnType);
+                APPLICATION_JSON, APPLICATION_JSON, getAuthNames(), returnType);
 
     }
 
@@ -171,7 +172,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions/" + executionID;
 
         return invokeAPI(path, TestSteps.HttpMethod.DELETE.name(), null, APPLICATION_JSON, new ArrayList<Pair>(),
-            new HashMap<String, File>());
+                new HashMap<String, File>());
 
     }
 
@@ -190,7 +191,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions/" + executionID + "/transactions/" + transactionId;
 
         return getTransactionLog(path, TestSteps.HttpMethod.GET.name(), null, APPLICATION_JSON, new ArrayList<Pair>(),
-            new HashMap<String, File>());
+                new HashMap<String, File>());
 
     }
 
@@ -262,14 +263,14 @@ public class CodegenBasedTestServerApi implements TestServerApi {
                                           List<Pair> queryParams, Map<String, File> formParams) throws ApiException {
 
         return (ProjectResultReport) apiClient.invokeAPI(path, method, queryParams, postBody, formParams, APPLICATION_JSON, contentType,
-            getAuthNames(), getReturnTypeProjectResultReport());
+                getAuthNames(), getReturnTypeProjectResultReport());
     }
 
     private HarLogRoot getTransactionLog(String path, String method, Object postBody, String contentType,
                                          List<Pair> queryParams, Map<String, File> formParams) throws ApiException {
 
         return (HarLogRoot) apiClient.invokeAPI(path, method, queryParams, postBody, formParams, APPLICATION_JSON, contentType,
-            getAuthNames(), getReturnTypeHarLogRoot());
+                getAuthNames(), getReturnTypeHarLogRoot());
     }
 
     private String[] getAuthNames() {
@@ -300,17 +301,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
         setAuthentication(auth);
 
-        List<Pair> queryParams = new ArrayList<>();
-        queryParams.add(new Pair("async", String.valueOf(async)));
-        if (testCaseName != null) {
-            queryParams.add(new Pair("testCaseName", testCaseName));
-        }
-        if (testSuiteName != null) {
-            queryParams.add(new Pair("testSuiteName", testSuiteName));
-        }
-        if (environment != null) {
-            queryParams.add(new Pair("environment", environment));
-        }
+        List<Pair> queryParams = buildQueryParameters(async, testCaseName, testSuiteName, environment);
 
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions";
         String type = "application/xml";
@@ -327,11 +318,39 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
             byte[] data = Files.readAllBytes(file.toPath());
 
-            return invokeAPI(path, TestSteps.HttpMethod.POST.name(), data,
-                type, queryParams, null);
+            return invokeAPI(path, TestSteps.HttpMethod.POST.name(), data, type, queryParams, null);
         } catch (IOException e) {
             throw new ApiException(500, "Failed to read project; " + e.toString());
         }
+    }
+
+    @Override
+    public ProjectResultReport postRepositoryProject(RepositoryProjectExecutionRequest request, boolean async, HttpBasicAuth auth) throws ApiException {
+        setAuthentication(auth);
+        List<Pair> queryParams = buildQueryParameters(async, request.getTestCaseName(), request.getTestSuiteName(),
+                request.getEnvironment());
+        queryParams.add(new Pair("projectFileName", request.getProjectFileName()));
+        if (request.getRepositoryName() != null) {
+            queryParams.add(new Pair("repositoryName", request.getRepositoryName()));
+        }
+
+        return invokeAPI(ServerDefaults.SERVICE_BASE_PATH + "/executions/project", TestSteps.HttpMethod.POST.name(), null,
+                "application/json", queryParams, null);
+    }
+
+    private List<Pair> buildQueryParameters(boolean async, String testCaseName, String testSuiteName, String environment) {
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.add(new Pair("async", String.valueOf(async)));
+        if (testCaseName != null) {
+            queryParams.add(new Pair("testCaseName", testCaseName));
+        }
+        if (testSuiteName != null) {
+            queryParams.add(new Pair("testSuiteName", testSuiteName));
+        }
+        if (environment != null) {
+            queryParams.add(new Pair("environment", environment));
+        }
+        return queryParams;
     }
 
     private File zipCompositeProject(File dir) throws IOException {
@@ -340,8 +359,8 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         byte[] buffer = new byte[1024];
 
         try (
-            FileOutputStream fout = new FileOutputStream(zipFile);
-            ZipOutputStream zout = new ZipOutputStream(fout)) {
+                FileOutputStream fout = new FileOutputStream(zipFile);
+                ZipOutputStream zout = new ZipOutputStream(fout)) {
 
             List<String> files = Lists.newArrayList();
             populateFilesList(dir, files);
