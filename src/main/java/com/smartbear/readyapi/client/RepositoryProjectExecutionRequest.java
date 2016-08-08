@@ -1,6 +1,10 @@
 package com.smartbear.readyapi.client;
 
+import com.smartbear.readyapi.client.model.CustomProperties;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RepositoryProjectExecutionRequest {
     private String repositoryName;
@@ -8,6 +12,7 @@ public class RepositoryProjectExecutionRequest {
     private String testSuiteName;
     private String testCaseName;
     private String environment;
+    private Map<String, CustomProperties> customPropertiesMap = new HashMap<>();
 
     private RepositoryProjectExecutionRequest() {
     }
@@ -30,6 +35,10 @@ public class RepositoryProjectExecutionRequest {
 
     public String getEnvironment() {
         return environment;
+    }
+
+    public Map<String, CustomProperties> getCustomPropertiesMap() {
+        return customPropertiesMap;
     }
 
     public static class Builder {
@@ -85,6 +94,28 @@ public class RepositoryProjectExecutionRequest {
         public Builder forEnvironment(String environmentName) {
             projectExecutionRequest.environment = environmentName;
             return this;
+        }
+
+        public Builder addCustomProperty(String targetName, String propertyName, String value) {
+            CustomProperties customProperties = getCustomPropertiesForTargetName(targetName);
+            customProperties.getProperties().put(propertyName, value);
+            return this;
+        }
+
+        public Builder addCustomProperties(String targetName, Map<String, String> properties) {
+            CustomProperties customProperties = getCustomPropertiesForTargetName(targetName);
+            customProperties.getProperties().putAll(properties);
+            return this;
+        }
+
+        private CustomProperties getCustomPropertiesForTargetName(String targetName) {
+            CustomProperties customProperties = projectExecutionRequest.customPropertiesMap.get(targetName);
+            if (customProperties == null) {
+                customProperties = new CustomProperties();
+                customProperties.setTargetName(targetName);
+                projectExecutionRequest.customPropertiesMap.put(targetName, customProperties);
+            }
+            return customProperties;
         }
 
         public RepositoryProjectExecutionRequest build() {

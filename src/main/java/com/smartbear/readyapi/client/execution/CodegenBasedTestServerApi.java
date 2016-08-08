@@ -334,7 +334,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
             queryParams.add(new Pair("repositoryName", request.getRepositoryName()));
         }
 
-        return invokeAPI(ServerDefaults.SERVICE_BASE_PATH + "/executions/project", TestSteps.HttpMethod.POST.name(), null,
+        return invokeAPI(ServerDefaults.SERVICE_BASE_PATH + "/executions/project", TestSteps.HttpMethod.POST.name(), request.getCustomPropertiesMap().values(),
                 "application/json", queryParams, null);
     }
 
