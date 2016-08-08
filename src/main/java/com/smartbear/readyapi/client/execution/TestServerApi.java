@@ -15,7 +15,7 @@ import java.io.File;
  */
 public interface TestServerApi {
 
-    ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException;
+    ProjectResultReport postProject(ProjectExecutionRequest projectExecutionRequest, boolean async, HttpBasicAuth auth) throws ApiException;
 
     /**
      * Executes a project from an existing repository on TestServer

@@ -15,8 +15,6 @@ import io.swagger.client.auth.HttpBasicAuth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -83,10 +81,6 @@ public class RecipeExecutor {
         executionListeners.remove(listener);
     }
 
-    public Execution submitProject(File project) {
-        return submitProject(project, null, null, null);
-    }
-
     public Execution submitRepositoryProject(RepositoryProjectExecutionRequest executionRequest) {
         Execution execution = doExecuteProjectFromRepository(executionRequest, true);
         notifyRequestSubmitted(execution);
@@ -101,18 +95,14 @@ public class RecipeExecutor {
         return execution;
     }
 
-    public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException {
-        Execution execution = doExecuteProject(project, true, testCaseName, testSuiteName, environment);
+    public Execution submitProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
+        Execution execution = doExecuteProject(projectExecutionRequest, true);
         notifyRequestSubmitted(execution);
         return execution;
     }
 
-    public Execution executeProject(File project) {
-        return executeProject(project, null, null, null);
-    }
-
-    public Execution executeProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException {
-        Execution execution = doExecuteProject(project, false, testCaseName, testSuiteName, environment);
+    public Execution executeProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
+        Execution execution = doExecuteProject(projectExecutionRequest, false);
         if (execution != null) {
             notifyExecutionFinished(execution.getCurrentReport());
         }
@@ -194,9 +184,9 @@ public class RecipeExecutor {
         }
     }
 
-    private Execution doExecuteProject(File project, boolean async, String testCaseName, String testSuiteName, String environment) throws ApiException {
+    private Execution doExecuteProject(ProjectExecutionRequest projectExecutionRequest, boolean async) throws ApiException {
         try {
-            ProjectResultReport projectResultReport = apiStub.postProject(project, async, authentication, testCaseName, testSuiteName, environment);
+            ProjectResultReport projectResultReport = apiStub.postProject(projectExecutionRequest, async, authentication);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, null);
             return new Execution(apiStub, authentication, projectResultReport);
         } catch (ApiException e) {

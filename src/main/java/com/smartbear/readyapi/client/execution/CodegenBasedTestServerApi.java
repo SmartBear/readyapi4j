@@ -293,30 +293,32 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     }
 
     @Override
-    public ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth, String testCaseName, String testSuiteName, String environment) throws ApiException {
+    public ProjectResultReport postProject(ProjectExecutionRequest executionRequest, boolean async, HttpBasicAuth auth) throws ApiException {
 
-        if (!file.exists()) {
-            throw new ApiException(404, "File [" + file.toString() + "] not found");
+        File projectFile = executionRequest.getProjectFile();
+        if (!projectFile.exists()) {
+            throw new ApiException(404, "File [" + projectFile.toString() + "] not found");
         }
 
         setAuthentication(auth);
 
-        List<Pair> queryParams = buildQueryParameters(async, testCaseName, testSuiteName, environment);
+        List<Pair> queryParams = buildQueryParameters(async, executionRequest.getTestCaseName(),
+                executionRequest.getTestSuiteName(), executionRequest.getEnvironment());
 
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions";
         String type = "application/xml";
 
         try {
             // composite project?
-            if (file.isDirectory()) {
-                file = zipCompositeProject(file);
+            if (projectFile.isDirectory()) {
+                projectFile = zipCompositeProject(projectFile);
                 path += "/composite";
                 type = "application/zip";
             } else {
                 path += "/xml";
             }
 
-            byte[] data = Files.readAllBytes(file.toPath());
+            byte[] data = Files.readAllBytes(projectFile.toPath());
 
             return invokeAPI(path, TestSteps.HttpMethod.POST.name(), data, type, queryParams, null);
         } catch (IOException e) {
