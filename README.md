@@ -16,7 +16,7 @@ Ready! API or any other API testing tool on your computer.
 	<dependency>
 		<groupId>com.smartbear.readyapi</groupId>
 		<artifactId>ready-api-testserver-client</artifactId>
-		<version>1.1.0</version>
+		<version>1.2.1</version>
 	</dependency>
 	```
 
