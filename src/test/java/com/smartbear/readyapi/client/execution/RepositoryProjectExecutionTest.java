@@ -17,21 +17,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class RepositoryProjectExecutionTest {
+public class RepositoryProjectExecutionTest extends ProjectExecutionTestBase {
 
-    private static final String HOST = "thehost";
-    private static final int PORT = 6234;
-    private static final String BASE_PATH = "/custom_path";
-
-    private TestServerApi apiWrapper;
-    private RecipeExecutor recipeExecutor;
     private RepositoryProjectExecutionRequest executionRequest;
 
     @Before
     public void setUp() throws Exception {
-        apiWrapper = mock(TestServerApi.class);
-        recipeExecutor = new RecipeExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, apiWrapper);
-        recipeExecutor.setCredentials("theUser", "thePassword");
         executionRequest = createRepositoryProjectExecutionRequest();
     }
 
@@ -66,8 +57,8 @@ public class RepositoryProjectExecutionTest {
                 .fromRepository("compositeprojects")
                 .forProject("Environment-test.xml")
                 .forEnvironment("staging")
-                .testSuite("TestSuite-1")
-                .testCase("TestCase-1")
+                .forTestSuite("TestSuite-1")
+                .forTestCase("TestCase-1")
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client.execution;
 
 import com.google.common.collect.Lists;
 import com.smartbear.readyapi.client.RepositoryProjectExecutionRequest;
+import com.smartbear.readyapi.client.model.CustomProperties;
 import com.smartbear.readyapi.client.model.DataSource;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.ExcelDataSource;
@@ -24,8 +25,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +105,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         apiClient.setDebugging(debugging);
     }
 
-    public ApiClientWrapper getApiClient() {
+    private ApiClientWrapper getApiClient() {
         return apiClient;
     }
 
@@ -293,34 +296,57 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     }
 
     @Override
-    public ProjectResultReport postProject(File file, boolean async, HttpBasicAuth auth, String testCaseName, String testSuiteName, String environment) throws ApiException {
+    public ProjectResultReport postProject(ProjectExecutionRequest executionRequest, boolean async, HttpBasicAuth auth) throws ApiException {
 
-        if (!file.exists()) {
-            throw new ApiException(404, "File [" + file.toString() + "] not found");
+        File projectFile = executionRequest.getProjectFile();
+        if (!projectFile.exists()) {
+            throw new ApiException(404, "File [" + projectFile.toString() + "] not found");
         }
 
         setAuthentication(auth);
 
-        List<Pair> queryParams = buildQueryParameters(async, testCaseName, testSuiteName, environment);
+        List<Pair> queryParams = buildQueryParameters(async, executionRequest.getTestCaseName(),
+                executionRequest.getTestSuiteName(), executionRequest.getEnvironment());
 
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions";
         String type = "application/xml";
 
         try {
             // composite project?
-            if (file.isDirectory()) {
-                file = zipCompositeProject(file);
+            if (projectFile.isDirectory()) {
+                projectFile = zipCompositeProject(projectFile);
                 path += "/composite";
                 type = "application/zip";
             } else {
                 path += "/xml";
             }
 
-            byte[] data = Files.readAllBytes(file.toPath());
+            if (executionRequest.getCustomPropertiesMap().isEmpty()) {
+                byte[] data = Files.readAllBytes(projectFile.toPath());
+                return invokeAPI(path, TestSteps.HttpMethod.POST.name(), data, type, queryParams, null);
+            } else {
+                File propertiesFile = writeCustomPropertiesToFile(executionRequest.getCustomPropertiesMap().values());
 
-            return invokeAPI(path, TestSteps.HttpMethod.POST.name(), data, type, queryParams, null);
+                Map<String, File> formParams = new HashMap<>();
+                formParams.put(projectFile.getName(), projectFile);
+                formParams.put(propertiesFile.getName(), propertiesFile);
+                return invokeAPI(path, TestSteps.HttpMethod.POST.name(), null, "multipart/form-data", queryParams, formParams);
+            }
+
         } catch (IOException e) {
             throw new ApiException(500, "Failed to read project; " + e.toString());
+        }
+    }
+
+    private File writeCustomPropertiesToFile(Collection<CustomProperties> values) throws ApiException {
+        try {
+            String content = (String) getApiClient().serialize(values, "application/json");
+            File tempFile = File.createTempFile("custom-properties", ".json");
+            Files.write(tempFile.toPath(), content.getBytes(StandardCharsets.UTF_8));
+            tempFile.deleteOnExit();
+            return tempFile;
+        } catch (IOException e) {
+            throw new ApiException(400, "Failed to create custom properties file.");
         }
     }
 
@@ -334,7 +360,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
             queryParams.add(new Pair("repositoryName", request.getRepositoryName()));
         }
 
-        return invokeAPI(ServerDefaults.SERVICE_BASE_PATH + "/executions/project", TestSteps.HttpMethod.POST.name(), null,
+        return invokeAPI(ServerDefaults.SERVICE_BASE_PATH + "/executions/project", TestSteps.HttpMethod.POST.name(), request.getCustomPropertiesMap().values(),
                 "application/json", queryParams, null);
     }
 
@@ -355,6 +381,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
     private File zipCompositeProject(File dir) throws IOException {
         File zipFile = File.createTempFile("soapui-project", ".zip");
+        zipFile.deleteOnExit();
 
         byte[] buffer = new byte[1024];
 
@@ -388,6 +415,9 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
     private void populateFilesList(File dir, List<String> files) throws IOException {
         File[] filesInDir = dir.listFiles();
+        if (filesInDir == null || filesInDir.length == 0) {
+            return;
+        }
         for (File file : filesInDir) {
             if (file.isFile()) {
                 files.add(file.getAbsolutePath());

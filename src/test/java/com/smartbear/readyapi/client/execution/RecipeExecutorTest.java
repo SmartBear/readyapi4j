@@ -30,22 +30,14 @@ import static org.mockito.Mockito.when;
 /**
  * Unit tests for the RecipeExecutor.
  */
-public class RecipeExecutorTest {
+public class RecipeExecutorTest extends ProjectExecutionTestBase {
 
-    private static final String HOST = "thehost";
-    private static final int PORT = 6234;
-    private static final String BASE_PATH = "/custom_path";
     private static final String CLIENT_CERTIFICATE_FILE_NAME = "ClientCertificate.cert";
 
-    private TestServerApi apiWrapper;
-    private RecipeExecutor executor;
     private TestRecipe recipeToSubmit;
 
     @Before
     public void setUp() throws Exception {
-        apiWrapper = mock(TestServerApi.class);
-        executor = new RecipeExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, apiWrapper);
-        executor.setCredentials("theUser", "thePassword");
         recipeToSubmit = new TestRecipe(new TestCase());
     }
 
@@ -62,7 +54,7 @@ public class RecipeExecutorTest {
         when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(startReport);
         when(apiWrapper.getExecutionStatus(eq(executionID), any(HttpBasicAuth.class))).thenReturn(endReport);
 
-        Execution execution = executor.submitRecipe(recipeToSubmit);
+        Execution execution = recipeExecutor.submitRecipe(recipeToSubmit);
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.RUNNING));
         assertThat(execution.getCurrentReport(), is(startReport));
         Thread.sleep(1500);
@@ -79,8 +71,8 @@ public class RecipeExecutorTest {
         when(apiWrapper.getExecutionStatus(eq(executionID), any(HttpBasicAuth.class))).thenReturn(endReport);
         ExecutionListener executionListener = mock(ExecutionListener.class);
 
-        executor.addExecutionListener(executionListener);
-        executor.submitRecipe(recipeToSubmit);
+        recipeExecutor.addExecutionListener(executionListener);
+        recipeExecutor.submitRecipe(recipeToSubmit);
         Thread.sleep(1500);
         verify(executionListener).requestSent(startReport);
         verify(executionListener).executionFinished(endReport);
@@ -91,7 +83,7 @@ public class RecipeExecutorTest {
         ProjectResultReport report = makeFinishedReport("execution_ID");
         when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
 
-        Execution execution = executor.executeRecipe(recipeToSubmit);
+        Execution execution = recipeExecutor.executeRecipe(recipeToSubmit);
         assertThat(execution.getCurrentReport(), is(report));
     }
 
@@ -101,8 +93,8 @@ public class RecipeExecutorTest {
         when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
         ExecutionListener executionListener = mock(ExecutionListener.class);
 
-        executor.addExecutionListener(executionListener);
-        executor.executeRecipe(recipeToSubmit);
+        recipeExecutor.addExecutionListener(executionListener);
+        recipeExecutor.executeRecipe(recipeToSubmit);
         verify(executionListener).executionFinished(report);
 
     }
@@ -111,7 +103,7 @@ public class RecipeExecutorTest {
     public void getsExecutions() throws Exception {
         ProjectResultReports projectStatusReports = makeProjectResultReports();
         when(apiWrapper.getExecutions(any(HttpBasicAuth.class))).thenReturn(projectStatusReports);
-        List<Execution> executions = executor.getExecutions();
+        List<Execution> executions = recipeExecutor.getExecutions();
         assertThat(executions.size(), is(2));
     }
 
@@ -122,48 +114,50 @@ public class RecipeExecutorTest {
         ProjectResultReport cancelledReport = makeCancelledReport("execution_ID");
         when(apiWrapper.cancelExecution(eq(cancelledReport.getExecutionID()), any(HttpBasicAuth.class))).thenReturn(cancelledReport);
         when(apiWrapper.getExecutionStatus(eq(cancelledReport.getExecutionID()), any(HttpBasicAuth.class))).thenReturn(cancelledReport);
-        Execution execution = executor.submitRecipe(recipeToSubmit);
+        Execution execution = recipeExecutor.submitRecipe(recipeToSubmit);
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.RUNNING));
 
-        execution = executor.cancelExecution(execution);
+        execution = recipeExecutor.cancelExecution(execution);
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.CANCELED));
     }
 
     @Test
     public void throwsExceptionAndExecutionIsNullIfClientCertificateNotProvidedAndNotFoundOnServer() throws Exception {
         TestRecipe testRecipe = new TestRecipeBuilder()
-            .withClientCertificate(CLIENT_CERTIFICATE_FILE_NAME)
-            .withClientCertificatePassword("password")
-            .buildTestRecipe();
+                .withClientCertificate(CLIENT_CERTIFICATE_FILE_NAME)
+                .withClientCertificatePassword("password")
+                .buildTestRecipe();
 
         ProjectResultReport pendingReport = makePendingReportWithUnresolvedFiles("executionId", CLIENT_CERTIFICATE_FILE_NAME);
         when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
 
-        executor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find client certificate file: " + CLIENT_CERTIFICATE_FILE_NAME));
+        recipeExecutor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find client certificate file: " + CLIENT_CERTIFICATE_FILE_NAME));
         try {
-            Execution execution = executor.submitRecipe(testRecipe);
+            recipeExecutor.submitRecipe(testRecipe);
             assertTrue(false);
         } catch (com.smartbear.readyapi.client.execution.ApiException e) {
+            e.printStackTrace();
         }
     }
 
     @Test
     public void throwsExceptionIfTestStepClientCertificateNotProvidedAndNotFoundOnServer() throws Exception {
         TestRecipe testRecipe = new TestRecipeBuilder()
-            .addStep(TestSteps.getRequest("http://localhost:8080")
-                .withClientCertificate("clientCertificate.jks")
-            )
-            .buildTestRecipe();
+                .addStep(TestSteps.getRequest("http://localhost:8080")
+                        .withClientCertificate("clientCertificate.jks")
+                )
+                .buildTestRecipe();
 
         ProjectResultReport pendingReport = makePendingReportWithUnresolvedFiles("executionId", "clientCertificate.jks");
         when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
 
-        executor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find test step client certificate file: clientCertificate.jks"));
+        recipeExecutor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find test step client certificate file: clientCertificate.jks"));
 
         try {
-            executor.submitRecipe(testRecipe);
+            recipeExecutor.submitRecipe(testRecipe);
             assertTrue(false);
         } catch (com.smartbear.readyapi.client.execution.ApiException e) {
+            e.printStackTrace();
         }
     }
 

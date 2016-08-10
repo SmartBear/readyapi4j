@@ -83,6 +83,10 @@ public class RecipeExecutor {
         executionListeners.remove(listener);
     }
 
+    /**
+     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
+     */
+    @Deprecated
     public Execution submitProject(File project) {
         return submitProject(project, null, null, null);
     }
@@ -101,18 +105,52 @@ public class RecipeExecutor {
         return execution;
     }
 
-    public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException {
-        Execution execution = doExecuteProject(project, true, testCaseName, testSuiteName, environment);
+    /**
+     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
+     */
+    @Deprecated
+    public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,
+                                   @Nullable String environment) throws ApiException {
+        ProjectExecutionRequest executionRequest = ProjectExecutionRequest.Builder.newInstance()
+                .withProjectFile(project)
+                .forTestCase(testCaseName)
+                .forTestSuite(testSuiteName)
+                .forEnvironment(environment)
+                .build();
+        return submitProject(executionRequest);
+    }
+
+    public Execution submitProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
+        Execution execution = doExecuteProject(projectExecutionRequest, true);
         notifyRequestSubmitted(execution);
         return execution;
     }
 
+    /**
+     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
+     */
+    @Deprecated
     public Execution executeProject(File project) {
         return executeProject(project, null, null, null);
     }
 
-    public Execution executeProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName, @Nullable String environment) throws ApiException {
-        Execution execution = doExecuteProject(project, false, testCaseName, testSuiteName, environment);
+    /**
+     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
+     */
+    @Deprecated
+    public Execution executeProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,
+                                    @Nullable String environment) throws ApiException {
+        ProjectExecutionRequest executionRequest = ProjectExecutionRequest.Builder.newInstance()
+                .withProjectFile(project)
+                .forTestCase(testCaseName)
+                .forTestSuite(testSuiteName)
+                .forEnvironment(environment)
+                .build();
+        return executeProject(executionRequest);
+    }
+
+    public Execution executeProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
+        Execution execution = doExecuteProject(projectExecutionRequest, false);
         if (execution != null) {
             notifyExecutionFinished(execution.getCurrentReport());
         }
@@ -194,9 +232,9 @@ public class RecipeExecutor {
         }
     }
 
-    private Execution doExecuteProject(File project, boolean async, String testCaseName, String testSuiteName, String environment) throws ApiException {
+    private Execution doExecuteProject(ProjectExecutionRequest projectExecutionRequest, boolean async) throws ApiException {
         try {
-            ProjectResultReport projectResultReport = apiStub.postProject(project, async, authentication, testCaseName, testSuiteName, environment);
+            ProjectResultReport projectResultReport = apiStub.postProject(projectExecutionRequest, async, authentication);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(projectResultReport, null);
             return new Execution(apiStub, authentication, projectResultReport);
         } catch (ApiException e) {

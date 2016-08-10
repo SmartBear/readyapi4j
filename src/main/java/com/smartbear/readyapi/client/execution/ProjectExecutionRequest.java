@@ -1,28 +1,21 @@
-package com.smartbear.readyapi.client;
+package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.model.CustomProperties;
-import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RepositoryProjectExecutionRequest {
-    private String repositoryName;
-    private String projectFileName;
+public class ProjectExecutionRequest {
+    private File projectFile;
     private String testSuiteName;
     private String testCaseName;
     private String environment;
+
     private Map<String, CustomProperties> customPropertiesMap = new HashMap<>();
 
-    private RepositoryProjectExecutionRequest() {
-    }
-
-    public String getRepositoryName() {
-        return repositoryName;
-    }
-
-    public String getProjectFileName() {
-        return projectFileName;
+    public File getProjectFile() {
+        return projectFile;
     }
 
     public String getTestSuiteName() {
@@ -41,36 +34,25 @@ public class RepositoryProjectExecutionRequest {
         return customPropertiesMap;
     }
 
+
     public static class Builder {
-        private Builder() {
+        protected Builder() {
         }
 
-        private RepositoryProjectExecutionRequest projectExecutionRequest = new RepositoryProjectExecutionRequest();
+        private ProjectExecutionRequest projectExecutionRequest = new ProjectExecutionRequest();
 
         /**
-         * @param projectFileName (mandatory) name of the project file in repository
+         * @param projectFile (required) projectFile
          * @return Builder
          */
-        public Builder forProject(String projectFileName) {
-            projectExecutionRequest.projectFileName = projectFileName;
-            return this;
-        }
-
-        /**
-         * @param repositoryName (optional) name of the repository on TestServer.
-         *                       Default repository will be used if repository name is not provided.
-         *                       TestServer will return with error code if rpository name is not provided and default
-         *                       repository doesn't exist.
-         * @return Builder
-         */
-        public Builder fromRepository(String repositoryName) {
-            projectExecutionRequest.repositoryName = repositoryName;
+        public Builder withProjectFile(File projectFile) {
+            projectExecutionRequest.projectFile = projectFile;
             return this;
         }
 
         /**
          * @param testSuiteName (optional) Name of the test suite in the project if specific test suite needs to be run.
-         * @return
+         * @return Builder
          */
         public Builder forTestSuite(String testSuiteName) {
             projectExecutionRequest.testSuiteName = testSuiteName;
@@ -79,7 +61,7 @@ public class RepositoryProjectExecutionRequest {
 
         /**
          * @param testCaseName (optional) Name of the test case if specific test case needs to be run.
-         * @return
+         * @return Builder
          */
         public Builder forTestCase(String testCaseName) {
             projectExecutionRequest.testCaseName = testCaseName;
@@ -89,7 +71,7 @@ public class RepositoryProjectExecutionRequest {
         /**
          * @param environmentName (optional) Name of the environment (defined in project) if project has multiple environments defined and
          *                        request is to execute for a particular environment
-         * @return
+         * @return Builder
          */
         public Builder forEnvironment(String environmentName) {
             projectExecutionRequest.environment = environmentName;
@@ -118,10 +100,7 @@ public class RepositoryProjectExecutionRequest {
             return customProperties;
         }
 
-        public RepositoryProjectExecutionRequest build() {
-            if (StringUtils.isEmpty(projectExecutionRequest.projectFileName)) {
-                throw new IllegalArgumentException("Project file name is a mandatory parameter.");
-            }
+        public ProjectExecutionRequest build() {
             return projectExecutionRequest;
         }
 

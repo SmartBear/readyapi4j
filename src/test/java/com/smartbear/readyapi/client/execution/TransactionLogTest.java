@@ -20,25 +20,14 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TransactionLogTest {
+public class TransactionLogTest extends ProjectExecutionTestBase {
 
-    private static final String HOST = "thehost";
-    private static final int PORT = 6234;
-    private static final String BASE_PATH = "/custom_path";
-
-
-    private TestServerApi apiWrapper;
-    private RecipeExecutor executor;
     private TestRecipe recipeToSubmit;
 
     @Before
     public void setUp() throws Exception {
-        apiWrapper = mock(TestServerApi.class);
-        executor = new RecipeExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, apiWrapper);
-        executor.setCredentials("theUser", "thePassword");
         recipeToSubmit = new TestRecipe(new TestCase());
     }
 
@@ -53,8 +42,8 @@ public class TransactionLogTest {
         HarLogRoot harLog = Json.mapper().readValue(new FileInputStream("src/test/resources/har-log.json"), HarLogRoot.class);
         when(apiWrapper.getTransactionLog(eq(executionID), eq("1463064414287"), any(HttpBasicAuth.class))).thenReturn(harLog);
 
-        Execution execution = executor.submitRecipe(recipeToSubmit);
-        HarLogRoot transactionLog = executor.getTransactionLog(execution, "1463064414287");
+        Execution execution = recipeExecutor.submitRecipe(recipeToSubmit);
+        HarLogRoot transactionLog = recipeExecutor.getTransactionLog(execution, "1463064414287");
         assertThat(transactionLog, is(harLog));
     }
 
