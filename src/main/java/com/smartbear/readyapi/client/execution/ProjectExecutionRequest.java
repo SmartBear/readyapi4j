@@ -54,7 +54,7 @@ public class ProjectExecutionRequest {
          * @param testSuiteName (optional) Name of the test suite in the project if specific test suite needs to be run.
          * @return Builder
          */
-        public Builder testSuite(String testSuiteName) {
+        public Builder forTestSuite(String testSuiteName) {
             projectExecutionRequest.testSuiteName = testSuiteName;
             return this;
         }
@@ -63,7 +63,7 @@ public class ProjectExecutionRequest {
          * @param testCaseName (optional) Name of the test case if specific test case needs to be run.
          * @return Builder
          */
-        public Builder testCase(String testCaseName) {
+        public Builder forTestCase(String testCaseName) {
             projectExecutionRequest.testCaseName = testCaseName;
             return this;
         }
@@ -78,13 +78,13 @@ public class ProjectExecutionRequest {
             return this;
         }
 
-        public Builder addCustomProperty(String targetName, String propertyName, String value) {
+        public Builder withCustomProperty(String targetName, String propertyName, String value) {
             CustomProperties customProperties = getCustomPropertiesForTargetName(targetName);
             customProperties.getProperties().put(propertyName, value);
             return this;
         }
 
-        public Builder addCustomProperties(String targetName, Map<String, String> properties) {
+        public Builder withCustomProperties(String targetName, Map<String, String> properties) {
             CustomProperties customProperties = getCustomPropertiesForTargetName(targetName);
             customProperties.getProperties().putAll(properties);
             return this;

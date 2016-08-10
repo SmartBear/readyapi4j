@@ -113,8 +113,8 @@ public class RecipeExecutor {
                                    @Nullable String environment) throws ApiException {
         ProjectExecutionRequest executionRequest = ProjectExecutionRequest.Builder.newInstance()
                 .withProjectFile(project)
-                .testCase(testCaseName)
-                .testSuite(testSuiteName)
+                .forTestCase(testCaseName)
+                .forTestSuite(testSuiteName)
                 .forEnvironment(environment)
                 .build();
         return submitProject(executionRequest);
@@ -142,8 +142,8 @@ public class RecipeExecutor {
                                     @Nullable String environment) throws ApiException {
         ProjectExecutionRequest executionRequest = ProjectExecutionRequest.Builder.newInstance()
                 .withProjectFile(project)
-                .testCase(testCaseName)
-                .testSuite(testSuiteName)
+                .forTestCase(testCaseName)
+                .forTestSuite(testSuiteName)
                 .forEnvironment(environment)
                 .build();
         return executeProject(executionRequest);

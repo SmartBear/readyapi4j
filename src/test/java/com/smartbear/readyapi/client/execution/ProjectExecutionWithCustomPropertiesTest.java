@@ -77,11 +77,11 @@ public class ProjectExecutionWithCustomPropertiesTest {
                 .fromRepository("compositeprojects")
                 .forProject("Environment-test.xml")
                 .forEnvironment("staging")
-                .testSuite(TEST_SUITE_NAME)
-                .testCase("TestCase-1")
-                .addCustomProperty(TEST_SUITE_NAME, "Test-suite-property", "test-suite-property-value")
-                .addCustomProperty("TestCase-1", "Test-case-property", "test-case-property-value")
-                .addCustomProperties(TEST_SUITE_NAME, testSuiteProperties)
+                .forTestSuite(TEST_SUITE_NAME)
+                .forTestCase("TestCase-1")
+                .withCustomProperty(TEST_SUITE_NAME, "Test-suite-property", "test-suite-property-value")
+                .withCustomProperty("TestCase-1", "Test-case-property", "test-case-property-value")
+                .withCustomProperties(TEST_SUITE_NAME, testSuiteProperties)
                 .build();
     }
 }

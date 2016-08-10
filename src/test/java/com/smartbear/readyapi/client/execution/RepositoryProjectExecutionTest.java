@@ -57,8 +57,8 @@ public class RepositoryProjectExecutionTest extends ProjectExecutionTestBase {
                 .fromRepository("compositeprojects")
                 .forProject("Environment-test.xml")
                 .forEnvironment("staging")
-                .testSuite("TestSuite-1")
-                .testCase("TestCase-1")
+                .forTestSuite("TestSuite-1")
+                .forTestCase("TestCase-1")
                 .build();
     }
 }
