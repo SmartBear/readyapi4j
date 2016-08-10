@@ -15,6 +15,8 @@ import io.swagger.client.auth.HttpBasicAuth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -81,6 +83,14 @@ public class RecipeExecutor {
         executionListeners.remove(listener);
     }
 
+    /**
+     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
+     */
+    @Deprecated
+    public Execution submitProject(File project) {
+        return submitProject(project, null, null, null);
+    }
+
     public Execution submitRepositoryProject(RepositoryProjectExecutionRequest executionRequest) {
         Execution execution = doExecuteProjectFromRepository(executionRequest, true);
         notifyRequestSubmitted(execution);
@@ -95,10 +105,48 @@ public class RecipeExecutor {
         return execution;
     }
 
+    /**
+     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
+     */
+    @Deprecated
+    public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,
+                                   @Nullable String environment) throws ApiException {
+        ProjectExecutionRequest executionRequest = ProjectExecutionRequest.Builder.newInstance()
+                .withProjectFile(project)
+                .testCase(testCaseName)
+                .testSuite(testSuiteName)
+                .forEnvironment(environment)
+                .build();
+        return submitProject(executionRequest);
+    }
+
     public Execution submitProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
         Execution execution = doExecuteProject(projectExecutionRequest, true);
         notifyRequestSubmitted(execution);
         return execution;
+    }
+
+    /**
+     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
+     */
+    @Deprecated
+    public Execution executeProject(File project) {
+        return executeProject(project, null, null, null);
+    }
+
+    /**
+     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
+     */
+    @Deprecated
+    public Execution executeProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,
+                                    @Nullable String environment) throws ApiException {
+        ProjectExecutionRequest executionRequest = ProjectExecutionRequest.Builder.newInstance()
+                .withProjectFile(project)
+                .testCase(testCaseName)
+                .testSuite(testSuiteName)
+                .forEnvironment(environment)
+                .build();
+        return executeProject(executionRequest);
     }
 
     public Execution executeProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
