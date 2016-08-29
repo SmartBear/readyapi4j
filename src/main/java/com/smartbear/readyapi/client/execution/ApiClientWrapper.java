@@ -170,7 +170,7 @@ public class ApiClientWrapper extends ApiClient {
 
     public Object serialize(Object obj, String contentType) throws ApiException {
         try {
-            if (contentType.startsWith("application/json")) {
+            if (contentType.startsWith("application/json") && !(obj instanceof byte[])) {
                 ObjectMapper mapper = getObjectMapper();
                 mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                 mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);

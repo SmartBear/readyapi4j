@@ -28,9 +28,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit tests for the RecipeExecutor.
+ * Unit tests for the TestServerRequestExecutor.
  */
-public class RecipeExecutorTest extends ProjectExecutionTestBase {
+public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
 
     private static final String CLIENT_CERTIFICATE_FILE_NAME = "ClientCertificate.cert";
 

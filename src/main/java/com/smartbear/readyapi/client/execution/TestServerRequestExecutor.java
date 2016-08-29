@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -26,7 +27,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Responsible for executing test recipes and projects on a Ready! API Server, synchronously or asynchronously.
  */
-public class RecipeExecutor {
+public class TestServerRequestExecutor {
 
     private static Logger logger;
 
@@ -34,7 +35,22 @@ public class RecipeExecutor {
         if (System.getProperty("org.slf4j.simpleLogger.defaultLogLevel") == null) { //Don't set if user has defined the log level
             System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
         }
-        logger = LoggerFactory.getLogger(RecipeExecutor.class);
+        logger = LoggerFactory.getLogger(TestServerRequestExecutor.class);
+    }
+
+    enum SwaggerFormat {
+        JSON("application/json"),
+        YAML("application/yaml");
+
+        private final String mimeType;
+
+        SwaggerFormat(String mimeType) {
+            this.mimeType = mimeType;
+        }
+
+        public String getMimeType() {
+            return mimeType;
+        }
     }
 
     private static final int NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS = 3;
@@ -43,20 +59,20 @@ public class RecipeExecutor {
     private final List<ExecutionListener> executionListeners = new CopyOnWriteArrayList<>();
     private final List<RecipeFilter> recipeFilters = new CopyOnWriteArrayList<>();
 
-    public RecipeExecutor(Scheme scheme, String host, int port) {
+    public TestServerRequestExecutor(Scheme scheme, String host, int port) {
         this(scheme, host, port, ServerDefaults.VERSION_PREFIX, new CodegenBasedTestServerApi());
     }
 
-    public RecipeExecutor(String host, int port) {
+    public TestServerRequestExecutor(String host, int port) {
         this(ServerDefaults.DEFAULT_SCHEME, host, port);
     }
 
-    public RecipeExecutor(String host) {
+    public TestServerRequestExecutor(String host) {
         this(host, ServerDefaults.DEFAULT_PORT);
     }
 
     // Used for testing
-    RecipeExecutor(Scheme scheme, String host, int port, String basePath, TestServerApi apiStub) {
+    TestServerRequestExecutor(Scheme scheme, String host, int port, String basePath, TestServerApi apiStub) {
         this.apiStub = apiStub;
         apiStub.setBasePath(String.format("%s://%s:%d%s", scheme.getValue(), host, port, basePath));
     }
@@ -84,7 +100,7 @@ public class RecipeExecutor {
     }
 
     /**
-     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
+     * @deprecated Use TestServerRequestExecutor#submitProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution submitProject(File project) {
@@ -106,7 +122,7 @@ public class RecipeExecutor {
     }
 
     /**
-     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
+     * @deprecated Use TestServerRequestExecutor#submitProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,
@@ -127,7 +143,7 @@ public class RecipeExecutor {
     }
 
     /**
-     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
+     * @deprecated Use TestServerRequestExecutor#executeProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution executeProject(File project) {
@@ -135,7 +151,7 @@ public class RecipeExecutor {
     }
 
     /**
-     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
+     * @deprecated Use TestServerRequestExecutor#executeProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution executeProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,
@@ -174,6 +190,62 @@ public class RecipeExecutor {
             notifyExecutionFinished(execution.getCurrentReport());
         }
         return execution;
+    }
+
+    /**
+     * Asynchronous execution of Swagger Definition:
+     * Submit Swagger specification file to TestServer to create and execute tests for each api defined in specifications.
+     *
+     * @param swaggerFile   Swagger file
+     * @param swaggerFormat format
+     * @param endpoint      endpoint against which tests should be executed.
+     *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
+     * @return execution with executionId to be used to query the status
+     */
+    public Execution submitSwagger(File swaggerFile, SwaggerFormat swaggerFormat, String endpoint) {
+        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerFile, swaggerFormat, endpoint, true, authentication);
+        return new Execution(apiStub, authentication, projectResultReport);
+    }
+
+    /**
+     * Synchronous execution of Swagger Definition:
+     * Submit Swagger specification file to TestServer to create and execute tests for each api defined in specifications.
+     *
+     * @param swaggerFile   Swagger file
+     * @param swaggerFormat format
+     * @param endpoint      endpoint against which tests should be executed.
+     *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
+     * @return execution with execution report
+     */
+    public Execution executeSwagger(File swaggerFile, SwaggerFormat swaggerFormat, String endpoint) {
+        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerFile, swaggerFormat, endpoint, false, authentication);
+        return new Execution(apiStub, authentication, projectResultReport);
+    }
+
+    /**
+     * Asynchronous : Submit URL of Swagger specification to TestServer to create and execute tests for each api defined in specifications.
+     *
+     * @param swaggerApiURL URL of Swagger API
+     * @param endpoint      endpoint against which tests should be executed.
+     *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
+     * @return execution with executionId to be used to query the status
+     */
+    public Execution submitSwagger(URL swaggerApiURL, String endpoint) {
+        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerApiURL, endpoint, true, authentication);
+        return new Execution(apiStub, authentication, projectResultReport);
+    }
+
+    /**
+     * Synchronous execution: Submit URL of Swagger specification to TestServer to create and execute tests for each api defined in specifications.
+     *
+     * @param swaggerApiURL URL of Swagger API
+     * @param endpoint      endpoint against which tests should be executed.
+     *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
+     * @return execution with execution report
+     */
+    public Execution executeSwagger(URL swaggerApiURL, String endpoint) {
+        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerApiURL, endpoint, false, authentication);
+        return new Execution(apiStub, authentication, projectResultReport);
     }
 
     public Execution cancelExecution(final Execution execution) {
