@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client.execution;
 
-import com.smartbear.readyapi.client.execution.TestServerRequestExecutor.SwaggerFormat;
+import com.smartbear.readyapi.client.execution.RecipeExecutor.SwaggerFormat;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Ignore;
@@ -28,7 +28,7 @@ public class SwaggerExecutionTest extends ProjectExecutionTestBase {
 
     @Test(expected = ApiException.class)
     public void throwsExceptionIfSwaggerFileDoesNotExist() throws Exception {
-        new TestServerRequestExecutor("localhost").submitSwagger(new File("non-existing-file.json"), SwaggerFormat.JSON, "http://google.com");
+        new RecipeExecutor("localhost").submitSwagger(new File("non-existing-file.json"), SwaggerFormat.JSON, "http://google.com");
     }
 
     @Test
@@ -47,7 +47,7 @@ public class SwaggerExecutionTest extends ProjectExecutionTestBase {
     @Ignore("manual test")
     public void manualTest() {
         File swaggerFile = new File(SwaggerExecutionTest.class.getResource("/pet-store-2.0-minimal.json").getFile());
-        TestServerRequestExecutor requestExecutor = new TestServerRequestExecutor("localhost");
+        RecipeExecutor requestExecutor = new RecipeExecutor("localhost");
         requestExecutor.setCredentials("prakash", "password");
         Execution execution = requestExecutor.submitSwagger(swaggerFile, SwaggerFormat.JSON, "http://petstore.swagger.io");
         System.out.println(execution.getCurrentReport());

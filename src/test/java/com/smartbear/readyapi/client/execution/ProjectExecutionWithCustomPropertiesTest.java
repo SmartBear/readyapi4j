@@ -30,14 +30,14 @@ public class ProjectExecutionWithCustomPropertiesTest {
     private static final String TEST_SUITE_NAME = "TestSuite-1";
 
     private ApiClientWrapper apiClientWrapper;
-    private TestServerRequestExecutor recipeExecutor;
+    private RecipeExecutor recipeExecutor;
     private RepositoryProjectExecutionRequest executionRequest;
 
     @Before
     public void setUp() throws Exception {
         apiClientWrapper = Mockito.mock(ApiClientWrapper.class);
         TestServerApi testServerApi = new CodegenBasedTestServerApi(apiClientWrapper);
-        recipeExecutor = new TestServerRequestExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, testServerApi);
+        recipeExecutor = new RecipeExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, testServerApi);
         executionRequest = createRepositoryProjectExecutionRequest();
     }
 

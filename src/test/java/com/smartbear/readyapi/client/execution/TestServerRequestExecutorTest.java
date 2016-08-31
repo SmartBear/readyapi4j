@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit tests for the TestServerRequestExecutor.
+ * Unit tests for the RecipeExecutor.
  */
 public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
 

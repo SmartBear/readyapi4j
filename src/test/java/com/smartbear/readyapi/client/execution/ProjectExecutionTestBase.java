@@ -10,12 +10,12 @@ class ProjectExecutionTestBase {
     static final String BASE_PATH = "/custom_path";
 
     TestServerApi apiWrapper;
-    TestServerRequestExecutor recipeExecutor;
+    RecipeExecutor recipeExecutor;
 
     @Before
     public void setUpApiMockAndRecipeExecutor() throws Exception {
         apiWrapper = mock(TestServerApi.class);
-        recipeExecutor = new TestServerRequestExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, apiWrapper);
+        recipeExecutor = new RecipeExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, apiWrapper);
         recipeExecutor.setCredentials("theUser", "thePassword");
     }
 

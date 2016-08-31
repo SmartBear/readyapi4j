@@ -50,7 +50,7 @@ public class TransactionLogTest extends ProjectExecutionTestBase {
     @Ignore("Manual test to get the transaction log from real test server")
     @Test
     public void getsExecutionLogFromTestServer() throws Exception {
-        TestServerRequestExecutor recipeExecutor = new TestServerRequestExecutor(Scheme.HTTP, "localhost", 8080);
+        RecipeExecutor recipeExecutor = new RecipeExecutor(Scheme.HTTP, "localhost", 8080);
         recipeExecutor.setCredentials("prakash", "password");
 
         TestRecipe recipe = newTestRecipe()

@@ -27,7 +27,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Responsible for executing test recipes and projects on a Ready! API Server, synchronously or asynchronously.
  */
-public class TestServerRequestExecutor {
+public class RecipeExecutor {
 
     private static Logger logger;
 
@@ -35,7 +35,7 @@ public class TestServerRequestExecutor {
         if (System.getProperty("org.slf4j.simpleLogger.defaultLogLevel") == null) { //Don't set if user has defined the log level
             System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
         }
-        logger = LoggerFactory.getLogger(TestServerRequestExecutor.class);
+        logger = LoggerFactory.getLogger(RecipeExecutor.class);
     }
 
     enum SwaggerFormat {
@@ -59,20 +59,20 @@ public class TestServerRequestExecutor {
     private final List<ExecutionListener> executionListeners = new CopyOnWriteArrayList<>();
     private final List<RecipeFilter> recipeFilters = new CopyOnWriteArrayList<>();
 
-    public TestServerRequestExecutor(Scheme scheme, String host, int port) {
+    public RecipeExecutor(Scheme scheme, String host, int port) {
         this(scheme, host, port, ServerDefaults.VERSION_PREFIX, new CodegenBasedTestServerApi());
     }
 
-    public TestServerRequestExecutor(String host, int port) {
+    public RecipeExecutor(String host, int port) {
         this(ServerDefaults.DEFAULT_SCHEME, host, port);
     }
 
-    public TestServerRequestExecutor(String host) {
+    public RecipeExecutor(String host) {
         this(host, ServerDefaults.DEFAULT_PORT);
     }
 
     // Used for testing
-    TestServerRequestExecutor(Scheme scheme, String host, int port, String basePath, TestServerApi apiStub) {
+    RecipeExecutor(Scheme scheme, String host, int port, String basePath, TestServerApi apiStub) {
         this.apiStub = apiStub;
         apiStub.setBasePath(String.format("%s://%s:%d%s", scheme.getValue(), host, port, basePath));
     }
@@ -100,7 +100,7 @@ public class TestServerRequestExecutor {
     }
 
     /**
-     * @deprecated Use TestServerRequestExecutor#submitProject(ProjectExecutionRequest) instead.
+     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution submitProject(File project) {
@@ -122,7 +122,7 @@ public class TestServerRequestExecutor {
     }
 
     /**
-     * @deprecated Use TestServerRequestExecutor#submitProject(ProjectExecutionRequest) instead.
+     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,
@@ -143,7 +143,7 @@ public class TestServerRequestExecutor {
     }
 
     /**
-     * @deprecated Use TestServerRequestExecutor#executeProject(ProjectExecutionRequest) instead.
+     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution executeProject(File project) {
@@ -151,7 +151,7 @@ public class TestServerRequestExecutor {
     }
 
     /**
-     * @deprecated Use TestServerRequestExecutor#executeProject(ProjectExecutionRequest) instead.
+     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution executeProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,

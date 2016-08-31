@@ -3,7 +3,7 @@ package com.smartbear.readyapi.client;
 import com.smartbear.readyapi.client.execution.ApiClientWrapper;
 import com.smartbear.readyapi.client.execution.CodegenBasedTestServerApi;
 import com.smartbear.readyapi.client.execution.Execution;
-import com.smartbear.readyapi.client.execution.TestServerRequestExecutor;
+import com.smartbear.readyapi.client.execution.RecipeExecutor;
 import com.smartbear.readyapi.client.execution.RecipeExecutorTestCreator;
 import com.smartbear.readyapi.client.execution.ServerDefaults;
 import com.smartbear.readyapi.client.execution.TestServerApi;
@@ -132,7 +132,7 @@ public class DataSourceTestStepRecipeTest {
         )
             .buildTestRecipe();
 
-        TestServerRequestExecutor recipeExecutor = new TestServerRequestExecutor("localhost", ServerDefaults.DEFAULT_PORT);
+        RecipeExecutor recipeExecutor = new RecipeExecutor("localhost", ServerDefaults.DEFAULT_PORT);
         recipeExecutor.addExecutionListener(new ExecutionListener() {
             @Override
             public void requestSent(ProjectResultReport projectResultReport) {
@@ -176,7 +176,7 @@ public class DataSourceTestStepRecipeTest {
 
         ApiClientWrapper apiClientWrapper = mockApiClientWrapper();
         TestServerApi testServerApi = new CodegenBasedTestServerApi(apiClientWrapper);
-        TestServerRequestExecutor recipeExecutor = RecipeExecutorTestCreator.createRecipeExecutor(ServerDefaults.DEFAULT_SCHEME, "localhost", ServerDefaults.DEFAULT_PORT,
+        RecipeExecutor recipeExecutor = RecipeExecutorTestCreator.createRecipeExecutor(ServerDefaults.DEFAULT_SCHEME, "localhost", ServerDefaults.DEFAULT_PORT,
             ServerDefaults.VERSION_PREFIX, testServerApi);
         recipeExecutor.setCredentials("user", "password");
         Execution execution = recipeExecutor.executeRecipe(recipe);
