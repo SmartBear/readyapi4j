@@ -63,7 +63,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
     }
 
     @Test
-    public void sendsNotificationsOnAsynchrounousRequests() throws Exception {
+    public void sendsNotificationsOnAsynchronousRequests() throws Exception {
         String executionID = "the_id";
         ProjectResultReport startReport = makeRunningReport(executionID);
         ProjectResultReport endReport = makeFinishedReport(executionID);
@@ -103,7 +103,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
     public void getsExecutions() throws Exception {
         ProjectResultReports projectStatusReports = makeProjectResultReports();
         when(apiWrapper.getExecutions(any(HttpBasicAuth.class))).thenReturn(projectStatusReports);
-        List<Execution> executions = recipeExecutor.getExecutions();
+        List<Execution> executions = testServerClient.getExecutions();
         assertThat(executions.size(), is(2));
     }
 
@@ -117,7 +117,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
         Execution execution = recipeExecutor.submitRecipe(recipeToSubmit);
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.RUNNING));
 
-        execution = recipeExecutor.cancelExecution(execution);
+        execution = testServerClient.cancelExecution(execution);
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.CANCELED));
     }
 

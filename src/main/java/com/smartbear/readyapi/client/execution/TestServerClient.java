@@ -1,0 +1,117 @@
+package com.smartbear.readyapi.client.execution;
+
+import com.smartbear.readyapi.client.RepositoryProjectExecutionRequest;
+import com.smartbear.readyapi.client.model.HarLogRoot;
+import com.smartbear.readyapi.client.model.ProjectResultReport;
+import com.smartbear.readyapi.client.model.ProjectResultReports;
+import com.smartbear.readyapi.client.model.TestCase;
+import io.swagger.client.auth.HttpBasicAuth;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TestServerClient {
+
+    static {
+        if (System.getProperty("org.slf4j.simpleLogger.defaultLogLevel") == null) { //Don't set if user has defined the log level
+            System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
+        }
+    }
+
+    private final TestServerApi apiStub;
+
+    private HttpBasicAuth authentication;
+
+
+    public TestServerClient(Scheme scheme, String host, int port) {
+        this(scheme, host, port, ServerDefaults.VERSION_PREFIX, new CodegenBasedTestServerApi());
+    }
+
+    public TestServerClient(String host, int port) {
+        this(ServerDefaults.DEFAULT_SCHEME, host, port);
+    }
+
+    public TestServerClient(String host) {
+        this(host, ServerDefaults.DEFAULT_PORT);
+    }
+
+    public RecipeExecutor createRecipeExecutor() {
+        return new RecipeExecutor(this);
+    }
+
+    public ProjectExecutor createProjectExecutor() {
+        return new ProjectExecutor(this);
+    }
+
+    public SwaggerApiValidator createApiValidator() {
+        return new SwaggerApiValidator(this);
+    }
+
+    // Used for testing
+    TestServerClient(Scheme scheme, String host, int port, String basePath, TestServerApi apiStub) {
+        this.apiStub = apiStub;
+        apiStub.setBasePath(String.format("%s://%s:%d%s", scheme.getValue(), host, port, basePath));
+    }
+
+    public void setCredentials(String username, String password) {
+        authentication = new HttpBasicAuth();
+        authentication.setUsername(username);
+        authentication.setPassword(password);
+    }
+
+
+    Execution postTestRecipe(TestCase testCase, boolean async) {
+        ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
+        return new Execution(apiStub, authentication, projectResultReport);
+    }
+
+    Execution postProject(ProjectExecutionRequest projectExecutionRequest, boolean async) {
+        ProjectResultReport projectResultReport = apiStub.postProject(projectExecutionRequest, async, authentication);
+        return new Execution(apiStub, authentication, projectResultReport);
+    }
+
+    Execution postRepositoryProject(RepositoryProjectExecutionRequest executionRequest, boolean async) {
+        ProjectResultReport projectResultReport = apiStub.postRepositoryProject(executionRequest, async, authentication);
+        return new Execution(apiStub, authentication, projectResultReport);
+    }
+
+    Execution postSwagger(File swaggerFile, SwaggerApiValidator.SwaggerFormat swaggerFormat, String endpoint, boolean async) {
+        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerFile, swaggerFormat, endpoint, true, authentication);
+        return new Execution(apiStub, authentication, projectResultReport);
+    }
+
+    Execution postSwagger(URL swaggerApiURL, String endpoint, boolean async) {
+        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerApiURL, endpoint, true, authentication);
+        return new Execution(apiStub, authentication, projectResultReport);
+    }
+
+    ProjectResultReport getExecutionStatus(String executionId) {
+        return apiStub.getExecutionStatus(executionId, authentication);
+    }
+
+    void cancelExecution(String executionID) {
+        apiStub.cancelExecution(executionID, authentication);
+    }
+
+    public Execution cancelExecution(final Execution execution) {
+        ProjectResultReport projectResultReport = apiStub.cancelExecution(execution.getId(), authentication);
+        execution.addResultReport(projectResultReport);
+        return execution;
+    }
+
+    public HarLogRoot getTransactionLog(final Execution execution, String transactionId) {
+        return apiStub.getTransactionLog(execution.getId(), transactionId, authentication);
+    }
+
+    public List<Execution> getExecutions() {
+        List<Execution> executions = new ArrayList<>();
+        ProjectResultReports projectResultReport = apiStub.getExecutions(authentication);
+        for (ProjectResultReport resultReport : projectResultReport.getProjectResultReports()) {
+            executions.add(new Execution(apiStub, authentication, resultReport));
+        }
+        return executions;
+    }
+
+}

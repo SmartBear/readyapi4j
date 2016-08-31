@@ -30,14 +30,15 @@ public class ProjectExecutionWithCustomPropertiesTest {
     private static final String TEST_SUITE_NAME = "TestSuite-1";
 
     private ApiClientWrapper apiClientWrapper;
-    private RecipeExecutor recipeExecutor;
+    private ProjectExecutor projectExecutor;
     private RepositoryProjectExecutionRequest executionRequest;
 
     @Before
     public void setUp() throws Exception {
         apiClientWrapper = Mockito.mock(ApiClientWrapper.class);
         TestServerApi testServerApi = new CodegenBasedTestServerApi(apiClientWrapper);
-        recipeExecutor = new RecipeExecutor(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, testServerApi);
+        TestServerClient testServerClient = new TestServerClient(ServerDefaults.DEFAULT_SCHEME, HOST, PORT, BASE_PATH, testServerApi);
+        projectExecutor = testServerClient.createProjectExecutor();
         executionRequest = createRepositoryProjectExecutionRequest();
     }
 
@@ -47,7 +48,7 @@ public class ProjectExecutionWithCustomPropertiesTest {
         when(apiClientWrapper.invokeAPI(any(String.class), eq("POST"), any(List.class), eq(executionRequest.getCustomPropertiesMap().values()),
                 any(Map.class), eq("application/json"), eq("application/json"), any(String[].class), any(GenericType.class))).thenReturn(endReport);
 
-        recipeExecutor.executeRepositoryProject(executionRequest);
+        projectExecutor.executeRepositoryProject(executionRequest);
 
         ArgumentCaptor<Collection> customPropertiesCaptor = ArgumentCaptor.forClass(Collection.class);
         verify(apiClientWrapper).invokeAPI(eq("/readyapi/executions/project"), eq("POST"), any(List.class), customPropertiesCaptor.capture(),

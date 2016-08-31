@@ -1,6 +1,6 @@
 package com.smartbear.readyapi.client.execution;
 
-import com.smartbear.readyapi.client.execution.RecipeExecutor.SwaggerFormat;
+import com.smartbear.readyapi.client.execution.SwaggerApiValidator.SwaggerFormat;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Ignore;
@@ -22,13 +22,13 @@ public class SwaggerExecutionTest extends ProjectExecutionTestBase {
         ProjectResultReport endReport = makeFinishedReport("executionId");
         when(apiWrapper.postSwagger(any(File.class), any(SwaggerFormat.class), any(String.class), anyBoolean(),
                 any(HttpBasicAuth.class))).thenReturn(endReport);
-        Execution execution = recipeExecutor.submitSwagger(getSwaggerFile(), SwaggerFormat.JSON, "http://google.com");
+        Execution execution = swaggerApiValidator.validateApiSynchronously(getSwaggerFile(), SwaggerFormat.JSON, "http://google.com");
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
     }
 
     @Test(expected = ApiException.class)
     public void throwsExceptionIfSwaggerFileDoesNotExist() throws Exception {
-        new RecipeExecutor("localhost").submitSwagger(new File("non-existing-file.json"), SwaggerFormat.JSON, "http://google.com");
+        new TestServerClient("localhost").createApiValidator().validateApiSynchronously(new File("non-existing-file.json"), SwaggerFormat.JSON, "http://google.com");
     }
 
     @Test
@@ -36,7 +36,7 @@ public class SwaggerExecutionTest extends ProjectExecutionTestBase {
         ProjectResultReport endReport = makeFinishedReport("executionId");
         when(apiWrapper.postSwagger(any(URL.class), any(String.class), anyBoolean(), any(HttpBasicAuth.class)))
                 .thenReturn(endReport);
-        Execution execution = recipeExecutor.submitSwagger(new URL("http://abc.com"), "http://google.com");
+        Execution execution = swaggerApiValidator.validateApiSynchronously(new URL("http://abc.com"), "http://google.com");
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
     }
 
@@ -47,9 +47,9 @@ public class SwaggerExecutionTest extends ProjectExecutionTestBase {
     @Ignore("manual test")
     public void manualTest() {
         File swaggerFile = new File(SwaggerExecutionTest.class.getResource("/pet-store-2.0-minimal.json").getFile());
-        RecipeExecutor requestExecutor = new RecipeExecutor("localhost");
-        requestExecutor.setCredentials("prakash", "password");
-        Execution execution = requestExecutor.submitSwagger(swaggerFile, SwaggerFormat.JSON, "http://petstore.swagger.io");
+        TestServerClient testServerClient = new TestServerClient("localhost");
+        testServerClient.setCredentials("prakash", "password");
+        Execution execution = testServerClient.createApiValidator().validateApiSynchronously(swaggerFile, SwaggerFormat.JSON, "http://petstore.swagger.io");
         System.out.println(execution.getCurrentReport());
     }
 }

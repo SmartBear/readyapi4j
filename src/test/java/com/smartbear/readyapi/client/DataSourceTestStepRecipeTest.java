@@ -7,6 +7,7 @@ import com.smartbear.readyapi.client.execution.RecipeExecutor;
 import com.smartbear.readyapi.client.execution.RecipeExecutorTestCreator;
 import com.smartbear.readyapi.client.execution.ServerDefaults;
 import com.smartbear.readyapi.client.execution.TestServerApi;
+import com.smartbear.readyapi.client.execution.TestServerClient;
 import com.smartbear.readyapi.client.model.DataSource;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.ExcelDataSource;
@@ -132,7 +133,7 @@ public class DataSourceTestStepRecipeTest {
         )
             .buildTestRecipe();
 
-        RecipeExecutor recipeExecutor = new RecipeExecutor("localhost", ServerDefaults.DEFAULT_PORT);
+        RecipeExecutor recipeExecutor = new TestServerClient("localhost", ServerDefaults.DEFAULT_PORT).createRecipeExecutor();
         recipeExecutor.addExecutionListener(new ExecutionListener() {
             @Override
             public void requestSent(ProjectResultReport projectResultReport) {
@@ -176,10 +177,10 @@ public class DataSourceTestStepRecipeTest {
 
         ApiClientWrapper apiClientWrapper = mockApiClientWrapper();
         TestServerApi testServerApi = new CodegenBasedTestServerApi(apiClientWrapper);
-        RecipeExecutor recipeExecutor = RecipeExecutorTestCreator.createRecipeExecutor(ServerDefaults.DEFAULT_SCHEME, "localhost", ServerDefaults.DEFAULT_PORT,
+        TestServerClient testServerClient= RecipeExecutorTestCreator.createRecipeExecutor(ServerDefaults.DEFAULT_SCHEME, "localhost", ServerDefaults.DEFAULT_PORT,
             ServerDefaults.VERSION_PREFIX, testServerApi);
-        recipeExecutor.setCredentials("user", "password");
-        Execution execution = recipeExecutor.executeRecipe(recipe);
+        testServerClient.setCredentials("user", "password");
+        Execution execution = testServerClient.createRecipeExecutor().executeRecipe(recipe);
 
         verify(apiClientWrapper, times(1)).invokeAPI(eq(EXECUTIONS_BASE_PATH), anyString(), anyList(), anyObject(),
             anyMap(), anyString(), eq("application/json"), any(String[].class), any(GenericType.class));
