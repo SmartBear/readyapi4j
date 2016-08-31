@@ -41,7 +41,7 @@ public interface TestServerApi {
      * @param auth          credentials container
      * @return execution
      */
-    ProjectResultReport postSwagger(File swaggerFile, TestServerRequestExecutor.SwaggerFormat swaggerFormat,
+    ProjectResultReport postSwagger(File swaggerFile, RecipeExecutor.SwaggerFormat swaggerFormat,
                                     String endpoint, boolean async, HttpBasicAuth auth) throws ApiException;
 
     /**

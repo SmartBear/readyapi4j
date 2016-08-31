@@ -300,7 +300,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     }
 
     @Override
-    public ProjectResultReport postSwagger(File swaggerFile, TestServerRequestExecutor.SwaggerFormat swaggerFormat,
+    public ProjectResultReport postSwagger(File swaggerFile, RecipeExecutor.SwaggerFormat swaggerFormat,
                                            String endpoint, boolean async, HttpBasicAuth auth) throws ApiException {
         if (!swaggerFile.exists()) {
             throw new ApiException(404, "File [" + swaggerFile.toString() + "] not found");
