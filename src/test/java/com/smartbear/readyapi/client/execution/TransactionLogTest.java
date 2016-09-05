@@ -43,15 +43,15 @@ public class TransactionLogTest extends ProjectExecutionTestBase {
         when(apiWrapper.getTransactionLog(eq(executionID), eq("1463064414287"), any(HttpBasicAuth.class))).thenReturn(harLog);
 
         Execution execution = recipeExecutor.submitRecipe(recipeToSubmit);
-        HarLogRoot transactionLog = recipeExecutor.getTransactionLog(execution, "1463064414287");
+        HarLogRoot transactionLog = testServerClient.getTransactionLog(execution, "1463064414287");
         assertThat(transactionLog, is(harLog));
     }
 
     @Ignore("Manual test to get the transaction log from real test server")
     @Test
     public void getsExecutionLogFromTestServer() throws Exception {
-        RecipeExecutor recipeExecutor = new RecipeExecutor(Scheme.HTTP, "localhost", 8080);
-        recipeExecutor.setCredentials("prakash", "password");
+        TestServerClient testServerClient = new TestServerClient(Scheme.HTTP, "localhost", 8080);
+        testServerClient.setCredentials("prakash", "password");
 
         TestRecipe recipe = newTestRecipe()
                 .addStep(getRequest("http://maps.googleapis.com/maps/api/geocode/xml")
@@ -63,9 +63,10 @@ public class TransactionLogTest extends ProjectExecutionTestBase {
                 )
                 .buildTestRecipe();
 
+        RecipeExecutor recipeExecutor = testServerClient.createRecipeExecutor();
         Execution execution = recipeExecutor.executeRecipe(recipe);
         String transactionId = execution.getCurrentReport().getTestSuiteResultReports().get(0).getTestCaseResultReports().get(0).getTestStepResultReports().get(0).getTransactionId();
-        HarLogRoot transactionLog = recipeExecutor.getTransactionLog(execution, transactionId);
+        HarLogRoot transactionLog = testServerClient.getTransactionLog(execution, transactionId);
         assertThat(transactionLog.getLog().getEntries().size(), is(1));
     }
 }

@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,9 +35,13 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static com.smartbear.readyapi.client.teststeps.TestSteps.HttpMethod.POST;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class CodegenBasedTestServerApi implements TestServerApi {
 
     private static final Logger logger = LoggerFactory.getLogger(CodegenBasedTestServerApi.class);
+    private static final String SWAGGER_RESOURCE_PATH = ServerDefaults.SERVICE_BASE_PATH + "/executions/swagger";
 
     private ApiClientWrapper apiClient;
 
@@ -79,7 +83,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
         Map<String, File> formParams = new HashMap<>();
 
-        ProjectResultReport projectResultReport = invokeAPI(path, TestSteps.HttpMethod.POST.name(), testCase, APPLICATION_JSON, queryParams, formParams);
+        ProjectResultReport projectResultReport = invokeAPI(path, POST.name(), testCase, APPLICATION_JSON, queryParams, formParams);
         return sendPendingFiles(testCase, projectResultReport, queryParams);
     }
 
@@ -118,7 +122,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         if (formParams.isEmpty()) {
             return projectResultReport;
         }
-        return invokeAPI(path, TestSteps.HttpMethod.POST.name(), body, "multipart/form-data", queryParams, formParams);
+        return invokeAPI(path, POST.name(), body, "multipart/form-data", queryParams, formParams);
     }
 
     private void addTestStepClientCertificateFile(TestCase body, Map<String, File> formParams) {
@@ -296,8 +300,41 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     }
 
     @Override
-    public ProjectResultReport postProject(ProjectExecutionRequest executionRequest, boolean async, HttpBasicAuth auth) throws ApiException {
+    public ProjectResultReport postSwagger(File swaggerFile, SwaggerApiValidator.SwaggerFormat swaggerFormat,
+                                           String endpoint, boolean async, HttpBasicAuth auth) throws ApiException {
+        if (!swaggerFile.exists()) {
+            throw new ApiException(404, "File [" + swaggerFile.toString() + "] not found");
+        }
+        setAuthentication(auth);
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.add(new Pair("async", String.valueOf(false)));
+        queryParams.add(new Pair("endpoint", endpoint));
+        try {
+            byte[] data = Files.readAllBytes(swaggerFile.toPath());
+            return invokeAPI(SWAGGER_RESOURCE_PATH, POST.name(), data, swaggerFormat.getMimeType(), queryParams,
+                    null);
+        } catch (IOException e) {
+            throw new ApiException(500, "Failed to read Swagger file; " + e.toString());
+        }
+    }
 
+    @Override
+    public ProjectResultReport postSwagger(URL swaggerApiURL, String endpoint, boolean async, HttpBasicAuth auth)
+            throws ApiException {
+        if (swaggerApiURL == null) {
+            throw new ApiException(404, "Swagger API URL is null.");
+        }
+        setAuthentication(auth);
+        List<Pair> queryParams = new ArrayList<>();
+        queryParams.add(new Pair("async", String.valueOf(async)));
+        queryParams.add(new Pair("endpoint", endpoint));
+        queryParams.add(new Pair("swaggerEndpoint", swaggerApiURL.toString()));
+        return invokeAPI(SWAGGER_RESOURCE_PATH, POST.name(), null, APPLICATION_JSON, queryParams, null);
+    }
+
+    @Override
+    public ProjectResultReport postProject(ProjectExecutionRequest executionRequest, boolean async, HttpBasicAuth auth)
+            throws ApiException {
         File projectFile = executionRequest.getProjectFile();
         if (!projectFile.exists()) {
             throw new ApiException(404, "File [" + projectFile.toString() + "] not found");
@@ -323,14 +360,14 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
             if (executionRequest.getCustomPropertiesMap().isEmpty()) {
                 byte[] data = Files.readAllBytes(projectFile.toPath());
-                return invokeAPI(path, TestSteps.HttpMethod.POST.name(), data, type, queryParams, null);
+                return invokeAPI(path, POST.name(), data, type, queryParams, null);
             } else {
                 File propertiesFile = writeCustomPropertiesToFile(executionRequest.getCustomPropertiesMap().values());
 
                 Map<String, File> formParams = new HashMap<>();
                 formParams.put(projectFile.getName(), projectFile);
                 formParams.put(propertiesFile.getName(), propertiesFile);
-                return invokeAPI(path, TestSteps.HttpMethod.POST.name(), null, "multipart/form-data", queryParams, formParams);
+                return invokeAPI(path, POST.name(), null, "multipart/form-data", queryParams, formParams);
             }
 
         } catch (IOException e) {
@@ -342,7 +379,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         try {
             String content = (String) getApiClient().serialize(values, "application/json");
             File tempFile = File.createTempFile("custom-properties", ".json");
-            Files.write(tempFile.toPath(), content.getBytes(StandardCharsets.UTF_8));
+            Files.write(tempFile.toPath(), content.getBytes(UTF_8));
             tempFile.deleteOnExit();
             return tempFile;
         } catch (IOException e) {
@@ -360,7 +397,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
             queryParams.add(new Pair("repositoryName", request.getRepositoryName()));
         }
 
-        return invokeAPI(ServerDefaults.SERVICE_BASE_PATH + "/executions/project", TestSteps.HttpMethod.POST.name(), request.getCustomPropertiesMap().values(),
+        return invokeAPI(ServerDefaults.SERVICE_BASE_PATH + "/executions/project", POST.name(), request.getCustomPropertiesMap().values(),
                 "application/json", queryParams, null);
     }
 

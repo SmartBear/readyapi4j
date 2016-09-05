@@ -31,7 +31,7 @@ public class RepositoryProjectExecutionTest extends ProjectExecutionTestBase {
         ProjectResultReport endReport = makeFinishedReport("executionId");
         when(apiWrapper.postRepositoryProject(eq(executionRequest), eq(false), any(HttpBasicAuth.class))).thenReturn(endReport);
 
-        Execution execution = recipeExecutor.executeRepositoryProject(executionRequest);//recipeExecutor.submitRepositoryProject(executionRequest) for async
+        Execution execution = projectExecutor.executeRepositoryProject(executionRequest);//recipeExecutor.submitRepositoryProject(executionRequest) for async
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
     }
 
@@ -44,8 +44,8 @@ public class RepositoryProjectExecutionTest extends ProjectExecutionTestBase {
         when(apiWrapper.getExecutionStatus(eq(executionID), any(HttpBasicAuth.class))).thenReturn(endReport);
         ExecutionListener executionListener = mock(ExecutionListener.class);
 
-        recipeExecutor.addExecutionListener(executionListener);
-        recipeExecutor.submitRepositoryProject(executionRequest);
+        projectExecutor.addExecutionListener(executionListener);
+        projectExecutor.submitRepositoryProject(executionRequest);
         Thread.sleep(1500);
         verify(executionListener).requestSent(startReport);
         verify(executionListener).executionFinished(endReport);
