@@ -99,13 +99,13 @@ public class TestServerClient {
         return new Execution(apiStub, authentication, projectResultReport);
     }
 
-    Execution postSwagger(File swaggerFile, SwaggerApiValidator.SwaggerFormat swaggerFormat, String endpoint, boolean async) {
-        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerFile, swaggerFormat, endpoint, true, authentication);
+    Execution postSwagger(File swaggerFile, SwaggerApiValidator.SwaggerFormat swaggerFormat, String callBackUrl, String endpoint, boolean async) {
+        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerFile, swaggerFormat, endpoint, callBackUrl, true, authentication);
         return new Execution(apiStub, authentication, projectResultReport);
     }
 
-    Execution postSwagger(URL swaggerApiURL, String endpoint, boolean async) {
-        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerApiURL, endpoint, true, authentication);
+    Execution postSwagger(URL swaggerApiURL, String endpoint, String callBackUrl, boolean async) {
+        ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerApiURL, endpoint, callBackUrl, true, authentication);
         return new Execution(apiStub, authentication, projectResultReport);
     }
 

@@ -42,7 +42,7 @@ public interface TestServerApi {
      * @return execution
      */
     ProjectResultReport postSwagger(File swaggerFile, SwaggerApiValidator.SwaggerFormat swaggerFormat,
-                                    String endpoint, boolean async, HttpBasicAuth auth) throws ApiException;
+                                    String endpoint, String callBackUrl, boolean async, HttpBasicAuth auth) throws ApiException;
 
     /**
      * Submit URL of Swagger specification to TestServer to create and execute tests for each api defined in specifications.
@@ -54,7 +54,7 @@ public interface TestServerApi {
      * @param auth          credentials container
      * @return execution
      */
-    ProjectResultReport postSwagger(URL swaggerApiURL, String endpoint, boolean async, HttpBasicAuth auth) throws ApiException;
+    ProjectResultReport postSwagger(URL swaggerApiURL, String endpoint, String callBackUrl, boolean async, HttpBasicAuth auth) throws ApiException;
 
     ProjectResultReport getExecutionStatus(String executionID, HttpBasicAuth auth) throws ApiException;
 
