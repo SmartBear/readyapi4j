@@ -308,8 +308,10 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         setAuthentication(auth);
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(false)));
-        queryParams.add(new Pair("endpoint", endpoint));
-        if(callBackUrl != null && !callBackUrl.isEmpty()) {
+        if(StringUtils.isNotEmpty(callBackUrl)) {
+            queryParams.add(new Pair("endpoint", endpoint));
+        }
+        if(StringUtils.isNotEmpty(callBackUrl)) {
             queryParams.add(new Pair("callback", callBackUrl));
         }
         try {
@@ -330,8 +332,10 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         setAuthentication(auth);
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(async)));
-        queryParams.add(new Pair("endpoint", endpoint));
-        if(callBackUrl != null && !callBackUrl.isEmpty()) {
+        if(StringUtils.isNotEmpty(callBackUrl)) {
+            queryParams.add(new Pair("endpoint", endpoint));
+        }
+        if(StringUtils.isNotEmpty(callBackUrl)) {
             queryParams.add(new Pair("callback", callBackUrl));
         }
         queryParams.add(new Pair("swaggerEndpoint", swaggerApiURL.toString()));
