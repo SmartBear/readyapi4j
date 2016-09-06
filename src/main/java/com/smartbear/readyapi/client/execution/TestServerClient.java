@@ -8,6 +8,7 @@ import com.smartbear.readyapi.client.model.TestCase;
 import io.swagger.client.auth.HttpBasicAuth;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,12 @@ public class TestServerClient {
         this(host, ServerDefaults.DEFAULT_PORT);
     }
 
+    public static TestServerClient fromUrl(String testserverUrl) throws MalformedURLException {
+        URL url = new URL(testserverUrl);
+        return new TestServerClient(Scheme.valueOf(url.getProtocol()), url.getHost(),
+            url.getPort() == -1 ? 80 : url.getPort());
+    }
+
     public RecipeExecutor createRecipeExecutor() {
         return new RecipeExecutor(this);
     }
@@ -59,6 +66,11 @@ public class TestServerClient {
         authentication = new HttpBasicAuth();
         authentication.setUsername(username);
         authentication.setPassword(password);
+    }
+
+    public TestServerClient withCredentials(String username, String password) {
+        setCredentials(username, password);
+        return this;
     }
 
 
