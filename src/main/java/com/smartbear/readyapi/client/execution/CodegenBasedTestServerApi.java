@@ -308,7 +308,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         setAuthentication(auth);
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(false)));
-        if(StringUtils.isNotEmpty(callBackUrl)) {
+        if(StringUtils.isNotEmpty(endpoint)) {
             queryParams.add(new Pair("endpoint", endpoint));
         }
         if(StringUtils.isNotEmpty(callBackUrl)) {
@@ -332,7 +332,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         setAuthentication(auth);
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(async)));
-        if(StringUtils.isNotEmpty(callBackUrl)) {
+        if(StringUtils.isNotEmpty(endpoint)) {
             queryParams.add(new Pair("endpoint", endpoint));
         }
         if(StringUtils.isNotEmpty(callBackUrl)) {
