@@ -309,7 +309,9 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(false)));
         queryParams.add(new Pair("endpoint", endpoint));
-        queryParams.add(new Pair("callBack", callBackUrl));
+        if(callBackUrl != null && !callBackUrl.isEmpty()) {
+            queryParams.add(new Pair("callback", callBackUrl));
+        }
         try {
             byte[] data = Files.readAllBytes(swaggerFile.toPath());
             return invokeAPI(SWAGGER_RESOURCE_PATH, POST.name(), data, swaggerFormat.getMimeType(), queryParams,
@@ -329,7 +331,9 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(async)));
         queryParams.add(new Pair("endpoint", endpoint));
-        queryParams.add(new Pair("callback", callBackUrl));
+        if(callBackUrl != null && !callBackUrl.isEmpty()) {
+            queryParams.add(new Pair("callback", callBackUrl));
+        }
         queryParams.add(new Pair("swaggerEndpoint", swaggerApiURL.toString()));
         return invokeAPI(SWAGGER_RESOURCE_PATH, POST.name(), null, APPLICATION_JSON, queryParams, null);
     }
