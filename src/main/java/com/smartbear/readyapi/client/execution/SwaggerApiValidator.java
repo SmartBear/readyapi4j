@@ -9,7 +9,7 @@ public class SwaggerApiValidator extends AbstractExecutor {
         super(testServerClient);
     }
 
-    enum SwaggerFormat {
+    public enum SwaggerFormat {
         JSON("application/json"),
         YAML("application/yaml");
 

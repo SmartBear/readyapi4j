@@ -15,6 +15,8 @@ import java.util.List;
 
 public class TestServerClient {
 
+    private String baseUrl;
+
     static {
         if (System.getProperty("org.slf4j.simpleLogger.defaultLogLevel") == null) { //Don't set if user has defined the log level
             System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
@@ -59,7 +61,12 @@ public class TestServerClient {
     // Used for testing
     TestServerClient(Scheme scheme, String host, int port, String basePath, TestServerApi apiStub) {
         this.apiStub = apiStub;
-        apiStub.setBasePath(String.format("%s://%s:%d%s", scheme.getValue(), host, port, basePath));
+        baseUrl = buildBaseUrl(scheme, host, port, basePath);
+        apiStub.setBasePath(baseUrl);
+    }
+
+    protected String buildBaseUrl(Scheme scheme, String host, int port, String basePath) {
+        return String.format("%s://%s:%d%s", scheme.getValue(), host, port, basePath);
     }
 
     public void setCredentials(String username, String password) {
@@ -73,6 +80,9 @@ public class TestServerClient {
         return this;
     }
 
+    public String getBaseUrl() {
+        return baseUrl;
+    }
 
     Execution postTestRecipe(TestCase testCase, boolean async) {
         ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
