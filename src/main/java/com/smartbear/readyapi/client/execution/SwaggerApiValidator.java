@@ -32,10 +32,11 @@ public class SwaggerApiValidator extends AbstractExecutor {
      * @param swaggerFormat format
      * @param endpoint      endpoint against which tests should be executed.
      *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
+     * @param callBackUrl Callback Url
      * @return execution with executionId to be used to query the status
      */
-    public Execution validateApiAsynchronously(File swaggerFile, SwaggerFormat swaggerFormat, String endpoint) {
-        return testServerClient.postSwagger(swaggerFile, swaggerFormat, endpoint, true);
+    public Execution validateApiAsynchronously(File swaggerFile, SwaggerFormat swaggerFormat, String endpoint, String callBackUrl) {
+        return testServerClient.postSwagger(swaggerFile, swaggerFormat, callBackUrl, endpoint, true);
     }
 
     /**
@@ -46,10 +47,11 @@ public class SwaggerApiValidator extends AbstractExecutor {
      * @param swaggerFormat format
      * @param endpoint      endpoint against which tests should be executed.
      *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
+     * @param callBackUrl Callback Url
      * @return execution with execution report
      */
-    public Execution validateApiSynchronously(File swaggerFile, SwaggerFormat swaggerFormat, String endpoint) {
-        return testServerClient.postSwagger(swaggerFile, swaggerFormat, endpoint, false);
+    public Execution validateApiSynchronously(File swaggerFile, SwaggerFormat swaggerFormat, String endpoint, String callBackUrl) {
+        return testServerClient.postSwagger(swaggerFile, swaggerFormat, callBackUrl, endpoint, false);
     }
 
     /**
@@ -60,8 +62,8 @@ public class SwaggerApiValidator extends AbstractExecutor {
      *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
      * @return execution with executionId to be used to query the status
      */
-    public Execution validateApiAsynchronously(URL swaggerApiURL, String endpoint) {
-        return testServerClient.postSwagger(swaggerApiURL, endpoint, true);
+    public Execution validateApiAsynchronously(URL swaggerApiURL, String endpoint, String callBackUrl) {
+        return testServerClient.postSwagger(swaggerApiURL, endpoint, callBackUrl,  true);
     }
 
     /**
@@ -72,7 +74,7 @@ public class SwaggerApiValidator extends AbstractExecutor {
      *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
      * @return execution with execution report
      */
-    public Execution validateApiSynchronously(URL swaggerApiURL, String endpoint) {
-        return testServerClient.postSwagger(swaggerApiURL, endpoint, false);
+    public Execution validateApiSynchronously(URL swaggerApiURL, String endpoint, String callBackUrl) {
+        return testServerClient.postSwagger(swaggerApiURL, endpoint, callBackUrl, false);
     }
 }

@@ -301,7 +301,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
     @Override
     public ProjectResultReport postSwagger(File swaggerFile, SwaggerApiValidator.SwaggerFormat swaggerFormat,
-                                           String endpoint, boolean async, HttpBasicAuth auth) throws ApiException {
+                                           String endpoint, String callBackUrl, boolean async, HttpBasicAuth auth) throws ApiException {
         if (!swaggerFile.exists()) {
             throw new ApiException(404, "File [" + swaggerFile.toString() + "] not found");
         }
@@ -309,6 +309,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(false)));
         queryParams.add(new Pair("endpoint", endpoint));
+        queryParams.add(new Pair("callBack", callBackUrl));
         try {
             byte[] data = Files.readAllBytes(swaggerFile.toPath());
             return invokeAPI(SWAGGER_RESOURCE_PATH, POST.name(), data, swaggerFormat.getMimeType(), queryParams,
@@ -319,7 +320,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     }
 
     @Override
-    public ProjectResultReport postSwagger(URL swaggerApiURL, String endpoint, boolean async, HttpBasicAuth auth)
+    public ProjectResultReport postSwagger(URL swaggerApiURL, String endpoint, String callBackUrl, boolean async, HttpBasicAuth auth)
             throws ApiException {
         if (swaggerApiURL == null) {
             throw new ApiException(404, "Swagger API URL is null.");
@@ -328,6 +329,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(async)));
         queryParams.add(new Pair("endpoint", endpoint));
+        queryParams.add(new Pair("callback", callBackUrl));
         queryParams.add(new Pair("swaggerEndpoint", swaggerApiURL.toString()));
         return invokeAPI(SWAGGER_RESOURCE_PATH, POST.name(), null, APPLICATION_JSON, queryParams, null);
     }
