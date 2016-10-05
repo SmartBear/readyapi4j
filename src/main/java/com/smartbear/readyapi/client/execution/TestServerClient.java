@@ -23,7 +23,7 @@ public class TestServerClient {
         }
     }
 
-    private final TestServerApi apiStub;
+    private TestServerApi apiStub;
 
     private HttpBasicAuth authentication;
 
@@ -42,7 +42,7 @@ public class TestServerClient {
 
     public static TestServerClient fromUrl(String testserverUrl) throws MalformedURLException {
         URL url = new URL(testserverUrl);
-        return new TestServerClient(Scheme.valueOf(url.getProtocol()), url.getHost(),
+        return new TestServerClient(Scheme.valueOf(url.getProtocol().toUpperCase()), url.getHost(),
             url.getPort() == -1 ? 80 : url.getPort());
     }
 
@@ -77,6 +77,11 @@ public class TestServerClient {
 
     public TestServerClient withCredentials(String username, String password) {
         setCredentials(username, password);
+        return this;
+    }
+
+    public TestServerClient withApiStub(TestServerApi apiStub) {
+        this.apiStub = apiStub;
         return this;
     }
 

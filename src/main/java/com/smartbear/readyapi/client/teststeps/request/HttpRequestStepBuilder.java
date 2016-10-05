@@ -72,6 +72,26 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         return (RequestBuilderType) this;
     }
 
+    public RequestBuilderType accepts(String acceptHeader) {
+        return addHeader("Accept", acceptHeader);
+    }
+
+    public RequestBuilderType acceptsJson() {
+        return accepts("application/json");
+    }
+
+    public RequestBuilderType acceptsXml() {
+        return accepts("application/xml");
+    }
+
+    public RequestBuilderType withHeader(String name, List<String> values) {
+        return addHeader(name, values);
+    }
+
+    public RequestBuilderType withHeader(String name, String value) {
+        return addHeader(name, value);
+    }
+
     public RequestBuilderType addHeader(String name, List<String> values) {
         List<String> headerValues = (List<String>) this.headers.get(name);
         if (headerValues == null) {
@@ -162,5 +182,20 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
 
     public RequestBuilderType assertResponseTime(int timeInMillis) {
         return addAssertion(responseSLA(timeInMillis));
+    }
+
+    public RequestBuilderType assertContentType(String contentType) {
+        return assertScript(
+            "assert messageExchange.responseHeaders[\"Content-Type\"].contains( \"" + contentType + "\")");
+    }
+
+    public RequestBuilderType assertHeaderExists(String header) {
+        return assertScript(
+            "assert messageExchange.responseHeaders.containsKey(\"" + header + "\")");
+    }
+
+    public RequestBuilderType assertHeader(String header, String value) {
+        return assertScript(
+            "assert messageExchange.responseHeaders[\"" + header + "\"].contains( \"" + value + "\")");
     }
 }
