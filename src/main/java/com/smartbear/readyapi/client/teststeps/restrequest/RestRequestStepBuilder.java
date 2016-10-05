@@ -39,6 +39,22 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return addParameter(parameterName, value, RestParameter.TypeEnum.HEADER);
     }
 
+    public RestRequestBuilderType withQueryParameter(String parameterName, String value) {
+        return addQueryParameter(parameterName, value);
+    }
+
+    public RestRequestBuilderType withPathParameter(String parameterName, String value) {
+        return addPathParameter(parameterName, value);
+    }
+
+    public RestRequestBuilderType withMatrixParameter(String parameterName, String value) {
+        return addMatrixParameter(parameterName, value);
+    }
+
+    public RestRequestBuilderType withHeaderParameter(String parameterName, String value) {
+        return addHeaderParameter(parameterName, value);
+    }
+
     protected RestRequestBuilderType addParameter(String parameterName, String value, RestParameter.TypeEnum type) {
         RestParameter parameter = new RestParameter();
         parameter.setName(parameterName);
