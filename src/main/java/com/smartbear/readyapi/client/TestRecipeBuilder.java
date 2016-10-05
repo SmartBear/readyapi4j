@@ -54,9 +54,13 @@ public class TestRecipeBuilder {
         return new TestRecipeBuilder();
     }
 
-    public static TestRecipeBuilder newTestRecipe(Object... args) {
+    /**
+     * Creates a TestRecipeBuilder containing the specified TestStepBuilders
+     */
+
+    public static TestRecipeBuilder newTestRecipe(Object... testStepBuilders) {
         TestRecipeBuilder recipeBuilder = newTestRecipe();
-        for (Object arg : args) {
+        for (Object arg : testStepBuilders) {
             if (arg instanceof TestStepBuilder) {
                 recipeBuilder.addStep((TestStepBuilder) arg);
             }
