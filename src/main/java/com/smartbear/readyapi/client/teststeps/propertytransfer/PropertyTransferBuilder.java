@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client.teststeps.propertytransfer;
 
+import com.smartbear.readyapi.client.BuilderUtils;
 import com.smartbear.readyapi.client.model.PropertyTransfer;
 
 public class PropertyTransferBuilder {
@@ -12,7 +13,16 @@ public class PropertyTransferBuilder {
     }
 
     public static PropertyTransferBuilder newTransfer() {
-        return new PropertyTransferBuilder();
+        return new PropertyTransferBuilder().named(BuilderUtils.randomName("Transfer"));
+    }
+
+    public static PropertyTransferBuilder newTransfer( String name ) {
+        return new PropertyTransferBuilder().named( name );
+    }
+
+    private PropertyTransferBuilder named(String name) {
+        transfer.setTransferName( name );
+        return this;
     }
 
     public PropertyTransferBuilder withSource(PropertyTransferSourceBuilder propertyTransferSourceBuilder) {
