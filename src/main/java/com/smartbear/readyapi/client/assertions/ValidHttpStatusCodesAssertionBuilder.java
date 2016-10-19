@@ -9,19 +9,28 @@ import java.util.List;
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
 
 public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion> extends AbstractAssertionBuilder<Assertion> implements HttpStatusCodeAssertionBuilder {
-    protected List<Integer> statusCodes = new ArrayList<>();
+    protected List<String> statusCodes = new ArrayList<>();
     protected String name;
 
     @Override
     public ValidHttpStatusCodesAssertionBuilder addStatusCode(int statusCode) {
-        statusCodes.add(statusCode);
+        statusCodes.add(String.valueOf(statusCode));
         return this;
     }
 
     @Override
     public ValidHttpStatusCodesAssertionBuilder addStatusCodes(List<Integer> statusCodes) {
-        this.statusCodes.addAll(statusCodes);
+        this.statusCodes.addAll(covertListIntegersToString(statusCodes));
         return this;
+    }
+
+    private List<String> covertListIntegersToString(List<Integer> statusCodes) {
+       List<String> result =  new ArrayList<>();
+        for(int code: statusCodes){
+            result.add(String.valueOf(code));
+        }
+        return result;
+
     }
 
     @Override

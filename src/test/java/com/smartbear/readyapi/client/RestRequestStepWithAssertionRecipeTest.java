@@ -58,7 +58,7 @@ public class RestRequestStepWithAssertionRecipeTest {
         JsonPathCountAssertion assertion = (JsonPathCountAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
         assertThat(assertion.getType(), is("JsonPath Count"));
         assertThat(assertion.getJsonPath(), is("$.results[0].address_components[1].long_name"));
-        assertThat(assertion.getExpectedCount(), is(1));
+        assertThat(assertion.getExpectedCount(), is("1"));
         assertThat(assertion.getAllowWildcards(), is(true));
     }
 
@@ -129,7 +129,7 @@ public class RestRequestStepWithAssertionRecipeTest {
 
         ValidHttpStatusCodesAssertion assertion = (ValidHttpStatusCodesAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
         assertThat(assertion.getType(), is("Valid HTTP Status Codes"));
-        assertThat(assertion.getValidStatusCodes(), is(Arrays.asList(202, 100, 200, 201)));
+        assertThat(assertion.getValidStatusCodes(), is(Arrays.asList("202", "100", "200", "201")));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class RestRequestStepWithAssertionRecipeTest {
 
         InvalidHttpStatusCodesAssertion assertion = (InvalidHttpStatusCodesAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
         assertThat(assertion.getType(), is("Invalid HTTP Status Codes"));
-        assertThat(assertion.getInvalidStatusCodes(), is(Arrays.asList(100, 200, 201)));
+        assertThat(assertion.getInvalidStatusCodes(), is(Arrays.asList("100", "200", "201")));
     }
 
     @Test
@@ -161,7 +161,7 @@ public class RestRequestStepWithAssertionRecipeTest {
 
         ResponseSLAAssertion assertion = (ResponseSLAAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
         assertThat(assertion.getType(), is("Response SLA"));
-        assertThat(assertion.getMaxResponseTime(), is(1000));
+        assertThat(assertion.getMaxResponseTime(), is("1000"));
     }
 
     @Test

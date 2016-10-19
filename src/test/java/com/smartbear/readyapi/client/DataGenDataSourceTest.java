@@ -50,7 +50,7 @@ public class DataGenDataSourceTest {
         DataGenDataSource dataGenDataSource = getDataGenDataSource(recipe);
         BooleanDataGenerator dataGenerator = (BooleanDataGenerator) dataGenDataSource.getDataGenerators().get(0);
 
-        assertThat(dataGenDataSource.getNumberOfRows(), is(34));
+        assertThat(dataGenDataSource.getNumberOfRows(), is("34"));
         assertThat(dataGenerator.getType(), is("Boolean"));
         assertThat(dataGenerator.getFormat(), is(BooleanDataGenerator.FormatEnum.YES_NO));
         assertThat(dataGenerator.getDuplicationFactor(), is(1));
@@ -108,7 +108,7 @@ public class DataGenDataSourceTest {
         DataGenDataSource dataGenDataSource = getDataGenDataSource(recipe);
         DataGenerator dataGenerator = dataGenDataSource.getDataGenerators().get(0);
 
-        assertThat(dataGenDataSource.getNumberOfRows(), is(13));
+        assertThat(dataGenDataSource.getNumberOfRows(), is("13"));
         assertThat(dataGenerator.getType(), is("City"));
         assertThat(dataGenerator.getDuplicationFactor(), is(7));
         assertThat(dataGenerator.getPropertyName(), is("property1"));
