@@ -120,9 +120,9 @@ public class RestRequestStepWithAssertionRecipeTest {
         TestRecipe recipe = newTestRecipe()
                 .addStep(restRequest()
                         .get(URI)
-                        .addAssertion(validStatusCodes(202)
-                                .addStatusCode(100)
-                                .addStatusCodes(Arrays.asList(200, 201))
+                        .addAssertion(validStatusCodes("202")
+                                .withStatusCode(100)
+                                .withStatusCodes(Arrays.asList("200", "201"))
                         )
                 )
                 .buildTestRecipe();
@@ -138,8 +138,8 @@ public class RestRequestStepWithAssertionRecipeTest {
                 .addStep(restRequest()
                         .get(URI)
                         .addAssertion(invalidStatusCodes()
-                                .addStatusCode(100)
-                                .addStatusCodes(Arrays.asList(200, 201))
+                                .withStatusCode("100")
+                                .withStatusCodes(Arrays.asList("200", "201"))
                         )
                 )
                 .buildTestRecipe();

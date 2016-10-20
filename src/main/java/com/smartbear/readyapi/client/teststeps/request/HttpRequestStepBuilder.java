@@ -168,11 +168,11 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         return addAssertion(xPathContains(xpath, expectedContent));
     }
 
-    public RequestBuilderType assertInvalidStatusCodes(Integer... statusCodes) {
+    public RequestBuilderType assertInvalidStatusCodes(String... statusCodes) {
         return addAssertion(invalidStatusCodes(statusCodes));
     }
 
-    public RequestBuilderType assertValidStatusCodes(Integer... statusCodes) {
+    public RequestBuilderType assertValidStatusCodes(String... statusCodes) {
         return addAssertion(validStatusCodes(statusCodes));
     }
 

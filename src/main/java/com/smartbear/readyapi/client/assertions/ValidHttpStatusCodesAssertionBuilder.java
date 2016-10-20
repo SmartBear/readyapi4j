@@ -13,13 +13,25 @@ public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion> extends A
     protected String name;
 
     @Override
-    public ValidHttpStatusCodesAssertionBuilder addStatusCode(int statusCode) {
+    public ValidHttpStatusCodesAssertionBuilder withStatusCode(int statusCode) {
         statusCodes.add(String.valueOf(statusCode));
         return this;
     }
 
     @Override
-    public ValidHttpStatusCodesAssertionBuilder addStatusCodes(List<Integer> statusCodes) {
+    public ValidHttpStatusCodesAssertionBuilder withStatusCode(String statusCode){
+        statusCodes.add(statusCode);
+        return this;
+    }
+
+    @Override
+    public ValidHttpStatusCodesAssertionBuilder withStatusCodes(List<String> statusCodes){
+        this.statusCodes.addAll(statusCodes);
+        return this;
+    }
+
+    @Override
+    public ValidHttpStatusCodesAssertionBuilder withIntStatusCodes(List<Integer> statusCodes){
         this.statusCodes.addAll(covertListIntegersToString(statusCodes));
         return this;
     }

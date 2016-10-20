@@ -5,9 +5,13 @@ import com.smartbear.readyapi.client.model.Assertion;
 import java.util.List;
 
 public interface HttpStatusCodeAssertionBuilder extends AssertionBuilder<Assertion> {
-    HttpStatusCodeAssertionBuilder addStatusCode(int statusCode);
+    HttpStatusCodeAssertionBuilder withStatusCode(int statusCode);
 
-    HttpStatusCodeAssertionBuilder addStatusCodes(List<Integer> statusCodes);
+    HttpStatusCodeAssertionBuilder withStatusCode(String statusCode);
+
+    HttpStatusCodeAssertionBuilder withStatusCodes(List<String> statusCodes);
+
+    HttpStatusCodeAssertionBuilder withIntStatusCodes(List<Integer> statusCodes);
 
     HttpStatusCodeAssertionBuilder named(String assertionName);
 }
