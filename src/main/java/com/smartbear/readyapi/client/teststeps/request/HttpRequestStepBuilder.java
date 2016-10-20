@@ -172,7 +172,15 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         return addAssertion(invalidStatusCodes(statusCodes));
     }
 
+    public RequestBuilderType assertInvalidStatusCodes(Integer... statusCodes) {
+        return addAssertion(invalidStatusCodes(statusCodes));
+    }
+
     public RequestBuilderType assertValidStatusCodes(String... statusCodes) {
+        return addAssertion(validStatusCodes(statusCodes));
+    }
+
+    public RequestBuilderType assertValidStatusCodes(Integer... statusCodes) {
         return addAssertion(validStatusCodes(statusCodes));
     }
 

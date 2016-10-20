@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client.teststeps.restrequest;
 
 import com.smartbear.readyapi.client.model.RestParameter;
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
+import com.smartbear.readyapi.client.support.HttpHeaders;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.TestSteps;
 import com.smartbear.readyapi.client.teststeps.request.HttpRequestStepBuilder;
@@ -42,6 +43,8 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
     public RestRequestBuilderType withParameter(String parameterName, String value) {
         if (getTestStep().getURI().toLowerCase().contains("{" + parameterName.toLowerCase() + "}")) {
             return withPathParameter(parameterName, value);
+        } else if (HttpHeaders.isKnownHeader(parameterName)) {
+            return withHeaderParameter(parameterName, value);
         } else {
             return withQueryParameter(parameterName, value);
         }

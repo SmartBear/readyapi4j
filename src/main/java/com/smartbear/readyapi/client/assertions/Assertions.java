@@ -39,9 +39,28 @@ public class Assertions {
         return new DefaultGroovyScriptAssertionBuilder(script);
     }
 
+    public static HttpStatusCodeAssertionBuilder validStatusCodes() {
+        return new ValidHttpStatusCodesAssertionBuilder();
+    }
+
     public static HttpStatusCodeAssertionBuilder validStatusCodes(String... statusCodes) {
         ValidHttpStatusCodesAssertionBuilder validHttpStatusCodesAssertionBuilder = new ValidHttpStatusCodesAssertionBuilder();
         return validHttpStatusCodesAssertionBuilder.withStatusCodes(asList(statusCodes));
+    }
+
+    public static HttpStatusCodeAssertionBuilder validStatusCodes(Integer... statusCodes) {
+        ValidHttpStatusCodesAssertionBuilder validHttpStatusCodesAssertionBuilder = new ValidHttpStatusCodesAssertionBuilder();
+        return validHttpStatusCodesAssertionBuilder.withIntStatusCodes(asList(statusCodes));
+    }
+
+    public static InvalidHttpStatusCodesAssertionBuilder invalidStatusCodes() {
+        return new InvalidHttpStatusCodesAssertionBuilder();
+    }
+
+    public static InvalidHttpStatusCodesAssertionBuilder invalidStatusCodes(Integer... statusCodes) {
+        InvalidHttpStatusCodesAssertionBuilder invalidHttpStatusCodesAssertionBuilder = new InvalidHttpStatusCodesAssertionBuilder();
+        invalidHttpStatusCodesAssertionBuilder.withIntStatusCodes(asList(statusCodes));
+        return invalidHttpStatusCodesAssertionBuilder;
     }
 
     public static InvalidHttpStatusCodesAssertionBuilder invalidStatusCodes(String... statusCodes) {
