@@ -39,6 +39,14 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return addParameter(parameterName, value, RestParameter.TypeEnum.HEADER);
     }
 
+    public RestRequestBuilderType withParameter(String parameterName, String value) {
+        if (getTestStep().getURI().toLowerCase().contains("{" + parameterName.toLowerCase() + "}")) {
+            return withPathParameter(parameterName, value);
+        } else {
+            return withQueryParameter(parameterName, value);
+        }
+    }
+
     public RestRequestBuilderType withQueryParameter(String parameterName, String value) {
         return addQueryParameter(parameterName, value);
     }
