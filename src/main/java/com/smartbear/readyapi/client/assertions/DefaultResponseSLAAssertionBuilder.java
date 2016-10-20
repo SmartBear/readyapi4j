@@ -9,6 +9,10 @@ public class DefaultResponseSLAAssertionBuilder extends AbstractAssertionBuilder
     private ResponseSLAAssertion responseSLAAssertion = new ResponseSLAAssertion();
 
     public DefaultResponseSLAAssertionBuilder(int maxResponseTime) {
+        responseSLAAssertion.setMaxResponseTime(String.valueOf(maxResponseTime));
+    }
+
+    public DefaultResponseSLAAssertionBuilder(String maxResponseTime) {
         responseSLAAssertion.setMaxResponseTime(maxResponseTime);
     }
 

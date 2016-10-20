@@ -35,7 +35,7 @@ class DataGenDataSourceBuilder implements DataSourceBuilder {
             dataGenerators.add(dataGeneratorBuilder.build());
         }
         dataGenDataSource.setDataGenerators(dataGenerators);
-        dataGenDataSource.setNumberOfRows(numberOfRows);
+        dataGenDataSource.setNumberOfRows(String.valueOf(numberOfRows));
 
         DataSource dataSource = new DataSource();
         dataSource.setDataGen(dataGenDataSource);

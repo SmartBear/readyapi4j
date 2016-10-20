@@ -57,7 +57,7 @@ public class TransactionLogTest extends ProjectExecutionTestBase {
                 .addStep(getRequest("http://maps.googleapis.com/maps/api/geocode/xml")
                         .named("Rest Request")
                         .assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
-                        .assertValidStatusCodes(200)
+                        .assertValidStatusCodes("200")
                         .withClientCertificate("C:\\cygwin64\\home\\Prakash\\ClientCertificateStore.jks")
                         .withClientCertificatePassword("password")
                 )
