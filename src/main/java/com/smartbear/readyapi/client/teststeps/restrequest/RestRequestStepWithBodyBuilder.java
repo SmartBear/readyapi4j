@@ -22,5 +22,4 @@ public class RestRequestStepWithBodyBuilder extends RestRequestStepBuilder<RestR
         getTestStep().setEncoding(encoding);
         return this;
     }
-
 }

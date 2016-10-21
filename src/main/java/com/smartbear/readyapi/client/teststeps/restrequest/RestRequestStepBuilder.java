@@ -1,5 +1,7 @@
 package com.smartbear.readyapi.client.teststeps.restrequest;
 
+import com.smartbear.readyapi.client.assertions.AssertionBuilder;
+import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
 import com.smartbear.readyapi.client.model.RestParameter;
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.support.HttpHeaders;
@@ -117,13 +119,168 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return (RestRequestBuilderType) this;
     }
 
+    @Override
     public RestTestRequestStep build() {
         super.build();
         validateNotEmpty(getTestStep().getURI(), "No URI set, it's a mandatory parameter for REST Request");
         validateNotEmpty(getTestStep().getMethod(), "No HTTP method set, it's a mandatory parameter for REST Request");
 
-        getTestStep().setParameters( parameters );
+        getTestStep().setParameters(parameters);
 
         return getTestStep();
+    }
+
+    /**
+     * Overrides required for correct return type
+     */
+
+    @Override
+    public RestRequestBuilderType assertHeader(String header, String value) {
+        return super.assertHeader(header, value);
+    }
+
+    @Override
+    public RestRequestBuilderType withClientCertificate(String filePath) {
+        return super.withClientCertificate(filePath);
+    }
+
+    @Override
+    public RestRequestBuilderType withClientCertificatePassword(String password) {
+        return super.withClientCertificatePassword(password);
+    }
+
+    @Override
+    public RestRequestBuilderType named(String name) {
+        return super.named(name);
+    }
+
+    @Override
+    public RestRequestBuilderType addAssertion(AssertionBuilder assertionBuilder) {
+        return super.addAssertion(assertionBuilder);
+    }
+
+    @Override
+    public RestRequestBuilderType setAuthentication(AuthenticationBuilder authenticationBuilder) {
+        return super.setAuthentication(authenticationBuilder);
+    }
+
+    @Override
+    public RestRequestBuilderType accepts(String acceptHeader) {
+        return super.accepts(acceptHeader);
+    }
+
+    @Override
+    public RestRequestBuilderType acceptsJson() {
+        return super.acceptsJson();
+    }
+
+    @Override
+    public RestRequestBuilderType acceptsXml() {
+        return super.acceptsXml();
+    }
+
+    @Override
+    public RestRequestBuilderType withHeader(String name, List<String> values) {
+        return super.withHeader(name, values);
+    }
+
+    @Override
+    public RestRequestBuilderType withHeader(String name, String value) {
+        return super.withHeader(name, value);
+    }
+
+    @Override
+    public RestRequestBuilderType addHeader(String name, List<String> values) {
+        return super.addHeader(name, values);
+    }
+
+    @Override
+    public RestRequestBuilderType addHeader(String name, String value) {
+        return super.addHeader(name, value);
+    }
+
+    @Override
+    protected RestRequestBuilderType withURI(String uri) {
+        return super.withURI(uri);
+    }
+
+    @Override
+    public RestRequestBuilderType setTimeout(String timeout) {
+        return super.setTimeout(timeout);
+    }
+
+    @Override
+    public RestRequestBuilderType setTimeout(int timeout) {
+        return super.setTimeout(timeout);
+    }
+
+    @Override
+    public RestRequestBuilderType followRedirects() {
+        return super.followRedirects();
+    }
+
+    @Override
+    public RestRequestBuilderType entitizeParameters() {
+        return super.entitizeParameters();
+    }
+
+    @Override
+    public RestRequestBuilderType assertContains(String content) {
+        return super.assertContains(content);
+    }
+
+    @Override
+    public RestRequestBuilderType assertNotContains(String content) {
+        return super.assertNotContains(content);
+    }
+
+    @Override
+    public RestRequestBuilderType assertScript(String script) {
+        return super.assertScript(script);
+    }
+
+    @Override
+    public RestRequestBuilderType assertXPath(String xpath, String expectedContent) {
+        return super.assertXPath(xpath, expectedContent);
+    }
+
+    @Override
+    public RestRequestBuilderType assertInvalidStatusCodes(String... statusCodes) {
+        return super.assertInvalidStatusCodes(statusCodes);
+    }
+
+    @Override
+    public RestRequestBuilderType assertInvalidStatusCodes(Integer... statusCodes) {
+        return super.assertInvalidStatusCodes(statusCodes);
+    }
+
+    @Override
+    public RestRequestBuilderType assertValidStatusCodes(String... statusCodes) {
+        return super.assertValidStatusCodes(statusCodes);
+    }
+
+    @Override
+    public RestRequestBuilderType assertValidStatusCodes(Integer... statusCodes) {
+        return super.assertValidStatusCodes(statusCodes);
+    }
+
+    @Override
+    public RestRequestBuilderType assertXQuery(String xquery, String expectedContent) {
+        return super.assertXQuery(xquery, expectedContent);
+    }
+
+    @Override
+    public RestRequestBuilderType assertResponseTime(int timeInMillis) {
+        return super.assertResponseTime(timeInMillis);
+    }
+
+    @Override
+    public RestRequestBuilderType assertContentType(String contentType) {
+        return super.assertContentType(contentType);
+    }
+
+    @Override
+    public RestRequestBuilderType assertHeaderExists(String header) {
+        return super.assertHeaderExists(header);
     }
 }
