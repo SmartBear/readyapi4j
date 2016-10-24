@@ -221,7 +221,7 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         return (RequestBuilderType) this;
     }
 
-    public RequestBuilderType withAttachment(RequestAttachmentBuilder builder){
+    public RequestBuilderType addAttachment(RequestAttachmentBuilder builder){
         attachmentsBuilders.add(builder);
         return (RequestBuilderType) this;
     }
