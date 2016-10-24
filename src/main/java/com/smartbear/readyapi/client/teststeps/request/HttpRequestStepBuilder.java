@@ -4,15 +4,16 @@ import com.smartbear.readyapi.client.assertions.AbstractAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.AssertionBuilder;
 import com.smartbear.readyapi.client.assertions.Assertions;
 import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
-import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.smartbear.readyapi.client.assertions.Assertions.contains;
 import static com.smartbear.readyapi.client.assertions.Assertions.invalidStatusCodes;
@@ -28,6 +29,7 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
     private final RequestTestStepType testStep;
     private List<AssertionBuilder> assertionBuilders = new ArrayList<>();
     private Map<String, Object> headers = new HashMap<>();
+    private List<RequestAttachmentBuilder> attachmentsBuilders = new ArrayList<>();
 
     protected HttpRequestStepBuilder(RequestTestStepType testStep, String type) {
         this.testStep = testStep;
@@ -145,16 +147,23 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
     public RequestTestStepType build() {
         testStep.setHeaders(headers);
         setAssertions(testStep);
+        setAttachments(testStep);
 
         return testStep;
     }
 
     private void setAssertions(RequestTestStepType testStep) {
-        List<Assertion> assertions = new ArrayList<>();
-        for (AssertionBuilder assertionBuilder : assertionBuilders) {
-            assertions.add(((AbstractAssertionBuilder) assertionBuilder).build());
-        }
-        testStep.setAssertions(assertions);
+        testStep.setAssertions(assertionBuilders
+                .stream()
+                .map(assertionBuilder -> ((AbstractAssertionBuilder) assertionBuilder).build())
+                .collect(Collectors.toList()));
+    }
+
+    private void setAttachments(RequestTestStepType testStep) {
+        testStep.setAttachments(attachmentsBuilders
+                .stream()
+                .map(RequestAttachmentBuilder::build)
+                .collect(Collectors.toList()));
     }
 
     public RequestBuilderType assertContains(String content) {
@@ -209,6 +218,16 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
 
     public RequestBuilderType assertHeader(String header, String value) {
         addAssertion(Assertions.headerValue(header, value));
+        return (RequestBuilderType) this;
+    }
+
+    public RequestBuilderType withAttachment(RequestAttachmentBuilder builder){
+        attachmentsBuilders.add(builder);
+        return (RequestBuilderType) this;
+    }
+
+    public RequestBuilderType withAttachments(RequestAttachmentBuilder... builders){
+        Arrays.asList(builders).forEach(builder -> attachmentsBuilders.add(builder));
         return (RequestBuilderType) this;
     }
 }
