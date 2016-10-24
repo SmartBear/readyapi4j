@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client.teststeps.request;
 
 import com.smartbear.readyapi.client.assertions.AbstractAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.AssertionBuilder;
+import com.smartbear.readyapi.client.assertions.Assertions;
 import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
 import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
@@ -193,17 +194,17 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
     }
 
     public RequestBuilderType assertContentType(String contentType) {
-        return assertScript(
-            "assert messageExchange.responseHeaders[\"Content-Type\"].contains( \"" + contentType + "\")");
+        addAssertion(Assertions.contentType(contentType));
+        return (RequestBuilderType) this;
     }
 
     public RequestBuilderType assertHeaderExists(String header) {
-        return assertScript(
-            "assert messageExchange.responseHeaders.containsKey(\"" + header + "\")");
+        addAssertion(Assertions.headerExists(header));
+        return (RequestBuilderType) this;
     }
 
     public RequestBuilderType assertHeader(String header, String value) {
-        return assertScript(
-            "assert messageExchange.responseHeaders[\"" + header + "\"].contains( \"" + value + "\")");
+        addAssertion(Assertions.headerValue(header, value));
+        return (RequestBuilderType) this;
     }
 }

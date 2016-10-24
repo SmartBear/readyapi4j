@@ -19,11 +19,26 @@ public class Assertions {
     public static final String SOAP_FAULT_TYPE = "SOAP Fault";
     public static final String NOT_SOAP_FAULT_TYPE = "Not SOAP Fault";
 
+    @Deprecated
     public static JsonPathAssertionBuilder jsonPathContent(String jsonPath, String expectedContent) {
         return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
     }
 
+    @Deprecated
     public static JsonPathAssertionBuilder jsonPathCount(String jsonPath, int expectedCount) {
+        return new JsonPathCountAssertionBuilder(jsonPath, expectedCount);
+    }
+
+    public static JsonPathAssertionBuilder json(String jsonPath, String expectedContent) {
+        return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
+    }
+
+    @Deprecated
+    public static JsonPathAssertionBuilder jsonContent(String jsonPath, String expectedContent) {
+        return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
+    }
+
+    public static JsonPathAssertionBuilder jsonCount(String jsonPath, int expectedCount) {
         return new JsonPathCountAssertionBuilder(jsonPath, expectedCount);
     }
 
@@ -33,6 +48,21 @@ public class Assertions {
 
     public static ContainsAssertionBuilder notContains(String token) {
         return new NotContainsAssertionBuilder(token);
+    }
+
+    public static GroovyScriptAssertionBuilder contentType(String contentType) {
+        return new DefaultGroovyScriptAssertionBuilder(
+            "assert messageExchange.responseHeaders[\"Content-Type\"].contains( \"" + contentType + "\")");
+    }
+
+    public static GroovyScriptAssertionBuilder headerExists(String header) {
+        return new DefaultGroovyScriptAssertionBuilder(
+            "assert messageExchange.responseHeaders.containsKey(\"" + header + "\")");
+    }
+
+    public static GroovyScriptAssertionBuilder headerValue(String header, String value) {
+        return new DefaultGroovyScriptAssertionBuilder(
+            "assert messageExchange.responseHeaders[\"" + header + "\"].contains( \"" + value + "\")");
     }
 
     public static GroovyScriptAssertionBuilder script(String script) {

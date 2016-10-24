@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.smartbear.readyapi.client.Validator.validateNotEmpty;
-import static com.smartbear.readyapi.client.assertions.Assertions.jsonPathContent;
-import static com.smartbear.readyapi.client.assertions.Assertions.jsonPathCount;
+import static com.smartbear.readyapi.client.assertions.Assertions.jsonContent;
+import static com.smartbear.readyapi.client.assertions.Assertions.jsonCount;
 
 public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestStepBuilder> extends HttpRequestStepBuilder<RestRequestBuilderType, RestTestRequestStep> {
 
@@ -40,6 +40,14 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
 
     public RestRequestBuilderType addHeaderParameter(String parameterName, String value) {
         return addParameter(parameterName, value, RestParameter.TypeEnum.HEADER);
+    }
+
+    public RestRequestBuilderType withParameters(ParameterBuilder... parameterBuilders) {
+        for (ParameterBuilder parameterBuilder : parameterBuilders) {
+            parameterBuilder.addParameter(this);
+        }
+
+        return (RestRequestBuilderType) this;
     }
 
     public RestRequestBuilderType withParameter(String parameterName, String value) {
@@ -84,11 +92,11 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
     }
 
     public RestRequestBuilderType assertJsonContent(String jsonPath, String expectedContent) {
-        return addAssertion(jsonPathContent(jsonPath, expectedContent).allowWildcards());
+        return addAssertion(jsonContent(jsonPath, expectedContent).allowWildcards());
     }
 
     public RestRequestBuilderType assertJsonCount(String jsonPath, int expectedCount) {
-        return addAssertion(jsonPathCount(jsonPath, expectedCount).allowWildcards());
+        return addAssertion(jsonCount(jsonPath, expectedCount).allowWildcards());
     }
 
     public RestRequestBuilderType get(String uri) {
@@ -282,5 +290,13 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
     @Override
     public RestRequestBuilderType assertHeaderExists(String header) {
         return super.assertHeaderExists(header);
+    }
+
+    public RestRequestBuilderType withAssertions(AssertionBuilder... assertionBuilders) {
+        for (AssertionBuilder assertionBuilder : assertionBuilders) {
+            addAssertion(assertionBuilder);
+        }
+
+        return (RestRequestBuilderType) this;
     }
 }
