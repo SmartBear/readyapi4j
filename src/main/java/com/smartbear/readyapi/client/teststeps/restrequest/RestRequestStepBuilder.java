@@ -76,6 +76,11 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return addHeaderParameter(parameterName, value);
     }
 
+    @Override
+    public RestRequestBuilderType withAuthorization(String authorizationValue) {
+        return super.withAuthorization(authorizationValue);
+    }
+
     protected RestRequestBuilderType addParameter(String parameterName, String value, RestParameter.TypeEnum type) {
         RestParameter parameter = new RestParameter();
         parameter.setName(parameterName);

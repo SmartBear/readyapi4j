@@ -69,16 +69,33 @@ public class Assertions {
         return new DefaultGroovyScriptAssertionBuilder(script);
     }
 
+    @Deprecated
     public static HttpStatusCodeAssertionBuilder validStatusCodes() {
         return new ValidHttpStatusCodesAssertionBuilder();
     }
 
+    @Deprecated
     public static HttpStatusCodeAssertionBuilder validStatusCodes(String... statusCodes) {
         ValidHttpStatusCodesAssertionBuilder validHttpStatusCodesAssertionBuilder = new ValidHttpStatusCodesAssertionBuilder();
         return validHttpStatusCodesAssertionBuilder.withStatusCodes(asList(statusCodes));
     }
 
+    @Deprecated
     public static HttpStatusCodeAssertionBuilder validStatusCodes(Integer... statusCodes) {
+        ValidHttpStatusCodesAssertionBuilder validHttpStatusCodesAssertionBuilder = new ValidHttpStatusCodesAssertionBuilder();
+        return validHttpStatusCodesAssertionBuilder.withIntStatusCodes(asList(statusCodes));
+    }
+
+    public static HttpStatusCodeAssertionBuilder statusCodes() {
+        return new ValidHttpStatusCodesAssertionBuilder();
+    }
+
+    public static HttpStatusCodeAssertionBuilder statusCodes(String... statusCodes) {
+        ValidHttpStatusCodesAssertionBuilder validHttpStatusCodesAssertionBuilder = new ValidHttpStatusCodesAssertionBuilder();
+        return validHttpStatusCodesAssertionBuilder.withStatusCodes(asList(statusCodes));
+    }
+
+    public static HttpStatusCodeAssertionBuilder statusCodes(Integer... statusCodes) {
         ValidHttpStatusCodesAssertionBuilder validHttpStatusCodesAssertionBuilder = new ValidHttpStatusCodesAssertionBuilder();
         return validHttpStatusCodesAssertionBuilder.withIntStatusCodes(asList(statusCodes));
     }

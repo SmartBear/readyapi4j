@@ -58,6 +58,10 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         return (RequestBuilderType) this;
     }
 
+    public RequestBuilderType withAuthorization(String authorizationValue) {
+        return withHeader("Authorization", authorizationValue);
+    }
+
     public RequestBuilderType named(String name) {
         testStep.setName(name);
         return (RequestBuilderType) this;
