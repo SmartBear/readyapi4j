@@ -3,6 +3,7 @@ package com.smartbear.readyapi.client.teststeps.request;
 import com.smartbear.readyapi.client.assertions.AbstractAssertionBuilder;
 import com.smartbear.readyapi.client.assertions.AssertionBuilder;
 import com.smartbear.readyapi.client.assertions.Assertions;
+import com.smartbear.readyapi.client.attachments.RequestAttachmentBuilder;
 import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
@@ -25,7 +26,6 @@ import static com.smartbear.readyapi.client.assertions.Assertions.xPathContains;
 import static com.smartbear.readyapi.client.assertions.Assertions.xQueryContains;
 
 abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequestStepBuilder, RequestTestStepType extends RequestTestStepBase> implements TestStepBuilder {
-
     private final RequestTestStepType testStep;
     private List<AssertionBuilder> assertionBuilders = new ArrayList<>();
     private Map<String, Object> headers = new HashMap<>();
@@ -221,13 +221,12 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         return (RequestBuilderType) this;
     }
 
-    public RequestBuilderType addAttachment(RequestAttachmentBuilder builder){
-        attachmentsBuilders.add(builder);
-        return (RequestBuilderType) this;
-    }
-
     public RequestBuilderType withAttachments(RequestAttachmentBuilder... builders){
-        Arrays.asList(builders).forEach(builder -> attachmentsBuilders.add(builder));
+        Arrays.asList(builders).forEach(builder -> {
+            if(builder != null) {
+                attachmentsBuilders.add(builder);
+            }
+        });
         return (RequestBuilderType) this;
     }
 }

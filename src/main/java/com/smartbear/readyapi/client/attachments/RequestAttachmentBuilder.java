@@ -1,13 +1,18 @@
-package com.smartbear.readyapi.client.teststeps.request;
+package com.smartbear.readyapi.client.attachments;
 
 import com.smartbear.readyapi.client.model.RequestAttachment;
 
 public class RequestAttachmentBuilder {
    private final RequestAttachment requestAttachment;
 
-   public RequestAttachmentBuilder(){
+   private RequestAttachmentBuilder(){
        requestAttachment = new RequestAttachment();
    }
+
+   public static RequestAttachmentBuilder getInstance(){
+       return new RequestAttachmentBuilder();
+   }
+
 
    public RequestAttachmentBuilder withContentType(String contentType){
        requestAttachment.setContentType(contentType);

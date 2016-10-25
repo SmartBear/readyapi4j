@@ -6,15 +6,19 @@ import com.smartbear.readyapi.client.model.RestParameter;
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.smartbear.readyapi.client.teststeps.TestSteps;
-import com.smartbear.readyapi.client.teststeps.request.RequestAttachmentBuilder;
+import com.sun.jersey.core.util.Base64;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
+import static com.smartbear.readyapi.client.attachments.Attachments.byteArray;
+import static com.smartbear.readyapi.client.attachments.Attachments.stream;
 import static com.smartbear.readyapi.client.auth.Authentications.basic;
 import static com.smartbear.readyapi.client.auth.Authentications.kerberos;
 import static com.smartbear.readyapi.client.auth.Authentications.ntlm;
@@ -343,50 +347,38 @@ public class RestRequestStepRecipeTest {
     }
 
     @Test
-    public void buildsRestRequestTestStepRecipeWithAttachments() {
+    public void buildRestRequestTestStepRecipeWithStreamAttachment() {
+        InputStream inputStream = new ByteArrayInputStream("Content".getBytes());
         TestRecipe recipe = newTestRecipe()
                 .addStep(restRequest()
                         .post(URI)
-                        .withAttachments(new RequestAttachmentBuilder()
-                                        .withContentId("ContentId")
-                                        .withContentType("ContentType")
-                                        .withName("Name")
-                                        .withContent("Content".getBytes()),
-                                new RequestAttachmentBuilder()
-                                        .withContentId("ContentId2")
-                                        .withContentType("ContentType2")
-                                        .withName("Name2")
-                                        .withContent("Content2".getBytes()))
-                )
+                        .withAttachments(
+                                stream(inputStream, "ContentType")))
                 .buildTestRecipe();
         RestTestRequestStep testStep = (RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0);
         List<RequestAttachment> attachments = testStep.getAttachments();
-        assertThat(attachments.size(), is(2));
-        assertRequestAttachment(attachments.get(0), "ContentId", "ContentType", "Name", "Content".getBytes());
-        assertRequestAttachment(attachments.get(1), "ContentId2", "ContentType2", "Name2", "Content2".getBytes());
+        assertThat(attachments.size(), is(1));
+        assertRequestAttachment(attachments.get(0), null, "ContentType", null, "Content".getBytes());
     }
 
     @Test
-    public void buildRestRequestTestStepRecipeWithAddedAttachment() {
+    public void buildRestRequestTestStepRecipeWithByteAttachment() {
         TestRecipe recipe = newTestRecipe()
                 .addStep(restRequest()
                         .post(URI)
-                        .addAttachment(new RequestAttachmentBuilder()
-                                .withContentId("ContentId")
-                                .withContentType("ContentType")
-                                .withName("Name")
-                                .withContent("Content".getBytes())
-                        )).buildTestRecipe();
+                        .withAttachments(
+                                byteArray("Content".getBytes(), "ContentType")))
+                .buildTestRecipe();
         RestTestRequestStep testStep = (RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0);
         List<RequestAttachment> attachments = testStep.getAttachments();
         assertThat(attachments.size(), is(1));
-        assertRequestAttachment(attachments.get(0), "ContentId", "ContentType", "Name", "Content".getBytes());
+        assertRequestAttachment(attachments.get(0), null, "ContentType", null, "Content".getBytes());
     }
 
     private void assertRequestAttachment(RequestAttachment attachment, String contentId, String contentType, String name, byte[] content) {
         assertThat(attachment.getContentId(), is(contentId));
         assertThat(attachment.getContentType(), is(contentType));
         assertThat(attachment.getName(), is(name));
-        assertThat(attachment.getContent(), is(content));
+        assertThat(Base64.decode(attachment.getContent()), is(content));
     }
 }
