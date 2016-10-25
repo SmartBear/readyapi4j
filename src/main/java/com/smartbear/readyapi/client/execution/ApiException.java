@@ -33,4 +33,16 @@ public class ApiException extends RuntimeException {
                 .append(", responseBody='").append(responseBody).append("\'")
                 .append("}").toString();
     }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public String getResponseBody() {
+        return responseBody;
+    }
+
+    public MultivaluedMap<String, String> getHeaders() {
+        return headers;
+    }
 }

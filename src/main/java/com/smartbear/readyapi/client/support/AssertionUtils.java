@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client.support;
 
+import com.smartbear.readyapi.client.execution.ApiException;
 import com.smartbear.readyapi.client.execution.Execution;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.result.TestStepResult;
@@ -19,8 +20,21 @@ public class AssertionUtils {
         assertNotNull(execution);
 
         for (TestStepResult result : execution.getExecutionResult().getTestStepResults()) {
-            LOG.info("Response content for TestStep [" + result.getTestStepName() + "]: " +
-                result.getResponseContent());
+
+            String responseContent = null;
+            try {
+                responseContent = result.getResponseContent();
+            } catch (ApiException e) {
+                if (e.getStatusCode() == 404) {
+                    LOG.info("Missing response content for TestStep [" + result.getTestStepName() + "]");
+                } else {
+                    LOG.error("Missing response content for TestStep [" + result.getTestStepName() + "]", e);
+                }
+            }
+
+            if (responseContent != null) {
+                LOG.info("Response content for TestStep [" + result.getTestStepName() + "]: " + responseContent);
+            }
         }
 
         assertEquals(Arrays.toString(execution.getErrorMessages().toArray()),

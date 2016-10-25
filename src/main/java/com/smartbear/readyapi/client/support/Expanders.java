@@ -5,7 +5,7 @@ package com.smartbear.readyapi.client.support;
  */
 
 public class Expanders {
-    public static final String DEFAULT_DATASOURCE_TESTSTEP_NAME = "DataSource";
+    public static final String DEFAULT_DATASOURCE_TESTSTEP_NAME = "DataSource 1";
 
     public static String expand(String testStep, String property, String path) {
         return "${" + testStep + "#" + property + "#" + path + "}";
@@ -20,7 +20,7 @@ public class Expanders {
     }
 
     public static String dataSourceProperty(String property) {
-        return expand(property, DEFAULT_DATASOURCE_TESTSTEP_NAME);
+        return expand(DEFAULT_DATASOURCE_TESTSTEP_NAME, property);
     }
 
     public static String expand(String testStep, String property) {
