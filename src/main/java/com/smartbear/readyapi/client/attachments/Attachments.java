@@ -1,6 +1,7 @@
 package com.smartbear.readyapi.client.attachments;
 
 
+import com.smartbear.readyapi.client.model.RequestAttachment;
 import com.sun.jersey.core.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,5 +68,21 @@ public class Attachments {
             logger.error("Could not add byte array attachment since a required field was not set");
             return null;
         }
+    }
+
+    public static RequestAttachmentBuilder string(String content, String contentType){
+        if(content != null && contentType != null){
+            return RequestAttachmentBuilder
+                    .getInstance()
+                    .withContent(Base64.encode(content.getBytes()))
+                    .withContentType(contentType);
+        } else {
+            logger.error("Could not add string attachment since a required field was not set");
+            return null;
+        }
+    }
+
+    public static RequestAttachmentBuilder string(String content){
+        return string(content, "text/plain");
     }
 }

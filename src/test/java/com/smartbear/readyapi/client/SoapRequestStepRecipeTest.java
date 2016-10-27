@@ -16,6 +16,7 @@ import java.util.List;
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.attachments.Attachments.byteArray;
 import static com.smartbear.readyapi.client.attachments.Attachments.stream;
+import static com.smartbear.readyapi.client.attachments.Attachments.string;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.soapRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -78,6 +79,23 @@ public class SoapRequestStepRecipeTest {
                         .withParameter("CountryName", "Sweden")
                         .withPathParameter("//*:CityName", "Stockholm")
                         .withAttachments(byteArray("Content".getBytes(), "ContentType")))
+                .buildTestRecipe();
+        SoapRequestTestStep testStep = (SoapRequestTestStep) testRecipe.getTestCase().getTestSteps().get(0);
+        List<RequestAttachment> attachments = testStep.getAttachments();
+        assertThat(attachments.size(), is(1));
+        assertRequestAttachment(attachments.get(0), null, "ContentType", null, "Content".getBytes());
+    }
+
+    @Test
+    public void buildSoapRequestTestStepRecipeWithStringAttachment() throws MalformedURLException {
+        TestRecipe testRecipe = newTestRecipe()
+                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                        .named("Soap Rulez")
+                        .forBinding("GlobalWeatherSoap12")
+                        .forOperation("GetWeather")
+                        .withParameter("CountryName", "Sweden")
+                        .withPathParameter("//*:CityName", "Stockholm")
+                        .withAttachments(string("Content", "ContentType")))
                 .buildTestRecipe();
         SoapRequestTestStep testStep = (SoapRequestTestStep) testRecipe.getTestCase().getTestSteps().get(0);
         List<RequestAttachment> attachments = testStep.getAttachments();

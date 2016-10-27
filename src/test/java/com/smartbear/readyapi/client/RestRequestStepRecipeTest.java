@@ -19,6 +19,7 @@ import java.util.Map;
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.attachments.Attachments.byteArray;
 import static com.smartbear.readyapi.client.attachments.Attachments.stream;
+import static com.smartbear.readyapi.client.attachments.Attachments.string;
 import static com.smartbear.readyapi.client.auth.Authentications.basic;
 import static com.smartbear.readyapi.client.auth.Authentications.kerberos;
 import static com.smartbear.readyapi.client.auth.Authentications.ntlm;
@@ -368,6 +369,20 @@ public class RestRequestStepRecipeTest {
                         .post(URI)
                         .withAttachments(
                                 byteArray("Content".getBytes(), "ContentType")))
+                .buildTestRecipe();
+        RestTestRequestStep testStep = (RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0);
+        List<RequestAttachment> attachments = testStep.getAttachments();
+        assertThat(attachments.size(), is(1));
+        assertRequestAttachment(attachments.get(0), null, "ContentType", null, "Content".getBytes());
+    }
+
+    @Test
+    public void buildRestRequestTestStepRecipeWithStringAttachment(){
+        TestRecipe recipe = newTestRecipe()
+                .addStep(restRequest()
+                        .post(URI)
+                        .withAttachments(
+                                string("Content", "ContentType")))
                 .buildTestRecipe();
         RestTestRequestStep testStep = (RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0);
         List<RequestAttachment> attachments = testStep.getAttachments();
