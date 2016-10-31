@@ -10,6 +10,7 @@ import com.smartbear.readyapi.client.teststeps.propertytransfer.PathLanguage;
 import org.junit.Test;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
+import static com.smartbear.readyapi.client.properties.Properties.property;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.getRequest;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.groovyScriptStep;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.propertyTransfer;
@@ -36,6 +37,20 @@ public class TestRecipeBuilderTest {
                 .buildTestRecipe().toString();
 
         assertThat(recipe.length(), not(0));
+    }
+
+    @Test
+    public void buildRecipeWithTestCaseProperty(){
+        TestRecipe recipe = newTestRecipe().withProperty("test","test").buildTestRecipe();
+        assertThat(recipe.getTestCase().getProperties().size(), is(1));
+        assertThat(recipe.getTestCase().getProperties().get("test"), is("test"));
+    }
+
+    @Test
+    public void buildRecipeWithTestCaseProperties(){
+        TestRecipe recipe = newTestRecipe().withProperties(property("test","test")).buildTestRecipe();
+        assertThat(recipe.getTestCase().getProperties().size(), is(1));
+        assertThat(recipe.getTestCase().getProperties().get("test"), is("test"));
     }
 
     @Test
