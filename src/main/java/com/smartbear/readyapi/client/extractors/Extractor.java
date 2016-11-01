@@ -1,9 +1,12 @@
 package com.smartbear.readyapi.client.extractors;
 
+import com.smartbear.readyapi.client.teststeps.propertytransfer.PathLanguage;
+
 public class Extractor {
     private String path;
     private String property;
     private String source;
+    private PathLanguage pathLanguage;
 
     private final ExtractorOperator operator;
 
@@ -17,6 +20,7 @@ public class Extractor {
         this.property = extractorProperty;
         this.path = "";
         this.operator = operator;
+        this.pathLanguage = PathLanguage.XPath;
     }
 
     public String getPath() {
@@ -46,4 +50,13 @@ public class Extractor {
     public ExtractorOperator getOperator() {
         return operator;
     }
+
+    public PathLanguage getPathLanguage() {
+        return pathLanguage;
+    }
+
+    public void setPathLanguage(PathLanguage pathLanguage) {
+        this.pathLanguage = pathLanguage;
+    }
+
 }

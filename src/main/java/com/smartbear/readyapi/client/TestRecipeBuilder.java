@@ -6,12 +6,12 @@ import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.properties.PropertyBuilder;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
-import com.smartbear.readyapi.client.teststeps.propertytransfer.PathLanguage;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferBuilder;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferSourceBuilder;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferTargetBuilder;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferTestStepBuilder;
 import com.smartbear.readyapi.client.teststeps.request.HttpRequestStepBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +22,7 @@ import java.util.Map;
 import static com.smartbear.readyapi.client.properties.Properties.property;
 
 public class TestRecipeBuilder {
+    private static final String TARGET_STEP = "#TestCase#";
     private List<TestStepBuilder> testStepBuilders = new LinkedList<>();
     private List<PropertyBuilder> propertyBuilders = new LinkedList<>();
     private final TestCase testCase;
@@ -73,11 +74,11 @@ public class TestRecipeBuilder {
         return new TestRecipe(testCase, extractorData);
     }
 
-    private void addProperties(){
-        Map<String, String> propertiesMap= new HashMap<>();
+    private void addProperties() {
+        Map<String, String> propertiesMap = new HashMap<>();
         propertyBuilders.forEach(propertyBuilder -> {
             PropertyBuilder.Property property = propertyBuilder.build();
-            propertiesMap.put(property.getKey(),property.getValue());
+            propertiesMap.put(property.getKey(), property.getValue());
         });
         testCase.setProperties(propertiesMap);
     }
@@ -87,7 +88,7 @@ public class TestRecipeBuilder {
         for (TestStepBuilder testStepBuilder : testStepBuilders) {
             testSteps.add(testStepBuilder.build());
             if (testStepBuilder instanceof HttpRequestStepBuilder) {
-                List<Extractor> extractorList = ((HttpRequestStepBuilder)testStepBuilder).getExtractors();
+                List<Extractor> extractorList = ((HttpRequestStepBuilder) testStepBuilder).getExtractors();
                 handleExtractors(extractorList, testSteps);
             }
         }
@@ -98,9 +99,12 @@ public class TestRecipeBuilder {
         if (!extractors.isEmpty()) {
             // Add the unique execution key as property, match it in the result report
             withProperty(ExtractorData.EXTRACTOR_DATA_KEY, extractorData.getExtractorDataId());
-           extractors.forEach(extractor -> {
-                String extractorId = extractorData.addExtractorOperator(extractor.getProperty(), extractor.getOperator());
-                withProperty(extractorId,"");
+            extractors.forEach(extractor -> {
+                // Base the extractorId on the property if the path is empty, otherwise on the path
+                String extractorId = extractorData
+                        .addExtractorOperator(StringUtils.isEmpty(extractor.getPath()) ?
+                                extractor.getProperty() : extractor.getPath(), extractor.getOperator());
+                withProperty(extractorId, "");
                 testSteps.add(new PropertyTransferTestStepBuilder()
                         .named(extractorId)
                         .addTransfer(PropertyTransferBuilder
@@ -110,11 +114,11 @@ public class TestRecipeBuilder {
                                         .withPath(extractor.getPath())
                                         .withProperty(extractor.getProperty())
                                         .withSourceStep(extractor.getSource())
-                                        .withPathLanguage(extractor.getPath().startsWith("$") ? PathLanguage.JSONPath : PathLanguage.XPath)
+                                        .withPathLanguage(extractor.getPathLanguage())
                                 ).withTarget(PropertyTransferTargetBuilder
                                         .aTarget()
                                         .withProperty(extractorId)
-                                        .withTargetStep("#TestCase#")))
+                                        .withTargetStep(TARGET_STEP)))
                         .build());
             });
         }
