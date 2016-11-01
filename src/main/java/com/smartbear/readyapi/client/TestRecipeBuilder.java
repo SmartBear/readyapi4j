@@ -1,9 +1,17 @@
 package com.smartbear.readyapi.client;
 
+import com.smartbear.readyapi.client.extractors.Extractor;
+import com.smartbear.readyapi.client.extractors.ExtractorData;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.properties.PropertyBuilder;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
+import com.smartbear.readyapi.client.teststeps.propertytransfer.PathLanguage;
+import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferBuilder;
+import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferSourceBuilder;
+import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferTargetBuilder;
+import com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferTestStepBuilder;
+import com.smartbear.readyapi.client.teststeps.request.HttpRequestStepBuilder;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +25,7 @@ public class TestRecipeBuilder {
     private List<TestStepBuilder> testStepBuilders = new LinkedList<>();
     private List<PropertyBuilder> propertyBuilders = new LinkedList<>();
     private final TestCase testCase;
+    private ExtractorData extractorData = new ExtractorData();
 
     public TestRecipeBuilder() {
         testCase = new TestCase();
@@ -59,12 +68,12 @@ public class TestRecipeBuilder {
     }
 
     public TestRecipe buildTestRecipe() {
-        addTestSteps(testCase);
-        addProperties(testCase);
-        return new TestRecipe(testCase);
+        addTestSteps();
+        addProperties();
+        return new TestRecipe(testCase, extractorData);
     }
 
-    private void addProperties(TestCase testCase){
+    private void addProperties(){
         Map<String, String> propertiesMap= new HashMap<>();
         propertyBuilders.forEach(propertyBuilder -> {
             PropertyBuilder.Property property = propertyBuilder.build();
@@ -73,12 +82,42 @@ public class TestRecipeBuilder {
         testCase.setProperties(propertiesMap);
     }
 
-    private void addTestSteps(TestCase testCase) {
+    private void addTestSteps() {
         List<TestStep> testSteps = new LinkedList<>();
         for (TestStepBuilder testStepBuilder : testStepBuilders) {
             testSteps.add(testStepBuilder.build());
+            if (testStepBuilder instanceof HttpRequestStepBuilder) {
+                List<Extractor> extractorList = ((HttpRequestStepBuilder)testStepBuilder).getExtractors();
+                handleExtractors(extractorList, testSteps);
+            }
         }
         testCase.setTestSteps(testSteps);
+    }
+
+    private void handleExtractors(List<Extractor> extractors, List<TestStep> testSteps) {
+        if (!extractors.isEmpty()) {
+            // Add the unique execution key as property, match it in the result report
+            withProperty(ExtractorData.EXTRACTOR_DATA_KEY, extractorData.getExtractorDataId());
+           extractors.forEach(extractor -> {
+                String extractorId = extractorData.addExtractorOperator(extractor.getProperty(), extractor.getOperator());
+                withProperty(extractorId,"");
+                testSteps.add(new PropertyTransferTestStepBuilder()
+                        .named(extractorId)
+                        .addTransfer(PropertyTransferBuilder
+                                .newTransfer()
+                                .withSource(PropertyTransferSourceBuilder
+                                        .aSource()
+                                        .withPath(extractor.getPath())
+                                        .withProperty(extractor.getProperty())
+                                        .withSourceStep(extractor.getSource())
+                                        .withPathLanguage(extractor.getPath().startsWith("$") ? PathLanguage.JSONPath : PathLanguage.XPath)
+                                ).withTarget(PropertyTransferTargetBuilder
+                                        .aTarget()
+                                        .withProperty(extractorId)
+                                        .withTargetStep("#TestCase#")))
+                        .build());
+            });
+        }
     }
 
     public static TestRecipeBuilder newTestRecipe() {
@@ -88,7 +127,6 @@ public class TestRecipeBuilder {
     /**
      * Creates a TestRecipeBuilder containing the specified TestStepBuilders
      */
-
     public static TestRecipeBuilder newTestRecipe(TestStepBuilder... testStepBuilders) {
         TestRecipeBuilder recipeBuilder = newTestRecipe();
         for (TestStepBuilder arg : testStepBuilders) {
