@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client;
 
 import com.smartbear.readyapi.client.extractors.Extractor;
 import com.smartbear.readyapi.client.extractors.ExtractorData;
+import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.properties.PropertyBuilder;
@@ -89,23 +90,28 @@ public class TestRecipeBuilder {
             testSteps.add(testStepBuilder.build());
             if (testStepBuilder instanceof HttpRequestStepBuilder) {
                 List<Extractor> extractorList = ((HttpRequestStepBuilder) testStepBuilder).getExtractors();
-                handleExtractors(extractorList, testSteps);
+                TestStep testStep = handleExtractors(extractorList);
+                if(testStep != null) {
+                    testSteps.add(testStep);
+                }
             }
         }
         testCase.setTestSteps(testSteps);
     }
 
-    private void handleExtractors(List<Extractor> extractors, List<TestStep> testSteps) {
+    private TestStep handleExtractors(List<Extractor> extractors) {
+        PropertyTransferTestStep propertyTransferTestStep = null;
         if (!extractors.isEmpty()) {
             // Add the unique execution key as property, match it in the result report
             withProperty(ExtractorData.EXTRACTOR_DATA_KEY, extractorData.getExtractorDataId());
+            PropertyTransferTestStepBuilder propertyTransferTestStepBuilder = new PropertyTransferTestStepBuilder();
             extractors.forEach(extractor -> {
                 // Base the extractorId on the property if the path is empty, otherwise on the path
                 String extractorId = extractorData
                         .addExtractorOperator(StringUtils.isEmpty(extractor.getPath()) ?
                                 extractor.getProperty() : extractor.getPath(), extractor.getOperator());
                 withProperty(extractorId, "");
-                testSteps.add(new PropertyTransferTestStepBuilder()
+                propertyTransferTestStepBuilder
                         .named(extractorId)
                         .addTransfer(PropertyTransferBuilder
                                 .newTransfer()
@@ -118,10 +124,11 @@ public class TestRecipeBuilder {
                                 ).withTarget(PropertyTransferTargetBuilder
                                         .aTarget()
                                         .withProperty(extractorId)
-                                        .withTargetStep(TARGET_STEP)))
-                        .build());
+                                        .withTargetStep(TARGET_STEP)));
             });
+            propertyTransferTestStep = propertyTransferTestStepBuilder.build();
         }
+        return propertyTransferTestStep;
     }
 
     public static TestRecipeBuilder newTestRecipe() {

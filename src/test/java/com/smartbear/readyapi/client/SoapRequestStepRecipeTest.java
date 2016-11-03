@@ -18,8 +18,8 @@ import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.attachments.Attachments.byteArray;
 import static com.smartbear.readyapi.client.attachments.Attachments.stream;
 import static com.smartbear.readyapi.client.attachments.Attachments.string;
-import static com.smartbear.readyapi.client.extractors.Extractors.extractorPath;
-import static com.smartbear.readyapi.client.extractors.Extractors.extractorProperty;
+import static com.smartbear.readyapi.client.extractors.Extractors.pathExtractor;
+import static com.smartbear.readyapi.client.extractors.Extractors.propertyExtractor;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.soapRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -124,7 +124,7 @@ public class SoapRequestStepRecipeTest {
                         .withParameter("CountryName", "Sweden")
                         .withPathParameter("//*:CityName", "Stockholm")
                         .withExtractors(
-                                extractorProperty("Endpoint", property -> extractedProperty[0] = property)))
+                                propertyExtractor("Endpoint", property -> extractedProperty[0] = property)))
                 .buildTestRecipe();
 
         // This should not be set only after building the testrecipe, it should be set after run
@@ -150,14 +150,14 @@ public class SoapRequestStepRecipeTest {
                         .withParameter("CountryName", "Sweden")
                         .withPathParameter("//*:CityName", "Stockholm")
                         .withExtractors(
-                                extractorPath("$[0].Endpoint", property -> extractedProperty[0] = property)))
+                                pathExtractor("$[0].Endpoint", property -> extractedProperty[0] = property)))
                 .buildTestRecipe();
 
         // This should not be set only after building the testrecipe, it should be set after run
         assertThat(extractedProperty[0], is(""));
         assertThat(recipe.getTestCase().getProperties().size(), is(2));
         recipe.getTestCase().getProperties().forEach((key, value) -> {
-            if(key.contains("$.Endpoint")) {
+            if(key.contains("$[0].Endpoint")) {
                 assertThat(value, is(""));
             } else {
                 assertThat(key, is(ExtractorData.EXTRACTOR_DATA_KEY));

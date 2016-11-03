@@ -12,7 +12,7 @@ public class Extractors {
      * @param operator The lambda function to be run on the extracted property
      * @return The extractor that is added to the testserver run
      */
-    public static Extractor extractorProperty(String property, ExtractorOperator operator) {
+    public static Extractor propertyExtractor(String property, ExtractorOperator operator) {
         return new Extractor(property, operator);
     }
 
@@ -27,7 +27,7 @@ public class Extractors {
      * @param operator The lambda function to be run on the extracted property
      * @return The extractor that is added to the testserver run
      */
-    public static Extractor extractorPath(String path, ExtractorOperator operator) {
+    public static Extractor pathExtractor(String path, ExtractorOperator operator) {
         Extractor extractor;
         if(path.startsWith("$")){
             extractor = new Extractor("Response", path, operator);
