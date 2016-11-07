@@ -1879,6 +1879,12 @@
             "description": "Properties of the test recipe. Analogues of the <a href=\"http://readyapi.smartbear.com/structure/cases/options/basic\">test case options</a>.<br/>See also <a href=\"http://readyapi.smartbear.com/testserver/howto/text/modifying\">Modifying Test Options</a>.",
             "type": "object",
             "properties": {
+                "properties" : {
+                    "type": "object",
+                    "additionalProperties" : {
+                        "type": "string"
+                    }
+                },
                 "searchProperties": {
                     "type": "boolean",
                     "default": false,
