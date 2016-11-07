@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client.support;
 
 import com.smartbear.readyapi.client.execution.ApiException;
 import com.smartbear.readyapi.client.execution.Execution;
+import com.smartbear.readyapi.client.model.HarResponse;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.result.TestStepResult;
 import org.slf4j.Logger;
@@ -21,20 +22,18 @@ public class AssertionUtils {
 
         for (TestStepResult result : execution.getExecutionResult().getTestStepResults()) {
 
-            String responseContent = null;
             try {
-                responseContent = result.getResponseContent();
+                HarResponse response = result.getHarResponse();
+                LOG.info("TestStep [" + result.getTestStepName() + "] response: " + response.getStatus() +
+                    " - " + response.getContent().getText());
             } catch (ApiException e) {
                 if (e.getStatusCode() == 404) {
-                    LOG.info("Missing response content for TestStep [" + result.getTestStepName() + "]");
+                    LOG.info("Missing HAR response for TestStep [" + result.getTestStepName() + "]");
                 } else {
-                    LOG.error("Missing response content for TestStep [" + result.getTestStepName() + "]", e);
+                    LOG.error("Missing HAR response content for TestStep [" + result.getTestStepName() + "]", e);
                 }
             }
 
-            if (responseContent != null) {
-                LOG.info("Response content for TestStep [" + result.getTestStepName() + "]: " + responseContent);
-            }
         }
 
         assertEquals(Arrays.toString(execution.getErrorMessages().toArray()),

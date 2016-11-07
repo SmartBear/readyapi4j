@@ -53,9 +53,9 @@
         <maven-plugin-version>1.0.0</maven-plugin-version>
         <junit-version>4.8.1</junit-version>
         <swagger-codegen.version>2.1.6</swagger-codegen.version>
-
-        <codegen.swagger.path>https://api.swaggerhub.com/apis/smartbear/ready-api-testserver/1.3.3
-        </codegen.swagger.path>
+        <swagger.url>https://api.swaggerhub.com/apis/smartbear/ready-api-testserver/1.3.3</swagger.url>
+        <swagger.directory>src/main/resources</swagger.directory>
+        <swagger.file>swagger.json</swagger.file>
     </properties>
 
     <dependencies>
@@ -161,7 +161,7 @@
                     <arguments>
                         <argument>generate</argument>
                         <argument>-i</argument>
-                        <argument>${codegen.swagger.path}</argument>
+                        <argument>${swagger.directory}/${swagger.file}</argument>
                         <argument>-l</argument>
                         <argument>java</argument>
                         <argument>-o</argument>
@@ -212,6 +212,36 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>downloadSwagger</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.googlecode.maven-download-plugin</groupId>
+                        <artifactId>download-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>testserver-swagger-download</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>wget</goal>
+                                </goals>
+                                <configuration>
+                                    <url>${swagger.url}</url>
+                                    <outputFileName>${swagger.file}</outputFileName>
+                                    <outputDirectory>${swagger.directory}</outputDirectory>
+                                    <skipCache>true</skipCache>
+                                    <overwrite>true</overwrite>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
         <profile>
             <id>sonatype</id>
             <build>
