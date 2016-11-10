@@ -112,9 +112,9 @@ public class TestRecipeBuilder {
                                 extractor.getProperty() : extractor.getPath(), extractor.getOperator());
                 withProperty(extractorId, "");
                 propertyTransferTestStepBuilder
-                        .named(extractorId)
                         .addTransfer(PropertyTransferBuilder
                                 .newTransfer()
+                                .named(extractorId)
                                 .withSource(PropertyTransferSourceBuilder
                                         .aSource()
                                         .withPath(extractor.getPath())
