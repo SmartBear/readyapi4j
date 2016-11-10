@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client;
 
+import com.smartbear.readyapi.client.extractors.ExtractorData;
 import com.smartbear.readyapi.client.model.Authentication;
 import com.smartbear.readyapi.client.model.RequestAttachment;
 import com.smartbear.readyapi.client.model.RestParameter;
@@ -23,6 +24,8 @@ import static com.smartbear.readyapi.client.attachments.Attachments.string;
 import static com.smartbear.readyapi.client.auth.Authentications.basic;
 import static com.smartbear.readyapi.client.auth.Authentications.kerberos;
 import static com.smartbear.readyapi.client.auth.Authentications.ntlm;
+import static com.smartbear.readyapi.client.extractors.Extractors.pathExtractor;
+import static com.smartbear.readyapi.client.extractors.Extractors.propertyExtractor;
 import static com.smartbear.readyapi.client.model.RestParameter.TypeEnum.HEADER;
 import static com.smartbear.readyapi.client.model.RestParameter.TypeEnum.MATRIX;
 import static com.smartbear.readyapi.client.model.RestParameter.TypeEnum.PATH;
@@ -395,5 +398,49 @@ public class RestRequestStepRecipeTest {
         assertThat(attachment.getContentType(), is(contentType));
         assertThat(attachment.getName(), is(name));
         assertThat(Base64.decode(attachment.getContent()), is(content));
+    }
+
+    @Test
+    public void buildRestRequestTestRecipeWithPropertyExtractor(){
+        final String[] extractedProperty = {""};
+        TestRecipe recipe = newTestRecipe()
+                .addStep(restRequest()
+                .post(URI)
+                .withExtractors(
+                        propertyExtractor("Endpoint", property -> extractedProperty[0] = property)))
+                .buildTestRecipe();
+
+        // This should not be set only after building the testrecipe, it should be set after run
+        assertThat(extractedProperty[0], is(""));
+        assertThat(recipe.getTestCase().getProperties().size(), is(2));
+        recipe.getTestCase().getProperties().forEach((key, value) -> {
+            if(key.contains("Endpoint")) {
+                assertThat(value, is(""));
+            } else {
+                assertThat(key, is(ExtractorData.EXTRACTOR_DATA_KEY));
+            }
+        });
+    }
+
+    @Test
+    public void buildRestRequestTestRecipeWithJsonPathExtractor(){
+        final String[] extractedProperty = {""};
+        TestRecipe recipe = newTestRecipe()
+                .addStep(restRequest()
+                        .post(URI)
+                        .withExtractors(
+                                pathExtractor("$[0].Endpoint", property -> extractedProperty[0] = property)))
+                .buildTestRecipe();
+
+        // This should not be set only after building the testrecipe, it should be set after run
+        assertThat(extractedProperty[0], is(""));
+        assertThat(recipe.getTestCase().getProperties().size(), is(2));
+        recipe.getTestCase().getProperties().forEach((key, value) -> {
+            if(key.contains("$[0].Endpoint")) {
+                assertThat(value, is(""));
+            } else {
+                assertThat(key, is(ExtractorData.EXTRACTOR_DATA_KEY));
+            }
+        });
     }
 }

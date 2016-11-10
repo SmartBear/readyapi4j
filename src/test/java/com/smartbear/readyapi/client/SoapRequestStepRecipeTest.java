@@ -1,5 +1,6 @@
 package com.smartbear.readyapi.client;
 
+import com.smartbear.readyapi.client.extractors.ExtractorData;
 import com.smartbear.readyapi.client.model.RequestAttachment;
 import com.smartbear.readyapi.client.model.SoapParameter;
 import com.smartbear.readyapi.client.model.SoapRequestTestStep;
@@ -17,6 +18,8 @@ import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.attachments.Attachments.byteArray;
 import static com.smartbear.readyapi.client.attachments.Attachments.stream;
 import static com.smartbear.readyapi.client.attachments.Attachments.string;
+import static com.smartbear.readyapi.client.extractors.Extractors.pathExtractor;
+import static com.smartbear.readyapi.client.extractors.Extractors.propertyExtractor;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.soapRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -108,5 +111,57 @@ public class SoapRequestStepRecipeTest {
         assertThat(attachment.getContentType(), is(contentType));
         assertThat(attachment.getName(), is(name));
         assertThat(Base64.decode(attachment.getContent()), is(content));
+    }
+
+    @Test
+    public void buildRestRequestTestRecipeWithPropertyExtractor() throws MalformedURLException {
+        final String[] extractedProperty = {""};
+        TestRecipe recipe = newTestRecipe()
+                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                        .named("Soap Rulez")
+                        .forBinding("GlobalWeatherSoap12")
+                        .forOperation("GetWeather")
+                        .withParameter("CountryName", "Sweden")
+                        .withPathParameter("//*:CityName", "Stockholm")
+                        .withExtractors(
+                                propertyExtractor("Endpoint", property -> extractedProperty[0] = property)))
+                .buildTestRecipe();
+
+        // This should not be set only after building the testrecipe, it should be set after run
+        assertThat(extractedProperty[0], is(""));
+        assertThat(recipe.getTestCase().getProperties().size(), is(2));
+        recipe.getTestCase().getProperties().forEach((key, value) -> {
+            if(key.contains("Endpoint")) {
+                assertThat(value, is(""));
+            } else {
+                assertThat(key, is(ExtractorData.EXTRACTOR_DATA_KEY));
+            }
+        });
+    }
+
+    @Test
+    public void buildRestRequestTestRecipeWithJsonPathExtractor() throws MalformedURLException {
+        final String[] extractedProperty = {""};
+        TestRecipe recipe = newTestRecipe()
+                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                        .named("Soap Rulez")
+                        .forBinding("GlobalWeatherSoap12")
+                        .forOperation("GetWeather")
+                        .withParameter("CountryName", "Sweden")
+                        .withPathParameter("//*:CityName", "Stockholm")
+                        .withExtractors(
+                                pathExtractor("$[0].Endpoint", property -> extractedProperty[0] = property)))
+                .buildTestRecipe();
+
+        // This should not be set only after building the testrecipe, it should be set after run
+        assertThat(extractedProperty[0], is(""));
+        assertThat(recipe.getTestCase().getProperties().size(), is(2));
+        recipe.getTestCase().getProperties().forEach((key, value) -> {
+            if(key.contains("$[0].Endpoint")) {
+                assertThat(value, is(""));
+            } else {
+                assertThat(key, is(ExtractorData.EXTRACTOR_DATA_KEY));
+            }
+        });
     }
 }

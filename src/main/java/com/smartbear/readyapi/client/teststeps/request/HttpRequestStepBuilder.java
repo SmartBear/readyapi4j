@@ -5,6 +5,7 @@ import com.smartbear.readyapi.client.assertions.AssertionBuilder;
 import com.smartbear.readyapi.client.assertions.Assertions;
 import com.smartbear.readyapi.client.attachments.RequestAttachmentBuilder;
 import com.smartbear.readyapi.client.auth.AuthenticationBuilder;
+import com.smartbear.readyapi.client.extractors.Extractor;
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,9 +28,11 @@ import static com.smartbear.readyapi.client.assertions.Assertions.xPathContains;
 import static com.smartbear.readyapi.client.assertions.Assertions.xQueryContains;
 
 abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequestStepBuilder, RequestTestStepType extends RequestTestStepBase> implements TestStepBuilder {
+
     private final RequestTestStepType testStep;
     private List<AssertionBuilder> assertionBuilders = new ArrayList<>();
     private Map<String, Object> headers = new HashMap<>();
+    private List<Extractor> extractors = new LinkedList<>();
     private List<RequestAttachmentBuilder> attachmentsBuilders = new ArrayList<>();
 
     protected HttpRequestStepBuilder(RequestTestStepType testStep, String type) {
@@ -221,12 +225,23 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         return (RequestBuilderType) this;
     }
 
-    public RequestBuilderType withAttachments(RequestAttachmentBuilder... builders){
-        Arrays.asList(builders).forEach(builder -> {
-            if(builder != null) {
-                attachmentsBuilders.add(builder);
-            }
-        });
+    public RequestBuilderType withExtractors(Extractor... argExtractors) {
+        extractors.addAll(Arrays.stream(argExtractors)
+                .filter(extractor -> extractor != null)
+                .collect(Collectors.toList()));
+        extractors.forEach(extractor -> extractor.setSource(testStep.getName()));
+        return (RequestBuilderType) this;
+    }
+
+    public List<Extractor> getExtractors() {
+        return extractors;
+    }
+
+    public RequestBuilderType withAttachments(RequestAttachmentBuilder... builders) {
+        attachmentsBuilders.addAll(Arrays.stream(builders)
+                .filter(builder -> builder != null)
+                .collect(Collectors.toList()));
+
         return (RequestBuilderType) this;
     }
 }
