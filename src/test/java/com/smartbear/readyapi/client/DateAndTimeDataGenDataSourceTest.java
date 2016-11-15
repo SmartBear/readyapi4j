@@ -23,7 +23,7 @@ import static com.smartbear.readyapi.client.model.DateAndTimeDataGenerator.DateT
 import static com.smartbear.readyapi.client.model.DateAndTimeDataGenerator.DateTimeFormatEnum.M_D_YYYY_HH_MM_SS_24_HOUR_;
 import static com.smartbear.readyapi.client.model.DateAndTimeDataGenerator.DateTimeFormatEnum.M_D_YYYY_HH_MM_SS_AM_PM;
 import static com.smartbear.readyapi.client.model.DateAndTimeDataGenerator.DateTimeFormatEnum.YYYY_MM_DDTHH_MM_SSZ_ISO_8601_;
-import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
+import static com.smartbear.readyapi.client.teststeps.ServerTestSteps.dataGenDataSource;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.randomDateAndTimeTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.sequentialDateAndTimeTypeProperty;
 import static org.hamcrest.CoreMatchers.is;

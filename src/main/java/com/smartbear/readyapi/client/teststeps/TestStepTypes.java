@@ -22,4 +22,13 @@ public enum TestStepTypes {
     public String toString() {
         return name;
     }
+
+    public static TestStepTypes fromString(String typeName) {
+        for (TestStepTypes value : TestStepTypes.values()) {
+            if (value.getName().equals(typeName)) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Not a valid enum: " + typeName);
+    }
 }

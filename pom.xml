@@ -75,6 +75,17 @@
             <artifactId>migbase64</artifactId>
             <version>2.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.smartbear.soapui</groupId>
+            <artifactId>soapui-testserver-api</artifactId>
+            <version>5.2.2-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javafx</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <dependency>
             <groupId>com.sun.jersey</groupId>

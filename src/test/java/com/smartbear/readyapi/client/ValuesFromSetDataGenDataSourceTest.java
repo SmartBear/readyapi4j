@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
-import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
+import static com.smartbear.readyapi.client.teststeps.ServerTestSteps.dataGenDataSource;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.randomValueFromSetTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.sequentialValueFromSetTypeProperty;
 import static org.hamcrest.CoreMatchers.is;

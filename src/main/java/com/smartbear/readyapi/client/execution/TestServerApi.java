@@ -3,8 +3,6 @@ package com.smartbear.readyapi.client.execution;
 import com.smartbear.readyapi.client.RepositoryProjectExecutionRequest;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
-import com.smartbear.readyapi.client.model.ProjectResultReports;
-import com.smartbear.readyapi.client.model.TestCase;
 import io.swagger.client.auth.HttpBasicAuth;
 
 import java.io.File;
@@ -13,7 +11,7 @@ import java.net.URL;
 /**
  * Defines an API stub that can communicate with the Ready! API Server.
  */
-public interface TestServerApi {
+public interface TestServerApi extends RecipeExecutionSupport {
 
     ProjectResultReport postProject(ProjectExecutionRequest projectExecutionRequest, boolean async, HttpBasicAuth auth) throws ApiException;
 
@@ -27,8 +25,6 @@ public interface TestServerApi {
      * @throws ApiException if validation fails or server returns with an error
      */
     ProjectResultReport postRepositoryProject(RepositoryProjectExecutionRequest executionRequest, boolean async, HttpBasicAuth auth) throws ApiException;
-
-    ProjectResultReport postTestRecipe(TestCase body, boolean async, HttpBasicAuth auth) throws ApiException;
 
     /**
      * Submit Swagger specification file to TestServer to create and execute tests for each api defined in specifications.
@@ -56,17 +52,11 @@ public interface TestServerApi {
      */
     ProjectResultReport postSwagger(URL swaggerApiURL, String endpoint, String callBackUrl, boolean async, HttpBasicAuth auth) throws ApiException;
 
-    ProjectResultReport getExecutionStatus(String executionID, HttpBasicAuth auth) throws ApiException;
-
-    ProjectResultReports getExecutions(HttpBasicAuth auth) throws ApiException;
-
-    ProjectResultReport cancelExecution(String executionID, HttpBasicAuth auth) throws ApiException;
-
     HarLogRoot getTransactionLog(String executionID, String transactionId, HttpBasicAuth auth) throws ApiException;
 
     void setBasePath(String basePath);
 
-    void setConnectTimeout(int connectionTimeout);
-
     void setDebugging(boolean debugging);
+
+    void setConnectTimeout(int connectionTimeout);
 }

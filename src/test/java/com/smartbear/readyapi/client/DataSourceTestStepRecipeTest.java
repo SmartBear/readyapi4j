@@ -14,6 +14,7 @@ import com.smartbear.readyapi.client.model.ExcelDataSource;
 import com.smartbear.readyapi.client.model.FileDataSource;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.TestStep;
+import com.smartbear.readyapi.client.teststeps.ServerTestSteps;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import com.sun.jersey.api.client.GenericType;
 import io.swagger.client.ApiException;
@@ -27,10 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
-import static com.smartbear.readyapi.client.teststeps.TestSteps.excelDataSource;
-import static com.smartbear.readyapi.client.teststeps.TestSteps.fileDataSource;
+import static com.smartbear.readyapi.client.teststeps.ServerTestSteps.excelDataSource;
+import static com.smartbear.readyapi.client.teststeps.ServerTestSteps.fileDataSource;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.getRequest;
-import static com.smartbear.readyapi.client.teststeps.TestSteps.gridDataSource;
+import static com.smartbear.readyapi.client.teststeps.ServerTestSteps.gridDataSource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -53,7 +54,7 @@ public class DataSourceTestStepRecipeTest {
     public void buildsRecipeWithDataSourceTestStepWithGridDataSource() throws Exception {
         final List<String> propertyValues = Arrays.asList("Value1", "Value");
         TestRecipe recipe = newTestRecipe()
-            .addStep(gridDataSource()
+            .addStep(ServerTestSteps.gridDataSource()
                 .addProperty("property1", propertyValues)
                 .addProperty("property2", propertyValues)
             )
@@ -71,7 +72,7 @@ public class DataSourceTestStepRecipeTest {
     @Test
     public void buildsRecipeWithDataSourceTestStepWithExcelDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
-            .addStep(excelDataSource()
+            .addStep(ServerTestSteps.excelDataSource()
                 .addProperty("property1")
                 .addProperty("property2")
                 .withFilePath("ExcelFilePath")
@@ -97,7 +98,7 @@ public class DataSourceTestStepRecipeTest {
     @Test
     public void buildsRecipeWithDataSourceTestStepWithFileDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
-            .addStep(fileDataSource()
+            .addStep(ServerTestSteps.fileDataSource()
                 .addProperty("property1")
                 .addProperty("property2")
                 .withFilePath("FilePath")
@@ -125,7 +126,7 @@ public class DataSourceTestStepRecipeTest {
     @Test
     public void throwsExceptionIfDataSourceFileDoesNotExist() {
         TestRecipe recipe = newTestRecipe().addStep(
-            excelDataSource()
+            ServerTestSteps.excelDataSource()
                 .withFilePath("abc.xlsx")
                 .withWorksheet("Sheet1")
                 .addProperty("cityName")
@@ -164,7 +165,7 @@ public class DataSourceTestStepRecipeTest {
 
         TestRecipe recipe = newTestRecipe().
             addStep(
-                excelDataSource()
+                ServerTestSteps.excelDataSource()
                     .withFilePath(dataSourceFilePath)
                     .withWorksheet("Sheet1")
                     .addProperty("cityName")

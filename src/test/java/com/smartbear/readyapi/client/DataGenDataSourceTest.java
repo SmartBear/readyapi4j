@@ -15,7 +15,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
-import static com.smartbear.readyapi.client.teststeps.TestSteps.dataGenDataSource;
+import static com.smartbear.readyapi.client.teststeps.ServerTestSteps.dataGenDataSource;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.addressTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.cityTypeProperty;
 import static com.smartbear.readyapi.client.teststeps.datasource.datagen.DataGenerators.countryTypeProperty;
