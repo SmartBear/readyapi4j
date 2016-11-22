@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ready-api-testserver-client</artifactId>
+        <groupId>com.smartbear.readyapi</groupId>
+        <version>1.2.2-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ready-api-testserver-local-soapui-client</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.smartbear.readyapi</groupId>
+            <artifactId>ready-api-testserver-client-core</artifactId>
+            <version>1.2.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.smartbear.soapui</groupId>
+            <artifactId>soapui-testserver-api</artifactId>
+            <version>5.2.2-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javafx</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+</project>
