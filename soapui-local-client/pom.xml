@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ready-api-testserver-local-soapui-client</artifactId>
+    <name>Ready!API TestServer SoapUI Client</name>
     <dependencies>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
