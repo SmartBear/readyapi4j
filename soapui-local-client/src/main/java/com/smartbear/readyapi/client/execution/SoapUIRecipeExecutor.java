@@ -131,6 +131,10 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
         return testStepStructs;
     }
 
+    private AuthenticationStruct nullAuthenticationConversion(Authentication authentication){
+         return authentication != null ? convertToAuthenticationStruct(authentication): null;
+    }
+
     private TestStepStruct convertToStruct(TestStep testStep) {
         String stepName = testStep.getName();
         String typeName = testStep.getType();
@@ -142,18 +146,18 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
             switch (testStepType) {
                 case REST_REQUEST:
                     RestTestRequestStep requestTestStep = (RestTestRequestStep) testStep;
-                    AuthenticationStruct authentication = convertToAuthenticationStruct(requestTestStep.getAuthentication());
+                    AuthenticationStruct authenticationStruct = nullAuthenticationConversion(requestTestStep.getAuthentication());
                     ParamStruct[] parameters = convertToParamStructArray(requestTestStep.getParameters());
                     AssertionStruct[] assertions = convertToAssertionStructArray(requestTestStep.getAssertions());
                     return new RestTestRequestStepStruct(typeName, stepName, requestTestStep.getMethod(),
-                            requestTestStep.getURI(), requestTestStep.getRequestBody(), authentication, parameters, assertions,
+                            requestTestStep.getURI(), requestTestStep.getRequestBody(), authenticationStruct, parameters, assertions,
                             requestTestStep.getHeaders(), requestTestStep.getEncoding(), requestTestStep.getTimeout(), requestTestStep.getMediaType(),
                             nullSafeBoolean(requestTestStep.getFollowRedirects()), nullSafeBoolean(requestTestStep.getEntitizeParameters()),
                             nullSafeBoolean(requestTestStep.getPostQueryString()), requestTestStep.getClientCertificateFileName(),
                             requestTestStep.getClientCertificatePassword());
                 case SOAP_REQUEST:
                     SoapRequestTestStep soapTestStep = (SoapRequestTestStep) testStep;
-                    AuthenticationStruct soapAuthentication = convertToAuthenticationStruct(soapTestStep.getAuthentication());
+                    AuthenticationStruct soapAuthentication = nullAuthenticationConversion(soapTestStep.getAuthentication());
                     SoapParamStruct[] soapParameters = convertToSoapParameterStructs(soapTestStep.getParameters());
                     return new SoapTestRequestStepStruct(typeName, stepName, soapTestStep.getWsdl(), soapTestStep.getBinding(),
                             soapTestStep.getOperation(), soapTestStep.getURI(), soapTestStep.getRequestBody(), soapAuthentication,
@@ -169,7 +173,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
                     GroovyScriptTestStep groovyTestStep = (GroovyScriptTestStep) testStep;
                     return new GroovyScriptTestStepStruct(typeName, stepName, groovyTestStep.getScript());
                 case JDBC_REQUEST:
-                    JdbcRequestTestStep jdbcTestStep = new JdbcRequestTestStep();
+                    JdbcRequestTestStep jdbcTestStep = (JdbcRequestTestStep) testStep;
                     return new JdbcRequestTestStepStruct(typeName, stepName, jdbcTestStep.getDriver(),
                             jdbcTestStep.getConnectionString(), jdbcTestStep.getSqlQuery(),
                             nullSafeBoolean(jdbcTestStep.getStoredProcedure()), jdbcTestStep.getProperties(),
