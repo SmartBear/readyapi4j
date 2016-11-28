@@ -1,4 +1,4 @@
-package com.smartbear.readyapi.util;
+package com.smartbear.readyapi.util.rest;
 
 /**
  * A Tuple pair for usage with values that a tightly coupled together

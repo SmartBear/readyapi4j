@@ -1,4 +1,4 @@
-package com.smartbear.readyapi.util;
+package com.smartbear.readyapi.util.rest;
 
 public class JsonTestObject {
 

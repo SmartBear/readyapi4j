@@ -1,17 +1,15 @@
-package com.smartbear.readyapi.util.local;
+package com.smartbear.readyapi.util.rest.local;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import com.smartbear.readyapi.util.JsonTestObject;
-import com.smartbear.readyapi.util.Pair;
+import com.smartbear.readyapi.util.rest.JsonTestObject;
+import com.smartbear.readyapi.util.rest.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-
+import static com.smartbear.readyapi.util.PortFinder.portFinder;
 import static spark.Spark.*;
 
 public class LocalServerUtil {
@@ -38,7 +36,6 @@ public class LocalServerUtil {
     private static final String DEFAULT_PATH = "/";
     private static final String DEFAULT_MESSAGE = "Hello world";
     private static final String FORMAT = "application/json";
-    private static final int PORT_MAX = 65535;
 
     private static JsonTestObject postedObject;
 
@@ -177,29 +174,6 @@ public class LocalServerUtil {
      */
     public static void stopLocalServer() {
         stop();
-    }
-
-    private static int portFinder(int firstPort) {
-        int port = firstPort;
-        ServerSocket serverSocket = null;
-        while (port <= PORT_MAX) {
-            try {
-                serverSocket = new ServerSocket(port);
-                return port;
-            } catch (IOException ex) {
-                port++;
-            } finally {
-                if (serverSocket != null) {
-                    try {
-                        serverSocket.close();
-                    } catch (IOException e) {
-                        // Should never happen
-                        logger.error("Could not close serversocket while finding free ports");
-                    }
-                }
-            }
-        }
-        throw new IllegalStateException("Could not find any free ports for local server");
     }
 
     private static String requestInfoToString(Request request) {

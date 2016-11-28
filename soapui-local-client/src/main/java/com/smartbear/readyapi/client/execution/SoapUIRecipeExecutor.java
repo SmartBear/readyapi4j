@@ -11,15 +11,7 @@ import com.eviware.soapui.support.types.StringToObjectMap;
 import com.smartbear.ready.recipe.JsonRecipeParser;
 import com.smartbear.ready.recipe.PropertyTransferSource;
 import com.smartbear.ready.recipe.PropertyTransferTarget;
-import com.smartbear.ready.recipe.assertions.AssertionStruct;
-import com.smartbear.ready.recipe.assertions.GroovyScriptAssertionStruct;
-import com.smartbear.ready.recipe.assertions.InvalidHttpStatusCodesAssertionStruct;
-import com.smartbear.ready.recipe.assertions.JdbcStatusAssertionStruct;
-import com.smartbear.ready.recipe.assertions.JdbcTimeoutAssertionStruct;
-import com.smartbear.ready.recipe.assertions.JsonPathContentAssertionStruct;
-import com.smartbear.ready.recipe.assertions.JsonPathCountAssertionStruct;
-import com.smartbear.ready.recipe.assertions.ResponseSLAAssertionStruct;
-import com.smartbear.ready.recipe.assertions.SimpleContainsAssertionStruct;
+import com.smartbear.ready.recipe.assertions.*;
 import com.smartbear.ready.recipe.teststeps.AuthenticationStruct;
 import com.smartbear.ready.recipe.teststeps.GroovyScriptTestStepStruct;
 import com.smartbear.ready.recipe.teststeps.JdbcRequestTestStepStruct;
@@ -31,36 +23,11 @@ import com.smartbear.ready.recipe.teststeps.SoapParamStruct;
 import com.smartbear.ready.recipe.teststeps.SoapTestRequestStepStruct;
 import com.smartbear.ready.recipe.teststeps.TestCaseStruct;
 import com.smartbear.ready.recipe.teststeps.TestStepStruct;
-import com.smartbear.readyapi.client.model.Assertion;
-import com.smartbear.readyapi.client.model.Authentication;
-import com.smartbear.readyapi.client.model.GroovyScriptAssertion;
-import com.smartbear.readyapi.client.model.GroovyScriptTestStep;
-import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion;
-import com.smartbear.readyapi.client.model.JdbcRequestTestStep;
-import com.smartbear.readyapi.client.model.JdbcTimeoutAssertion;
-import com.smartbear.readyapi.client.model.JsonPathContentAssertion;
-import com.smartbear.readyapi.client.model.JsonPathCountAssertion;
-import com.smartbear.readyapi.client.model.ProjectResultReport;
-import com.smartbear.readyapi.client.model.ProjectResultReports;
-import com.smartbear.readyapi.client.model.PropertyTransfer;
-import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
-import com.smartbear.readyapi.client.model.ResponseSLAAssertion;
-import com.smartbear.readyapi.client.model.RestParameter;
-import com.smartbear.readyapi.client.model.RestTestRequestStep;
-import com.smartbear.readyapi.client.model.SimpleContainsAssertion;
-import com.smartbear.readyapi.client.model.SimpleNotContainsAssertion;
-import com.smartbear.readyapi.client.model.SoapParameter;
-import com.smartbear.readyapi.client.model.SoapRequestTestStep;
-import com.smartbear.readyapi.client.model.TestCase;
-import com.smartbear.readyapi.client.model.TestCaseResultReport;
-import com.smartbear.readyapi.client.model.TestStep;
-import com.smartbear.readyapi.client.model.TestStepResultReport;
-import com.smartbear.readyapi.client.model.TestSuiteResultReport;
-import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion;
-import com.smartbear.readyapi.client.model.XPathContainsAssertion;
-import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
+import com.smartbear.readyapi.client.model.*;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
 import io.swagger.client.auth.HttpBasicAuth;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,6 +40,7 @@ import java.util.UUID;
  * Class that can execute a Test recipe locally, using the SoapUI core classes.
  */
 public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
+    private static final Logger logger = LoggerFactory.getLogger(SoapUIRecipeExecutor.class);
 
     private static final String TEST_STEP_STRUCT_TYPE = "TestStepStruct";
     private static final String CONTAINS_ASSERTION_TYPE = "Contains";
@@ -87,6 +55,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
     private static final String XQUERY_MATCH_ASSERTION_TYPE = "XQuery Match";
     private static final String RESPONSE_SLA_ASSERTION_TYPE = "Response SLA";
     private static final String SCRIPT_ASSERTION_TYPE = "Script Assertion";
+    private static final String NOT_SOAP_FAULT_ASSERTION = "Not SOAP Fault";
 
     private final Map<String,ProjectRunner> executionsMap = new HashMap<>();
     private final JsonRecipeParser recipeParser = new JsonRecipeParser();
@@ -252,12 +221,14 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
                     break;
                 case XPATH_MATCH_ASSERTION_TYPE:
                     XPathContainsAssertion xpathAssertion = (XPathContainsAssertion) sourceAssertion;
-                    assertionStructs[i] = new JsonPathContentAssertionStruct(name, xpathAssertion.getXpath(),
-                            xpathAssertion.getExpectedContent(), nullSafeBoolean(xpathAssertion.getAllowWildcards()));
+                    assertionStructs[i] = new XPathContainsAssertionStruct(name, xpathAssertion.getXpath(),
+                            xpathAssertion.getExpectedContent(), nullSafeBoolean(xpathAssertion.getAllowWildcards()),
+                            nullSafeBoolean(xpathAssertion.getIgnoreNamespaces()),
+                            nullSafeBoolean(xpathAssertion.getIgnoreComments()));
                     break;
                 case XQUERY_MATCH_ASSERTION_TYPE:
                     XQueryContainsAssertion xqueryAssertion = (XQueryContainsAssertion) sourceAssertion;
-                    assertionStructs[i] = new JsonPathContentAssertionStruct(name, xqueryAssertion.getXquery(),
+                    assertionStructs[i] = new XQueryContainsAssertionStruct(name, xqueryAssertion.getXquery(),
                             xqueryAssertion.getExpectedContent(), nullSafeBoolean(xqueryAssertion.getAllowWildcards()));
                     break;
                 case RESPONSE_SLA_ASSERTION_TYPE:
@@ -268,7 +239,12 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
                     GroovyScriptAssertion scriptAssertion = (GroovyScriptAssertion) sourceAssertion;
                     assertionStructs[i] = new GroovyScriptAssertionStruct(name, scriptAssertion.getScript());
                     break;
-
+                case NOT_SOAP_FAULT_ASSERTION:
+                    assertionStructs[i] = new NotSoapFaultAssertionStruct(name);
+                    break;
+                default:
+                    logger.warn("No such assertion type defined in the soapui local client api");
+                    break;
             }
 
         }

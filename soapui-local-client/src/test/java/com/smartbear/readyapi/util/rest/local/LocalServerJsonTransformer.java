@@ -1,4 +1,4 @@
-package com.smartbear.readyapi.util.local;
+package com.smartbear.readyapi.util.rest.local;
 
 import com.google.gson.Gson;
 import spark.ResponseTransformer;
