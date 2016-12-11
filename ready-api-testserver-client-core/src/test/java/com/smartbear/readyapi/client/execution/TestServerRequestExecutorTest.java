@@ -74,7 +74,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
         recipeExecutor.addExecutionListener(executionListener);
         recipeExecutor.submitRecipe(recipeToSubmit);
         Thread.sleep(1500);
-        verify(executionListener).requestSent(startReport);
+        verify(executionListener).executionStarted(startReport);
         verify(executionListener).executionFinished(endReport);
     }
 
@@ -164,7 +164,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
     private ExecutionListener createExecutionListenerWithExpectedErrorMessage(final String expectedErrorMessage) {
         return new ExecutionListener() {
             @Override
-            public void requestSent(ProjectResultReport projectResultReport) {
+            public void executionStarted(ProjectResultReport projectResultReport) {
             }
 
             @Override

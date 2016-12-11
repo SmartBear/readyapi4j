@@ -47,7 +47,7 @@ public class RepositoryProjectExecutionTest extends ProjectExecutionTestBase {
         projectExecutor.addExecutionListener(executionListener);
         projectExecutor.submitRepositoryProject(executionRequest);
         Thread.sleep(1500);
-        verify(executionListener).requestSent(startReport);
+        verify(executionListener).executionStarted(startReport);
         verify(executionListener).executionFinished(endReport);
     }
 

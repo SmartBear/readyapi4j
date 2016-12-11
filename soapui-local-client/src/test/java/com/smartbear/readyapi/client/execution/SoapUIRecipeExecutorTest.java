@@ -1,6 +1,7 @@
 package com.smartbear.readyapi.client.execution;
 
 import com.google.gson.Gson;
+import com.smartbear.readyapi.client.ExecutionListener;
 import com.smartbear.readyapi.client.TestRecipe;
 import com.smartbear.readyapi.client.model.HarResponse;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
@@ -29,6 +30,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
 
 public class SoapUIRecipeExecutorTest {
     private static final String REST_SOURCE = "SourceStep";
@@ -122,7 +127,29 @@ public class SoapUIRecipeExecutorTest {
 
     @Test
     public void runsPropertyTransferRequestWithJsonPathExtraction() {
-        TestRecipe testRecipe = newTestRecipe(
+        TestRecipe testRecipe = buildPropertyTransferWithJsonPathExtractionTestRecipe();
+        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        assertThat(execution.getId(), is(not(nullValue())));
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(getPostedJsonTestObject(), is(testObject));
+    }
+
+    @Test
+    public void runsAsyncPropertyTransferRequestWithJsonPathExtraction() {
+        TestRecipe testRecipe = buildPropertyTransferWithJsonPathExtractionTestRecipe();
+
+        ExecutionListener listenerMock = mock(ExecutionListener.class);
+        executor.addExecutionListener(listenerMock);
+        Execution execution = executor.postTestCase(testRecipe.getTestCase(), true);
+        assertThat(execution.getId(), is(not(nullValue())));
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.RUNNING));
+
+        verify(listenerMock, timeout(1000).times(1)).executionStarted(any());
+        verify(listenerMock, timeout(20000).times(1)).executionFinished(any());
+    }
+
+    private TestRecipe buildPropertyTransferWithJsonPathExtractionTestRecipe() {
+        return newTestRecipe(
                 getRequest(jsonURL)
                         .named(REST_SOURCE)
                         .acceptsJson()
@@ -151,9 +178,5 @@ public class SoapUIRecipeExecutorTest {
                         .acceptsJson()
                         .withRequestBody(new Gson().toJson(new JsonTestObject(ASSERTION_TEST_VALUE, serverURL)))
         ).buildTestRecipe();
-        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
-        assertThat(execution.getId(), is(not(nullValue())));
-        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
-        assertThat(getPostedJsonTestObject(), is(testObject));
     }
 }

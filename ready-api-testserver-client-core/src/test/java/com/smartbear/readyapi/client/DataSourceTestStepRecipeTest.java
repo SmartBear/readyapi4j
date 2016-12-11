@@ -134,7 +134,7 @@ public class DataSourceTestStepRecipeTest {
         TestServerRecipeExecutor recipeExecutor = new TestServerClient("localhost", ServerDefaults.DEFAULT_PORT).createRecipeExecutor();
         recipeExecutor.addExecutionListener(new ExecutionListener() {
             @Override
-            public void requestSent(ProjectResultReport projectResultReport) {
+            public void executionStarted(ProjectResultReport projectResultReport) {
 
             }
 

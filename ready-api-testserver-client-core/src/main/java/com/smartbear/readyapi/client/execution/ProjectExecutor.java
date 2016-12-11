@@ -16,7 +16,7 @@ public class ProjectExecutor extends AbstractTestServerExecutor {
 
     public Execution submitRepositoryProject(RepositoryProjectExecutionRequest executionRequest) {
         TestServerExecution execution = doExecuteProjectFromRepository(executionRequest, true);
-        notifyRequestSubmitted(execution);
+        notifyExecutionStarted(execution);
         return execution;
     }
 
@@ -53,7 +53,7 @@ public class ProjectExecutor extends AbstractTestServerExecutor {
 
     public Execution submitProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
         TestServerExecution execution = doExecuteProject(projectExecutionRequest, true);
-        notifyRequestSubmitted(execution);
+        notifyExecutionStarted(execution);
         return execution;
     }
 

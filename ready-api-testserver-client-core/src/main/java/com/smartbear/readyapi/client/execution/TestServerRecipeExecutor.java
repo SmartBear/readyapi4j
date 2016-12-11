@@ -36,7 +36,7 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
         }
 
         TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), true);
-        notifyRequestSubmitted(execution);
+        notifyExecutionStarted(execution);
         return execution;
     }
 

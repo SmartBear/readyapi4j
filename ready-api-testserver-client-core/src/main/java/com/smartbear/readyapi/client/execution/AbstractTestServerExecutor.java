@@ -33,10 +33,10 @@ abstract class AbstractTestServerExecutor {
         executionListeners.remove(listener);
     }
 
-    void notifyRequestSubmitted(TestServerExecution execution) {
+    void notifyExecutionStarted(TestServerExecution execution) {
         if (execution != null) {
             for (ExecutionListener executionListener : executionListeners) {
-                executionListener.requestSent(execution.getCurrentReport());
+                executionListener.executionStarted(execution.getCurrentReport());
             }
             new ExecutionStatusChecker(execution).start();
         }
