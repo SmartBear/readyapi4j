@@ -16,6 +16,7 @@ public class AssertionUtils {
 
     public static final Logger LOG = LoggerFactory.getLogger(AssertionUtils.class);
 
+
     public static void assertExecution(Execution execution) {
         assertNotNull(execution);
 
@@ -38,6 +39,6 @@ public class AssertionUtils {
         }
 
         assertEquals(Arrays.toString(execution.getErrorMessages().toArray()),
-            ProjectResultReport.StatusEnum.FINISHED, execution.getCurrentStatus());
+                ProjectResultReport.StatusEnum.FINISHED, execution.getCurrentStatus());
     }
 }

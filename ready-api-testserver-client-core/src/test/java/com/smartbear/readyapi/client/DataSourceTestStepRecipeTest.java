@@ -3,11 +3,11 @@ package com.smartbear.readyapi.client;
 import com.smartbear.readyapi.client.execution.ApiClientWrapper;
 import com.smartbear.readyapi.client.execution.CodegenBasedTestServerApi;
 import com.smartbear.readyapi.client.execution.Execution;
-import com.smartbear.readyapi.client.execution.RecipeExecutor;
 import com.smartbear.readyapi.client.execution.RecipeExecutorTestCreator;
 import com.smartbear.readyapi.client.execution.ServerDefaults;
 import com.smartbear.readyapi.client.execution.TestServerApi;
 import com.smartbear.readyapi.client.execution.TestServerClient;
+import com.smartbear.readyapi.client.execution.TestServerRecipeExecutor;
 import com.smartbear.readyapi.client.model.DataSource;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.ExcelDataSource;
@@ -28,10 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
-import static com.smartbear.readyapi.client.teststeps.ServerTestSteps.excelDataSource;
-import static com.smartbear.readyapi.client.teststeps.ServerTestSteps.fileDataSource;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.getRequest;
-import static com.smartbear.readyapi.client.teststeps.ServerTestSteps.gridDataSource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -54,11 +51,11 @@ public class DataSourceTestStepRecipeTest {
     public void buildsRecipeWithDataSourceTestStepWithGridDataSource() throws Exception {
         final List<String> propertyValues = Arrays.asList("Value1", "Value");
         TestRecipe recipe = newTestRecipe()
-            .addStep(ServerTestSteps.gridDataSource()
-                .addProperty("property1", propertyValues)
-                .addProperty("property2", propertyValues)
-            )
-            .buildTestRecipe();
+                .addStep(ServerTestSteps.gridDataSource()
+                        .addProperty("property1", propertyValues)
+                        .addProperty("property2", propertyValues)
+                )
+                .buildTestRecipe();
 
         TestStep testStep = recipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getType(), is(TestStepTypes.DATA_SOURCE.getName()));
@@ -72,15 +69,15 @@ public class DataSourceTestStepRecipeTest {
     @Test
     public void buildsRecipeWithDataSourceTestStepWithExcelDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
-            .addStep(ServerTestSteps.excelDataSource()
-                .addProperty("property1")
-                .addProperty("property2")
-                .withFilePath("ExcelFilePath")
-                .withWorksheet("Worksheet1")
-                .startAtCell("A1")
-                .ignoreEmpty()
-            )
-            .buildTestRecipe();
+                .addStep(ServerTestSteps.excelDataSource()
+                        .addProperty("property1")
+                        .addProperty("property2")
+                        .withFilePath("ExcelFilePath")
+                        .withWorksheet("Worksheet1")
+                        .startAtCell("A1")
+                        .ignoreEmpty()
+                )
+                .buildTestRecipe();
 
         DataSourceTestStep testStep = (DataSourceTestStep) recipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getType(), is(TestStepTypes.DATA_SOURCE.getName()));
@@ -98,16 +95,16 @@ public class DataSourceTestStepRecipeTest {
     @Test
     public void buildsRecipeWithDataSourceTestStepWithFileDataSource() throws Exception {
         TestRecipe recipe = newTestRecipe()
-            .addStep(ServerTestSteps.fileDataSource()
-                .addProperty("property1")
-                .addProperty("property2")
-                .withFilePath("FilePath")
-                .withCharSet("UTF-8")
-                .withSeparator(",")
-                .quotedValues()
-                .trim()
-            )
-            .buildTestRecipe();
+                .addStep(ServerTestSteps.fileDataSource()
+                        .addProperty("property1")
+                        .addProperty("property2")
+                        .withFilePath("FilePath")
+                        .withCharSet("UTF-8")
+                        .withSeparator(",")
+                        .quotedValues()
+                        .trim()
+                )
+                .buildTestRecipe();
 
         DataSourceTestStep testStep = (DataSourceTestStep) recipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getType(), is(TestStepTypes.DATA_SOURCE.getName()));
@@ -126,15 +123,15 @@ public class DataSourceTestStepRecipeTest {
     @Test
     public void throwsExceptionIfDataSourceFileDoesNotExist() {
         TestRecipe recipe = newTestRecipe().addStep(
-            ServerTestSteps.excelDataSource()
-                .withFilePath("abc.xlsx")
-                .withWorksheet("Sheet1")
-                .addProperty("cityName")
-                .startAtCell("A1")
+                ServerTestSteps.excelDataSource()
+                        .withFilePath("abc.xlsx")
+                        .withWorksheet("Sheet1")
+                        .addProperty("cityName")
+                        .startAtCell("A1")
         )
-            .buildTestRecipe();
+                .buildTestRecipe();
 
-        RecipeExecutor recipeExecutor = new TestServerClient("localhost", ServerDefaults.DEFAULT_PORT).createRecipeExecutor();
+        TestServerRecipeExecutor recipeExecutor = new TestServerClient("localhost", ServerDefaults.DEFAULT_PORT).createRecipeExecutor();
         recipeExecutor.addExecutionListener(new ExecutionListener() {
             @Override
             public void requestSent(ProjectResultReport projectResultReport) {
@@ -164,32 +161,32 @@ public class DataSourceTestStepRecipeTest {
         final String dataSourceFilePath = getClass().getResource("/DataSource.xlsx").getPath();
 
         TestRecipe recipe = newTestRecipe().
-            addStep(
-                ServerTestSteps.excelDataSource()
-                    .withFilePath(dataSourceFilePath)
-                    .withWorksheet("Sheet1")
-                    .addProperty("cityName")
-                    .startAtCell("A1"))
-            .addStep(
-                getRequest("http://maps.googleapis.com/maps/api/geocode/xml")
-                    .addQueryParameter("address", "${DataSourceStep#cityName}")
-            )
-            .buildTestRecipe();
+                addStep(
+                        ServerTestSteps.excelDataSource()
+                                .withFilePath(dataSourceFilePath)
+                                .withWorksheet("Sheet1")
+                                .addProperty("cityName")
+                                .startAtCell("A1"))
+                .addStep(
+                        getRequest("http://maps.googleapis.com/maps/api/geocode/xml")
+                                .addQueryParameter("address", "${DataSourceStep#cityName}")
+                )
+                .buildTestRecipe();
 
         ApiClientWrapper apiClientWrapper = mockApiClientWrapper();
         TestServerApi testServerApi = new CodegenBasedTestServerApi(apiClientWrapper);
-        TestServerClient testServerClient= RecipeExecutorTestCreator.createRecipeExecutor(ServerDefaults.DEFAULT_SCHEME, "localhost", ServerDefaults.DEFAULT_PORT,
-            ServerDefaults.VERSION_PREFIX, testServerApi);
+        TestServerClient testServerClient = RecipeExecutorTestCreator.createRecipeExecutor(ServerDefaults.DEFAULT_SCHEME, "localhost", ServerDefaults.DEFAULT_PORT,
+                ServerDefaults.VERSION_PREFIX, testServerApi);
         testServerClient.setCredentials("user", "password");
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(recipe);
 
         verify(apiClientWrapper, times(1)).invokeAPI(eq(EXECUTIONS_BASE_PATH), anyString(), anyList(), anyObject(),
-            anyMap(), anyString(), eq("application/json"), any(String[].class), any(GenericType.class));
+                anyMap(), anyString(), eq("application/json"), any(String[].class), any(GenericType.class));
 
         ArgumentCaptor<Map> formDataArgumentCaptor = ArgumentCaptor.forClass(Map.class);
         verify(apiClientWrapper, times(1)).invokeAPI(eq(EXECUTIONS_BASE_PATH + "/" + execution.getId() + "/files"),
-            anyString(), anyList(), anyObject(), formDataArgumentCaptor.capture(), anyString(),
-            eq("multipart/form-data"), any(String[].class), any(GenericType.class));
+                anyString(), anyList(), anyObject(), formDataArgumentCaptor.capture(), anyString(),
+                eq("multipart/form-data"), any(String[].class), any(GenericType.class));
 
         Iterator iterator = formDataArgumentCaptor.getValue().entrySet().iterator();
         Map.Entry<String, File> dataSourceFile = (Map.Entry<String, File>) iterator.next();

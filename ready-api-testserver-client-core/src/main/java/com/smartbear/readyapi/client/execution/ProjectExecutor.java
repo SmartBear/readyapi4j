@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nullable;
 import java.io.File;
 
-public class ProjectExecutor extends AbstractExecutor {
+public class ProjectExecutor extends AbstractTestServerExecutor {
     private static final Logger logger = LoggerFactory.getLogger(ProjectExecutor.class);
 
     ProjectExecutor(TestServerClient testServerClient) {
@@ -15,7 +15,7 @@ public class ProjectExecutor extends AbstractExecutor {
     }
 
     public Execution submitRepositoryProject(RepositoryProjectExecutionRequest executionRequest) {
-        Execution execution = doExecuteProjectFromRepository(executionRequest, true);
+        TestServerExecution execution = doExecuteProjectFromRepository(executionRequest, true);
         notifyRequestSubmitted(execution);
         return execution;
     }
@@ -29,7 +29,7 @@ public class ProjectExecutor extends AbstractExecutor {
     }
 
     /**
-     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
+     * @deprecated Use TestServerRecipeExecutor#submitProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution submitProject(File project) {
@@ -37,7 +37,7 @@ public class ProjectExecutor extends AbstractExecutor {
     }
 
     /**
-     * @deprecated Use RecipeExecutor#submitProject(ProjectExecutionRequest) instead.
+     * @deprecated Use TestServerRecipeExecutor#submitProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution submitProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,
@@ -52,13 +52,13 @@ public class ProjectExecutor extends AbstractExecutor {
     }
 
     public Execution submitProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
-        Execution execution = doExecuteProject(projectExecutionRequest, true);
+        TestServerExecution execution = doExecuteProject(projectExecutionRequest, true);
         notifyRequestSubmitted(execution);
         return execution;
     }
 
     /**
-     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
+     * @deprecated Use TestServerRecipeExecutor#executeProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution executeProject(File project) {
@@ -66,7 +66,7 @@ public class ProjectExecutor extends AbstractExecutor {
     }
 
     /**
-     * @deprecated Use RecipeExecutor#executeProject(ProjectExecutionRequest) instead.
+     * @deprecated Use TestServerRecipeExecutor#executeProject(ProjectExecutionRequest) instead.
      */
     @Deprecated
     public Execution executeProject(File project, @Nullable String testCaseName, @Nullable String testSuiteName,
@@ -88,9 +88,9 @@ public class ProjectExecutor extends AbstractExecutor {
         return execution;
     }
 
-    private Execution doExecuteProjectFromRepository(RepositoryProjectExecutionRequest executionRequest, boolean async) {
+    private TestServerExecution doExecuteProjectFromRepository(RepositoryProjectExecutionRequest executionRequest, boolean async) {
         try {
-            Execution execution = testServerClient.postRepositoryProject(executionRequest, async);
+            TestServerExecution execution = testServerClient.postRepositoryProject(executionRequest, async);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), null);
             return execution;
         } catch (ApiException e) {
@@ -104,9 +104,9 @@ public class ProjectExecutor extends AbstractExecutor {
         }
     }
 
-    private Execution doExecuteProject(ProjectExecutionRequest projectExecutionRequest, boolean async) throws ApiException {
+    private TestServerExecution doExecuteProject(ProjectExecutionRequest projectExecutionRequest, boolean async) throws ApiException {
         try {
-            Execution execution = testServerClient.postProject(projectExecutionRequest, async);
+            TestServerExecution execution = testServerClient.postProject(projectExecutionRequest, async);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), null);
             return execution;
         } catch (ApiException e) {

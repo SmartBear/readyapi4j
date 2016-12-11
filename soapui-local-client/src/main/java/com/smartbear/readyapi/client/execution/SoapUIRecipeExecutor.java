@@ -2,16 +2,24 @@ package com.smartbear.readyapi.client.execution;
 
 import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.impl.wsdl.testcase.WsdlProjectRunner;
-import com.eviware.soapui.model.testsuite.ProjectRunner;
-import com.eviware.soapui.model.testsuite.TestCaseRunner;
-import com.eviware.soapui.model.testsuite.TestRunner;
-import com.eviware.soapui.model.testsuite.TestStepResult;
-import com.eviware.soapui.model.testsuite.TestSuiteRunner;
 import com.eviware.soapui.support.types.StringToObjectMap;
+import com.google.common.collect.Lists;
 import com.smartbear.ready.recipe.JsonRecipeParser;
 import com.smartbear.ready.recipe.PropertyTransferSource;
 import com.smartbear.ready.recipe.PropertyTransferTarget;
-import com.smartbear.ready.recipe.assertions.*;
+import com.smartbear.ready.recipe.assertions.AssertionStruct;
+import com.smartbear.ready.recipe.assertions.GroovyScriptAssertionStruct;
+import com.smartbear.ready.recipe.assertions.InvalidHttpStatusCodesAssertionStruct;
+import com.smartbear.ready.recipe.assertions.JdbcStatusAssertionStruct;
+import com.smartbear.ready.recipe.assertions.JdbcTimeoutAssertionStruct;
+import com.smartbear.ready.recipe.assertions.JsonPathContentAssertionStruct;
+import com.smartbear.ready.recipe.assertions.JsonPathCountAssertionStruct;
+import com.smartbear.ready.recipe.assertions.NotSoapFaultAssertionStruct;
+import com.smartbear.ready.recipe.assertions.ResponseSLAAssertionStruct;
+import com.smartbear.ready.recipe.assertions.SimpleContainsAssertionStruct;
+import com.smartbear.ready.recipe.assertions.ValidHttpStatusCodesAssertionStruct;
+import com.smartbear.ready.recipe.assertions.XPathContainsAssertionStruct;
+import com.smartbear.ready.recipe.assertions.XQueryContainsAssertionStruct;
 import com.smartbear.ready.recipe.teststeps.AuthenticationStruct;
 import com.smartbear.ready.recipe.teststeps.GroovyScriptTestStepStruct;
 import com.smartbear.ready.recipe.teststeps.JdbcRequestTestStepStruct;
@@ -23,14 +31,34 @@ import com.smartbear.ready.recipe.teststeps.SoapParamStruct;
 import com.smartbear.ready.recipe.teststeps.SoapTestRequestStepStruct;
 import com.smartbear.ready.recipe.teststeps.TestCaseStruct;
 import com.smartbear.ready.recipe.teststeps.TestStepStruct;
-import com.smartbear.readyapi.client.model.*;
+import com.smartbear.readyapi.client.TestRecipe;
+import com.smartbear.readyapi.client.model.Assertion;
+import com.smartbear.readyapi.client.model.Authentication;
+import com.smartbear.readyapi.client.model.GroovyScriptAssertion;
+import com.smartbear.readyapi.client.model.GroovyScriptTestStep;
+import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion;
+import com.smartbear.readyapi.client.model.JdbcRequestTestStep;
+import com.smartbear.readyapi.client.model.JdbcTimeoutAssertion;
+import com.smartbear.readyapi.client.model.JsonPathContentAssertion;
+import com.smartbear.readyapi.client.model.JsonPathCountAssertion;
+import com.smartbear.readyapi.client.model.PropertyTransfer;
+import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
+import com.smartbear.readyapi.client.model.ResponseSLAAssertion;
+import com.smartbear.readyapi.client.model.RestParameter;
+import com.smartbear.readyapi.client.model.RestTestRequestStep;
+import com.smartbear.readyapi.client.model.SimpleContainsAssertion;
+import com.smartbear.readyapi.client.model.SimpleNotContainsAssertion;
+import com.smartbear.readyapi.client.model.SoapParameter;
+import com.smartbear.readyapi.client.model.SoapRequestTestStep;
+import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi.client.model.TestStep;
+import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion;
+import com.smartbear.readyapi.client.model.XPathContainsAssertion;
+import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
 import com.smartbear.readyapi.client.teststeps.TestStepTypes;
-import io.swagger.client.auth.HttpBasicAuth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +67,7 @@ import java.util.UUID;
 /**
  * Class that can execute a Test recipe locally, using the SoapUI core classes.
  */
-public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
+public class SoapUIRecipeExecutor implements RecipeExecutor {
     private static final Logger logger = LoggerFactory.getLogger(SoapUIRecipeExecutor.class);
 
     private static final String TEST_STEP_STRUCT_TYPE = "TestStepStruct";
@@ -57,18 +85,25 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
     private static final String SCRIPT_ASSERTION_TYPE = "Script Assertion";
     private static final String NOT_SOAP_FAULT_ASSERTION = "Not SOAP Fault";
 
-    private final Map<String,ProjectRunner> executionsMap = new HashMap<>();
+    private final Map<String, SoapUIRecipeExecution> executionsMap = new HashMap<>();
     private final JsonRecipeParser recipeParser = new JsonRecipeParser();
 
-    @Override
-    public ProjectResultReport postTestRecipe(TestCase testCase, boolean async, HttpBasicAuth auth) throws ApiException {
+    /**
+     * Submit a Test recipe for execution.
+     *
+     * @param testCase a Test Case struct representing the Test recipe to be executed.
+     * @param async    a boolean indicating whether the execution should be done in the background
+     * @return
+     * @throws ApiException
+     */
+    public Execution postTestCase(TestCase testCase, boolean async) throws ApiException {
         String executionId = UUID.randomUUID().toString();
         try {
             WsdlProject project = recipeParser.parse(makeTestCaseStruct(testCase));
             WsdlProjectRunner projectRunner = new WsdlProjectRunner(project, new StringToObjectMap());
-            executionsMap.put(executionId, projectRunner);
+            executionsMap.put(executionId, new SoapUIRecipeExecution(executionId, projectRunner));
             projectRunner.start(async);
-            return makeProjectResultReport(projectRunner, executionId);
+            return executionsMap.get(executionId);
         } catch (Exception e) {
             throw new RecipeExecutionException("Failed to execute Test recipe", e);
         }
@@ -100,8 +135,8 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
         return testStepStructs;
     }
 
-    private AuthenticationStruct nullAuthenticationConversion(Authentication authentication){
-         return authentication != null ? convertToAuthenticationStruct(authentication): null;
+    private AuthenticationStruct nullAuthenticationConversion(Authentication authentication) {
+        return authentication != null ? convertToAuthenticationStruct(authentication) : null;
     }
 
     private TestStepStruct convertToStruct(TestStep testStep) {
@@ -195,7 +230,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
                 case VALID_HTTP_STATUSES_TYPE:
                     ValidHttpStatusCodesAssertion validStatusesAssertion = (ValidHttpStatusCodesAssertion) sourceAssertion;
                     List<String> validStatusCodes = validStatusesAssertion.getValidStatusCodes();
-                    assertionStructs[i] = new InvalidHttpStatusCodesAssertionStruct(name, validStatusCodes.toArray(new String[validStatusCodes.size()]));
+                    assertionStructs[i] = new ValidHttpStatusCodesAssertionStruct(name, validStatusCodes.toArray(new String[validStatusCodes.size()]));
                     break;
                 case INVALID_HTTP_STATUSES_TYPE:
                     InvalidHttpStatusCodesAssertion invalidStatusesAssertion = (InvalidHttpStatusCodesAssertion) sourceAssertion;
@@ -279,104 +314,17 @@ public class SoapUIRecipeExecutor implements RecipeExecutionSupport {
     }
 
     @Override
-    public ProjectResultReport getExecutionStatus(String executionID, HttpBasicAuth auth) throws ApiException {
-        ProjectRunner projectRunner = executionsMap.get(executionID);
-        if (projectRunner == null) {
-            return null;
-        } else {
-            return makeProjectResultReport(projectRunner, executionID);
-        }
+    public Execution submitRecipe(TestRecipe recipe) throws ApiException {
+        return postTestCase(recipe.getTestCase(), true);
     }
 
     @Override
-    public ProjectResultReports getExecutions(HttpBasicAuth auth) throws ApiException {
-        return null;
+    public Execution executeRecipe(TestRecipe recipe) throws ApiException {
+        return postTestCase(recipe.getTestCase(), false);
     }
 
     @Override
-    public ProjectResultReport cancelExecution(String executionID, HttpBasicAuth auth) throws ApiException {
-        return null;
+    public List<Execution> getExecutions() throws ApiException {
+        return Lists.newArrayList(executionsMap.values());
     }
-
-    private ProjectResultReport makeProjectResultReport(TestRunner testRunner, String executionID) {
-        ProjectResultReport report = new ProjectResultReport();
-        report.setStatus(convertTestRunnerStatus(testRunner.getStatus()));
-        report.setTimeTaken(testRunner.getTimeTaken());
-        report.setStartTime(testRunner.getStartTime());
-        report.setExecutionID(executionID);
-        List<TestSuiteResultReport> testSuiteResultReports = new ArrayList<>();
-        ProjectRunner projectRunner = (ProjectRunner) testRunner;
-        report.setProjectName(projectRunner.getProject().getName());
-        for (TestSuiteRunner testSuiteResult : projectRunner.getResults()) {
-            testSuiteResultReports.add(makeTestSuiteResultReport(testSuiteResult));
-        }
-        report.setTestSuiteResultReports(testSuiteResultReports);
-        return report;
-    }
-
-    private TestSuiteResultReport makeTestSuiteResultReport(TestSuiteRunner runner) {
-        TestSuiteResultReport report = new TestSuiteResultReport();
-        report.setTestSuiteName(runner.getTestSuite().getName());
-        List<TestCaseResultReport> testCaseResultReports = new ArrayList<>();
-        for (TestCaseRunner testCaseResult : runner.getResults()) {
-            testCaseResultReports.add(makeTestCaseResultReport(testCaseResult));
-        }
-        report.setTestCaseResultReports(testCaseResultReports);
-        return report;
-    }
-
-    private TestCaseResultReport makeTestCaseResultReport(TestCaseRunner testCaseResult) {
-        TestCaseResultReport report = new TestCaseResultReport();
-        report.setTestCaseName(testCaseResult.getTestCase().getName());
-        List<TestStepResultReport> testStepResultReports = new ArrayList<>();
-        for (TestStepResult stepResult : testCaseResult.getResults()) {
-            testStepResultReports.add(makeTestStepResultReport(stepResult));
-        }
-        report.setTestStepResultReports(testStepResultReports);
-        return report;
-    }
-
-    private TestStepResultReport makeTestStepResultReport(TestStepResult result) {
-        TestStepResultReport report = new TestStepResultReport();
-        report.setTestStepName(result.getTestStep().getName());
-        report.setMessages(Arrays.asList(result.getMessages()));
-        report.setAssertionStatus(convertTestStepStatus(result.getStatus()));
-        report.setTimeTaken(result.getTimeTaken());
-        return report;
-    }
-
-    private TestStepResultReport.AssertionStatusEnum convertTestStepStatus(TestStepResult.TestStepStatus status) {
-        switch(status) {
-            case UNKNOWN:
-                return TestStepResultReport.AssertionStatusEnum.UNKNOWN;
-            case OK:
-                return TestStepResultReport.AssertionStatusEnum.OK;
-            case FAILED:
-                return TestStepResultReport.AssertionStatusEnum.FAILED;
-            case CANCELED:
-                return TestStepResultReport.AssertionStatusEnum.CANCELED;
-            default:
-                throw new Error("Unexpected Test step status: " + status);
-        }
-    }
-
-    private ProjectResultReport.StatusEnum convertTestRunnerStatus(TestRunner.Status status) {
-        switch(status) {
-            case INITIALIZED:
-                return ProjectResultReport.StatusEnum.INITIALIZED;
-            case RUNNING:
-                return ProjectResultReport.StatusEnum.RUNNING;
-            case CANCELED:
-                return ProjectResultReport.StatusEnum.CANCELED;
-            case FINISHED:
-                return ProjectResultReport.StatusEnum.FINISHED;
-            case FAILED:
-                return ProjectResultReport.StatusEnum.FAILED;
-            case WARNING:
-                return ProjectResultReport.StatusEnum.WARNING;
-            default:
-                throw new Error("Unexpected Test Runner status: " + status);
-        }
-    }
-
 }

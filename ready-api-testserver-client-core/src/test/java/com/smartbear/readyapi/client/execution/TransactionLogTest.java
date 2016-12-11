@@ -63,7 +63,7 @@ public class TransactionLogTest extends ProjectExecutionTestBase {
                 )
                 .buildTestRecipe();
 
-        RecipeExecutor recipeExecutor = testServerClient.createRecipeExecutor();
+        TestServerRecipeExecutor recipeExecutor = testServerClient.createRecipeExecutor();
         Execution execution = recipeExecutor.executeRecipe(recipe);
         String transactionId = execution.getCurrentReport().getTestSuiteResultReports().get(0).getTestCaseResultReports().get(0).getTestStepResultReports().get(0).getTransactionId();
         HarLogRoot transactionLog = testServerClient.getTransactionLog(execution, transactionId);

@@ -69,7 +69,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     public ProjectResultReport postTestRecipe(TestCase testCase, boolean async, HttpBasicAuth auth) throws ApiException {
         // verify the required parameter 'testCase' is set
         if (testCase == null) {
-            throw new ApiException(400, "Missing the required parameter 'testCase' when calling postTestRecipe");
+            throw new ApiException(400, "Missing the required parameter 'testCase' when calling postTestCase");
         }
         verifyDataSourceFilesExist(testCase);
         setAuthentication(auth);
@@ -101,10 +101,12 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         }
     }
 
+    @Override
     public void setConnectTimeout(int connectionTimeout) {
         apiClient.setConnectTimeout(connectionTimeout);
     }
 
+    @Override
     public void setDebugging(boolean debugging) {
         apiClient.setDebugging(debugging);
     }
@@ -141,7 +143,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
                 formParams.put(certificateFile.getName(), certificateFile);
             } else {
                 logger.warn("Client certificate file not found, file path: " + clientCertFileName +
-                        ". Execution will fail unless file exists on TestServer and file path added to allowed file paths.");
+                        ". TestServerExecution will fail unless file exists on TestServer and file path added to allowed file paths.");
             }
         }
     }
@@ -171,6 +173,8 @@ public class CodegenBasedTestServerApi implements TestServerApi {
      * @param executionID execution id
      * @return ProjectResultReport
      */
+
+    @Override
     public ProjectResultReport cancelExecution(String executionID, HttpBasicAuth auth) throws ApiException {
         if (executionID == null) {
             throw new ApiException(400, "Missing the required parameter 'executionID' when calling cancelExecution");
@@ -308,10 +312,10 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         setAuthentication(auth);
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(false)));
-        if(StringUtils.isNotEmpty(endpoint)) {
+        if (StringUtils.isNotEmpty(endpoint)) {
             queryParams.add(new Pair("endpoint", endpoint));
         }
-        if(StringUtils.isNotEmpty(callBackUrl)) {
+        if (StringUtils.isNotEmpty(callBackUrl)) {
             queryParams.add(new Pair("callback", callBackUrl));
         }
         try {
@@ -332,10 +336,10 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         setAuthentication(auth);
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(async)));
-        if(StringUtils.isNotEmpty(endpoint)) {
+        if (StringUtils.isNotEmpty(endpoint)) {
             queryParams.add(new Pair("endpoint", endpoint));
         }
-        if(StringUtils.isNotEmpty(callBackUrl)) {
+        if (StringUtils.isNotEmpty(callBackUrl)) {
             queryParams.add(new Pair("callback", callBackUrl));
         }
         queryParams.add(new Pair("swaggerEndpoint", swaggerApiURL.toString()));

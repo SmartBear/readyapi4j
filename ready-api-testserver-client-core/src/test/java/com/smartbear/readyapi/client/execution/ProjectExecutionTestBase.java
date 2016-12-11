@@ -11,7 +11,7 @@ class ProjectExecutionTestBase {
 
     TestServerClient testServerClient;
     TestServerApi apiWrapper;
-    RecipeExecutor recipeExecutor;
+    TestServerRecipeExecutor recipeExecutor;
     ProjectExecutor projectExecutor;
     SwaggerApiValidator swaggerApiValidator;
 

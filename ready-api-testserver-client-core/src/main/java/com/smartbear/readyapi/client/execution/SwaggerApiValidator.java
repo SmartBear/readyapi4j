@@ -3,7 +3,7 @@ package com.smartbear.readyapi.client.execution;
 import java.io.File;
 import java.net.URL;
 
-public class SwaggerApiValidator extends AbstractExecutor {
+public class SwaggerApiValidator extends AbstractTestServerExecutor {
 
     SwaggerApiValidator(TestServerClient testServerClient) {
         super(testServerClient);
@@ -32,7 +32,7 @@ public class SwaggerApiValidator extends AbstractExecutor {
      * @param swaggerFormat format
      * @param endpoint      endpoint against which tests should be executed.
      *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
-     * @param callBackUrl Callback Url
+     * @param callBackUrl   Callback Url
      * @return execution with executionId to be used to query the status
      */
     public Execution validateApiAsynchronously(File swaggerFile, SwaggerFormat swaggerFormat, String endpoint, String callBackUrl) {
@@ -47,7 +47,7 @@ public class SwaggerApiValidator extends AbstractExecutor {
      * @param swaggerFormat format
      * @param endpoint      endpoint against which tests should be executed.
      *                      Tests will be executed against the host specified in Swagger definition if endpoint is not provided.
-     * @param callBackUrl Callback Url
+     * @param callBackUrl   Callback Url
      * @return execution with execution report
      */
     public Execution validateApiSynchronously(File swaggerFile, SwaggerFormat swaggerFormat, String endpoint, String callBackUrl) {
@@ -63,7 +63,7 @@ public class SwaggerApiValidator extends AbstractExecutor {
      * @return execution with executionId to be used to query the status
      */
     public Execution validateApiAsynchronously(URL swaggerApiURL, String endpoint, String callBackUrl) {
-        return testServerClient.postSwagger(swaggerApiURL, endpoint, callBackUrl,  true);
+        return testServerClient.postSwagger(swaggerApiURL, endpoint, callBackUrl, true);
     }
 
     /**
