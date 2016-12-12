@@ -2,6 +2,7 @@ package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.TestRecipe;
 import com.smartbear.readyapi.client.TestRecipeBuilder;
+import com.smartbear.readyapi.client.result.RecipeExecutionResult;
 import com.smartbear.readyapi.client.teststeps.TestStepBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +23,16 @@ public class ExecutionUtils {
 
     private static RecipeExecutor executor;
 
-    public static void executeRecipe(TestStepBuilder... testStepBuilders) {
+    public static RecipeExecutionResult executeRecipe(TestStepBuilder... testStepBuilders) {
         TestRecipe recipe = TestRecipeBuilder.newTestRecipe(testStepBuilders).buildTestRecipe();
 
         if (executor == null) {
             executor = createRecipeExecutor();
         }
 
-        assertExecution(createRecipeExecutor().executeRecipe(recipe));
+        Execution execution = createRecipeExecutor().executeRecipe(recipe);
+        assertExecution(execution);
+        return execution.getExecutionResult();
     }
 
     private static RecipeExecutor createRecipeExecutor() {

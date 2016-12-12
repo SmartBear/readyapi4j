@@ -19,6 +19,7 @@ import com.smartbear.ready.recipe.assertions.JsonPathContentAssertionStruct;
 import com.smartbear.ready.recipe.assertions.JsonPathCountAssertionStruct;
 import com.smartbear.ready.recipe.assertions.NotSoapFaultAssertionStruct;
 import com.smartbear.ready.recipe.assertions.ResponseSLAAssertionStruct;
+import com.smartbear.ready.recipe.assertions.SchemaComplianceAssertionStruct;
 import com.smartbear.ready.recipe.assertions.SimpleContainsAssertionStruct;
 import com.smartbear.ready.recipe.assertions.ValidHttpStatusCodesAssertionStruct;
 import com.smartbear.ready.recipe.assertions.XPathContainsAssertionStruct;
@@ -91,6 +92,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     private static final String RESPONSE_SLA_ASSERTION_TYPE = "Response SLA";
     private static final String SCRIPT_ASSERTION_TYPE = "Script Assertion";
     private static final String NOT_SOAP_FAULT_ASSERTION = "Not SOAP Fault";
+    private static final String SCHEMA_COMPLIANCE_ASSERTION = "Schema Compliance";
 
     private final Map<String, SoapUIRecipeExecution> executionsMap = new HashMap<>();
     private final JsonRecipeParser recipeParser = new JsonRecipeParser();
@@ -345,6 +347,9 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
                     break;
                 case NOT_SOAP_FAULT_ASSERTION:
                     assertionStructs[i] = new NotSoapFaultAssertionStruct(name);
+                    break;
+                case SCHEMA_COMPLIANCE_ASSERTION:
+                    assertionStructs[i] = new SchemaComplianceAssertionStruct(name);
                     break;
                 default:
                     logger.warn("No such assertion type defined in the soapui local client api");
