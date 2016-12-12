@@ -11,9 +11,9 @@
     <artifactId>ready-api-testserver-client-core</artifactId>
     <name>Ready!API TestServer Client Core</name>
     <properties>
-        <swagger-version>1.5.8</swagger-version>
+        <swagger-version>1.5.10</swagger-version>
         <jersey-version>1.19</jersey-version>
-        <jackson-version>2.4.6</jackson-version>
+        <jackson-version>2.8.5</jackson-version>
         <jodatime-version>2.3</jodatime-version>
         <junit-version>4.8.1</junit-version>
         <swagger-codegen.version>2.1.6</swagger-codegen.version>

@@ -10,9 +10,6 @@ import com.smartbear.readyapi.client.model.TestStepResultReport;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by ole on 2016-12-11.
- */
 public abstract class AbstractTestStepResult implements TestStepResult {
     private static final List<HarHeader> noHeadersList = Collections.unmodifiableList(Lists.<HarHeader>newArrayList());
     protected final TestStepResultReport testStepResultReport;
