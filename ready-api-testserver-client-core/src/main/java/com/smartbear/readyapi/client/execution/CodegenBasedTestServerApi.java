@@ -143,7 +143,8 @@ public class CodegenBasedTestServerApi implements TestServerApi {
                 formParams.put(certificateFile.getName(), certificateFile);
             } else {
                 logger.warn("Client certificate file not found, file path: " + clientCertFileName +
-                        ". TestServerExecution will fail unless file exists on TestServer and file path added to allowed file paths.");
+                    ". The TestServer execution will fail unless file exists on TestServer and " +
+                    "the file path has been added to allowed file paths.");
             }
         }
     }

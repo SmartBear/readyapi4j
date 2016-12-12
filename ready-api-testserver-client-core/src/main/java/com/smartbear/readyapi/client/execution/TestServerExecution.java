@@ -12,10 +12,6 @@ import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-/**
- * Represents an execution, synchronous or asynchronous, and encapsulates all available information about the execution.
- */
-
 public class TestServerExecution implements Execution {
     private final Deque<ProjectResultReport> executionStatusReports = new ConcurrentLinkedDeque<>();
     private final String id;

@@ -5,6 +5,11 @@ import com.smartbear.readyapi.client.result.RecipeExecutionResult;
 
 import java.util.List;
 
+/**
+ * Represents an execution, synchronous or asynchronous, and encapsulates all
+ * available information about the execution.
+ */
+
 public interface Execution {
     String getId();
 
