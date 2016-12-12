@@ -31,6 +31,17 @@ public class PropertyTransferSourceBuilder {
     }
 
     PropertyTransferSource build() {
+        if (source.getProperty() == null) {
+            source.setProperty("Response");
+        }
+
+        if (source.getPath() != null && source.getPathLanguage() == null) {
+            if (source.getPath().startsWith("$")) {
+                source.setPathLanguage(PathLanguage.JSONPath.name());
+            } else {
+                source.setPathLanguage(PathLanguage.XPath.name());
+            }
+        }
         return source;
     }
 }
