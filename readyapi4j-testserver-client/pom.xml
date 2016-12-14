@@ -10,71 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>readyapi4j-testserver-client</artifactId>
     <name>Ready!API TestServer Client Core</name>
-    <properties>
-        <swagger-version>1.5.10</swagger-version>
-        <jersey-version>1.19</jersey-version>
-        <jackson-version>2.8.5</jackson-version>
-        <jodatime-version>2.3</jodatime-version>
-        <junit-version>4.8.1</junit-version>
-        <swagger-codegen.version>2.1.6</swagger-codegen.version>
-        <codegen.swagger.path>https://api.swaggerhub.com/apis/smartbear/ready-api-testserver/1.3.2
-        </codegen.swagger.path>
-    </properties>
+
     <dependencies>
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>${swagger-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-jaxrs</artifactId>
-            <version>${swagger-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.brsanthu</groupId>
-            <artifactId>migbase64</artifactId>
-            <version>2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jersey-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-multipart</artifactId>
-            <version>${jersey-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
-            <version>${jackson-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${jodatime-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
+            <groupId>com.smartbear.readyapi</groupId>
+            <artifactId>readyapi4j-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -90,7 +31,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
+            <version>4.12</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -98,47 +39,4 @@
             <version>1.9.5</version>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.3.2</version>
-                <executions>
-                    <execution>
-                        <id>swagger-codegen-test</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>java</executable>
-                    <mainClass>io.swagger.codegen.SwaggerCodegen</mainClass>
-                    <arguments>
-                        <argument>generate</argument>
-                        <argument>-i</argument>
-                        <argument>${codegen.swagger.path}</argument>
-                        <argument>-l</argument>
-                        <argument>java</argument>
-                        <argument>-o</argument>
-                        <argument>${project.basedir}/target/generated-sources/swagger</argument>
-                        <argument>
-                            -DmodelPackage=com.smartbear.readyapi.client.model,apiPackage=com.smartbear.readyapi.client.api
-                        </argument>
-                    </arguments>
-                    <includeProjectDependencies>true</includeProjectDependencies>
-                    <includePluginDependencies>true</includePluginDependencies>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>io.swagger</groupId>
-                        <artifactId>swagger-codegen-cli</artifactId>
-                        <version>${swagger-codegen.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>
 </project>

@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>readyapi4j-local-soapui</artifactId>
-    <name>Ready!API TestServer SoapUI Client</name>
+    <name>SoapUI Client</name>
     <dependencies>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
-            <artifactId>ready-api-testserver-client-core</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
+            <artifactId>readyapi4j-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.smartbear.soapui</groupId>
