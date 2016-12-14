@@ -19,25 +19,27 @@ public class AssertionUtils {
     public static void assertExecution(Execution execution) {
         assertNotNull(execution);
 
-        for (TestStepResult result : execution.getExecutionResult().getTestStepResults()) {
+        if (LOG.isDebugEnabled()) {
+            for (TestStepResult result : execution.getExecutionResult().getTestStepResults()) {
 
-            String responseContent = null;
-            try {
-                responseContent = result.getResponseContent();
-            } catch (ApiException e) {
-                if (e.getStatusCode() == 404) {
-                    LOG.info("Missing response content for TestStep [" + result.getTestStepName() + "]");
-                } else {
-                    LOG.error("Missing response content for TestStep [" + result.getTestStepName() + "]", e);
+                String responseContent = null;
+                try {
+                    responseContent = result.getResponseContent();
+                } catch (ApiException e) {
+                    if (e.getStatusCode() == 404) {
+                        LOG.debug("Missing response content for TestStep [" + result.getTestStepName() + "]");
+                    } else {
+                        LOG.debug("Missing response content for TestStep [" + result.getTestStepName() + "]", e);
+                    }
                 }
-            }
 
-            if (responseContent != null) {
-                LOG.info("Response content for TestStep [" + result.getTestStepName() + "]: " + responseContent);
+                if (responseContent != null) {
+                    LOG.debug("Response content for TestStep [" + result.getTestStepName() + "]: " + responseContent);
+                }
             }
         }
 
         assertEquals(Arrays.toString(execution.getErrorMessages().toArray()),
-            ProjectResultReport.StatusEnum.FINISHED, execution.getCurrentStatus());
+                ProjectResultReport.StatusEnum.FINISHED, execution.getCurrentStatus());
     }
 }

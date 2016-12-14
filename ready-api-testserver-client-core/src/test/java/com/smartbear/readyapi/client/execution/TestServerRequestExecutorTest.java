@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit tests for the RecipeExecutor.
+ * Unit tests for the TestServerRecipeExecutor.
  */
 public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
 
@@ -74,7 +74,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
         recipeExecutor.addExecutionListener(executionListener);
         recipeExecutor.submitRecipe(recipeToSubmit);
         Thread.sleep(1500);
-        verify(executionListener).requestSent(startReport);
+        verify(executionListener).executionStarted(startReport);
         verify(executionListener).executionFinished(endReport);
     }
 
@@ -114,7 +114,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
         ProjectResultReport cancelledReport = makeCancelledReport("execution_ID");
         when(apiWrapper.cancelExecution(eq(cancelledReport.getExecutionID()), any(HttpBasicAuth.class))).thenReturn(cancelledReport);
         when(apiWrapper.getExecutionStatus(eq(cancelledReport.getExecutionID()), any(HttpBasicAuth.class))).thenReturn(cancelledReport);
-        Execution execution = recipeExecutor.submitRecipe(recipeToSubmit);
+        TestServerExecution execution = recipeExecutor.submitRecipe(recipeToSubmit);
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.RUNNING));
 
         execution = testServerClient.cancelExecution(execution);
@@ -164,7 +164,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
     private ExecutionListener createExecutionListenerWithExpectedErrorMessage(final String expectedErrorMessage) {
         return new ExecutionListener() {
             @Override
-            public void requestSent(ProjectResultReport projectResultReport) {
+            public void executionStarted(ProjectResultReport projectResultReport) {
             }
 
             @Override

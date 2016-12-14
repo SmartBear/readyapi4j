@@ -1,6 +1,8 @@
 package com.smartbear.readyapi.client.execution;
 
+import com.eviware.soapui.support.xml.XmlUtils;
 import com.smartbear.readyapi.client.TestRecipe;
+import com.smartbear.readyapi.client.model.HarResponse;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.util.soap.LocalService;
 import org.junit.AfterClass;
@@ -14,8 +16,11 @@ import java.net.URL;
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.soapRequest;
 import static com.smartbear.readyapi.util.PortFinder.portFinder;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class SoapUIRecipeExecutorSOAPTest {
     private static final String SOAP_BINDING = "LocalServicePortBinding";
@@ -60,8 +65,12 @@ public class SoapUIRecipeExecutorSOAPTest {
                         .assertSoapOkResponse()
                         .assertXPath(XPATH_TO_ASSERT, XPATH_RESULT)
         ).buildTestRecipe();
-        ProjectResultReport projectResultReport = executor.postTestRecipe(testRecipe.getTestCase(), false, null);
-        assertThat(projectResultReport.getExecutionID(), is(not(nullValue())));
-        assertThat(projectResultReport.getStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        assertThat(execution.getId(), is(not(nullValue())));
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+
+        HarResponse harResponse = execution.getExecutionResult().getTestStepResult(0).getHarResponse();
+        assertThat(harResponse, is(not(nullValue())));
+        assertTrue(XmlUtils.seemsToBeXml(harResponse.getContent().getText()));
     }
 }

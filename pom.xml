@@ -7,6 +7,7 @@
     <version>1.2.2-SNAPSHOT</version>
     <modules>
         <module>ready-api-testserver-client-core</module>
+        <module>soapui-local-client</module>
     </modules>
     <packaging>pom</packaging>
     <name>Ready!API TestServer Client</name>

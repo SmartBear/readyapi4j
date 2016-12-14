@@ -1,7 +1,9 @@
 package com.smartbear.readyapi.client.execution;
 
 import com.google.gson.Gson;
+import com.smartbear.readyapi.client.ExecutionListener;
 import com.smartbear.readyapi.client.TestRecipe;
+import com.smartbear.readyapi.client.model.HarResponse;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.teststeps.propertytransfer.PathLanguage;
 import com.smartbear.readyapi.util.rest.JsonTestObject;
@@ -11,13 +13,27 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
-import static com.smartbear.readyapi.client.teststeps.TestSteps.*;
+import static com.smartbear.readyapi.client.teststeps.TestSteps.getRequest;
+import static com.smartbear.readyapi.client.teststeps.TestSteps.groovyScriptStep;
+import static com.smartbear.readyapi.client.teststeps.TestSteps.postRequest;
+import static com.smartbear.readyapi.client.teststeps.TestSteps.propertyTransfer;
 import static com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferBuilder.from;
 import static com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferSourceBuilder.aSource;
 import static com.smartbear.readyapi.client.teststeps.propertytransfer.PropertyTransferTargetBuilder.aTarget;
-import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.*;
-import static org.hamcrest.CoreMatchers.*;
+import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.addGetToLocalServer;
+import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.addPostToLocalServer;
+import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.getPostedJsonTestObject;
+import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.startLocalServer;
+import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.stopLocalServer;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
 
 public class SoapUIRecipeExecutorTest {
     private static final String REST_SOURCE = "SourceStep";
@@ -64,9 +80,9 @@ public class SoapUIRecipeExecutorTest {
         TestRecipe testRecipe = newTestRecipe(
                 groovyScriptStep("println 'Hello Earth'")
         ).buildTestRecipe();
-        ProjectResultReport projectResultReport = executor.postTestRecipe(testRecipe.getTestCase(), false, null);
-        assertThat(projectResultReport.getExecutionID(), is(not(nullValue())));
-        assertThat(projectResultReport.getStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        assertThat(execution.getId(), is(not(nullValue())));
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
     }
 
     @Test
@@ -76,9 +92,13 @@ public class SoapUIRecipeExecutorTest {
                         .acceptsJson()
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_TEST_VALUE)
         ).buildTestRecipe();
-        ProjectResultReport projectResultReport = executor.postTestRecipe(testRecipe.getTestCase(), false, null);
-        assertThat(projectResultReport.getExecutionID(), is(not(nullValue())));
-        assertThat(projectResultReport.getStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        assertThat(execution.getId(), is(not(nullValue())));
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+
+        HarResponse harResponse = execution.getExecutionResult().getTestStepResult(0).getHarResponse();
+        assertThat(harResponse, is(not(nullValue())));
+        assertEquals("{\"message\":\"Hello World\"}", harResponse.getContent().getText());
     }
 
     @Test
@@ -90,8 +110,8 @@ public class SoapUIRecipeExecutorTest {
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_TEST_VALUE),
                 propertyTransfer()
                         .addTransfer(from(aSource()
-                                        .withSourceStep(REST_SOURCE)
-                                        .withProperty(PROPERTY_ENDPOINT))
+                                .withSourceStep(REST_SOURCE)
+                                .withProperty(PROPERTY_ENDPOINT))
                                 .to(aTarget()
                                         .withTargetStep(REST_TARGET)
                                         .withProperty(PROPERTY_ENDPOINT))),
@@ -100,32 +120,54 @@ public class SoapUIRecipeExecutorTest {
                         .acceptsJson()
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_ROOT_VALUE)
         ).buildTestRecipe();
-        ProjectResultReport projectResultReport = executor.postTestRecipe(testRecipe.getTestCase(), false, null);
-        assertThat(projectResultReport.getExecutionID(), is(not(nullValue())));
-        assertThat(projectResultReport.getStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        assertThat(execution.getId(), is(not(nullValue())));
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
     }
 
     @Test
-    public void runsPropertyTransferRequestWithJsonPathExtraction(){
-        TestRecipe testRecipe = newTestRecipe(
+    public void runsPropertyTransferRequestWithJsonPathExtraction() {
+        TestRecipe testRecipe = buildPropertyTransferWithJsonPathExtractionTestRecipe();
+        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        assertThat(execution.getId(), is(not(nullValue())));
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(getPostedJsonTestObject(), is(testObject));
+    }
+
+    @Test
+    public void runsAsyncPropertyTransferRequestWithJsonPathExtraction() {
+        TestRecipe testRecipe = buildPropertyTransferWithJsonPathExtractionTestRecipe();
+
+        ExecutionListener listenerMock = mock(ExecutionListener.class);
+        executor.addExecutionListener(listenerMock);
+        Execution execution = executor.postTestCase(testRecipe.getTestCase(), true);
+        assertThat(execution.getId(), is(not(nullValue())));
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.RUNNING));
+
+        verify(listenerMock, timeout(1000).times(1)).executionStarted(any());
+        verify(listenerMock, timeout(20000).times(1)).executionFinished(any());
+    }
+
+    private TestRecipe buildPropertyTransferWithJsonPathExtractionTestRecipe() {
+        return newTestRecipe(
                 getRequest(jsonURL)
                         .named(REST_SOURCE)
                         .acceptsJson()
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_JSON_VALUE),
                 propertyTransfer()
                         .addTransfer(from(aSource()
-                                        .withSourceStep(REST_SOURCE)
-                                        .withProperty(PROPERTY_RESPONSE)
-                                        .withPathLanguage(PathLanguage.JSONPath)
-                                        .withPath(JSON_PATH_ALTERNATE))
+                                .withSourceStep(REST_SOURCE)
+                                .withProperty(PROPERTY_RESPONSE)
+                                .withPathLanguage(PathLanguage.JSONPath)
+                                .withPath(JSON_PATH_ALTERNATE))
                                 .to(aTarget()
                                         .withTargetStep(REST_TARGET)
                                         .withProperty(PROPERTY_ENDPOINT)))
                         .addTransfer(from(aSource()
-                                        .withSourceStep(REST_SOURCE)
-                                        .withProperty(PROPERTY_RESPONSE)
-                                        .withPathLanguage(PathLanguage.JSONPath)
-                                        .withPath(JSON_PATH_MESSAGE))
+                                .withSourceStep(REST_SOURCE)
+                                .withProperty(PROPERTY_RESPONSE)
+                                .withPathLanguage(PathLanguage.JSONPath)
+                                .withPath(JSON_PATH_MESSAGE))
                                 .to(aTarget()
                                         .withTargetStep(REST_TARGET)
                                         .withPathLanguage(PathLanguage.JSONPath)
@@ -136,9 +178,5 @@ public class SoapUIRecipeExecutorTest {
                         .acceptsJson()
                         .withRequestBody(new Gson().toJson(new JsonTestObject(ASSERTION_TEST_VALUE, serverURL)))
         ).buildTestRecipe();
-        ProjectResultReport projectResultReport = executor.postTestRecipe(testRecipe.getTestCase(), false, null);
-        assertThat(projectResultReport.getExecutionID(), is(not(nullValue())));
-        assertThat(projectResultReport.getStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
-        assertThat(getPostedJsonTestObject(), is(testObject));
     }
 }

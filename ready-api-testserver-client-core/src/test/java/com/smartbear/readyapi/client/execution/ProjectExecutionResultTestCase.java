@@ -2,7 +2,6 @@ package com.smartbear.readyapi.client.execution;
 
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
-import com.smartbear.readyapi.client.model.TestStepResultReport;
 import com.smartbear.readyapi.client.result.RecipeExecutionResult;
 import io.swagger.client.auth.HttpBasicAuth;
 import io.swagger.util.Json;
@@ -18,7 +17,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +36,7 @@ public class ProjectExecutionResultTestCase {
         TestServerApi apiMock = mock(TestServerApi.class);
         when(apiMock.getTransactionLog(Matchers.anyString(), Matchers.anyString(), (HttpBasicAuth) Matchers.any())).thenReturn(harLogRoot);
 
-        Execution execution = new Execution(apiMock, new HttpBasicAuth(), resultReport);
+        Execution execution = new TestServerExecution(apiMock, new HttpBasicAuth(), resultReport);
         RecipeExecutionResult result = execution.getExecutionResult();
 
         assertEquals(ProjectResultReport.StatusEnum.FINISHED, result.getStatus());
@@ -57,7 +55,7 @@ public class ProjectExecutionResultTestCase {
         assertNotNull(result.getLastTestStepResult("get request 1"));
         assertEquals(1, result.getFailedTestStepsResults("GET request 1").size());
 
-        assertTrue(result.getTestStepResult(0).hasTransactionData());
+        assertNotNull(result.getTestStepResult(0).getHarResponse());
         assertEquals("Test response", result.getTestStepResult(0).getResponseContent());
     }
 }

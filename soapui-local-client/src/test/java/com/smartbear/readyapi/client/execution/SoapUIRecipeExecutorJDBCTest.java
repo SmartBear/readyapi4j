@@ -14,9 +14,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
-import static com.smartbear.readyapi.client.teststeps.TestSteps.jdbcConnection;
 import static com.smartbear.readyapi.client.assertions.Assertions.contains;
-import static org.hamcrest.CoreMatchers.*;
+import static com.smartbear.readyapi.client.teststeps.TestSteps.jdbcConnection;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class SoapUIRecipeExecutorJDBCTest {
@@ -34,7 +36,7 @@ public class SoapUIRecipeExecutorJDBCTest {
 
     @BeforeClass
     public static void setUp() {
-        try(Connection dbConnection = getDBConnection()) {
+        try (Connection dbConnection = getDBConnection()) {
             PreparedStatement createStatement = dbConnection.prepareStatement(CREATE_STATEMENT);
             createStatement.executeUpdate();
             createStatement.close();
@@ -52,7 +54,7 @@ public class SoapUIRecipeExecutorJDBCTest {
             insertStatement2.setString(3, "Arvidsson");
             insertStatement2.executeUpdate();
             insertStatement2.close();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             logger.error("Could not create test tables in in-memory db due to: " + e.getMessage());
         }
     }
@@ -73,8 +75,8 @@ public class SoapUIRecipeExecutorJDBCTest {
         TestRecipe testRecipe = newTestRecipe(
                 connection.jdbcRequest(SELECT_STATEMENT).addAssertion(contains("Arvid"))
         ).buildTestRecipe();
-        ProjectResultReport projectResultReport = executor.postTestRecipe(testRecipe.getTestCase(), false, null);
-        assertThat(projectResultReport.getExecutionID(), is(not(nullValue())));
-        assertThat(projectResultReport.getStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        assertThat(execution.getId(), is(not(nullValue())));
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
     }
 }

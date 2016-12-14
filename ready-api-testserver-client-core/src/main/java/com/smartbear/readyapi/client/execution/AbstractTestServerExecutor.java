@@ -14,14 +14,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-abstract class AbstractExecutor {
-    private static Logger logger = LoggerFactory.getLogger(AbstractExecutor.class);
+abstract class AbstractTestServerExecutor {
+    private static Logger logger = LoggerFactory.getLogger(AbstractTestServerExecutor.class);
     private static final int NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS = 3;
     private final List<ExecutionListener> executionListeners = new CopyOnWriteArrayList<>();
 
     final TestServerClient testServerClient;
 
-    AbstractExecutor(TestServerClient testServerClient) {
+    AbstractTestServerExecutor(TestServerClient testServerClient) {
         this.testServerClient = testServerClient;
     }
 
@@ -33,10 +33,10 @@ abstract class AbstractExecutor {
         executionListeners.remove(listener);
     }
 
-    void notifyRequestSubmitted(Execution execution) {
+    void notifyExecutionStarted(TestServerExecution execution) {
         if (execution != null) {
             for (ExecutionListener executionListener : executionListeners) {
-                executionListener.requestSent(execution.getCurrentReport());
+                executionListener.executionStarted(execution.getCurrentReport());
             }
             new ExecutionStatusChecker(execution).start();
         }
@@ -83,11 +83,11 @@ abstract class AbstractExecutor {
     private class ExecutionStatusChecker {
         private final Timer timer;
 
-        private final Execution execution;
+        private final TestServerExecution execution;
 
         private int errorCount = 0;
 
-        ExecutionStatusChecker(Execution execution) {
+        ExecutionStatusChecker(TestServerExecution execution) {
             this.execution = execution;
             timer = new Timer();
         }

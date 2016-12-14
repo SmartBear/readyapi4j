@@ -43,11 +43,11 @@ public class TestServerClient {
     public static TestServerClient fromUrl(String testserverUrl) throws MalformedURLException {
         URL url = new URL(testserverUrl);
         return new TestServerClient(Scheme.valueOf(url.getProtocol().toUpperCase()), url.getHost(),
-            url.getPort() == -1 ? 80 : url.getPort());
+                url.getPort() == -1 ? 80 : url.getPort());
     }
 
-    public RecipeExecutor createRecipeExecutor() {
-        return new RecipeExecutor(this);
+    public TestServerRecipeExecutor createRecipeExecutor() {
+        return new TestServerRecipeExecutor(this);
     }
 
     public ProjectExecutor createProjectExecutor() {
@@ -89,29 +89,29 @@ public class TestServerClient {
         return baseUrl;
     }
 
-    Execution postTestRecipe(TestCase testCase, boolean async) {
+    TestServerExecution postTestRecipe(TestCase testCase, boolean async) {
         ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
-        return new Execution(apiStub, authentication, projectResultReport);
+        return new TestServerExecution(apiStub, authentication, projectResultReport);
     }
 
-    Execution postProject(ProjectExecutionRequest projectExecutionRequest, boolean async) {
+    TestServerExecution postProject(ProjectExecutionRequest projectExecutionRequest, boolean async) {
         ProjectResultReport projectResultReport = apiStub.postProject(projectExecutionRequest, async, authentication);
-        return new Execution(apiStub, authentication, projectResultReport);
+        return new TestServerExecution(apiStub, authentication, projectResultReport);
     }
 
-    Execution postRepositoryProject(RepositoryProjectExecutionRequest executionRequest, boolean async) {
+    TestServerExecution postRepositoryProject(RepositoryProjectExecutionRequest executionRequest, boolean async) {
         ProjectResultReport projectResultReport = apiStub.postRepositoryProject(executionRequest, async, authentication);
-        return new Execution(apiStub, authentication, projectResultReport);
+        return new TestServerExecution(apiStub, authentication, projectResultReport);
     }
 
     Execution postSwagger(File swaggerFile, SwaggerApiValidator.SwaggerFormat swaggerFormat, String callBackUrl, String endpoint, boolean async) {
         ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerFile, swaggerFormat, endpoint, callBackUrl, true, authentication);
-        return new Execution(apiStub, authentication, projectResultReport);
+        return new TestServerExecution(apiStub, authentication, projectResultReport);
     }
 
     Execution postSwagger(URL swaggerApiURL, String endpoint, String callBackUrl, boolean async) {
         ProjectResultReport projectResultReport = apiStub.postSwagger(swaggerApiURL, endpoint, callBackUrl, true, authentication);
-        return new Execution(apiStub, authentication, projectResultReport);
+        return new TestServerExecution(apiStub, authentication, projectResultReport);
     }
 
     ProjectResultReport getExecutionStatus(String executionId) {
@@ -122,7 +122,7 @@ public class TestServerClient {
         apiStub.cancelExecution(executionID, authentication);
     }
 
-    public Execution cancelExecution(final Execution execution) {
+    public TestServerExecution cancelExecution(final TestServerExecution execution) {
         ProjectResultReport projectResultReport = apiStub.cancelExecution(execution.getId(), authentication);
         execution.addResultReport(projectResultReport);
         return execution;
@@ -136,7 +136,7 @@ public class TestServerClient {
         List<Execution> executions = new ArrayList<>();
         ProjectResultReports projectResultReport = apiStub.getExecutions(authentication);
         for (ProjectResultReport resultReport : projectResultReport.getProjectResultReports()) {
-            executions.add(new Execution(apiStub, authentication, resultReport));
+            executions.add(new TestServerExecution(apiStub, authentication, resultReport));
         }
         return executions;
     }
