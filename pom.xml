@@ -96,7 +96,7 @@
             </activation>
             <modules>
                 <module>readyapi4j-core</module>
-                <module>readyapi4j-local-soapui</module>
+                <module>readyapi4j-local</module>
             </modules>
         </profile>
         <profile>
