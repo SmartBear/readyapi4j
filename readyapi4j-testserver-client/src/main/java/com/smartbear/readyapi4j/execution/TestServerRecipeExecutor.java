@@ -3,6 +3,7 @@ package com.smartbear.readyapi4j.execution;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi4j.RecipeFilter;
 import com.smartbear.readyapi4j.TestRecipe;
+import com.smartbear.readyapi4j.extractor.ExtractorData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,22 +36,25 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
             recipeFilter.filterRecipe(recipe);
         }
 
-        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), true);
+        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), recipe.getExtractorData(), true);
         notifyExecutionStarted(execution);
         return execution;
     }
 
     @Override
     public TestServerExecution executeRecipe(TestRecipe recipe) throws ApiException {
-        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), false);
+        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), recipe.getExtractorData(), false);
         if (execution != null) {
             notifyExecutionFinished(execution.getCurrentReport());
         }
         return execution;
     }
 
-    private TestServerExecution doExecuteTestCase(TestCase testCase, boolean async) throws ApiException {
+    private TestServerExecution doExecuteTestCase(TestCase testCase, ExtractorData extractorData, boolean async) throws ApiException {
         try {
+            if (extractorData != null) {
+                extractorDataList.add(extractorData);
+            }
             TestServerExecution execution = testServerClient.postTestRecipe(testCase, async);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), testCase);
             return execution;

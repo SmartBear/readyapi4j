@@ -24,6 +24,11 @@ public class PropertyTransferBuilder {
         return to(propertyTransferTargetBuilder);
     }
 
+    public PropertyTransferBuilder named(String name) {
+        transfer.setTransferName(name);
+        return this;
+    }
+
     public PropertyTransferBuilder to(PropertyTransferTargetBuilder propertyTransferTargetBuilder) {
         this.propertyTransferTargetBuilder = propertyTransferTargetBuilder;
         return this;

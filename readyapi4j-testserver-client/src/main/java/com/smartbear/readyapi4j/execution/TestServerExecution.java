@@ -67,7 +67,9 @@ public class TestServerExecution implements Execution {
                 for (TestCaseResultReport testCaseResultReport : testSuiteReport.getTestCaseResultReports()) {
                     for (TestStepResultReport testStepResultReport : testCaseResultReport.getTestStepResultReports()) {
                         if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
-                            result.addAll(testStepResultReport.getMessages());
+                            result.add(String.format("TestStepName: %s, messages: %s",
+                                    testStepResultReport.getTestStepName(),
+                                    String.join(", ", testStepResultReport.getMessages())));
                         }
                     }
                 }

@@ -1,23 +1,32 @@
 package com.smartbear.readyapi4j.execution;
 
-import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
 import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi.client.model.TestCaseResultReport;
 import com.smartbear.readyapi.client.model.TestStep;
+import com.smartbear.readyapi.client.model.TestSuiteResultReport;
 import com.smartbear.readyapi.client.model.UnresolvedFile;
+import com.smartbear.readyapi4j.ExecutionListener;
+import com.smartbear.readyapi4j.extractor.ExtractorData;
+import com.smartbear.readyapi4j.extractor.ExtractorOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 abstract class AbstractTestServerExecutor {
     private static Logger logger = LoggerFactory.getLogger(AbstractTestServerExecutor.class);
     private static final int NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS = 3;
     private final List<ExecutionListener> executionListeners = new CopyOnWriteArrayList<>();
+    protected List<ExtractorData> extractorDataList = new LinkedList<>();
 
     final TestServerClient testServerClient;
 
@@ -49,8 +58,46 @@ abstract class AbstractTestServerExecutor {
     }
 
     void notifyExecutionFinished(ProjectResultReport executionStatus) {
+        List<String> extractorDataIdList = extractorDataList
+                .stream()
+                .map(ExtractorData::getExtractorDataId)
+                .collect(Collectors.toList());
+        TestCaseResultReport resultReport = executionStatus
+                .getTestSuiteResultReports()
+                .stream()
+                .map(TestSuiteResultReport::getTestCaseResultReports)
+                .flatMap(Collection::stream)
+                .filter(testCaseResultReport ->
+                        extractorDataIdList.contains(testCaseResultReport.getProperties().get(ExtractorData.EXTRACTOR_DATA_KEY)))
+                .findAny()
+                .orElse(null);
+
+        if (resultReport != null) {
+            Map<String, String> properties = resultReport.getProperties();
+            runExtractors(properties);
+
+            // After run, remove all unnecessary properties
+            properties.entrySet().removeIf(entry -> entry.getKey().contains(properties.get(ExtractorData.EXTRACTOR_DATA_KEY)));
+            properties.remove(ExtractorData.EXTRACTOR_DATA_KEY);
+        }
         for (ExecutionListener executionListener : executionListeners) {
             executionListener.executionFinished(executionStatus);
+        }
+    }
+
+    private void runExtractors(Map<String, String> properties) {
+        ExtractorData extractorData = extractorDataList
+                .stream()
+                .filter(ed -> ed.getExtractorDataId().equals(properties.get(ExtractorData.EXTRACTOR_DATA_KEY)))
+                .findAny()
+                .orElse(null);
+        if (extractorData != null) {
+            properties.forEach((key, value) -> {
+                ExtractorOperator operator = extractorData.getExtractorOperator(key);
+                if (operator != null) {
+                    operator.extractValue(value);
+                }
+            });
         }
     }
 
@@ -64,12 +111,12 @@ abstract class AbstractTestServerExecutor {
                 if (testCase == null || unresolvedFile.getFileName().equals(testCase.getClientCertFileName())) {
                     throw new ApiException(400, "Couldn't find client certificate file: " + unresolvedFile.getFileName());
                 }
-                throwExceptionIfTestStepCertificateIsUnresolved(projectResultReport, testCase, unresolvedFile);
+                throwExceptionIfTestStepCertificateIsUnresolved(testCase, unresolvedFile);
             }
         }
     }
 
-    private void throwExceptionIfTestStepCertificateIsUnresolved(ProjectResultReport projectResultReport, TestCase testCase, UnresolvedFile unresolvedFile) {
+    private void throwExceptionIfTestStepCertificateIsUnresolved(TestCase testCase, UnresolvedFile unresolvedFile) {
         for (TestStep testStep : testCase.getTestSteps()) {
             if (testStep instanceof RequestTestStepBase) {
                 RequestTestStepBase requestTestStepBase = (RequestTestStepBase) testStep;

@@ -3,6 +3,7 @@ package com.smartbear.readyapi4j;
 import com.smartbear.readyapi.client.model.RequestAttachment;
 import com.smartbear.readyapi.client.model.SoapParameter;
 import com.smartbear.readyapi.client.model.SoapRequestTestStep;
+import com.smartbear.readyapi4j.extractor.ExtractorData;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import com.sun.jersey.core.util.Base64;
 import org.junit.Test;
@@ -17,6 +18,8 @@ import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi4j.attachments.Attachments.byteArray;
 import static com.smartbear.readyapi4j.attachments.Attachments.stream;
 import static com.smartbear.readyapi4j.attachments.Attachments.string;
+import static com.smartbear.readyapi4j.extractor.Extractors.pathExtractor;
+import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.soapRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -27,15 +30,15 @@ public class SoapRequestStepRecipeTest {
     @Test
     public void testSoapRecipe() throws Exception {
         TestRecipe recipe = newTestRecipe()
-            .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
-                .named("Soap Rulez")
-                .forBinding("GlobalWeatherSoap12")
-                .forOperation("GetWeather")
-                .withParameter("CountryName", "Sweden")
-                .withPathParameter("//*:CityName", "Stockholm")
+                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                        .named("Soap Rulez")
+                        .forBinding("GlobalWeatherSoap12")
+                        .forOperation("GetWeather")
+                        .withParameter("CountryName", "Sweden")
+                        .withPathParameter("//*:CityName", "Stockholm")
 
-            )
-            .buildTestRecipe();
+                )
+                .buildTestRecipe();
 
         SoapRequestTestStep testStep = (SoapRequestTestStep) recipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getName(), is("Soap Rulez"));
@@ -108,5 +111,57 @@ public class SoapRequestStepRecipeTest {
         assertThat(attachment.getContentType(), is(contentType));
         assertThat(attachment.getName(), is(name));
         assertThat(Base64.decode(attachment.getContent()), is(content));
+    }
+
+    @Test
+    public void buildRestRequestTestRecipeWithPropertyExtractor() throws MalformedURLException {
+        final String[] extractedProperty = {""};
+        TestRecipe recipe = newTestRecipe()
+                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                        .named("Soap Rulez")
+                        .forBinding("GlobalWeatherSoap12")
+                        .forOperation("GetWeather")
+                        .withParameter("CountryName", "Sweden")
+                        .withPathParameter("//*:CityName", "Stockholm")
+                        .withExtractors(
+                                propertyExtractor("Endpoint", property -> extractedProperty[0] = property)))
+                .buildTestRecipe();
+
+        // This should not be set only after building the testrecipe, it should be set after run
+        assertThat(extractedProperty[0], is(""));
+        assertThat(recipe.getTestCase().getProperties().size(), is(2));
+        recipe.getTestCase().getProperties().forEach((key, value) -> {
+            if (key.contains("Endpoint")) {
+                assertThat(value, is(""));
+            } else {
+                assertThat(key, is(ExtractorData.EXTRACTOR_DATA_KEY));
+            }
+        });
+    }
+
+    @Test
+    public void buildRestRequestTestRecipeWithJsonPathExtractor() throws MalformedURLException {
+        final String[] extractedProperty = {""};
+        TestRecipe recipe = newTestRecipe()
+                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                        .named("Soap Rulez")
+                        .forBinding("GlobalWeatherSoap12")
+                        .forOperation("GetWeather")
+                        .withParameter("CountryName", "Sweden")
+                        .withPathParameter("//*:CityName", "Stockholm")
+                        .withExtractors(
+                                pathExtractor("$[0].Endpoint", property -> extractedProperty[0] = property)))
+                .buildTestRecipe();
+
+        // This should not be set only after building the testrecipe, it should be set after run
+        assertThat(extractedProperty[0], is(""));
+        assertThat(recipe.getTestCase().getProperties().size(), is(2));
+        recipe.getTestCase().getProperties().forEach((key, value) -> {
+            if (key.contains("$[0].Endpoint")) {
+                assertThat(value, is(""));
+            } else {
+                assertThat(key, is(ExtractorData.EXTRACTOR_DATA_KEY));
+            }
+        });
     }
 }
