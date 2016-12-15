@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j.support;
 
+import com.smartbear.readyapi.client.model.HarResponse;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.result.TestStepResult;
@@ -13,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class AssertionUtils {
 
-    public static final Logger LOG = LoggerFactory.getLogger(AssertionUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AssertionUtils.class);
 
     public static void assertExecution(Execution execution) {
         assertNotNull(execution);
@@ -21,15 +22,12 @@ public class AssertionUtils {
         if (LOG.isDebugEnabled()) {
             for (TestStepResult result : execution.getExecutionResult().getTestStepResults()) {
 
-                String responseContent = null;
                 try {
-                    responseContent = result.getResponseContent();
+                    HarResponse response = result.getHarResponse();
+                    LOG.info("TestStep [" + result.getTestStepName() + "] response: " + response.getStatus() +
+                            " - " + response.getContent().getText());
                 } catch (RuntimeException e) {
-                    LOG.debug("Missing response content for TestStep [" + result.getTestStepName() + "]", e);
-                }
-
-                if (responseContent != null) {
-                    LOG.debug("Response content for TestStep [" + result.getTestStepName() + "]: " + responseContent);
+                    LOG.debug("Missing  HAR response for TestStep [" + result.getTestStepName() + "]", e);
                 }
             }
         }

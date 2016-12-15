@@ -6,6 +6,7 @@ import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi4j.extractor.ExtractorData;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Before;
@@ -38,7 +39,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
 
     @Before
     public void setUp() throws Exception {
-        recipeToSubmit = new TestRecipe(new TestCase());
+        recipeToSubmit = new TestRecipe(new TestCase(), new ExtractorData());
     }
 
     @Test
