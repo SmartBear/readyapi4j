@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
-            <artifactId>readyapi4j-local-soapui</artifactId>
+            <artifactId>readyapi4j-local</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
