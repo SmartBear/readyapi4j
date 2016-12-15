@@ -60,7 +60,7 @@ Ready! API or any other API testing tool on your computer.
     Actual   :FAILED
     ```
 
-4. [Dive into the javadocs](http://smartbear.github.io/ready-api-testserver-client/apidocs/) to get an overview of the Java API
+4. [Dive into the javadocs](http://smartbear.github.io/readyapi4j/apidocs/) to get an overview of the Java API
 
 
 ## More samples / tutorials
