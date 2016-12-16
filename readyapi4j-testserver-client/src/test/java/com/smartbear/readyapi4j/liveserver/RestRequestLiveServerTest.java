@@ -7,7 +7,7 @@ import com.smartbear.readyapi.client.model.TestSuiteResultReport;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi4j.execution.Execution;
-import com.smartbear.readyapi4j.execution.TestServerClient;
+import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
 import com.smartbear.readyapi4j.teststeps.TestStepBuilder;
 import org.junit.Before;
 import org.junit.Test;
