@@ -17,9 +17,9 @@ import java.util.Map;
 
 import static com.smartbear.readyapi4j.support.AssertionUtils.assertExecution;
 
-public class ExecutionUtils {
+public class RecipeExecutionFacade {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ExecutionUtils.class);
+    private final static Logger LOG = LoggerFactory.getLogger(RecipeExecutionFacade.class);
 
     private static final String TESTSERVER_ENDPOINT = "testserver.endpoint";
     private static final String TESTSERVER_USER = "testserver.user";
