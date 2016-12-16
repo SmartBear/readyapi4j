@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -38,25 +39,24 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
             recipeFilter.filterRecipe(recipe);
         }
 
-        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), recipe.getExtractorData(), true);
+        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), true);
         notifyExecutionStarted(execution);
         return execution;
     }
 
     @Override
     public TestServerExecution executeRecipe(TestRecipe recipe) throws ApiException {
-        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), recipe.getExtractorData(), false);
+        Optional<ExtractorData> optionoalExtractorData = recipe.getExtractorData();
+        optionoalExtractorData.ifPresent(extractorData -> extractorDataList.add(extractorData));
+        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), false);
         if (execution != null) {
             notifyExecutionFinished(execution.getCurrentReport());
         }
         return execution;
     }
 
-    private TestServerExecution doExecuteTestCase(TestCase testCase, ExtractorData extractorData, boolean async) throws ApiException {
+    private TestServerExecution doExecuteTestCase(TestCase testCase, boolean async) throws ApiException {
         try {
-            if (extractorData != null) {
-                extractorDataList.add(extractorData);
-            }
             TestServerExecution execution = testServerClient.postTestRecipe(testCase, async);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), testCase);
             return execution;

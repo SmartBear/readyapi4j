@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import static com.smartbear.readyapi.client.model.TestStepResultReport.AssertionStatusEnum.FAILED;
 import static com.smartbear.readyapi.client.model.TestStepResultReport.AssertionStatusEnum.OK;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -54,8 +55,8 @@ public class ProjectExecutionResultTestCase {
         assertThat(FAILED, is(result.getTestStepResult(1).getStatusForAssertion("Valid HTTP Status Codes")));
         assertThat(OK, is(result.getTestStepResult(1).getStatusForAssertion("Invalid HTTP Status Codes")));
 
-        assertNotNull(result.getFirstTestStepResult("get request 1"));
-        assertNotNull(result.getLastTestStepResult("get request 1"));
+        assertTrue(result.getFirstTestStepResult("get request 1").isPresent());
+        assertTrue(result.getLastTestStepResult("get request 1").isPresent());
         assertEquals(1, result.getFailedTestStepsResults("GET request 1").size());
 
         assertNotNull(result.getTestStepResult(0).getHarResponse());

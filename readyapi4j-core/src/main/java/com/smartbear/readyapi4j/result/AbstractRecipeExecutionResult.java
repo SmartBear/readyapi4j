@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j.result;
 
+import com.google.common.collect.Lists;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.TestCaseResultReport;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
@@ -8,6 +9,7 @@ import com.smartbear.readyapi.client.model.TestSuiteResultReport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractRecipeExecutionResult implements RecipeExecutionResult {
     protected final ProjectResultReport report;
@@ -58,25 +60,13 @@ public abstract class AbstractRecipeExecutionResult implements RecipeExecutionRe
     }
 
     @Override
-    public TestStepResult getFirstTestStepResult(String name) {
-        for (TestStepResult testStepResultReport : results) {
-            if (testStepResultReport.getTestStepName().equalsIgnoreCase(name)) {
-                return testStepResultReport;
-            }
-        }
-
-        return null;
+    public Optional<TestStepResult> getFirstTestStepResult(String name) {
+        return results.stream().filter(result -> result.getTestStepName().equalsIgnoreCase(name)).findAny();
     }
 
     @Override
-    public TestStepResult getLastTestStepResult(String testStepName) {
-        for (TestStepResult testStepResultReport : results) {
-            if (testStepResultReport.getTestStepName().equalsIgnoreCase(testStepName)) {
-                return testStepResultReport;
-            }
-        }
-
-        return null;
+    public Optional<TestStepResult> getLastTestStepResult(String testStepName) {
+        return Lists.reverse(results).stream().filter(result -> result.getTestStepName().equalsIgnoreCase(testStepName)).findAny();
     }
 
     @Override
