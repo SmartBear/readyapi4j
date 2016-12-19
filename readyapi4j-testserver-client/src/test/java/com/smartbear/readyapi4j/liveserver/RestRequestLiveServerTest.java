@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j.liveserver;
 
+import com.google.code.tempusfugit.temporal.Duration;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.TestCaseResultReport;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
@@ -19,7 +20,10 @@ import org.slf4j.LoggerFactory;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeoutException;
 
+import static com.google.code.tempusfugit.concurrency.CountDownLatchWithTimeout.await;
 import static com.smartbear.readyapi4j.extractor.Extractors.pathExtractor;
 import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.getRequest;
@@ -38,6 +42,10 @@ public class RestRequestLiveServerTest {
     private static final String TESTSERVER_PASSWORD = "demoPassword";
     private static final String REST_REQUEST_NAME = "swaggerhubrequest";
     private static final String SECOND_REST_REQUEST_NAME = "secondswaggerhubrequest";
+
+    private static final Duration LATCH_TIMEOUT = Duration.millis(5000);
+    private final CountDownLatch waitForExecution = new CountDownLatch(2);
+
 
     private TestServerClient testServerClient;
 
@@ -150,7 +158,7 @@ public class RestRequestLiveServerTest {
     }
 
     @Test
-    public void sendSeveralRequestWithExtractorsAsync(){
+    public void sendSeveralRequestWithExtractorsAsync() throws TimeoutException, InterruptedException {
         final String[] extractedProperty = {"",""};
         TestRecipe testRecipe1 = createTestRecipe(
                 getRequest(ENDPOINT_WITH_PATH)
@@ -181,6 +189,7 @@ public class RestRequestLiveServerTest {
                 } else {
                     assertThat(extractedProperty[1], is(ENDPOINT_NAME));
                 }
+                waitForExecution.countDown();
             }
 
             @Override
@@ -193,6 +202,7 @@ public class RestRequestLiveServerTest {
         executor.submitRecipe(testRecipe1);
         executor.submitRecipe(testRecipe2);
         executor.addExecutionListener(listener);
+        await(waitForExecution).with(LATCH_TIMEOUT);
     }
 
     private Optional<TestStepResultReport> extractTestStepResultReport(ProjectResultReport projectResultReport){
