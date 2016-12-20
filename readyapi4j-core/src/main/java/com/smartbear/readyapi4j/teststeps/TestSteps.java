@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j.teststeps;
 
+import com.smartbear.readyapi4j.teststeps.delay.DelayTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcConnection;
 import com.smartbear.readyapi4j.teststeps.plugin.PluginTestStepBuilder;
@@ -47,6 +48,10 @@ public class TestSteps {
 
     public static GroovyScriptTestStepBuilder groovyScriptStep(String scriptText) {
         return new GroovyScriptTestStepBuilder(scriptText);
+    }
+
+    public static DelayTestStepBuilder delayStep(int delayInMillis) {
+        return new DelayTestStepBuilder(delayInMillis);
     }
 
     public static JdbcConnection jdbcConnection(String driver, String connectionString) {
