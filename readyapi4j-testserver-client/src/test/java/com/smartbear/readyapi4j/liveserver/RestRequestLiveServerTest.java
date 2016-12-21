@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static com.smartbear.readyapi4j.extractor.Extractors.pathExtractor;
 import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.getRequest;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -46,7 +46,7 @@ public class RestRequestLiveServerTest {
     public void sendRequestWithPathExtractor(){
         final String[] extractedProperty = {""};
         TestRecipe testRecipe = createTestRecipe(
-                getRequest(ENDPOINT_WITH_PATH)
+                GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(pathExtractor("$.name", property -> extractedProperty[0] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
@@ -61,7 +61,7 @@ public class RestRequestLiveServerTest {
     public void sendRequestWithPropertyExtractor(){
         final String[] extractedProperty = {""};
         TestRecipe testRecipe = createTestRecipe(
-                getRequest(ENDPOINT_WITH_PATH)
+                GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
@@ -76,7 +76,7 @@ public class RestRequestLiveServerTest {
     public void sendRequestWithSeveralPathExtractors(){
         final String[] extractedProperty = {"",""};
         TestRecipe testRecipe = createTestRecipe(
-                getRequest(ENDPOINT_WITH_PATH)
+                GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(pathExtractor("$.name", property -> extractedProperty[0] = property),
                                 pathExtractor("$.description", property -> extractedProperty[1] = property)));
@@ -93,7 +93,7 @@ public class RestRequestLiveServerTest {
     public void sendRequestWithSeveralPropertyExtractors(){
         final String[] extractedProperty = {"",""};
         TestRecipe testRecipe = createTestRecipe(
-                getRequest(ENDPOINT_WITH_PATH)
+                GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property),
                                 propertyExtractor("Response", property -> extractedProperty[1] = property)));
@@ -111,7 +111,7 @@ public class RestRequestLiveServerTest {
     public void sendRequestWithPathAndPropertyExtractors(){
         final String[] extractedProperty = {"",""};
         TestRecipe testRecipe = createTestRecipe(
-                getRequest(ENDPOINT_WITH_PATH)
+                GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property),
                                 pathExtractor("$.name", property -> extractedProperty[1] = property)));
@@ -128,10 +128,10 @@ public class RestRequestLiveServerTest {
     public void sendSeveralRequestsWithExtractors(){
         final String[] extractedProperty = {"",""};
         TestRecipe testRecipe = createTestRecipe(
-                getRequest(ENDPOINT_WITH_PATH)
+                GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property)),
-                getRequest(ENDPOINT_WITH_PATH)
+                GET(ENDPOINT_WITH_PATH)
                         .named(SECOND_REST_REQUEST_NAME)
                         .withExtractors(pathExtractor("$.name", property -> extractedProperty[1] = property)));
 

@@ -14,9 +14,9 @@ import java.util.List;
 
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi4j.properties.Properties.property;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.getRequest;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.postRequest;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.propertyTransfer;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromPreviousResponse;
@@ -33,7 +33,7 @@ public class TestRecipeBuilderTest {
 
     @Test
     public void dumpsRecipe() throws Exception {
-        String recipe = newTestRecipe(getRequest(URI)
+        String recipe = newTestRecipe(GET(URI)
                                 .addQueryParameter("address", "1600+Amphitheatre+Parkway,+Mountain+View,+CA")
                                 .addQueryParameter("sensor", "false")
                                 .assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
@@ -88,7 +88,7 @@ public class TestRecipeBuilderTest {
     public void buildsJsonPathTransferWithImplicitSourceStep() throws Exception {
         final String jsonPath = "$.customer.address";
         TestRecipe recipe = newTestRecipe(
-                getRequest("/get/something").named("theGet"),
+                GET("/get/something").named("theGet"),
                 propertyTransfer(fromPreviousResponse(jsonPath)
                         .to(aTarget()
                                 .withTargetStep("targetName")
@@ -123,7 +123,7 @@ public class TestRecipeBuilderTest {
     public void buildsXPathTransferWithImplicitSourceStep() throws Exception {
         final String xPath = "/customer/address";
         TestRecipe recipe = newTestRecipe(
-                getRequest("/get/something").named("theGet"),
+                GET("/get/something").named("theGet"),
                 propertyTransfer(fromPreviousResponse(xPath)
                                 .to(aTarget()
                                         .withTargetStep("targetName")
@@ -143,7 +143,7 @@ public class TestRecipeBuilderTest {
         final String testStepName = "theGet";
         final String xPath = "/customer/address";
         TestRecipe recipe = newTestRecipe(
-                getRequest("/get/something").named(testStepName),
+                GET("/get/something").named(testStepName),
                 propertyTransfer(fromResponse(testStepName, xPath)
                                 .to(aTarget()
                                         .withTargetStep("targetName")
@@ -162,9 +162,9 @@ public class TestRecipeBuilderTest {
     public void buildsXPathTransferWithImplicitTargetStep() throws Exception {
         final String xPath = "/customer/address";
         TestRecipe recipe = newTestRecipe(
-                getRequest("/get/something"),
+                GET("/get/something"),
                 propertyTransfer(fromPreviousResponse("/some/path").toNextRequest(xPath)),
-                postRequest("/some/destination").named("thePost"))
+                POST("/some/destination").named("thePost"))
                 .buildTestRecipe();
 
         List<TestStep> testSteps = recipe.getTestCase().getTestSteps();
@@ -190,9 +190,9 @@ public class TestRecipeBuilderTest {
     public void buildsJsonPathTransferWithImplicitTargetStep() throws Exception {
         final String jsonPath = "$.customer.address";
         TestRecipe recipe = newTestRecipe(
-                getRequest("/get/something"),
+                GET("/get/something"),
                 propertyTransfer(fromPreviousResponse("/some/path").toNextRequest(jsonPath)),
-                postRequest("/some/destination").named("thePost")
+                POST("/some/destination").named("thePost")
         ).buildTestRecipe();
 
         List<TestStep> testSteps = recipe.getTestCase().getTestSteps();
@@ -203,9 +203,9 @@ public class TestRecipeBuilderTest {
     public void buildsJsonPathTransferWithSpecifiedTargetStep() throws Exception {
         final String jsonPath = "$.customer.address";
         TestRecipe recipe = newTestRecipe(
-                getRequest("/get/something"),
+                GET("/get/something"),
                 propertyTransfer(fromPreviousResponse("/some/path").toRequestStep("thePost", jsonPath)),
-                postRequest("/some/destination").named("thePost")
+                POST("/some/destination").named("thePost")
         ).buildTestRecipe();
 
         List<TestStep> testSteps = recipe.getTestCase().getTestSteps();

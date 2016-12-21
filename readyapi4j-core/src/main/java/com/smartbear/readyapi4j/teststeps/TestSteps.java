@@ -25,19 +25,19 @@ public class TestSteps {
         return new RestRequestStepBuilder<>(null, TestSteps.HttpMethod.GET);
     }
 
-    public static RestRequestStepBuilder<RestRequestStepBuilder> getRequest(String uri) {
+    public static RestRequestStepBuilder<RestRequestStepBuilder> GET(String uri) {
         return new RestRequestStepBuilder<>(uri, TestSteps.HttpMethod.GET);
     }
 
-    public static RestRequestStepWithBodyBuilder postRequest(String uri) {
+    public static RestRequestStepWithBodyBuilder POST(String uri) {
         return new RestRequestStepWithBodyBuilder(uri, TestSteps.HttpMethod.POST);
     }
 
-    public static RestRequestStepWithBodyBuilder putRequest(String uri) {
+    public static RestRequestStepWithBodyBuilder PUT(String uri) {
         return new RestRequestStepWithBodyBuilder(uri, TestSteps.HttpMethod.PUT);
     }
 
-    public static RestRequestStepBuilder<RestRequestStepBuilder> deleteRequest(String uri) {
+    public static RestRequestStepBuilder<RestRequestStepBuilder> DELETE(String uri) {
         return new RestRequestStepBuilder<>(uri, TestSteps.HttpMethod.DELETE);
     }
 
