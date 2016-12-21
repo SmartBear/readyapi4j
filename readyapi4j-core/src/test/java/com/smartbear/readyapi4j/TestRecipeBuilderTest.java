@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j;
 
+import com.smartbear.readyapi.client.model.DelayTestStep;
 import com.smartbear.readyapi.client.model.GroovyScriptTestStep;
 import com.smartbear.readyapi.client.model.PropertyTransfer;
 import com.smartbear.readyapi.client.model.PropertyTransferSource;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi4j.properties.Properties.property;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.delayStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
@@ -224,6 +226,18 @@ public class TestRecipeBuilderTest {
         assertThat(testStep.getType(), is(TestStepTypes.GROOVY_SCRIPT.getName()));
         assertThat(testStep.getScript(), is(script));
         assertThat(testStep.getName(), is(name));
+    }
+    @Test
+    public void buildsRecipeWithDelayTestStep() throws Exception {
+        String testStepName = "DelayStep";
+        TestRecipe recipe = newTestRecipe()
+                .addStep(delayStep(3000).named(testStepName))
+                .buildTestRecipe();
+
+        DelayTestStep testStep = (DelayTestStep) recipe.getTestCase().getTestSteps().get(0);
+        assertThat(testStep.getType(), is(TestStepTypes.DELAY.getName()));
+        assertThat(testStep.getDelay(), is(3000));
+        assertThat(testStep.getName(), is(testStepName));
     }
 
     private void assertSource(PropertyTransferSource source) {

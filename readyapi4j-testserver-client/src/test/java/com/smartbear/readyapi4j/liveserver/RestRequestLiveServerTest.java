@@ -1,21 +1,29 @@
 package com.smartbear.readyapi4j.liveserver;
 
+import com.google.code.tempusfugit.temporal.Duration;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.TestCaseResultReport;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 import com.smartbear.readyapi.client.model.TestSuiteResultReport;
+import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
+import com.smartbear.readyapi4j.testserver.execution.TestServerRecipeExecutor;
 import com.smartbear.readyapi4j.teststeps.TestStepBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeoutException;
 
+import static com.google.code.tempusfugit.concurrency.CountDownLatchWithTimeout.await;
 import static com.smartbear.readyapi4j.extractor.Extractors.pathExtractor;
 import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
@@ -24,6 +32,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class RestRequestLiveServerTest {
+    private static Logger logger = LoggerFactory.getLogger(RestRequestLiveServerTest.class);
     private static final String ENDPOINT = "http://api.swaggerhub.com";
     private static final String ENDPOINT_WITH_PATH = ENDPOINT + "/apis";
     private static final String ENDPOINT_NAME ="Default listing";
@@ -33,6 +42,10 @@ public class RestRequestLiveServerTest {
     private static final String TESTSERVER_PASSWORD = "demoPassword";
     private static final String REST_REQUEST_NAME = "swaggerhubrequest";
     private static final String SECOND_REST_REQUEST_NAME = "secondswaggerhubrequest";
+
+    private static final Duration LATCH_TIMEOUT = Duration.millis(5000);
+    private final CountDownLatch waitForExecution = new CountDownLatch(2);
+
 
     private TestServerClient testServerClient;
 
@@ -142,6 +155,54 @@ public class RestRequestLiveServerTest {
         }
         assertThat(extractedProperty[0], is(ENDPOINT));
         assertThat(extractedProperty[1], is(ENDPOINT_NAME));
+    }
+
+    @Test
+    public void sendSeveralRequestWithExtractorsAsync() throws TimeoutException, InterruptedException {
+        final String[] extractedProperty = {"",""};
+        TestRecipe testRecipe1 = createTestRecipe(
+                GET(ENDPOINT_WITH_PATH)
+                        .named(REST_REQUEST_NAME)
+                        .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property)));
+        TestRecipe testRecipe2 = createTestRecipe(
+                GET(ENDPOINT_WITH_PATH)
+                        .named(SECOND_REST_REQUEST_NAME)
+                        .withExtractors(pathExtractor("$.name", property -> extractedProperty[1] = property)));
+
+        ExecutionListener listener = new ExecutionListener() {
+            private String executionID;
+
+            @Override
+            public void executionStarted(ProjectResultReport projectResultReport) {
+                executionID = projectResultReport.getExecutionID();
+                logger.info("Started execution of " + executionID);
+            }
+
+            @Override
+            public void executionFinished(ProjectResultReport projectResultReport) {
+                Optional<TestStepResultReport> report  = extractTestStepResultReport(projectResultReport);
+                if(report.isPresent()){
+                    assertThat(report.get().getAssertionStatus(), is(TestStepResultReport.AssertionStatusEnum.UNKNOWN));
+                }
+                if(report.get().getTestStepName().equals(REST_REQUEST_NAME)) {
+                    assertThat(extractedProperty[0], is(ENDPOINT));
+                } else {
+                    assertThat(extractedProperty[1], is(ENDPOINT_NAME));
+                }
+                waitForExecution.countDown();
+            }
+
+            @Override
+            public void errorOccurred(Exception exception) {
+                logger.error("Exception occurred on " + executionID + "with message: " + exception.getMessage());
+            }
+        };
+
+        TestServerRecipeExecutor executor = testServerClient.createRecipeExecutor();
+        executor.submitRecipe(testRecipe1);
+        executor.submitRecipe(testRecipe2);
+        executor.addExecutionListener(listener);
+        await(waitForExecution).with(LATCH_TIMEOUT);
     }
 
     private Optional<TestStepResultReport> extractTestStepResultReport(ProjectResultReport projectResultReport){
