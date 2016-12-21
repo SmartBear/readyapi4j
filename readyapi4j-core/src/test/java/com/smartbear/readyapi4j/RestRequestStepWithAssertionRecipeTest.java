@@ -23,7 +23,7 @@ import static com.smartbear.readyapi4j.assertions.Assertions.script;
 import static com.smartbear.readyapi4j.assertions.Assertions.validStatusCodes;
 import static com.smartbear.readyapi4j.assertions.Assertions.xPathContains;
 import static com.smartbear.readyapi4j.assertions.Assertions.xQueryContains;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.getRequest;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.restRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -35,7 +35,7 @@ public class RestRequestStepWithAssertionRecipeTest {
     public void buildsRestRequestStepRecipeWitJsonPathContentAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe()
                 .addStep(
-                        getRequest(URI).
+                        GET(URI).
                                 assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
                 )
                 .buildTestRecipe();
@@ -50,7 +50,7 @@ public class RestRequestStepWithAssertionRecipeTest {
     @Test
     public void buildsRestRequestStepRecipeWitJsonPathCountAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .assertJsonCount("$.results[0].address_components[1].long_name", 1)
                 )
                 .buildTestRecipe();

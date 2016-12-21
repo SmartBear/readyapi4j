@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -52,11 +53,9 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
         return execution;
     }
 
-    private TestServerExecution doExecuteTestCase(TestCase testCase, ExtractorData extractorData, boolean async) throws ApiException {
+    private TestServerExecution doExecuteTestCase(TestCase testCase, Optional<ExtractorData> optionalExtractorData, boolean async) throws ApiException {
         try {
-            if (extractorData != null) {
-                extractorDataList.add(extractorData);
-            }
+            optionalExtractorData.ifPresent(extractorData -> extractorDataList.add(extractorData));
             TestServerExecution execution = testServerClient.postTestRecipe(testCase, async);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), testCase);
             return execution;

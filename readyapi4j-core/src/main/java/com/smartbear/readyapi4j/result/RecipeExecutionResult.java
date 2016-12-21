@@ -3,6 +3,7 @@ package com.smartbear.readyapi4j.result;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RecipeExecutionResult {
 
@@ -18,9 +19,9 @@ public interface RecipeExecutionResult {
 
     TestStepResult getTestStepResult(int index);
 
-    TestStepResult getFirstTestStepResult(String testStepName);
+    Optional<TestStepResult> getFirstTestStepResult(String testStepName);
 
-    TestStepResult getLastTestStepResult(String testStepName);
+    Optional<TestStepResult> getLastTestStepResult(String testStepName);
 
     List<TestStepResult> getTestStepResults();
 

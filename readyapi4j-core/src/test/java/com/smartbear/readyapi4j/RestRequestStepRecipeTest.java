@@ -30,10 +30,10 @@ import static com.smartbear.readyapi4j.auth.Authentications.kerberos;
 import static com.smartbear.readyapi4j.auth.Authentications.ntlm;
 import static com.smartbear.readyapi4j.extractor.Extractors.pathExtractor;
 import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.deleteRequest;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.getRequest;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.postRequest;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.putRequest;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.DELETE;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.PUT;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.restRequest;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
@@ -48,7 +48,7 @@ public class RestRequestStepRecipeTest {
     public void buildsRestRequestTestStepRecipe() throws Exception {
 
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .named("Rest Request")
                 )
                 .buildTestRecipe();
@@ -63,7 +63,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepRecipeWithRequestBody() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(postRequest(URI)
+                .addStep(POST(URI)
                         .named("Rest Request")
                         .withRequestBody(REQUEST_BODY)
                         .withMediaType(MEDIA_TYPE_APPLICATION_JSON)
@@ -81,7 +81,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepRecipeWithRequestHeader() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .addHeader("header", "value")
                 )
                 .buildTestRecipe();
@@ -95,7 +95,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepRecipeWithRequestHeaderWithMultipleValues() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .addHeader("header1", "value1")
                         .addHeader("header1", "value2")
                         .addHeader("header1", "value3")
@@ -112,7 +112,7 @@ public class RestRequestStepRecipeTest {
     public void buildsRestRequestTestStepRecipeWithRequestHeaderWithMultipleValuesInOneGo() throws Exception {
         final List<String> headerValues = Arrays.asList("value1", "value2", "value3");
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .addHeader("header1", headerValues)
                 )
                 .buildTestRecipe();
@@ -125,7 +125,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepWithMethodPut() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(putRequest(URI))
+                .addStep(PUT(URI))
                 .buildTestRecipe();
 
         RestTestRequestStep testStep = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0));
@@ -136,7 +136,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepWithMethodPost() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(postRequest(URI))
+                .addStep(POST(URI))
                 .buildTestRecipe();
 
         RestTestRequestStep testStep = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0));
@@ -147,7 +147,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepWithMethodDelete() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(deleteRequest(URI))
+                .addStep(DELETE(URI))
                 .buildTestRecipe();
 
         RestTestRequestStep testStep = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0));
@@ -158,7 +158,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepWithQueryParameter() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .addQueryParameter("param1", "value1")
                 )
                 .buildTestRecipe();
@@ -172,7 +172,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepWithHeaderParameter() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .addHeaderParameter("param1", "value1")
                 )
                 .buildTestRecipe();
@@ -186,7 +186,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepWithPathParameter() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .addPathParameter("param1", "value1")
                 )
                 .buildTestRecipe();
@@ -200,7 +200,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepWithMatrixParameter() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .addMatrixParameter("param1", "value1")
                 )
                 .buildTestRecipe();
@@ -240,7 +240,7 @@ public class RestRequestStepRecipeTest {
     @Test
     public void buildsRestRequestTestStepRecipeWithRequestOptions() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest(URI)
+                .addStep(GET(URI)
                         .postQueryString()
                         .followRedirects()
                         .entitizeParameters()

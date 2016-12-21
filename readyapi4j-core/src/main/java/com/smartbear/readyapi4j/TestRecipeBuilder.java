@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j;
 
+import com.smartbear.readyapi.client.model.PropertyTransfer;
 import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.TestStep;
@@ -86,15 +87,31 @@ public class TestRecipeBuilder {
 
     private void addTestSteps() {
         List<TestStep> testSteps = new LinkedList<>();
+        TestStep currentTestStep = null;
         for (TestStepBuilder testStepBuilder : testStepBuilders) {
-            testSteps.add(testStepBuilder.build());
+            testStepBuilder.setPreviousTestStep(currentTestStep);
+            currentTestStep = testStepBuilder.build();
+            testSteps.add(currentTestStep);
             if (testStepBuilder instanceof HttpRequestStepBuilder) {
                 List<Extractor> extractorList = ((HttpRequestStepBuilder) testStepBuilder).getExtractors();
-                TestStep testStep = handleExtractors(extractorList);
-                if (testStep != null) {
-                    testSteps.add(testStep);
+                TestStep extractedTestStep = handleExtractors(extractorList);
+                if (extractedTestStep != null) {
+                    testSteps.add(extractedTestStep);
                 }
             }
+        }
+        String nextTestStep = null;
+        for (int i = testSteps.size() - 1; i >= 0; i--) {
+            TestStep testStep = testSteps.get(i);
+            if (testStep instanceof PropertyTransferTestStep) {
+                PropertyTransferTestStep transferTestStep = (PropertyTransferTestStep) testStep;
+                for (PropertyTransfer propertyTransfer : transferTestStep.getTransfers()) {
+                    if (propertyTransfer.getTarget() != null && propertyTransfer.getTarget().getTargetName() == null) {
+                        propertyTransfer.getTarget().setTargetName(nextTestStep);
+                    }
+                }
+            }
+            nextTestStep = testStep.getName();
         }
         testCase.setTestSteps(testSteps);
     }

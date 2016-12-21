@@ -140,7 +140,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
     @Test
     public void throwsExceptionIfTestStepClientCertificateNotProvidedAndNotFoundOnServer() throws Exception {
         TestRecipe testRecipe = new TestRecipeBuilder()
-                .addStep(TestSteps.getRequest("http://localhost:8080")
+                .addStep(TestSteps.GET("http://localhost:8080")
                         .withClientCertificate("clientCertificate.jks")
                 )
                 .buildTestRecipe();

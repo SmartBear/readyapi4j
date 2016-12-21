@@ -19,9 +19,9 @@ import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.getPostedJs
 import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.startLocalServer;
 import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.stopLocalServer;
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.getRequest;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.postRequest;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.propertyTransfer;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferSourceBuilder.aSource;
@@ -89,7 +89,7 @@ public class SoapUIRecipeExecutorTest {
     @Test
     public void runsRestGetRequestJson() throws Exception {
         TestRecipe testRecipe = newTestRecipe(
-                getRequest(serverURL)
+                GET(serverURL)
                         .acceptsJson()
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_TEST_VALUE)
         ).buildTestRecipe();
@@ -105,7 +105,7 @@ public class SoapUIRecipeExecutorTest {
     @Test
     public void runsPropertyTransferRequest() {
         TestRecipe testRecipe = newTestRecipe(
-                getRequest(serverURL)
+                GET(serverURL)
                         .named(REST_SOURCE)
                         .acceptsJson()
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_TEST_VALUE),
@@ -116,7 +116,7 @@ public class SoapUIRecipeExecutorTest {
                                 .to(aTarget()
                                         .withTargetStep(REST_TARGET)
                                         .withProperty(PROPERTY_ENDPOINT))),
-                getRequest(BOGUS_URL)
+                GET(BOGUS_URL)
                         .named(REST_TARGET)
                         .acceptsJson()
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_ROOT_VALUE)
@@ -151,7 +151,7 @@ public class SoapUIRecipeExecutorTest {
 
     private TestRecipe buildPropertyTransferWithJsonPathExtractionTestRecipe() {
         return newTestRecipe(
-                getRequest(jsonURL)
+                GET(jsonURL)
                         .named(REST_SOURCE)
                         .acceptsJson()
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_JSON_VALUE),
@@ -174,7 +174,7 @@ public class SoapUIRecipeExecutorTest {
                                         .withPathLanguage(PathLanguage.JSONPath)
                                         .withPath(JSON_PATH_MESSAGE)
                                         .withProperty(PROPERTY_REQUEST))),
-                postRequest(BOGUS_URL)
+                POST(BOGUS_URL)
                         .named(REST_TARGET)
                         .acceptsJson()
                         .withRequestBody(new Gson().toJson(new JsonTestObject(ASSERTION_TEST_VALUE, serverURL)))

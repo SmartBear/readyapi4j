@@ -4,6 +4,7 @@ import com.smartbear.readyapi4j.teststeps.delay.DelayTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcConnection;
 import com.smartbear.readyapi4j.teststeps.plugin.PluginTestStepBuilder;
+import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepWithBodyBuilder;
@@ -25,24 +26,28 @@ public class TestSteps {
         return new RestRequestStepBuilder<>(null, TestSteps.HttpMethod.GET);
     }
 
-    public static RestRequestStepBuilder<RestRequestStepBuilder> getRequest(String uri) {
+    public static RestRequestStepBuilder<RestRequestStepBuilder> GET(String uri) {
         return new RestRequestStepBuilder<>(uri, TestSteps.HttpMethod.GET);
     }
 
-    public static RestRequestStepWithBodyBuilder postRequest(String uri) {
+    public static RestRequestStepWithBodyBuilder POST(String uri) {
         return new RestRequestStepWithBodyBuilder(uri, TestSteps.HttpMethod.POST);
     }
 
-    public static RestRequestStepWithBodyBuilder putRequest(String uri) {
+    public static RestRequestStepWithBodyBuilder PUT(String uri) {
         return new RestRequestStepWithBodyBuilder(uri, TestSteps.HttpMethod.PUT);
     }
 
-    public static RestRequestStepBuilder<RestRequestStepBuilder> deleteRequest(String uri) {
+    public static RestRequestStepBuilder<RestRequestStepBuilder> DELETE(String uri) {
         return new RestRequestStepBuilder<>(uri, TestSteps.HttpMethod.DELETE);
     }
 
     public static PropertyTransferTestStepBuilder propertyTransfer() {
         return new PropertyTransferTestStepBuilder();
+    }
+
+    public static PropertyTransferTestStepBuilder propertyTransfer(PropertyTransferBuilder singleTransfer) {
+        return new PropertyTransferTestStepBuilder().addTransfer(singleTransfer);
     }
 
 
