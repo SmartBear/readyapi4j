@@ -5,16 +5,22 @@ import com.smartbear.readyapi.client.model.PropertyTransfer;
 import com.smartbear.readyapi.client.model.PropertyTransferSource;
 import com.smartbear.readyapi.client.model.PropertyTransferTarget;
 import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
+import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PathLanguage;
 import org.junit.Test;
+
+import java.util.List;
 
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi4j.properties.Properties.property;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.getRequest;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.postRequest;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.propertyTransfer;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
+import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromPreviousResponse;
+import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromResponse;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferSourceBuilder.aSource;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferTargetBuilder.aTarget;
 import static org.hamcrest.CoreMatchers.is;
@@ -82,6 +88,155 @@ public class TestRecipeBuilderTest {
         PropertyTransfer propertyTransfer = testStep.getTransfers().get(0);
         assertSource(propertyTransfer.getSource());
         assertTarget(propertyTransfer.getTarget());
+    }
+
+    @Test
+    public void buildsJsonPathTransferWithImplicitSourceStep() throws Exception {
+        final String jsonPath = "$.customer.address";
+        TestRecipe recipe = newTestRecipe()
+                .addStep(getRequest("/get/something").named("theGet"))
+                .addStep(propertyTransfer()
+                        .addTransfer(
+                                fromPreviousResponse(jsonPath)
+                                        .to(aTarget()
+                                                .withTargetStep("targetName")
+                                                .withProperty("username")
+                                                .withPath("targetPath")
+                                                .withPathLanguage(PathLanguage.XPath)
+                                        )
+                        )
+                )
+                .buildTestRecipe();
+
+        verifyImplicitTransfer(recipe, jsonPath, "JSONPath");
+    }
+
+    private void verifyImplicitTransfer(TestRecipe recipe, String expectedPath, String pathLanguage) {
+        List<TestStep> testSteps = recipe.getTestCase().getTestSteps();
+        PropertyTransferTestStep testStep = (PropertyTransferTestStep) testSteps.get(1);
+        assertThat(testStep.getType(), is(TestStepTypes.PROPERTY_TRANSFER.getName()));
+
+        String firstStepName = testSteps.get(0).getName();
+        assertThat(testStep.getTransfers().size(), is(1));
+
+        PropertyTransfer propertyTransfer = testStep.getTransfers().get(0);
+        PropertyTransferSource source = propertyTransfer.getSource();
+        assertThat(source.getSourceName(), is(firstStepName));
+        assertThat(source.getPath(), is(expectedPath));
+        assertThat(source.getPathLanguage(), is(pathLanguage));
+        assertThat(source.getProperty(), is("Response"));
+    }
+
+    @Test
+    public void buildsXPathTransferWithImplicitSourceStep() throws Exception {
+        final String xPath = "/customer/address";
+        TestRecipe recipe = newTestRecipe()
+                .addStep(getRequest("/get/something").named("theGet"))
+                .addStep(propertyTransfer()
+                        .addTransfer(
+                                fromPreviousResponse(xPath)
+                                        .to(aTarget()
+                                                .withTargetStep("targetName")
+                                                .withProperty("username")
+                                                .withPath("targetPath")
+                                                .withPathLanguage(PathLanguage.XPath)
+                                        )
+                        )
+                )
+                .buildTestRecipe();
+
+        verifyImplicitTransfer(recipe, xPath, "XPath");
+    }
+
+    @Test
+    public void buildsTransferWithSpecifiedSourceStep() throws Exception {
+        final String testStepName = "theGet";
+        final String xPath = "/customer/address";
+        TestRecipe recipe = newTestRecipe()
+                .addStep(getRequest("/get/something").named(testStepName))
+                .addStep(propertyTransfer()
+                        .addTransfer(
+                                fromResponse(testStepName, xPath)
+                                        .to(aTarget()
+                                                .withTargetStep("targetName")
+                                                .withProperty("username")
+                                                .withPath("targetPath")
+                                                .withPathLanguage(PathLanguage.XPath)
+                                        )
+                        )
+                )
+                .buildTestRecipe();
+
+        verifyImplicitTransfer(recipe, xPath, "XPath");
+    }
+
+    @Test
+    public void buildsXPathTransferWithImplicitTargetStep() throws Exception {
+        final String xPath = "/customer/address";
+        TestRecipe recipe = newTestRecipe()
+                .addStep(getRequest("/get/something"))
+                .addStep(propertyTransfer()
+                        .addTransfer(
+                                fromPreviousResponse("/some/path")
+                                        .toNextRequest(xPath)
+                        )
+                )
+                .addStep(postRequest("/some/destination").named("thePost"))
+                .buildTestRecipe();
+
+        List<TestStep> testSteps = recipe.getTestCase().getTestSteps();
+        verifyImplicitTargetStep(testSteps, xPath, "XPath");
+    }
+
+    private void verifyImplicitTargetStep(List<TestStep> testSteps, String xPath, String expectedPathLanguage) {
+        PropertyTransferTestStep testStep = (PropertyTransferTestStep) testSteps.get(1);
+        assertThat(testStep.getType(), is(TestStepTypes.PROPERTY_TRANSFER.getName()));
+
+        String targetStepName = testSteps.get(2).getName();
+        assertThat(testStep.getTransfers().size(), is(1));
+
+        PropertyTransfer propertyTransfer = testStep.getTransfers().get(0);
+        PropertyTransferTarget target = propertyTransfer.getTarget();
+        assertThat(target.getTargetName(), is(targetStepName));
+        assertThat(target.getPath(), is(xPath));
+        assertThat(target.getPathLanguage(), is(expectedPathLanguage));
+        assertThat(target.getProperty(), is("Request"));
+    }
+
+    @Test
+    public void buildsJsonPathTransferWithImplicitTargetStep() throws Exception {
+        final String jsonPath = "$.customer.address";
+        TestRecipe recipe = newTestRecipe()
+                .addStep(getRequest("/get/something"))
+                .addStep(propertyTransfer()
+                        .addTransfer(
+                                fromPreviousResponse("/some/path")
+                                        .toNextRequest(jsonPath)
+                        )
+                )
+                .addStep(postRequest("/some/destination").named("thePost"))
+                .buildTestRecipe();
+
+        List<TestStep> testSteps = recipe.getTestCase().getTestSteps();
+        verifyImplicitTargetStep(testSteps, jsonPath, "JSONPath");
+    }
+
+    @Test
+    public void buildsJsonPathTransferWithSpecifiedTargetStep() throws Exception {
+        final String jsonPath = "$.customer.address";
+        TestRecipe recipe = newTestRecipe()
+                .addStep(getRequest("/get/something"))
+                .addStep(propertyTransfer()
+                        .addTransfer(
+                                fromPreviousResponse("/some/path")
+                                        .toRequestStep("thePost", jsonPath)
+                        )
+                )
+                .addStep(postRequest("/some/destination").named("thePost"))
+                .buildTestRecipe();
+
+        List<TestStep> testSteps = recipe.getTestCase().getTestSteps();
+        verifyImplicitTargetStep(testSteps, jsonPath, "JSONPath");
     }
 
     @Test

@@ -44,4 +44,8 @@ public class PropertyTransferSourceBuilder {
         }
         return source;
     }
+
+    public boolean hasSourceStep() {
+        return source.getSourceName() != null;
+    }
 }
