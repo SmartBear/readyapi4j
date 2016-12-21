@@ -33,14 +33,11 @@ public class TestRecipeBuilderTest {
 
     @Test
     public void dumpsRecipe() throws Exception {
-        String recipe = newTestRecipe()
-                .addStep(
-                        getRequest(URI)
+        String recipe = newTestRecipe(getRequest(URI)
                                 .addQueryParameter("address", "1600+Amphitheatre+Parkway,+Mountain+View,+CA")
                                 .addQueryParameter("sensor", "false")
                                 .assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
-                )
-                .buildTestRecipe().toString();
+                ).buildTestRecipe().toString();
 
         assertThat(recipe.length(), not(0));
     }
@@ -61,21 +58,20 @@ public class TestRecipeBuilderTest {
 
     @Test
     public void buildsRecipeWithPropertyTransferTestStep() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(propertyTransfer(from(aSource()
-                                        .withSourceStep("sourceName")
-                                        .withProperty("username")
-                                        .withPath("sourcePath")
-                                        .withPathLanguage(PathLanguage.XPath)
-                                )
-                                        .to(aTarget()
-                                                .withTargetStep("targetName")
-                                                .withProperty("username")
-                                                .withPath("targetPath")
-                                                .withPathLanguage(PathLanguage.XPath)
-                                        )
+        TestRecipe recipe = newTestRecipe(propertyTransfer(from(aSource()
+                        .withSourceStep("sourceName")
+                        .withProperty("username")
+                        .withPath("sourcePath")
+                        .withPathLanguage(PathLanguage.XPath)
+                )
+                        .to(aTarget()
+                                .withTargetStep("targetName")
+                                .withProperty("username")
+                                .withPath("targetPath")
+                                .withPathLanguage(PathLanguage.XPath)
                         )
                 )
+        )
                 .buildTestRecipe();
 
         PropertyTransferTestStep testStep = (PropertyTransferTestStep) recipe.getTestCase().getTestSteps().get(0);
@@ -91,17 +87,17 @@ public class TestRecipeBuilderTest {
     @Test
     public void buildsJsonPathTransferWithImplicitSourceStep() throws Exception {
         final String jsonPath = "$.customer.address";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest("/get/something").named("theGet"))
-                .addStep(propertyTransfer(fromPreviousResponse(jsonPath)
-                                        .to(aTarget()
-                                                .withTargetStep("targetName")
-                                                .withProperty("username")
-                                                .withPath("targetPath")
-                                                .withPathLanguage(PathLanguage.XPath)
-                                        )
+        TestRecipe recipe = newTestRecipe(
+                getRequest("/get/something").named("theGet"),
+                propertyTransfer(fromPreviousResponse(jsonPath)
+                        .to(aTarget()
+                                .withTargetStep("targetName")
+                                .withProperty("username")
+                                .withPath("targetPath")
+                                .withPathLanguage(PathLanguage.XPath)
                         )
                 )
+        )
                 .buildTestRecipe();
 
         verifyImplicitTransfer(recipe, jsonPath, "JSONPath");
@@ -126,15 +122,15 @@ public class TestRecipeBuilderTest {
     @Test
     public void buildsXPathTransferWithImplicitSourceStep() throws Exception {
         final String xPath = "/customer/address";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest("/get/something").named("theGet"))
-                .addStep(propertyTransfer(fromPreviousResponse(xPath)
-                                        .to(aTarget()
-                                                .withTargetStep("targetName")
-                                                .withProperty("username")
-                                                .withPath("targetPath")
-                                                .withPathLanguage(PathLanguage.XPath)
-                                        )
+        TestRecipe recipe = newTestRecipe(
+                getRequest("/get/something").named("theGet"),
+                propertyTransfer(fromPreviousResponse(xPath)
+                                .to(aTarget()
+                                        .withTargetStep("targetName")
+                                        .withProperty("username")
+                                        .withPath("targetPath")
+                                        .withPathLanguage(PathLanguage.XPath)
+                                )
                         )
                 )
                 .buildTestRecipe();
@@ -146,15 +142,15 @@ public class TestRecipeBuilderTest {
     public void buildsTransferWithSpecifiedSourceStep() throws Exception {
         final String testStepName = "theGet";
         final String xPath = "/customer/address";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest("/get/something").named(testStepName))
-                .addStep(propertyTransfer(fromResponse(testStepName, xPath)
-                                        .to(aTarget()
-                                                .withTargetStep("targetName")
-                                                .withProperty("username")
-                                                .withPath("targetPath")
-                                                .withPathLanguage(PathLanguage.XPath)
-                                        )
+        TestRecipe recipe = newTestRecipe(
+                getRequest("/get/something").named(testStepName),
+                propertyTransfer(fromResponse(testStepName, xPath)
+                                .to(aTarget()
+                                        .withTargetStep("targetName")
+                                        .withProperty("username")
+                                        .withPath("targetPath")
+                                        .withPathLanguage(PathLanguage.XPath)
+                                )
                         )
                 )
                 .buildTestRecipe();
@@ -165,10 +161,10 @@ public class TestRecipeBuilderTest {
     @Test
     public void buildsXPathTransferWithImplicitTargetStep() throws Exception {
         final String xPath = "/customer/address";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest("/get/something"))
-                .addStep(propertyTransfer(fromPreviousResponse("/some/path").toNextRequest(xPath)))
-                .addStep(postRequest("/some/destination").named("thePost"))
+        TestRecipe recipe = newTestRecipe(
+                getRequest("/get/something"),
+                propertyTransfer(fromPreviousResponse("/some/path").toNextRequest(xPath)),
+                postRequest("/some/destination").named("thePost"))
                 .buildTestRecipe();
 
         List<TestStep> testSteps = recipe.getTestCase().getTestSteps();
@@ -193,16 +189,11 @@ public class TestRecipeBuilderTest {
     @Test
     public void buildsJsonPathTransferWithImplicitTargetStep() throws Exception {
         final String jsonPath = "$.customer.address";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest("/get/something"))
-                .addStep(propertyTransfer()
-                        .addTransfer(
-                                fromPreviousResponse("/some/path")
-                                        .toNextRequest(jsonPath)
-                        )
-                )
-                .addStep(postRequest("/some/destination").named("thePost"))
-                .buildTestRecipe();
+        TestRecipe recipe = newTestRecipe(
+                getRequest("/get/something"),
+                propertyTransfer(fromPreviousResponse("/some/path").toNextRequest(jsonPath)),
+                postRequest("/some/destination").named("thePost")
+        ).buildTestRecipe();
 
         List<TestStep> testSteps = recipe.getTestCase().getTestSteps();
         verifyImplicitTargetStep(testSteps, jsonPath, "JSONPath");
@@ -211,16 +202,11 @@ public class TestRecipeBuilderTest {
     @Test
     public void buildsJsonPathTransferWithSpecifiedTargetStep() throws Exception {
         final String jsonPath = "$.customer.address";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(getRequest("/get/something"))
-                .addStep(propertyTransfer()
-                        .addTransfer(
-                                fromPreviousResponse("/some/path")
-                                        .toRequestStep("thePost", jsonPath)
-                        )
-                )
-                .addStep(postRequest("/some/destination").named("thePost"))
-                .buildTestRecipe();
+        TestRecipe recipe = newTestRecipe(
+                getRequest("/get/something"),
+                propertyTransfer(fromPreviousResponse("/some/path").toRequestStep("thePost", jsonPath)),
+                postRequest("/some/destination").named("thePost")
+        ).buildTestRecipe();
 
         List<TestStep> testSteps = recipe.getTestCase().getTestSteps();
         verifyImplicitTargetStep(testSteps, jsonPath, "JSONPath");
@@ -230,9 +216,9 @@ public class TestRecipeBuilderTest {
     public void buildsRecipeWithGroovyScriptTestStep() throws Exception {
         String script = "def a = 'a'";
         String name = "The name";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(groovyScriptStep(script).named(name))
-                .buildTestRecipe();
+        TestRecipe recipe = newTestRecipe(
+                groovyScriptStep(script).named(name)
+        ).buildTestRecipe();
 
         GroovyScriptTestStep testStep = (GroovyScriptTestStep) recipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getType(), is(TestStepTypes.GROOVY_SCRIPT.getName()));

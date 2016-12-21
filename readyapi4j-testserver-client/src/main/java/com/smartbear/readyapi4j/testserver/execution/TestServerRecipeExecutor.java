@@ -46,8 +46,8 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
 
     @Override
     public TestServerExecution executeRecipe(TestRecipe recipe) throws ApiException {
-        Optional<ExtractorData> optionoalExtractorData = recipe.getExtractorData();
-        optionoalExtractorData.ifPresent(extractorData -> extractorDataList.add(extractorData));
+        Optional<ExtractorData> optionalExtractorData = recipe.getExtractorData();
+        optionalExtractorData.ifPresent(extractorData -> extractorDataList.add(extractorData));
         TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), false);
         if (execution != null) {
             notifyExecutionFinished(execution.getCurrentReport());
