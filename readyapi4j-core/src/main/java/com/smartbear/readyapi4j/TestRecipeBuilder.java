@@ -16,7 +16,6 @@ import com.smartbear.readyapi4j.teststeps.request.HttpRequestStepBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
