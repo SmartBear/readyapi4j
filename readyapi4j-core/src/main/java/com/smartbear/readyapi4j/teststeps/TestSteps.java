@@ -3,6 +3,7 @@ package com.smartbear.readyapi4j.teststeps;
 import com.smartbear.readyapi4j.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcConnection;
 import com.smartbear.readyapi4j.teststeps.plugin.PluginTestStepBuilder;
+import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepWithBodyBuilder;
@@ -42,6 +43,10 @@ public class TestSteps {
 
     public static PropertyTransferTestStepBuilder propertyTransfer() {
         return new PropertyTransferTestStepBuilder();
+    }
+
+    public static PropertyTransferTestStepBuilder propertyTransfer(PropertyTransferBuilder singleTransfer) {
+        return new PropertyTransferTestStepBuilder().addTransfer(singleTransfer);
     }
 
 

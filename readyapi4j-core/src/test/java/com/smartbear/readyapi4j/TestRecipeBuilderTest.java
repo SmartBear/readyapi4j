@@ -29,7 +29,7 @@ import static org.junit.Assert.assertThat;
 
 public class TestRecipeBuilderTest {
 
-    public static final String URI = "http://maps.googleapis.com/maps/api/geocode/xml";
+    private static final String URI = "http://maps.googleapis.com/maps/api/geocode/xml";
 
     @Test
     public void dumpsRecipe() throws Exception {
@@ -62,9 +62,7 @@ public class TestRecipeBuilderTest {
     @Test
     public void buildsRecipeWithPropertyTransferTestStep() throws Exception {
         TestRecipe recipe = newTestRecipe()
-                .addStep(propertyTransfer()
-                        .addTransfer(
-                                from(aSource()
+                .addStep(propertyTransfer(from(aSource()
                                         .withSourceStep("sourceName")
                                         .withProperty("username")
                                         .withPath("sourcePath")
@@ -95,9 +93,7 @@ public class TestRecipeBuilderTest {
         final String jsonPath = "$.customer.address";
         TestRecipe recipe = newTestRecipe()
                 .addStep(getRequest("/get/something").named("theGet"))
-                .addStep(propertyTransfer()
-                        .addTransfer(
-                                fromPreviousResponse(jsonPath)
+                .addStep(propertyTransfer(fromPreviousResponse(jsonPath)
                                         .to(aTarget()
                                                 .withTargetStep("targetName")
                                                 .withProperty("username")
@@ -132,9 +128,7 @@ public class TestRecipeBuilderTest {
         final String xPath = "/customer/address";
         TestRecipe recipe = newTestRecipe()
                 .addStep(getRequest("/get/something").named("theGet"))
-                .addStep(propertyTransfer()
-                        .addTransfer(
-                                fromPreviousResponse(xPath)
+                .addStep(propertyTransfer(fromPreviousResponse(xPath)
                                         .to(aTarget()
                                                 .withTargetStep("targetName")
                                                 .withProperty("username")
@@ -154,9 +148,7 @@ public class TestRecipeBuilderTest {
         final String xPath = "/customer/address";
         TestRecipe recipe = newTestRecipe()
                 .addStep(getRequest("/get/something").named(testStepName))
-                .addStep(propertyTransfer()
-                        .addTransfer(
-                                fromResponse(testStepName, xPath)
+                .addStep(propertyTransfer(fromResponse(testStepName, xPath)
                                         .to(aTarget()
                                                 .withTargetStep("targetName")
                                                 .withProperty("username")
@@ -175,12 +167,7 @@ public class TestRecipeBuilderTest {
         final String xPath = "/customer/address";
         TestRecipe recipe = newTestRecipe()
                 .addStep(getRequest("/get/something"))
-                .addStep(propertyTransfer()
-                        .addTransfer(
-                                fromPreviousResponse("/some/path")
-                                        .toNextRequest(xPath)
-                        )
-                )
+                .addStep(propertyTransfer(fromPreviousResponse("/some/path").toNextRequest(xPath)))
                 .addStep(postRequest("/some/destination").named("thePost"))
                 .buildTestRecipe();
 
