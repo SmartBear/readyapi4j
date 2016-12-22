@@ -33,10 +33,9 @@ public class RestRequestStepWithAssertionRecipeTest {
 
     @Test
     public void buildsRestRequestStepRecipeWitJsonPathContentAssertion() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(
-                        GET(URI).
-                                assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
+        TestRecipe recipe = newTestRecipe(
+                    GET(URI).
+                        assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
                 )
                 .buildTestRecipe();
 
@@ -49,8 +48,8 @@ public class RestRequestStepWithAssertionRecipeTest {
 
     @Test
     public void buildsRestRequestStepRecipeWitJsonPathCountAssertion() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(GET(URI)
+        TestRecipe recipe = newTestRecipe(
+                    GET(URI)
                         .assertJsonCount("$.results[0].address_components[1].long_name", 1)
                 )
                 .buildTestRecipe();
@@ -64,9 +63,8 @@ public class RestRequestStepWithAssertionRecipeTest {
 
     @Test
     public void buildsRestRequestStepRecipeWithContainsAssertion() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(restRequest()
-                        .get(URI)
+        TestRecipe recipe = newTestRecipe(
+                    GET(URI)
                         .addAssertion(contains("bla bla")
                                 .ignoreCase()
                                 .useRegEx()
@@ -83,9 +81,8 @@ public class RestRequestStepWithAssertionRecipeTest {
 
     @Test
     public void buildsRestRequestStepRecipeWithNotContainsAssertion() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(restRequest()
-                        .get(URI)
+        TestRecipe recipe = newTestRecipe(
+                    GET(URI)
                         .addAssertion(notContains("bla bla")
                                 .ignoreCase()
                                 .useRegEx()
@@ -117,9 +114,8 @@ public class RestRequestStepWithAssertionRecipeTest {
 
     @Test
     public void buildsRestRequestStepRecipeWithValidHttpStatusCodesAssertion() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(restRequest()
-                        .get(URI)
+        TestRecipe recipe = newTestRecipe(
+                    GET(URI)
                         .addAssertion(validStatusCodes("202")
                                 .withStatusCode(100)
                                 .withStatusCodes(Arrays.asList("200", "201"))
@@ -134,9 +130,8 @@ public class RestRequestStepWithAssertionRecipeTest {
 
     @Test
     public void buildsRestRequestStepRecipeWithInValidHttpStatusCodesAssertion() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(restRequest()
-                        .get(URI)
+        TestRecipe recipe = newTestRecipe(
+                    GET(URI)
                         .addAssertion(invalidStatusCodes()
                                 .withStatusCode("100")
                                 .withStatusCodes(Arrays.asList("200", "201"))
@@ -151,9 +146,8 @@ public class RestRequestStepWithAssertionRecipeTest {
 
     @Test
     public void buildsRestRequestStepRecipeWithResponseSLAAssertion() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(restRequest()
-                        .get(URI)
+        TestRecipe recipe = newTestRecipe(
+                    GET(URI)
                         .addAssertion(responseSLA(1000)
                         )
                 )
@@ -166,9 +160,8 @@ public class RestRequestStepWithAssertionRecipeTest {
 
     @Test
     public void buildsRestRequestStepRecipeWithXPathContainsAssertion() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(restRequest()
-                        .get(URI)
+        TestRecipe recipe = newTestRecipe(
+                    GET(URI)
                         .addAssertion(xPathContains("//Addresses/address[0]/name", "Stockholm")
                                 .allowWildCards()
                                 .ignoreComments()
@@ -188,9 +181,8 @@ public class RestRequestStepWithAssertionRecipeTest {
 
     @Test
     public void buildsRestRequestStepRecipeWithXQueryContainsAssertion() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(restRequest()
-                        .get(URI)
+        TestRecipe recipe = newTestRecipe(
+                    GET(URI)
                         .addAssertion(xQueryContains("//Addresses/address[0]/name", "Stockholm")
                                 .allowWildcards()
                         )

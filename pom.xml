@@ -13,8 +13,8 @@
     </modules>
     <packaging>pom</packaging>
     <name>Ready!API TestServer Client</name>
-    <description>Java client library for creating and executing test recipes against Ready!API TestServer</description>
-    <url>https://github.com/SmartBear/ready-api-testserver-client</url>
+    <description>Java library for testing APIs using either a local or remote execution engine</description>
+    <url>https://github.com/SmartBear/readyapi4j</url>
     <developers>
         <developer>
             <name>Manne Fagerlind</name>
@@ -30,16 +30,16 @@
         </developer>
     </developers>
     <scm>
-        <url>https://github.com/SmartBear/ready-api-testserver-client</url>
-        <connection>scm:git:ssh://git@github.com/SmartBear/ready-api-testserver-client.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/SmartBear/ready-api-testserver-client.git
+        <url>https://github.com/SmartBear/readyapi4j</url>
+        <connection>scm:git:ssh://git@github.com/SmartBear/readyapi4j.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/SmartBear/readyapi4j.git
         </developerConnection>
         <tag>ready-api-testserver-client-1.2.0</tag>
     </scm>
 
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/SmartBear/ready-api-testserver-client/issues</url>
+        <url>https://github.com/SmartBear/readyapi4j/issues</url>
     </issueManagement>
 
     <licenses>

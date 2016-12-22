@@ -12,8 +12,8 @@ import static org.junit.Assert.assertThat;
 public class PluginTestStepBuilderTest {
     @Test
     public void buildsRecipeWithPluginTestStep() throws Exception {
-        TestRecipe testRecipe = newTestRecipe()
-                .addStep(pluginTestStep("MQTTPublishTestStep")
+        TestRecipe testRecipe = newTestRecipe(
+                    pluginTestStep("MQTTPublishTestStep")
                         .named("MQTT Publish Test Step")
                         .withConfigProperty("config", new TestStepConfig())
                         .andWithConfigProperty("ClientID", "Client1")
