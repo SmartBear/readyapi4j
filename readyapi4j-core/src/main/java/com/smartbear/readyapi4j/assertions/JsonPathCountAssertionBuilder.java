@@ -1,10 +1,11 @@
 package com.smartbear.readyapi4j.assertions;
 
+import com.smartbear.readyapi.client.model.JsonPathContentAssertion;
 import com.smartbear.readyapi.client.model.JsonPathCountAssertion;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
-public class JsonPathCountAssertionBuilder extends AbstractAssertionBuilder<JsonPathCountAssertion> implements JsonPathAssertionBuilder<JsonPathCountAssertion> {
+public class JsonPathCountAssertionBuilder implements JsonPathAssertionBuilder<JsonPathCountAssertion> {
     private JsonPathCountAssertion jsonPathCountAssertion = new JsonPathCountAssertion();
 
     JsonPathCountAssertionBuilder(String jsonPath, int expectedCount) {

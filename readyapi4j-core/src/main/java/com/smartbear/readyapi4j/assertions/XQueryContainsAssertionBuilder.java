@@ -4,7 +4,7 @@ import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
-public class XQueryContainsAssertionBuilder extends AbstractAssertionBuilder<XQueryContainsAssertion> implements XQueryAssertionBuilder {
+public class XQueryContainsAssertionBuilder implements XQueryAssertionBuilder {
     private XQueryContainsAssertion xQueryContainsAssertion = new XQueryContainsAssertion();
 
     XQueryContainsAssertionBuilder(String xQuery, String expectedContent) {

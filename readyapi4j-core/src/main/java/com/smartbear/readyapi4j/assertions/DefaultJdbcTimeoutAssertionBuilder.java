@@ -4,7 +4,7 @@ import com.smartbear.readyapi.client.model.JdbcTimeoutAssertion;
 
 import java.util.Objects;
 
-public class DefaultJdbcTimeoutAssertionBuilder extends AbstractAssertionBuilder<JdbcTimeoutAssertion>
+public class DefaultJdbcTimeoutAssertionBuilder
         implements JdbcTimeoutAssertionBuilder {
 
     private final JdbcTimeoutAssertion timeoutAssertion;

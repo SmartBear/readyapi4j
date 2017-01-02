@@ -4,7 +4,7 @@ import com.smartbear.readyapi.client.model.ResponseSLAAssertion;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
-public class DefaultResponseSLAAssertionBuilder extends AbstractAssertionBuilder<ResponseSLAAssertion>
+public class DefaultResponseSLAAssertionBuilder
         implements ResponseSLAAssertionBuilder {
     private ResponseSLAAssertion responseSLAAssertion = new ResponseSLAAssertion();
 

@@ -2,8 +2,7 @@ package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.JdbcStatusAssertion;
 
-public class DefaultJdbcStatusAssertionBuilder extends AbstractAssertionBuilder<JdbcStatusAssertion>
-        implements JdbcStatusAssertionBuilder {
+public class DefaultJdbcStatusAssertionBuilder implements JdbcStatusAssertionBuilder {
     private final JdbcStatusAssertion statusAssertion = new JdbcStatusAssertion();
 
     @Override

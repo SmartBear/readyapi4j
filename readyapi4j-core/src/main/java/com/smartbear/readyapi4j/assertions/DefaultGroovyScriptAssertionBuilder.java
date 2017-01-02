@@ -4,8 +4,7 @@ import com.smartbear.readyapi.client.model.GroovyScriptAssertion;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
-public class DefaultGroovyScriptAssertionBuilder extends AbstractAssertionBuilder<GroovyScriptAssertion>
-        implements GroovyScriptAssertionBuilder {
+public class DefaultGroovyScriptAssertionBuilder implements GroovyScriptAssertionBuilder {
     private GroovyScriptAssertion scriptAssertion = new GroovyScriptAssertion();
 
     public DefaultGroovyScriptAssertionBuilder(String script) {

@@ -1,7 +1,6 @@
 package com.smartbear.readyapi4j.teststeps.request;
 
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
-import com.smartbear.readyapi4j.assertions.AbstractAssertionBuilder;
 import com.smartbear.readyapi4j.assertions.AssertionBuilder;
 import com.smartbear.readyapi4j.assertions.Assertions;
 import com.smartbear.readyapi4j.attachments.RequestAttachmentBuilder;
@@ -158,7 +157,7 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
     private void setAssertions(RequestTestStepType testStep) {
         testStep.setAssertions(assertionBuilders
                 .stream()
-                .map(assertionBuilder -> ((AbstractAssertionBuilder) assertionBuilder).build())
+                .map(assertionBuilder -> assertionBuilder.build())
                 .collect(Collectors.toList()));
     }
 

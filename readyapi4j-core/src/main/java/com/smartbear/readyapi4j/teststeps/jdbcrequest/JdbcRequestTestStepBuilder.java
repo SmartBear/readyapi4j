@@ -1,9 +1,8 @@
 package com.smartbear.readyapi4j.teststeps.jdbcrequest;
 
-import com.smartbear.readyapi4j.assertions.AbstractAssertionBuilder;
-import com.smartbear.readyapi4j.assertions.AssertionBuilder;
 import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.JdbcRequestTestStep;
+import com.smartbear.readyapi4j.assertions.AssertionBuilder;
 import com.smartbear.readyapi4j.teststeps.TestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 
@@ -78,7 +77,7 @@ public class JdbcRequestTestStepBuilder implements TestStepBuilder<JdbcRequestTe
     private void setAssertions(JdbcRequestTestStep testStep) {
         List<Assertion> assertions = new ArrayList<>();
         for (AssertionBuilder assertionBuilder : assertionBuilders) {
-            assertions.add(((AbstractAssertionBuilder) assertionBuilder).build());
+            assertions.add(assertionBuilder.build());
         }
         testStep.setAssertions(assertions);
     }

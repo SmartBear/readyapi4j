@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
-public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion> extends AbstractAssertionBuilder<Assertion> implements HttpStatusCodeAssertionBuilder {
+public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion>  implements HttpStatusCodeAssertionBuilder {
     protected List<String> statusCodes = new ArrayList<>();
     protected String name;
 
