@@ -4,6 +4,7 @@ import com.smartbear.readyapi4j.teststeps.delay.DelayTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcConnection;
 import com.smartbear.readyapi4j.teststeps.plugin.PluginTestStepBuilder;
+import com.smartbear.readyapi4j.teststeps.properties.PropertiesTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder;
@@ -11,6 +12,7 @@ import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepWithBodyBui
 import com.smartbear.readyapi4j.teststeps.soaprequest.SoapRequestStepBuilder;
 
 import java.net.URL;
+import java.util.Map;
 
 public class TestSteps {
 
@@ -57,6 +59,14 @@ public class TestSteps {
 
     public static DelayTestStepBuilder delayStep(int delayInMillis) {
         return new DelayTestStepBuilder(delayInMillis);
+    }
+
+    public static PropertiesTestStepBuilder properties() {
+        return new PropertiesTestStepBuilder();
+    }
+
+    public static PropertiesTestStepBuilder properties(Map<String, String> properties) {
+        return new PropertiesTestStepBuilder(properties);
     }
 
     public static JdbcConnection jdbcConnection(String driver, String connectionString) {

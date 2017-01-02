@@ -6,6 +6,7 @@ public enum TestStepTypes {
     DATA_SOURCE("DataSource"),
     GROOVY_SCRIPT("Groovy"),
     DELAY("Delay"),
+    PROPERTIES("Properties"),
     JDBC_REQUEST("JDBC Request"),
     SOAP_REQUEST("SOAP Request");
 
