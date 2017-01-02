@@ -22,7 +22,7 @@ import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.delayStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.propertiesStep;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.properties;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.propertyTransfer;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromPreviousResponse;
@@ -246,8 +246,8 @@ public class TestRecipeBuilderTest {
     }
 
     @Test
-    public void buildRecipeWithPropertiesTestStep() throws Exception {
-        TestRecipe testRecipe = newTestRecipe(propertiesStep()
+    public void buildsRecipeWithPropertiesTestStep() throws Exception {
+        TestRecipe testRecipe = newTestRecipe(properties()
                 .named("PropertiesStep")
                 .addProperty("property1", "value1")
         ).buildTestRecipe();
@@ -257,14 +257,14 @@ public class TestRecipeBuilderTest {
     }
 
     @Test
-    public void buildRecipeWithPropertiesTestStepWithProvidedProperties() throws Exception {
+    public void buildsRecipeWithPropertiesTestStepWithProvidedProperties() throws Exception {
         Map<String, String> properties1 = new HashMap<>();
         properties1.put("property1", "value1");
 
         Map<String, String> properties2 = new HashMap<>();
         properties2.put("property2", "value2");
 
-        TestRecipe testRecipe = newTestRecipe(propertiesStep(properties1)
+        TestRecipe testRecipe = newTestRecipe(properties(properties1)
                 .named("PropertiesStep")
                 .addProperties(properties2)
                 .addProperty("property3", "value3")

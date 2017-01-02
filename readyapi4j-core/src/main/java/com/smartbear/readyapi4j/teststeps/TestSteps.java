@@ -61,11 +61,11 @@ public class TestSteps {
         return new DelayTestStepBuilder(delayInMillis);
     }
 
-    public static PropertiesTestStepBuilder propertiesStep() {
+    public static PropertiesTestStepBuilder properties() {
         return new PropertiesTestStepBuilder();
     }
 
-    public static PropertiesTestStepBuilder propertiesStep(Map<String, String> properties) {
+    public static PropertiesTestStepBuilder properties(Map<String, String> properties) {
         return new PropertiesTestStepBuilder(properties);
     }
 
