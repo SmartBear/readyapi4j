@@ -12,7 +12,7 @@ import static org.hamcrest.CoreMatchers.is
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.fail
 
-class DslPropertyTransferTest {
+class PropertyTransferDslTest {
 
     public static final String URI = "/uri_to_get"
     public static final String FIRST_STEP = 'theGet'

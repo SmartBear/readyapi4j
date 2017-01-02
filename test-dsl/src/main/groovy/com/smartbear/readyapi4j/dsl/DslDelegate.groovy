@@ -61,6 +61,10 @@ class DslDelegate {
         return new DeferredPropertyTransferBuilder(sourceProperties, recipeBuilder)
     }
 
+    DeferredDelayStepBuilder pause(BigDecimal time) {
+        return new DeferredDelayStepBuilder(time, recipeBuilder)
+    }
+
     static final Map request = Collections.unmodifiableMap([property : 'Request'])
 
     static final Map response = Collections.unmodifiableMap([property : 'Response'])
