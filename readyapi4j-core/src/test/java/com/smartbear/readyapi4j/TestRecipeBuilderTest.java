@@ -2,6 +2,7 @@ package com.smartbear.readyapi4j;
 
 import com.smartbear.readyapi.client.model.DelayTestStep;
 import com.smartbear.readyapi.client.model.GroovyScriptTestStep;
+import com.smartbear.readyapi.client.model.PropertiesTestStep;
 import com.smartbear.readyapi.client.model.PropertyTransfer;
 import com.smartbear.readyapi.client.model.PropertyTransferSource;
 import com.smartbear.readyapi.client.model.PropertyTransferTarget;
@@ -11,14 +12,17 @@ import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PathLanguage;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi4j.properties.Properties.property;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.delayStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.delayStep;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.properties;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.propertyTransfer;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromPreviousResponse;
@@ -36,10 +40,10 @@ public class TestRecipeBuilderTest {
     @Test
     public void dumpsRecipe() throws Exception {
         String recipe = newTestRecipe(GET(URI)
-                                .addQueryParameter("address", "1600+Amphitheatre+Parkway,+Mountain+View,+CA")
-                                .addQueryParameter("sensor", "false")
-                                .assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
-                ).buildTestRecipe().toString();
+                .addQueryParameter("address", "1600+Amphitheatre+Parkway,+Mountain+View,+CA")
+                .addQueryParameter("sensor", "false")
+                .assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
+        ).buildTestRecipe().toString();
 
         assertThat(recipe.length(), not(0));
     }
@@ -127,14 +131,14 @@ public class TestRecipeBuilderTest {
         TestRecipe recipe = newTestRecipe(
                 GET("/get/something").named("theGet"),
                 propertyTransfer(fromPreviousResponse(xPath)
-                                .to(aTarget()
-                                        .withTargetStep("targetName")
-                                        .withProperty("username")
-                                        .withPath("targetPath")
-                                        .withPathLanguage(PathLanguage.XPath)
-                                )
+                        .to(aTarget()
+                                .withTargetStep("targetName")
+                                .withProperty("username")
+                                .withPath("targetPath")
+                                .withPathLanguage(PathLanguage.XPath)
                         )
                 )
+        )
                 .buildTestRecipe();
 
         verifyImplicitTransfer(recipe, xPath, "XPath");
@@ -147,14 +151,14 @@ public class TestRecipeBuilderTest {
         TestRecipe recipe = newTestRecipe(
                 GET("/get/something").named(testStepName),
                 propertyTransfer(fromResponse(testStepName, xPath)
-                                .to(aTarget()
-                                        .withTargetStep("targetName")
-                                        .withProperty("username")
-                                        .withPath("targetPath")
-                                        .withPathLanguage(PathLanguage.XPath)
-                                )
+                        .to(aTarget()
+                                .withTargetStep("targetName")
+                                .withProperty("username")
+                                .withPath("targetPath")
+                                .withPathLanguage(PathLanguage.XPath)
                         )
                 )
+        )
                 .buildTestRecipe();
 
         verifyImplicitTransfer(recipe, xPath, "XPath");
@@ -227,6 +231,7 @@ public class TestRecipeBuilderTest {
         assertThat(testStep.getScript(), is(script));
         assertThat(testStep.getName(), is(name));
     }
+
     @Test
     public void buildsRecipeWithDelayTestStep() throws Exception {
         String testStepName = "DelayStep";
@@ -238,6 +243,37 @@ public class TestRecipeBuilderTest {
         assertThat(testStep.getType(), is(TestStepTypes.DELAY.getName()));
         assertThat(testStep.getDelay(), is(3000));
         assertThat(testStep.getName(), is(testStepName));
+    }
+
+    @Test
+    public void buildsRecipeWithPropertiesTestStep() throws Exception {
+        TestRecipe testRecipe = newTestRecipe(properties()
+                .named("PropertiesStep")
+                .addProperty("property1", "value1")
+        ).buildTestRecipe();
+        PropertiesTestStep testStep = (PropertiesTestStep) testRecipe.getTestCase().getTestSteps().get(0);
+        assertThat(testStep.getType(), is(TestStepTypes.PROPERTIES.getName()));
+        assertThat(testStep.getProperties().get("property1"), is("value1"));
+    }
+
+    @Test
+    public void buildsRecipeWithPropertiesTestStepWithProvidedProperties() throws Exception {
+        Map<String, String> properties1 = new HashMap<>();
+        properties1.put("property1", "value1");
+
+        Map<String, String> properties2 = new HashMap<>();
+        properties2.put("property2", "value2");
+
+        TestRecipe testRecipe = newTestRecipe(properties(properties1)
+                .named("PropertiesStep")
+                .addProperties(properties2)
+                .addProperty("property3", "value3")
+        ).buildTestRecipe();
+        PropertiesTestStep testStep = (PropertiesTestStep) testRecipe.getTestCase().getTestSteps().get(0);
+        assertThat(testStep.getType(), is(TestStepTypes.PROPERTIES.getName()));
+        assertThat(testStep.getProperties().get("property1"), is("value1"));
+        assertThat(testStep.getProperties().get("property2"), is("value2"));
+        assertThat(testStep.getProperties().get("property3"), is("value3"));
     }
 
     private void assertSource(PropertyTransferSource source) {
