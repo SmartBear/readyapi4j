@@ -53,6 +53,17 @@ class DslDelegate {
         recipeBuilder.addStep(TestSteps.propertyTransfer(transferBuilder))
     }
 
+    DeferredPropertyTransferBuilder transfer(String sourcePath) {
+        return new DeferredPropertyTransferBuilder([property: 'Response', path: sourcePath], recipeBuilder)
+    }
+
+    DeferredPropertyTransferBuilder transfer(Map sourceProperties) {
+        return new DeferredPropertyTransferBuilder(sourceProperties, recipeBuilder)
+    }
+
+    static final Map request = Collections.unmodifiableMap([property : 'Request'])
+
+    static final Map response = Collections.unmodifiableMap([property : 'Response'])
 
     private void createRestRequest(Map<String, Object> params, String httpVerb, String URI) {
         RestRequestStepBuilder request = TestSteps."$httpVerb"(URI)
