@@ -1,6 +1,9 @@
 package com.smartbear.readyapi4j.dsl
 
+import com.smartbear.readyapi.client.model.Assertion
 import com.smartbear.readyapi.client.model.RestTestRequestStep
+import com.smartbear.readyapi.client.model.SimpleContainsAssertion
+import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion
 import com.smartbear.readyapi4j.TestRecipe
 import org.junit.Test
 
@@ -55,8 +58,14 @@ class RestRequestDslTest {
         String stepName = 'theGET'
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
-            GET ('/some_uri', name: stepName, headers: ['Cache-Control': 'nocache'], followRedirects: true,
-                    entitizeParameters: true, postQueryString: true, timeout: 5000)
+            GET ('/some_uri', {
+                name stepName
+                headers (['Cache-Control': 'nocache'])
+                followRedirects true
+                entitizeParameters true
+                postQueryString true
+                timeout 5000
+            })
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
@@ -66,6 +75,28 @@ class RestRequestDslTest {
         assertTrue('Not respecting entitizeParameters', restRequest.entitizeParameters)
         assertTrue('Not respecting postQueryString', restRequest.postQueryString)
         assertThat(restRequest.timeout, is ('5000'))
+    }
+
+    @Test
+    void createsAssertions() throws Exception {
+        String stepName = 'theGET'
+        TestRecipe recipe = recipe {
+            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
+            GET ('/some_uri', {
+                assertions {
+                    status 200
+                    responseContains 'Arrival', useRegexp: true
+                }
+            })
+        }
+
+        RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
+        assertThat(restRequest.assertions.size(), is(2))
+        ValidHttpStatusCodesAssertion statusAssertion = restRequest.assertions[0] as ValidHttpStatusCodesAssertion
+        assertThat(statusAssertion.validStatusCodes, is (['200']))
+        SimpleContainsAssertion containsAssertion = restRequest.assertions[1] as SimpleContainsAssertion
+        assertThat(containsAssertion.token, is('Arrival'))
+        assertTrue(containsAssertion.useRegexp)
     }
 
 

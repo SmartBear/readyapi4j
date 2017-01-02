@@ -17,36 +17,20 @@ class DslDelegate {
         recipeBuilder.addStep(TestSteps.groovyScriptStep(scriptText))
     }
 
-    void GET(String URI) {
-        GET([:], URI)
+    void GET(String URI, Closure configuration = null) {
+        createRestRequest('GET', URI, configuration)
     }
 
-    void GET(Map<String, Object> params, String URI) {
-        createRestRequest(params, 'GET', URI)
+    void POST(String URI, Closure configuration = null) {
+        createRestRequest('POST', URI, configuration)
     }
 
-    void POST(String URI) {
-        POST([:], URI)
+    void PUT(String URI, Closure configuration = null) {
+        createRestRequest('PUT', URI, configuration)
     }
 
-    void POST(Map<String, Object> params, String URI) {
-        createRestRequest(params, 'POST', URI)
-    }
-
-    void PUT(String URI) {
-        PUT([:], URI)
-    }
-
-    void PUT(Map<String, Object> params, String URI) {
-        createRestRequest(params, 'PUT', URI)
-    }
-
-    void DELETE(String URI) {
-        DELETE([:], URI)
-    }
-
-    void DELETE(Map<String, Object> params, String URI) {
-        createRestRequest(params, 'DELETE', URI)
+    void DELETE(String URI, Closure configuration = null) {
+        createRestRequest('DELETE', URI, configuration)
     }
 
     void propertyTransfer(PropertyTransferBuilder transferBuilder) {
@@ -76,26 +60,32 @@ class DslDelegate {
         recipeBuilder.addStep(delegate.buildSoapRequestStep())
     }
 
-    private void createRestRequest(Map<String, Object> params, String httpVerb, String URI) {
+    private void createRestRequest(String httpVerb, String URI, Closure configuration = null) {
         RestRequestStepBuilder request = TestSteps."$httpVerb"(URI)
-        request.named(params['name'] as String)
-        Map<String, Object> headers = params['headers']
-        if (headers) {
-            headers.each { name, value ->
-                request.addHeader(name, value)
+        if (configuration) {
+            RestRequestDelegate delegate = new RestRequestDelegate()
+            configuration.delegate = delegate
+            configuration.call()
+            request.named(delegate.stepName)
+            Map<String, Object> headers = delegate.headers
+            if (headers) {
+                headers.each { name, value ->
+                    request.addHeader(name, value)
+                }
             }
-        }
-        if (params['followRedirects'] as boolean) {
-            request.followRedirects()
-        }
-        if (params['entitizeParameters'] as boolean) {
-            request.entitizeParameters()
-        }
-        if (params['postQueryString'] as boolean) {
-            request.postQueryString()
-        }
-        if (params['timeout']) {
-            request.setTimeout(String.valueOf(params['timeout']))
+            if (delegate.followRedirects) {
+                request.followRedirects()
+            }
+            if (delegate.entitizeParameters) {
+                request.entitizeParameters()
+            }
+            if (delegate.postQueryString) {
+                request.postQueryString()
+            }
+            if (delegate.timeout) {
+                request.setTimeout(delegate.timeout)
+            }
+            delegate.assertions.each { assertion -> request.addAssertion(assertion)}
         }
         recipeBuilder.addStep(request)
     }
