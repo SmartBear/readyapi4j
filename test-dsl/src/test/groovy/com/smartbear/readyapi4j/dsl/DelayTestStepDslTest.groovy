@@ -12,8 +12,6 @@ import static org.junit.Assert.assertThat
 
 class DelayTestStepDslTest {
 
-    private static final String SCRIPT_TEXT = "println 'Peekaboo, little Earth'"
-
     @Test
     void buildsDelayWithMilliseconds() throws Exception {
         TestRecipe recipe = recipe {

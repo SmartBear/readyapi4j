@@ -69,6 +69,13 @@ class DslDelegate {
 
     static final Map response = Collections.unmodifiableMap([property : 'Response'])
 
+    void soapRequest(Closure soapRequestDefinition) {
+        SoapRequestDelegate delegate = new SoapRequestDelegate()
+        soapRequestDefinition.delegate = delegate
+        soapRequestDefinition.call()
+        recipeBuilder.addStep(delegate.buildSoapRequestStep())
+    }
+
     private void createRestRequest(Map<String, Object> params, String httpVerb, String URI) {
         RestRequestStepBuilder request = TestSteps."$httpVerb"(URI)
         request.named(params['name'] as String)
