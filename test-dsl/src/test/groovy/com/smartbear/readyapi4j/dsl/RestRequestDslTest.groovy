@@ -97,7 +97,6 @@ class RestRequestDslTest {
         assertTrue(containsAssertion.useRegexp)
     }
 
-
     private static void verifyValuesAndMethod(TestRecipe recipe, String method) {
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
         assertThat(restRequest.URI, is(URI))

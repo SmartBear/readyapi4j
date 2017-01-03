@@ -17,6 +17,7 @@ class DeferredPropertyTransferBuilder {
     private String sourcePath
     private TestRecipeBuilder recipeBuilder
     private Map targetOptions
+    private PropertyTransferBuilder transfer
 
     DeferredPropertyTransferBuilder(Map sourceProperties, TestRecipeBuilder recipeBuilder) {
         extractSourceProperties(sourceProperties)
@@ -49,21 +50,27 @@ class DeferredPropertyTransferBuilder {
     }
 
     DeferredPropertyTransferBuilder to(Map targetProperties) {
+        this.targetOptions = targetProperties
         PropertyTransferSourceBuilder source = new PropertyTransferSourceBuilder()
                 .withSourceStep(sourceStepName)
                 .withProperty(sourcePropertyName)
                 .withPath(sourcePath)
+        PropertyTransferTargetBuilder target = makeTarget(targetProperties)
+        transfer = new PropertyTransferBuilder().withSource(source).withTarget(target)
+        recipeBuilder.addStep(new PropertyTransferTestStepBuilder().addTransfer(this.transfer))
+        return this
+    }
+
+    private PropertyTransferTargetBuilder makeTarget(Map targetProperties) {
         PropertyTransferTargetBuilder target = new PropertyTransferTargetBuilder()
                 .withTargetStep(targetProperties['step'] as String)
                 .withProperty(targetProperties['property'] as String)
                 .withPath(targetProperties['path'] as String)
-        PropertyTransferBuilder transfer = new PropertyTransferBuilder().withSource(source).withTarget(target)
-        recipeBuilder.addStep(new PropertyTransferTestStepBuilder().addTransfer(transfer))
-        return this
+        target
     }
 
-    DeferredPropertyTransferBuilder of(Map targetOptions) {
-        this.targetOptions = targetOptions
-        return this
+    void of(Map targetOptions) {
+        this.targetOptions.putAll(targetOptions)
+        transfer.withTarget(makeTarget(this.targetOptions))
     }
 }

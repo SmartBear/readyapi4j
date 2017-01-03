@@ -12,7 +12,6 @@ import static org.hamcrest.CoreMatchers.is
 
 class SoapRequestDslTest {
 
-
     public static final String WSDL_URL = 'http://somedomain.com/service?wsdl'
     public static final String BINDING = 'TheBinding'
     public static final String OPERATION = 'TheOperation'
