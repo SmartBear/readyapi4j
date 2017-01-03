@@ -1,6 +1,5 @@
 package com.smartbear.readyapi4j.dsl
 
-import com.smartbear.readyapi.client.model.Assertion
 import com.smartbear.readyapi.client.model.RestTestRequestStep
 import com.smartbear.readyapi.client.model.SimpleContainsAssertion
 import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion
@@ -79,7 +78,6 @@ class RestRequestDslTest {
 
     @Test
     void createsAssertions() throws Exception {
-        String stepName = 'theGET'
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             GET ('/some_uri', {

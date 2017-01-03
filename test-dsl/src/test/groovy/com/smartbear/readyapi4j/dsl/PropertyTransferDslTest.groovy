@@ -34,7 +34,9 @@ class PropertyTransferDslTest {
     @Test
     void buildsPropertyTransferWithSpecialSyntax() throws Exception {
         TestRecipe recipe = recipe {
-            GET (URI, name: FIRST_STEP)
+            GET (URI, {
+                name FIRST_STEP
+            })
             transfer sourcePath from response to targetPath of request
             POST(URI, name: LAST_STEP)
         }

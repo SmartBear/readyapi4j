@@ -17,19 +17,19 @@ class DslDelegate {
         recipeBuilder.addStep(TestSteps.groovyScriptStep(scriptText))
     }
 
-    void GET(String URI, Closure configuration = null) {
+    void GET(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('GET', URI, configuration)
     }
 
-    void POST(String URI, Closure configuration = null) {
+    void POST(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('POST', URI, configuration)
     }
 
-    void PUT(String URI, Closure configuration = null) {
+    void PUT(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('PUT', URI, configuration)
     }
 
-    void DELETE(String URI, Closure configuration = null) {
+    void DELETE(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('DELETE', URI, configuration)
     }
 
@@ -53,7 +53,7 @@ class DslDelegate {
 
     static final Map response = Collections.unmodifiableMap([property : 'Response'])
 
-    void soapRequest(Closure soapRequestDefinition) {
+    void soapRequest(@DelegatesTo(SoapRequestDelegate) Closure soapRequestDefinition) {
         SoapRequestDelegate delegate = new SoapRequestDelegate()
         soapRequestDefinition.delegate = delegate
         soapRequestDefinition.call()

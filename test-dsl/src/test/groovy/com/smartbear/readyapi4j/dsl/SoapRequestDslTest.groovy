@@ -10,7 +10,7 @@ import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
 import static org.junit.Assert.assertThat
 import static org.hamcrest.CoreMatchers.is
 
-class SoapTestStepDslTest {
+class SoapRequestDslTest {
 
 
     public static final String WSDL_URL = 'http://somedomain.com/service?wsdl'

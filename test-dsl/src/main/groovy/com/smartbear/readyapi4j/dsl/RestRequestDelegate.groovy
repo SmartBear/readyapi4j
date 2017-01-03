@@ -1,6 +1,5 @@
 package com.smartbear.readyapi4j.dsl
 
-import com.smartbear.readyapi.client.model.Assertion
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
 import com.smartbear.readyapi4j.assertions.DefaultContainsAssertionBuilder
 import com.smartbear.readyapi4j.assertions.ValidHttpStatusCodesAssertionBuilder
@@ -42,7 +41,7 @@ class RestRequestDelegate {
         this.timeout = String.valueOf(timeout)
     }
 
-    void assertions(Closure assertionsConfig) {
+    void assertions(@DelegatesTo(AssertionsDelegate) Closure assertionsConfig) {
         def delegate = new AssertionsDelegate()
         assertionsConfig.delegate = delegate
         assertionsConfig.call()
