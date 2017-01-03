@@ -8,7 +8,8 @@ public enum TestStepTypes {
     DELAY("Delay"),
     PROPERTIES("Properties"),
     JDBC_REQUEST("JDBC Request"),
-    SOAP_REQUEST("SOAP Request");
+    SOAP_REQUEST("SOAP Request"),
+    WSDL_MOCK_RESPONSE("Wsdl Mock Response");
 
     private String name;
 
