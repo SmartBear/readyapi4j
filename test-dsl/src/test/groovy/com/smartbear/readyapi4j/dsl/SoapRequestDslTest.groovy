@@ -1,14 +1,11 @@
 package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi.client.model.SoapRequestTestStep
-import com.smartbear.readyapi.client.model.TestStep
 import com.smartbear.readyapi4j.TestRecipe
 import org.junit.Test
 
 import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
 import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
-import static org.junit.Assert.assertThat
-import static org.hamcrest.CoreMatchers.is
 
 class SoapRequestDslTest {
 
@@ -27,9 +24,9 @@ class SoapRequestDslTest {
         }
 
         SoapRequestTestStep testStep = extractSoapTestStep(recipe)
-        assertThat(testStep.wsdl as String, is(WSDL_URL))
-        assertThat(testStep.binding, is(BINDING))
-        assertThat(testStep.operation, is(OPERATION))
+        assert testStep.wsdl == WSDL_URL
+        assert testStep.binding == BINDING
+        assert testStep.operation == OPERATION
     }
 
     @Test
@@ -44,7 +41,7 @@ class SoapRequestDslTest {
         }
 
         SoapRequestTestStep testStep = extractSoapTestStep(recipe)
-        assertThat(testStep.parameters.find({ it.path = '/the/path'})?.value, is('12'))
+        assert testStep.parameters.find({ it.path = '/the/path'})?.value == '12'
     }
 
     @Test
@@ -59,12 +56,11 @@ class SoapRequestDslTest {
         }
 
         SoapRequestTestStep testStep = extractSoapTestStep(recipe)
-        assertThat(testStep.parameters.find({ it.name = 'ParamName'})?.value, is('12'))
+        assert testStep.parameters.find({ it.name = 'ParamName'})?.value == '12'
     }
 
     private static SoapRequestTestStep extractSoapTestStep(TestRecipe recipe) {
-        TestStep testStep = extractFirstTestStep(recipe)
-        assertThat(testStep, is(SoapRequestTestStep))
+        SoapRequestTestStep testStep = extractFirstTestStep(recipe) as SoapRequestTestStep
         return testStep as SoapRequestTestStep
     }
 }

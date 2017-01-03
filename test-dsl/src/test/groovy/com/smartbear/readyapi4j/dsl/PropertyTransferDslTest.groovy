@@ -8,8 +8,6 @@ import org.junit.Test
 
 import static TestDsl.recipe
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromPreviousResponse
-import static org.hamcrest.CoreMatchers.is
-import static org.junit.Assert.assertThat
 import static org.junit.Assert.fail
 
 class PropertyTransferDslTest {
@@ -63,9 +61,9 @@ class PropertyTransferDslTest {
         }
 
         PropertyTransfer transferStep = extractPropertyTransferStep(recipe)
-        assertThat(transferStep.target?.targetName, is('TheStep'))
-        assertThat(transferStep.target?.property, is('Username'))
-        assertThat(transferStep.target?.path, is(targetPath))
+        assert transferStep.target?.targetName == 'TheStep'
+        assert transferStep.target?.property == 'Username'
+        assert transferStep.target?.path == targetPath
     }
 
     @Test
@@ -75,9 +73,9 @@ class PropertyTransferDslTest {
         }
 
         PropertyTransfer transferStep = extractPropertyTransferStep(recipe)
-        assertThat(transferStep.source?.sourceName, is('someStep'))
-        assertThat(transferStep.source?.property, is('SomeProperty'))
-        assertThat(transferStep.source?.path, is(sourcePath))
+        assert transferStep.source?.sourceName == 'someStep'
+        assert transferStep.source?.property == 'SomeProperty'
+        assert transferStep.source?.path == sourcePath
     }
 
     @Test
@@ -87,9 +85,9 @@ class PropertyTransferDslTest {
         }
 
         PropertyTransfer transferStep = extractPropertyTransferStep(recipe)
-        assertThat(transferStep.target?.targetName, is('someStep'))
-        assertThat(transferStep.target?.property, is('SomeProperty'))
-        assertThat(transferStep.target?.path, is(targetPath))
+        assert transferStep.target?.targetName == 'someStep'
+        assert transferStep.target?.property == 'SomeProperty'
+        assert transferStep.target?.path == targetPath
     }
 
     private static PropertyTransfer extractPropertyTransferStep(TestRecipe recipe) {
@@ -102,12 +100,12 @@ class PropertyTransferDslTest {
 
     private static void verifyPropertyTransferStep(TestRecipe recipe) {
         PropertyTransfer transferStep = extractPropertyTransferStep(recipe)
-        assertThat(transferStep.source?.sourceName, is(FIRST_STEP))
-        assertThat(transferStep.source?.property, is('Response'))
-        assertThat(transferStep.source?.path, is(sourcePath))
-        assertThat(transferStep.target?.targetName, is(LAST_STEP))
-        assertThat(transferStep.target?.property, is('Request'))
-        assertThat(transferStep.target?.path, is(targetPath))
+        assert transferStep.source?.sourceName == FIRST_STEP
+        assert transferStep.source?.property == 'Response'
+        assert transferStep.source?.path == sourcePath
+        assert transferStep.target?.targetName == LAST_STEP
+        assert transferStep.target?.property == 'Request'
+        assert transferStep.target?.path == targetPath
     }
 
 }

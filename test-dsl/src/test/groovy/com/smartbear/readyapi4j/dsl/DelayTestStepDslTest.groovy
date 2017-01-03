@@ -7,8 +7,6 @@ import org.junit.Test
 
 import static TestDsl.recipe
 import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
-import static org.hamcrest.CoreMatchers.is
-import static org.junit.Assert.assertThat
 
 class DelayTestStepDslTest {
 
@@ -19,12 +17,6 @@ class DelayTestStepDslTest {
         }
 
         verifyDelay(recipe, 1200)
-    }
-
-    private static void verifyDelay(TestRecipe recipe, int delay) {
-        TestStep singleStep = extractFirstTestStep(recipe)
-        assertThat(singleStep, is(DelayTestStep))
-        assertThat(singleStep.delay, is(delay))
     }
 
     @Test
@@ -61,6 +53,11 @@ class DelayTestStepDslTest {
         }
 
         verifyDelay(recipe, 60_000)
+    }
+
+    private static void verifyDelay(TestRecipe recipe, int delay) {
+        TestStep singleStep = extractFirstTestStep(recipe) as DelayTestStep
+        assert singleStep.delay == delay
     }
 
 }

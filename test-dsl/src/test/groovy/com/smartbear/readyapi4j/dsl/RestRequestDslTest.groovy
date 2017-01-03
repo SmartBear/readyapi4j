@@ -8,9 +8,6 @@ import org.junit.Test
 
 import static TestDsl.recipe
 import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
-import static org.hamcrest.CoreMatchers.is
-import static org.junit.Assert.assertThat
-import static org.junit.Assert.assertTrue
 
 class RestRequestDslTest {
 
@@ -68,12 +65,12 @@ class RestRequestDslTest {
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
-        assertThat(restRequest.name, is(stepName))
-        assertThat(restRequest.headers['Cache-Control'] as List<String>, is(['nocache']))
-        assertTrue('Not respecting followRedirects', restRequest.followRedirects)
-        assertTrue('Not respecting entitizeParameters', restRequest.entitizeParameters)
-        assertTrue('Not respecting postQueryString', restRequest.postQueryString)
-        assertThat(restRequest.timeout, is ('5000'))
+        assert restRequest.name == stepName
+        assert restRequest.headers['Cache-Control'] == ['nocache']
+        assert restRequest.followRedirects : 'Not respecting followRedirects'
+        assert restRequest.entitizeParameters : 'Not respecting entitizeParameters'
+        assert restRequest.postQueryString : 'Not respecting postQueryString'
+        assert restRequest.timeout == '5000'
     }
 
     @Test
@@ -89,18 +86,18 @@ class RestRequestDslTest {
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
-        assertThat(restRequest.assertions.size(), is(2))
+        assert restRequest.assertions.size() == 2
         ValidHttpStatusCodesAssertion statusAssertion = restRequest.assertions[0] as ValidHttpStatusCodesAssertion
-        assertThat(statusAssertion.validStatusCodes, is (['200']))
+        assert statusAssertion.validStatusCodes == ['200']
         SimpleContainsAssertion containsAssertion = restRequest.assertions[1] as SimpleContainsAssertion
-        assertThat(containsAssertion.token, is('Arrival'))
-        assertTrue(containsAssertion.useRegexp)
+        assert containsAssertion.token == 'Arrival'
+        assert containsAssertion : 'Not respecting useRegexp'
     }
 
     private static void verifyValuesAndMethod(TestRecipe recipe, String method) {
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
-        assertThat(restRequest.URI, is(URI))
-        assertThat(restRequest.method, is(method))
+        assert restRequest.URI == URI
+        assert restRequest.method == method
     }
 
 }

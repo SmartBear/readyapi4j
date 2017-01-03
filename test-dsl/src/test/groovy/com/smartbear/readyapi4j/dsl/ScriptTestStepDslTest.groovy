@@ -6,8 +6,6 @@ import org.junit.Test
 
 import static TestDsl.recipe
 import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
-import static org.hamcrest.CoreMatchers.is
-import static org.junit.Assert.assertThat
 
 class ScriptTestStepDslTest {
 
@@ -20,7 +18,7 @@ class ScriptTestStepDslTest {
         }
 
         GroovyScriptTestStep singleStep = extractFirstTestStep(recipe) as GroovyScriptTestStep
-        assertThat(singleStep.script, is(SCRIPT_TEXT))
+        assert singleStep.script == SCRIPT_TEXT
     }
 
 }
