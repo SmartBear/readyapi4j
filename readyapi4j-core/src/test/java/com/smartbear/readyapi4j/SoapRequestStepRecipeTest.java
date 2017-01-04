@@ -29,8 +29,8 @@ public class SoapRequestStepRecipeTest {
 
     @Test
     public void testSoapRecipe() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+        TestRecipe recipe = newTestRecipe(
+                soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
                         .named("Soap Rulez")
                         .forBinding("GlobalWeatherSoap12")
                         .forOperation("GetWeather")
@@ -57,8 +57,8 @@ public class SoapRequestStepRecipeTest {
     @Test
     public void buildSoapRequestTestStepRecipeWithStreamAttachment() throws MalformedURLException {
         InputStream inputStream = new ByteArrayInputStream("Content".getBytes());
-        TestRecipe recipe = newTestRecipe()
-                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+        TestRecipe recipe = newTestRecipe(
+                soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
                         .named("Soap Rulez")
                         .forBinding("GlobalWeatherSoap12")
                         .forOperation("GetWeather")
@@ -74,8 +74,8 @@ public class SoapRequestStepRecipeTest {
 
     @Test
     public void buildSoapRequestTestStepRecipeWithByteArrayAttachment() throws MalformedURLException {
-        TestRecipe testRecipe = newTestRecipe()
-                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+        TestRecipe testRecipe = newTestRecipe(
+                soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
                         .named("Soap Rulez")
                         .forBinding("GlobalWeatherSoap12")
                         .forOperation("GetWeather")
@@ -91,8 +91,8 @@ public class SoapRequestStepRecipeTest {
 
     @Test
     public void buildSoapRequestTestStepRecipeWithStringAttachment() throws MalformedURLException {
-        TestRecipe testRecipe = newTestRecipe()
-                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+        TestRecipe testRecipe = newTestRecipe(
+                soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
                         .named("Soap Rulez")
                         .forBinding("GlobalWeatherSoap12")
                         .forOperation("GetWeather")
@@ -116,8 +116,8 @@ public class SoapRequestStepRecipeTest {
     @Test
     public void buildRestRequestTestRecipeWithPropertyExtractor() throws MalformedURLException {
         final String[] extractedProperty = {""};
-        TestRecipe recipe = newTestRecipe()
-                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+        TestRecipe recipe = newTestRecipe(
+                soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
                         .named("Soap Rulez")
                         .forBinding("GlobalWeatherSoap12")
                         .forOperation("GetWeather")
@@ -142,8 +142,8 @@ public class SoapRequestStepRecipeTest {
     @Test
     public void buildRestRequestTestRecipeWithJsonPathExtractor() throws MalformedURLException {
         final String[] extractedProperty = {""};
-        TestRecipe recipe = newTestRecipe()
-                .addStep(soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+        TestRecipe recipe = newTestRecipe(
+                soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
                         .named("Soap Rulez")
                         .forBinding("GlobalWeatherSoap12")
                         .forOperation("GetWeather")

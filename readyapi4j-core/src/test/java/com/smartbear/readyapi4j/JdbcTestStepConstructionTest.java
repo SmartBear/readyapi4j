@@ -30,8 +30,8 @@ public class JdbcTestStepConstructionTest {
     @Test
     public void buildsRecipeWithPlainJdbcRequest() throws Exception {
         String sql = "select * from users";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(connection.jdbcRequest(sql))
+        TestRecipe recipe = newTestRecipe(
+                    connection.jdbcRequest(sql))
                 .buildTestRecipe();
 
         JdbcRequestTestStep jdbcRequest = extractJdbcRequestTestStep(recipe);
@@ -43,8 +43,8 @@ public class JdbcTestStepConstructionTest {
     @Test
     public void buildsRecipeWithStoredProcedureCall() throws Exception {
         String sql = "registerVisit()";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(connection.storedProcedureCall(sql))
+        TestRecipe recipe = newTestRecipe(
+                    connection.storedProcedureCall(sql))
                 .buildTestRecipe();
 
         JdbcRequestTestStep jdbcRequest = extractJdbcRequestTestStep(recipe);
@@ -56,8 +56,8 @@ public class JdbcTestStepConstructionTest {
     @Test
     public void retainsName() throws Exception {
         String stepName = "The Name";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(connection.jdbcRequest("select * from some_table").named(stepName)
+        TestRecipe recipe = newTestRecipe(
+                    connection.jdbcRequest("select * from some_table").named(stepName)
                 )
 
                 .buildTestRecipe();
@@ -70,8 +70,8 @@ public class JdbcTestStepConstructionTest {
     public void addsProperties() throws Exception {
         String propertyName = "prop1";
         String propertyValue = "propValue";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(connection.jdbcRequest("select * from some_table")
+        TestRecipe recipe = newTestRecipe(
+                    connection.jdbcRequest("select * from some_table")
                         .addProperty(propertyName, propertyValue)
                 )
 
@@ -84,8 +84,8 @@ public class JdbcTestStepConstructionTest {
     @Test
     public void addsAssertions() throws Exception {
         String token = "Kalle";
-        TestRecipe recipe = newTestRecipe()
-                .addStep(connection.jdbcRequest("select * from some_table")
+        TestRecipe recipe = newTestRecipe(
+                    connection.jdbcRequest("select * from some_table")
                         .addAssertion(contains(token))
                 )
 
