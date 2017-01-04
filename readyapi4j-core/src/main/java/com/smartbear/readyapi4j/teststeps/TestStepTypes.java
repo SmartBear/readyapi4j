@@ -9,7 +9,7 @@ public enum TestStepTypes {
     PROPERTIES("Properties"),
     JDBC_REQUEST("JDBC Request"),
     SOAP_REQUEST("SOAP Request"),
-    WSDL_MOCK_RESPONSE("Wsdl Mock Response");
+    SOAP_MOCK_RESPONSE("SOAPMockResponse");
 
     private String name;
 
