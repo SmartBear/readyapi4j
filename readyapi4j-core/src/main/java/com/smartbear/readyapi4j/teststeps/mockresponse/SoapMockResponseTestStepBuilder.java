@@ -1,13 +1,13 @@
 package com.smartbear.readyapi4j.teststeps.mockresponse;
 
-import com.smartbear.readyapi.client.model.SOAPMockResponseTestStep;
+import com.smartbear.readyapi.client.model.SoapMockResponseTestStep;
 import com.smartbear.readyapi4j.teststeps.TestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 
 import java.net.URL;
 
-public class SoapMockResponseTestStepBuilder implements TestStepBuilder<SOAPMockResponseTestStep> {
-    private final SOAPMockResponseTestStep mockResponseTestStep = new SOAPMockResponseTestStep();
+public class SoapMockResponseTestStepBuilder implements TestStepBuilder<SoapMockResponseTestStep> {
+    private final SoapMockResponseTestStep mockResponseTestStep = new SoapMockResponseTestStep();
 
     public SoapMockResponseTestStepBuilder named(String name) {
         mockResponseTestStep.setName(name);
@@ -40,7 +40,7 @@ public class SoapMockResponseTestStepBuilder implements TestStepBuilder<SOAPMock
     }
 
     @Override
-    public SOAPMockResponseTestStep build() {
+    public SoapMockResponseTestStep build() {
         mockResponseTestStep.setType(TestStepTypes.SOAP_MOCK_RESPONSE.getName());
         return mockResponseTestStep;
     }

@@ -7,7 +7,7 @@ import com.smartbear.readyapi.client.model.PropertyTransfer;
 import com.smartbear.readyapi.client.model.PropertyTransferSource;
 import com.smartbear.readyapi.client.model.PropertyTransferTarget;
 import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
-import com.smartbear.readyapi.client.model.SOAPMockResponseTestStep;
+import com.smartbear.readyapi.client.model.SoapMockResponseTestStep;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PathLanguage;
@@ -288,7 +288,7 @@ public class TestRecipeBuilderTest {
                 .withPath("/weather")
                 .withPort(6091)
         ).buildTestRecipe();
-        SOAPMockResponseTestStep testStep = (SOAPMockResponseTestStep) testRecipe.getTestCase().getTestSteps().get(0);
+        SoapMockResponseTestStep testStep = (SoapMockResponseTestStep) testRecipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getWsdl(), is("http://www.webservicex.com/globalweather.asmx?WSDL"));
         assertThat(testStep.getBinding(), is("GlobalWeatherSoap12"));
         assertThat(testStep.getOperation(), is("GetWeather"));
