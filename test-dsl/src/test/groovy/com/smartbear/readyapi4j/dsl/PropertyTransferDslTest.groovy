@@ -24,7 +24,7 @@ class PropertyTransferDslTest {
             GET(URI, {
                 name FIRST_STEP
             })
-            propertyTransfer(fromPreviousResponse(sourcePath).toNextRequest(targetPath))
+            transfer(fromPreviousResponse(sourcePath).toNextRequest(targetPath))
             POST(URI, {
                 name LAST_STEP
             })

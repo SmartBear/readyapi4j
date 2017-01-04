@@ -33,7 +33,7 @@ class DslDelegate {
         createRestRequest('DELETE', URI, configuration)
     }
 
-    void propertyTransfer(PropertyTransferBuilder transferBuilder) {
+    void transfer(PropertyTransferBuilder transferBuilder) {
         recipeBuilder.addStep(TestSteps.propertyTransfer(transferBuilder))
     }
 
