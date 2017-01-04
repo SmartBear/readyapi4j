@@ -8,10 +8,12 @@ import com.smartbear.readyapi.client.model.PropertyTransferSource;
 import com.smartbear.readyapi.client.model.PropertyTransferTarget;
 import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
 import com.smartbear.readyapi.client.model.TestStep;
+import com.smartbear.readyapi.client.model.WsdlMockResponseTestStep;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PathLanguage;
 import org.junit.Test;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import static com.smartbear.readyapi4j.teststeps.TestSteps.delayStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.properties;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.propertyTransfer;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.wsdlMockResponse;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromPreviousResponse;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromResponse;
@@ -274,6 +277,23 @@ public class TestRecipeBuilderTest {
         assertThat(testStep.getProperties().get("property1"), is("value1"));
         assertThat(testStep.getProperties().get("property2"), is("value2"));
         assertThat(testStep.getProperties().get("property3"), is("value3"));
+    }
+
+    @Test
+    public void buildsRecipeWsdlMockResponseTestStep() throws Exception {
+        TestRecipe testRecipe = newTestRecipe(wsdlMockResponse(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                .named("WsdlMockResponse")
+                .forBinding("GlobalWeatherSoap12")
+                .forOperation("GetWeather")
+                .withPath("/weather")
+                .withPort(6091)
+        ).buildTestRecipe();
+        WsdlMockResponseTestStep testStep = (WsdlMockResponseTestStep) testRecipe.getTestCase().getTestSteps().get(0);
+        assertThat(testStep.getWsdl(), is("http://www.webservicex.com/globalweather.asmx?WSDL"));
+        assertThat(testStep.getBinding(), is("GlobalWeatherSoap12"));
+        assertThat(testStep.getOperation(), is("GetWeather"));
+        assertThat(testStep.getPath(), is("/weather"));
+        assertThat(testStep.getPort(), is(6091));
     }
 
     private void assertSource(PropertyTransferSource source) {
