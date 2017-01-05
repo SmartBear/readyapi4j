@@ -24,7 +24,7 @@ class RestRequestDelegate {
         this.stepName = name
     }
 
-    void headers(Map<String,Object> headers) {
+    void withHeaders(Map<String,Object> headers) {
         this.headers = headers
     }
 
@@ -44,7 +44,7 @@ class RestRequestDelegate {
         this.timeout = String.valueOf(timeout)
     }
 
-    void assertions(@DelegatesTo(AssertionsDelegate) Closure assertionsConfig) {
+    void asserting(@DelegatesTo(AssertionsDelegate) Closure assertionsConfig) {
         def delegate = new AssertionsDelegate()
         assertionsConfig.delegate = delegate
         assertionsConfig.call()

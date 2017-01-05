@@ -61,7 +61,7 @@ class RestRequestDslTest {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             GET ('/some_uri', {
                 name stepName
-                headers (['Cache-Control': 'nocache'])
+                withHeaders (['Cache-Control': 'nocache'])
                 followRedirects true
                 entitizeParameters true
                 postQueryString true
@@ -83,7 +83,7 @@ class RestRequestDslTest {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             GET ('/some_uri', {
-                assertions {
+                asserting {
                     status 200
                     statusNotIn 401,404
                 }
@@ -103,16 +103,15 @@ class RestRequestDslTest {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             GET ('/some_uri', {
-                assertions {
+                asserting {
                     responseContains 'Arrival', useRegexp: true, ignoreCase: true
                     responseDoesNotContain 'E.T', useRegexp: true, ignoreCase: true
-                    script "assert response.contentType == 'text/xml'"
                 }
             })
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
-        assert restRequest.assertions.size() == 3
+        assert restRequest.assertions.size() == 2
         SimpleContainsAssertion containsAssertion = restRequest.assertions[0] as SimpleContainsAssertion
         assert containsAssertion.token == 'Arrival'
         assert containsAssertion.useRegexp : 'Not respecting useRegexp'
@@ -123,8 +122,6 @@ class RestRequestDslTest {
         assert notContainsAssertion.useRegexp : 'Not respecting useRegexp'
         assert notContainsAssertion.ignoreCase : 'Not respecting ignoreCase'
         assert notContainsAssertion.type == 'Not Contains'
-        GroovyScriptAssertion scriptAssertion = restRequest.assertions[2] as GroovyScriptAssertion
-        assert scriptAssertion.script == "assert response.contentType == 'text/xml'"
     }
 
     @Test
@@ -132,7 +129,7 @@ class RestRequestDslTest {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             GET ('/some_uri', {
-                assertions {
+                asserting {
                     jsonPath '$.customer.address' contains 'Storgatan 1'
                     jsonPath '$.customer.order' occurs 3 times
                 }
@@ -154,7 +151,7 @@ class RestRequestDslTest {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             GET ('/some_uri', {
-                assertions {
+                asserting {
                     xpath '/customer/address' contains 'Storgatan 1'
                     xpath '/customer/order' occurs 3 times
                 }
@@ -170,6 +167,23 @@ class RestRequestDslTest {
         assert countAssertion.xpath == 'count(/customer/order)'
         assert countAssertion.expectedContent == '3'
 
+    }
+
+    @Test
+    void createsGroovyScriptAssertions() throws Exception {
+        TestRecipe recipe = recipe {
+            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
+            GET ('/some_uri', {
+                asserting {
+                    script "assert response.contentType == 'text/xml'"
+                }
+            })
+        }
+
+        RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
+        assert restRequest.assertions.size() == 1
+        GroovyScriptAssertion scriptAssertion = restRequest.assertions[0] as GroovyScriptAssertion
+        assert scriptAssertion.script == "assert response.contentType == 'text/xml'"
     }
 
     private static void verifyValuesAndMethod(TestRecipe recipe, String method) {
