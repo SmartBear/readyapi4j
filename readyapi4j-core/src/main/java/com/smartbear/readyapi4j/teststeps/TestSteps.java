@@ -3,7 +3,7 @@ package com.smartbear.readyapi4j.teststeps;
 import com.smartbear.readyapi4j.teststeps.delay.DelayTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcConnection;
-import com.smartbear.readyapi4j.teststeps.mockresponse.WsdlMockResponseTestStepBuilder;
+import com.smartbear.readyapi4j.teststeps.mockresponse.SoapMockResponseTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.plugin.PluginTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.properties.PropertiesTestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder;
@@ -25,8 +25,8 @@ public class TestSteps {
         return new SoapRequestStepBuilder().withWsdlAt(wsdlUrl);
     }
 
-    public static WsdlMockResponseTestStepBuilder wsdlMockResponse(URL wsdlUrl) {
-        return new WsdlMockResponseTestStepBuilder().withWsdlAt(wsdlUrl);
+    public static SoapMockResponseTestStepBuilder soapMockResponse(URL wsdlUrl) {
+        return new SoapMockResponseTestStepBuilder().withWsdlAt(wsdlUrl);
     }
 
     public static RestRequestStepBuilder<RestRequestStepBuilder> restRequest() {

@@ -7,8 +7,8 @@ import com.smartbear.readyapi.client.model.PropertyTransfer;
 import com.smartbear.readyapi.client.model.PropertyTransferSource;
 import com.smartbear.readyapi.client.model.PropertyTransferTarget;
 import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
+import com.smartbear.readyapi.client.model.SoapMockResponseTestStep;
 import com.smartbear.readyapi.client.model.TestStep;
-import com.smartbear.readyapi.client.model.WsdlMockResponseTestStep;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PathLanguage;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import static com.smartbear.readyapi4j.teststeps.TestSteps.delayStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.properties;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.propertyTransfer;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.wsdlMockResponse;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.soapMockResponse;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromPreviousResponse;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.fromResponse;
@@ -280,15 +280,15 @@ public class TestRecipeBuilderTest {
     }
 
     @Test
-    public void buildsRecipeWsdlMockResponseTestStep() throws Exception {
-        TestRecipe testRecipe = newTestRecipe(wsdlMockResponse(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
-                .named("WsdlMockResponse")
+    public void buildsRecipeWithSoapMockResponseTestStep() throws Exception {
+        TestRecipe testRecipe = newTestRecipe(soapMockResponse(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                .named("SoapMockResponse")
                 .forBinding("GlobalWeatherSoap12")
                 .forOperation("GetWeather")
                 .withPath("/weather")
                 .withPort(6091)
         ).buildTestRecipe();
-        WsdlMockResponseTestStep testStep = (WsdlMockResponseTestStep) testRecipe.getTestCase().getTestSteps().get(0);
+        SoapMockResponseTestStep testStep = (SoapMockResponseTestStep) testRecipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getWsdl(), is("http://www.webservicex.com/globalweather.asmx?WSDL"));
         assertThat(testStep.getBinding(), is("GlobalWeatherSoap12"));
         assertThat(testStep.getOperation(), is("GetWeather"));
