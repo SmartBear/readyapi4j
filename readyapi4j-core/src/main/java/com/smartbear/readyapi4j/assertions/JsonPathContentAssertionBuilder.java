@@ -7,7 +7,7 @@ import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 public class JsonPathContentAssertionBuilder implements JsonPathAssertionBuilder<JsonPathContentAssertion> {
     private JsonPathContentAssertion jsonPathContentAssertion = new JsonPathContentAssertion();
 
-    JsonPathContentAssertionBuilder(String jsonPath, String expectedContent) {
+    public JsonPathContentAssertionBuilder(String jsonPath, String expectedContent) {
         jsonPathContentAssertion.setJsonPath(jsonPath);
         jsonPathContentAssertion.setExpectedContent(expectedContent);
     }

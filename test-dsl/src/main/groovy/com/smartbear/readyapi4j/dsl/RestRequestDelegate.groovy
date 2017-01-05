@@ -2,6 +2,9 @@ package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
 import com.smartbear.readyapi4j.assertions.DefaultContainsAssertionBuilder
+import com.smartbear.readyapi4j.assertions.DefaultGroovyScriptAssertionBuilder
+import com.smartbear.readyapi4j.assertions.InvalidHttpStatusCodesAssertionBuilder
+import com.smartbear.readyapi4j.assertions.NotContainsAssertionBuilder
 import com.smartbear.readyapi4j.assertions.ValidHttpStatusCodesAssertionBuilder
 
 /**
@@ -52,17 +55,52 @@ class RestRequestDelegate {
 
         private List<AssertionBuilder> assertionBuilders = []
 
-        void status(int httpStatus) {
-            assertionBuilders.add(new ValidHttpStatusCodesAssertionBuilder().addStatusCode(httpStatus))
-        }
-
-        void responseContains( Map<String,Object> options = [:], String token) {
-            DefaultContainsAssertionBuilder builder = new DefaultContainsAssertionBuilder(token)
-            if(options['useRegexp'] as boolean) {
-                builder.useRegEx()
+        void status(int... httpStatuses) {
+            ValidHttpStatusCodesAssertionBuilder builder = new ValidHttpStatusCodesAssertionBuilder()
+            for (int httpStatus : httpStatuses) {
+                builder.addStatusCode(httpStatus)
             }
             assertionBuilders.add(builder)
         }
+
+        void responseContains( Map<String,Object> options = [:], String token) {
+            configureContainsAssertion(new DefaultContainsAssertionBuilder(token), options)
+        }
+
+        void responseDoesNotContain( Map<String,Object> options = [:], String token) {
+            configureContainsAssertion(new NotContainsAssertionBuilder(token), options)
+        }
+
+        private void configureContainsAssertion(DefaultContainsAssertionBuilder builder, Map<String, Object> options) {
+            if (options['useRegexp'] as boolean) {
+                builder.useRegEx()
+            }
+            if (options['ignoreCase'] as boolean) {
+                builder.ignoreCase()
+            }
+            assertionBuilders.add(builder)
+        }
+
+        void statusNotIn(int... invalidStatuses) {
+            InvalidHttpStatusCodesAssertionBuilder builder = new InvalidHttpStatusCodesAssertionBuilder()
+            for (int httpStatus : invalidStatuses) {
+                builder.addStatusCode(httpStatus)
+            }
+            assertionBuilders.add(builder)
+        }
+
+        void script(String scriptText) {
+            assertionBuilders.add(new DefaultGroovyScriptAssertionBuilder(scriptText))
+        }
+
+        JsonPathAssertionDelegate jsonPath(String jsonPath) {
+            return new JsonPathAssertionDelegate(jsonPath, assertionBuilders)
+        }
+
+        XPathAssertionDelegate xpath(String xpath) {
+            return new XPathAssertionDelegate(xpath, assertionBuilders)
+        }
+
     }
 
 }

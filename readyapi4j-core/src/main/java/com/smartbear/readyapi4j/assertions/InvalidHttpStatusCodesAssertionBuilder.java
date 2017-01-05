@@ -3,11 +3,9 @@ package com.smartbear.readyapi4j.assertions;
 import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion;
 import com.smartbear.readyapi4j.Validator;
 
-import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
-
 public class InvalidHttpStatusCodesAssertionBuilder extends ValidHttpStatusCodesAssertionBuilder<InvalidHttpStatusCodesAssertion> {
 
-    InvalidHttpStatusCodesAssertionBuilder() {
+    public InvalidHttpStatusCodesAssertionBuilder() {
     }
 
     @Override
