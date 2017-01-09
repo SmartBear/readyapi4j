@@ -4,10 +4,10 @@ import com.smartbear.readyapi.client.model.XPathContainsAssertion;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
-public class XPathContainsAssertionBuilder extends AbstractAssertionBuilder<XPathContainsAssertion> implements XPathAssertionBuilder {
+public class XPathContainsAssertionBuilder  implements XPathAssertionBuilder {
     private XPathContainsAssertion xPathContainsAssertion = new XPathContainsAssertion();
 
-    XPathContainsAssertionBuilder(String xPath, String expectedContent) {
+    public XPathContainsAssertionBuilder(String xPath, String expectedContent) {
         xPathContainsAssertion.setXpath(xPath);
         xPathContainsAssertion.setExpectedContent(expectedContent);
     }

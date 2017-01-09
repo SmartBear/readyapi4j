@@ -5,7 +5,7 @@ import com.smartbear.readyapi4j.Validator;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
-public class DefaultContainsAssertionBuilder extends AbstractAssertionBuilder<SimpleContainsAssertion> implements ContainsAssertionBuilder {
+public class DefaultContainsAssertionBuilder implements ContainsAssertionBuilder {
     protected SimpleContainsAssertion containsAssertion = new SimpleContainsAssertion();
 
     public DefaultContainsAssertionBuilder(String token) {

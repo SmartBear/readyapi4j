@@ -2,8 +2,7 @@ package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.NotSoapFaultAssertion;
 
-public class DefaultNotSoapFaultAssertionBuilder extends AbstractAssertionBuilder<NotSoapFaultAssertion>
-        implements NotSoapFaultAssertionBuilder {
+public class DefaultNotSoapFaultAssertionBuilder implements NotSoapFaultAssertionBuilder {
 
     private final NotSoapFaultAssertion notSoapFaultAssertion = new NotSoapFaultAssertion();
 

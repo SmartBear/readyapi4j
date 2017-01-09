@@ -2,7 +2,7 @@ package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.SchemaComplianceAssertion;
 
-public class DefaultSchemaComplianceAssertionBuilder extends AbstractAssertionBuilder<SchemaComplianceAssertion>
+public class DefaultSchemaComplianceAssertionBuilder
         implements SchemaComplianceAssertionBuilder {
 
     private final SchemaComplianceAssertion schemaComplianceAssertion = new SchemaComplianceAssertion();
