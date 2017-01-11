@@ -50,6 +50,10 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return (RestRequestBuilderType) this;
     }
 
+    public void addParameter(ParameterBuilder parameterBuilder) {
+        parameterBuilder.addParameter(this);
+    }
+
     public RestRequestBuilderType withParameter(String parameterName, String value) {
         if (getTestStep().getURI().toLowerCase().contains("{" + parameterName.toLowerCase() + "}")) {
             return withPathParameter(parameterName, value);

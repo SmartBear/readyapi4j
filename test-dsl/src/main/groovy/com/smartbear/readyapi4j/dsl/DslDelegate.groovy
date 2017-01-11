@@ -86,6 +86,7 @@ class DslDelegate {
                 request.setTimeout(delegate.timeout)
             }
             delegate.assertions.each { assertion -> request.addAssertion(assertion)}
+            delegate.parameters.each { param -> request.addParameter(param)}
         }
         recipeBuilder.addStep(request)
     }

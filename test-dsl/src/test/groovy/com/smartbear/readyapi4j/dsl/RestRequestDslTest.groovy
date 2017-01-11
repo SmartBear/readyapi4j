@@ -4,6 +4,7 @@ import com.smartbear.readyapi.client.model.GroovyScriptAssertion
 import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion
 import com.smartbear.readyapi.client.model.JsonPathContentAssertion
 import com.smartbear.readyapi.client.model.JsonPathCountAssertion
+import com.smartbear.readyapi.client.model.RestParameter
 import com.smartbear.readyapi.client.model.RestTestRequestStep
 import com.smartbear.readyapi.client.model.SimpleContainsAssertion
 import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion
@@ -76,6 +77,37 @@ class RestRequestDslTest {
         assert restRequest.entitizeParameters : 'Not respecting entitizeParameters'
         assert restRequest.postQueryString : 'Not respecting postQueryString'
         assert restRequest.timeout == '5000'
+    }
+
+    @Test
+    void createsParameters() throws Exception {
+        TestRecipe recipe = recipe {
+            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
+            GET ('/users/{pathparam}/profile', {
+                parameters {
+                    path 'pathparam', 'bosse'
+                    query 'q', 'Bo+Ek'
+                    matrix 'SESSION', 'abc'
+                    header 'X-My-Header', 'headervalue'
+                }
+            })
+        }
+
+        RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
+        List<RestParameter> parameters = restRequest.parameters
+        assert restRequest.parameters.size() == 4
+        assert parameters[0].type == RestParameter.TypeEnum.PATH
+        assert parameters[0].name == 'pathparam'
+        assert parameters[0].value == 'bosse'
+        assert parameters[1].type == RestParameter.TypeEnum.QUERY
+        assert parameters[1].name == 'q'
+        assert parameters[1].value == 'Bo+Ek'
+        assert parameters[2].type == RestParameter.TypeEnum.MATRIX
+        assert parameters[2].name == 'SESSION'
+        assert parameters[2].value == 'abc'
+        assert parameters[3].type == RestParameter.TypeEnum.HEADER
+        assert parameters[3].name == 'X-My-Header'
+        assert parameters[3].value == 'headervalue'
     }
 
     @Test
