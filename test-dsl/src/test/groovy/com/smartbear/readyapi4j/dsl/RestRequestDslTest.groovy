@@ -62,7 +62,6 @@ class RestRequestDslTest {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             GET ('/some_uri', {
                 name stepName
-                withHeaders (['Cache-Control': 'nocache'])
                 followRedirects true
                 entitizeParameters true
                 postQueryString true
@@ -72,11 +71,27 @@ class RestRequestDslTest {
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
         assert restRequest.name == stepName
-        assert restRequest.headers['Cache-Control'] == ['nocache']
         assert restRequest.followRedirects : 'Not respecting followRedirects'
         assert restRequest.entitizeParameters : 'Not respecting entitizeParameters'
         assert restRequest.postQueryString : 'Not respecting postQueryString'
         assert restRequest.timeout == '5000'
+    }
+
+    @Test
+    void addsHeaders() throws Exception {
+        TestRecipe recipe = recipe {
+            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
+            GET ('/some_uri', {
+                headers (['Cache-Control': 'nocache'])
+                header 'Expires', '0'
+                header 'Accepts', ['text/plain', 'text/xml']
+            })
+        }
+
+        RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
+        assert restRequest.headers['Cache-Control'] == ['nocache']
+        assert restRequest.headers['Expires'] == ['0']
+        assert restRequest.headers['Accepts'] == ['text/plain', 'text/xml']
     }
 
     @Test
@@ -88,7 +103,7 @@ class RestRequestDslTest {
                     path 'pathparam', 'bosse'
                     query 'q', 'Bo+Ek'
                     matrix 'SESSION', 'abc'
-                    header 'X-My-Header', 'headervalue'
+                    headerParam 'X-My-Header', 'headervalue'
                 }
             })
         }

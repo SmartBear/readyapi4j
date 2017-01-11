@@ -14,7 +14,7 @@ import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder
 class RestRequestDelegate {
 
     String stepName
-    Map<String,Object> headers
+    Map<String,Object> headers = [:]
     boolean followRedirects
     boolean entitizeParameters
     boolean postQueryString
@@ -26,8 +26,16 @@ class RestRequestDelegate {
         this.stepName = name
     }
 
-    void withHeaders(Map<String,Object> headers) {
+    void headers(Map<String,Object> headers) {
         this.headers = headers
+    }
+
+    void header(String name, String value) {
+        headers[name] = value
+    }
+
+    void header(String name, List<String> values) {
+        headers[name] = values
     }
 
     void followRedirects(boolean followRedirects) {
@@ -73,7 +81,7 @@ class RestRequestDelegate {
             parameters.add(ParameterBuilder.matrix(name, value))
         }
 
-        void header(String name, String value) {
+        void headerParam(String name, String value) {
             parameters.add(ParameterBuilder.header(name, value))
         }
 
