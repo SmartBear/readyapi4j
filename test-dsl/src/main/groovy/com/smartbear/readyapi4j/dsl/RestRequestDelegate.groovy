@@ -6,6 +6,9 @@ import com.smartbear.readyapi4j.assertions.DefaultGroovyScriptAssertionBuilder
 import com.smartbear.readyapi4j.assertions.InvalidHttpStatusCodesAssertionBuilder
 import com.smartbear.readyapi4j.assertions.NotContainsAssertionBuilder
 import com.smartbear.readyapi4j.assertions.ValidHttpStatusCodesAssertionBuilder
+import com.smartbear.readyapi4j.dsl.assertions.JsonPathAssertionDelegate
+import com.smartbear.readyapi4j.dsl.assertions.XPathAssertionDelegate
+import com.smartbear.readyapi4j.dsl.assertions.XQueryAssertionDelegate
 import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder
 
 /**
@@ -135,6 +138,10 @@ class RestRequestDelegate {
 
         XPathAssertionDelegate xpath(String xpath) {
             return new XPathAssertionDelegate(xpath, assertionBuilders)
+        }
+
+        XQueryAssertionDelegate xQuery(String xQuery) {
+            return new XQueryAssertionDelegate(xQuery, assertionBuilders)
         }
 
     }

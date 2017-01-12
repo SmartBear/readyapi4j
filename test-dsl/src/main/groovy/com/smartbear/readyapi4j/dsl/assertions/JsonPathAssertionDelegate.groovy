@@ -1,8 +1,9 @@
-package com.smartbear.readyapi4j.dsl
+package com.smartbear.readyapi4j.dsl.assertions
 
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
-import com.smartbear.readyapi4j.assertions.JsonPathContentAssertionBuilder
-import com.smartbear.readyapi4j.assertions.JsonPathCountAssertionBuilder
+
+import static com.smartbear.readyapi4j.assertions.Assertions.json
+import static com.smartbear.readyapi4j.assertions.Assertions.jsonCount
 
 /**
  * Delegate for building Json assertions using more or less natural language.
@@ -11,7 +12,6 @@ class JsonPathAssertionDelegate {
 
     private String jsonPath
     private List<AssertionBuilder> assertionBuilders
-    private String expectedContent
 
     JsonPathAssertionDelegate(String jsonPath, List<AssertionBuilder> assertionBuilders) {
         this.jsonPath = jsonPath
@@ -19,7 +19,7 @@ class JsonPathAssertionDelegate {
     }
 
     void contains(String expectedContent) {
-        assertionBuilders.add(new JsonPathContentAssertionBuilder(jsonPath, expectedContent))
+        assertionBuilders.add(json(jsonPath, expectedContent))
     }
 
     OccursDelegate occurs(int times) {
@@ -35,10 +35,8 @@ class JsonPathAssertionDelegate {
         }
 
         int getTimes() {
-            assertionBuilders.add(new JsonPathCountAssertionBuilder(jsonPath, times))
+            assertionBuilders.add(jsonCount(jsonPath, times))
             return times
         }
-
     }
-
 }

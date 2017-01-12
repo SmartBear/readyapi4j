@@ -9,6 +9,7 @@ import com.smartbear.readyapi.client.model.RestTestRequestStep
 import com.smartbear.readyapi.client.model.SimpleContainsAssertion
 import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion
 import com.smartbear.readyapi.client.model.XPathContainsAssertion
+import com.smartbear.readyapi.client.model.XQueryContainsAssertion
 import com.smartbear.readyapi4j.TestRecipe
 import org.junit.Test
 
@@ -207,6 +208,21 @@ class RestRequestDslTest {
         assert countAssertion.xpath == 'count(/customer/order)'
         assert countAssertion.expectedContent == '3'
 
+    }
+
+    @Test
+    public void createsXQueryMatchAssertion() throws Exception {
+        TestRecipe recipe = recipe {
+            get '/some_uri', {
+                asserting {
+                    xQuery '/customer/address' contains 'Storgatan 1'
+                }
+            }
+        }
+        RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
+        XQueryContainsAssertion assertion = restRequest.assertions[0] as XQueryContainsAssertion
+        assert assertion.xquery == '/customer/address'
+        assert assertion.expectedContent == 'Storgatan 1'
     }
 
     @Test
