@@ -59,7 +59,6 @@ class RestRequestDslTest {
     void parameterizesRestRequest() throws Exception {
         String stepName = 'theGET'
         TestRecipe recipe = recipe {
-            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             get '/some_uri', {
                 name stepName
                 followRedirects true
@@ -80,7 +79,6 @@ class RestRequestDslTest {
     @Test
     void addsHeaders() throws Exception {
         TestRecipe recipe = recipe {
-            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             get '/some_uri', {
                 headers(['Cache-Control': 'nocache'])
                 header 'Expires', '0'
@@ -97,7 +95,6 @@ class RestRequestDslTest {
     @Test
     void createsParameters() throws Exception {
         TestRecipe recipe = recipe {
-            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             get '/users/{pathparam}/profile', {
                 parameters {
                     path 'pathparam', 'bosse'
@@ -128,7 +125,6 @@ class RestRequestDslTest {
     @Test
     void createsStatusAssertions() throws Exception {
         TestRecipe recipe = recipe {
-            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             get '/some_uri', {
                 asserting {
                     status 200
@@ -173,7 +169,6 @@ class RestRequestDslTest {
     @Test
     void createsJsonPathAssertions() throws Exception {
         TestRecipe recipe = recipe {
-            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             get '/some_uri', {
                 asserting {
                     jsonPath '$.customer.address' contains 'Storgatan 1'
@@ -195,7 +190,6 @@ class RestRequestDslTest {
     @Test
     void createsXPathAssertions() throws Exception {
         TestRecipe recipe = recipe {
-            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             get '/some_uri', {
                 asserting {
                     xpath '/customer/address' contains 'Storgatan 1'
@@ -218,7 +212,6 @@ class RestRequestDslTest {
     @Test
     void createsGroovyScriptAssertions() throws Exception {
         TestRecipe recipe = recipe {
-            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
             get '/some_uri', {
                 asserting {
                     script "assert response.contentType == 'text/xml'"
