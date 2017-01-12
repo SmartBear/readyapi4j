@@ -22,7 +22,7 @@ class RestRequestDslTest {
     @Test
     void buildsRecipeWithGET() throws Exception {
         TestRecipe recipe = recipe {
-            GET(URI)
+            get URI
         }
 
         verifyValuesAndMethod(recipe, 'GET')
@@ -31,7 +31,7 @@ class RestRequestDslTest {
     @Test
     void buildsRecipeWithPOST() throws Exception {
         TestRecipe recipe = recipe {
-            POST(URI)
+            post URI
         }
 
         verifyValuesAndMethod(recipe, 'POST')
@@ -40,7 +40,7 @@ class RestRequestDslTest {
     @Test
     void buildsRecipeWithPUT() throws Exception {
         TestRecipe recipe = recipe {
-            PUT(URI)
+            put URI
         }
 
         verifyValuesAndMethod(recipe, 'PUT')
@@ -49,7 +49,7 @@ class RestRequestDslTest {
     @Test
     void buildsRecipeWithDELETE() throws Exception {
         TestRecipe recipe = recipe {
-            DELETE(URI)
+            delete URI
         }
 
         verifyValuesAndMethod(recipe, 'DELETE')
@@ -60,20 +60,20 @@ class RestRequestDslTest {
         String stepName = 'theGET'
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
-            GET ('/some_uri', {
+            get '/some_uri', {
                 name stepName
                 followRedirects true
                 entitizeParameters true
                 postQueryString true
                 timeout 5000
-            })
+            }
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
         assert restRequest.name == stepName
-        assert restRequest.followRedirects : 'Not respecting followRedirects'
-        assert restRequest.entitizeParameters : 'Not respecting entitizeParameters'
-        assert restRequest.postQueryString : 'Not respecting postQueryString'
+        assert restRequest.followRedirects: 'Not respecting followRedirects'
+        assert restRequest.entitizeParameters: 'Not respecting entitizeParameters'
+        assert restRequest.postQueryString: 'Not respecting postQueryString'
         assert restRequest.timeout == '5000'
     }
 
@@ -81,11 +81,11 @@ class RestRequestDslTest {
     void addsHeaders() throws Exception {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
-            GET ('/some_uri', {
-                headers (['Cache-Control': 'nocache'])
+            get '/some_uri', {
+                headers(['Cache-Control': 'nocache'])
                 header 'Expires', '0'
                 header 'Accepts', ['text/plain', 'text/xml']
-            })
+            }
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
@@ -98,14 +98,14 @@ class RestRequestDslTest {
     void createsParameters() throws Exception {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
-            GET ('/users/{pathparam}/profile', {
+            get '/users/{pathparam}/profile', {
                 parameters {
                     path 'pathparam', 'bosse'
                     query 'q', 'Bo+Ek'
                     matrix 'SESSION', 'abc'
                     headerParam 'X-My-Header', 'headervalue'
                 }
-            })
+            }
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
@@ -129,12 +129,12 @@ class RestRequestDslTest {
     void createsStatusAssertions() throws Exception {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
-            GET ('/some_uri', {
+            get '/some_uri', {
                 asserting {
                     status 200
-                    statusNotIn 401,404
+                    statusNotIn 401, 404
                 }
-            })
+            }
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
@@ -148,26 +148,25 @@ class RestRequestDslTest {
     @Test
     void createsSimpleContainsAssertions() throws Exception {
         TestRecipe recipe = recipe {
-            //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
-            GET ('/some_uri', {
+            get '/some_uri', {
                 asserting {
                     responseContains 'Arrival', useRegexp: true, ignoreCase: true
                     responseDoesNotContain 'E.T', useRegexp: true, ignoreCase: true
                 }
-            })
+            }
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
         assert restRequest.assertions.size() == 2
         SimpleContainsAssertion containsAssertion = restRequest.assertions[0] as SimpleContainsAssertion
         assert containsAssertion.token == 'Arrival'
-        assert containsAssertion.useRegexp : 'Not respecting useRegexp'
-        assert containsAssertion.ignoreCase : 'Not respecting ignoreCase'
+        assert containsAssertion.useRegexp: 'Not respecting useRegexp'
+        assert containsAssertion.ignoreCase: 'Not respecting ignoreCase'
         assert containsAssertion.type == 'Contains'
         SimpleContainsAssertion notContainsAssertion = restRequest.assertions[1] as SimpleContainsAssertion
         assert notContainsAssertion.token == 'E.T'
-        assert notContainsAssertion.useRegexp : 'Not respecting useRegexp'
-        assert notContainsAssertion.ignoreCase : 'Not respecting ignoreCase'
+        assert notContainsAssertion.useRegexp: 'Not respecting useRegexp'
+        assert notContainsAssertion.ignoreCase: 'Not respecting ignoreCase'
         assert notContainsAssertion.type == 'Not Contains'
     }
 
@@ -175,12 +174,12 @@ class RestRequestDslTest {
     void createsJsonPathAssertions() throws Exception {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
-            GET ('/some_uri', {
+            get '/some_uri', {
                 asserting {
                     jsonPath '$.customer.address' contains 'Storgatan 1'
                     jsonPath '$.customer.order' occurs 3 times
                 }
-            })
+            }
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
@@ -197,12 +196,12 @@ class RestRequestDslTest {
     void createsXPathAssertions() throws Exception {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
-            GET ('/some_uri', {
+            get '/some_uri', {
                 asserting {
                     xpath '/customer/address' contains 'Storgatan 1'
                     xpath '/customer/order' occurs 3 times
                 }
-            })
+            }
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
@@ -220,11 +219,11 @@ class RestRequestDslTest {
     void createsGroovyScriptAssertions() throws Exception {
         TestRecipe recipe = recipe {
             //Bug in the IntelliJ Groovyc - need parentheses here to make it compile!
-            GET ('/some_uri', {
+            get '/some_uri', {
                 asserting {
                     script "assert response.contentType == 'text/xml'"
                 }
-            })
+            }
         }
 
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
