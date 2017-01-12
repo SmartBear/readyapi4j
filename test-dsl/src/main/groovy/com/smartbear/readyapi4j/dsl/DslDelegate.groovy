@@ -17,19 +17,19 @@ class DslDelegate {
         recipeBuilder.addStep(TestSteps.groovyScriptStep(scriptText))
     }
 
-    void GET(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
+    void get(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('GET', URI, configuration)
     }
 
-    void POST(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
+    void post(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('POST', URI, configuration)
     }
 
-    void PUT(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
+    void put(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('PUT', URI, configuration)
     }
 
-    void DELETE(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
+    void delete(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('DELETE', URI, configuration)
     }
 
@@ -86,6 +86,7 @@ class DslDelegate {
                 request.setTimeout(delegate.timeout)
             }
             delegate.assertions.each { assertion -> request.addAssertion(assertion)}
+            delegate.parameters.each { param -> request.addParameter(param)}
         }
         recipeBuilder.addStep(request)
     }
