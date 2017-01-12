@@ -18,6 +18,11 @@ class ResponseSlaAssertionDelegate {
         return time
     }
 
+    int getMs() {
+        addAssertionBuilder time
+        return time
+    }
+
     int getSeconds() {
         addAssertionBuilder time * 1000
         return time * 1000

@@ -23,6 +23,19 @@ class ResponseSlaAssertionDslTest {
     }
 
     @Test
+    void buildsSlaAssertionWithMs() throws Exception {
+        TestRecipe recipe = recipe {
+            get '/myurl', {
+                asserting {
+                    responseSLA 1000 ms
+                }
+            }
+        }
+        ResponseSLAAssertion assertion = extractResponseSlaAssertion(recipe)
+        assert assertion.maxResponseTime == '1000'
+    }
+
+    @Test
     void buildsSlaAssertionWithOneSecond() throws Exception {
         TestRecipe recipe = recipe {
             get '/myurl', {
