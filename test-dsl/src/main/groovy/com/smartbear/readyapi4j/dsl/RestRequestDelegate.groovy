@@ -1,15 +1,18 @@
 package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
-import com.smartbear.readyapi4j.assertions.DefaultContainsAssertionBuilder
-import com.smartbear.readyapi4j.assertions.DefaultGroovyScriptAssertionBuilder
+import com.smartbear.readyapi4j.assertions.Assertions
+import com.smartbear.readyapi4j.assertions.ContainsAssertionBuilder
 import com.smartbear.readyapi4j.assertions.InvalidHttpStatusCodesAssertionBuilder
-import com.smartbear.readyapi4j.assertions.NotContainsAssertionBuilder
 import com.smartbear.readyapi4j.assertions.ValidHttpStatusCodesAssertionBuilder
 import com.smartbear.readyapi4j.dsl.assertions.JsonPathAssertionDelegate
+import com.smartbear.readyapi4j.dsl.assertions.ResponseSlaAssertionDelegate
 import com.smartbear.readyapi4j.dsl.assertions.XPathAssertionDelegate
 import com.smartbear.readyapi4j.dsl.assertions.XQueryAssertionDelegate
 import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder
+
+import static com.smartbear.readyapi4j.assertions.Assertions.contains
+import static com.smartbear.readyapi4j.assertions.Assertions.notContains
 
 /**
  * Class created to support soapRequest closures within the DSL's recipe closures etc.
@@ -17,7 +20,7 @@ import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder
 class RestRequestDelegate {
 
     String stepName
-    Map<String,Object> headers = [:]
+    Map<String, Object> headers = [:]
     boolean followRedirects
     boolean entitizeParameters
     boolean postQueryString
@@ -29,7 +32,7 @@ class RestRequestDelegate {
         this.stepName = name
     }
 
-    void headers(Map<String,Object> headers) {
+    void headers(Map<String, Object> headers) {
         this.headers = headers
     }
 
@@ -102,15 +105,15 @@ class RestRequestDelegate {
             assertionBuilders.add(builder)
         }
 
-        void responseContains( Map<String,Object> options = [:], String token) {
-            configureContainsAssertion(new DefaultContainsAssertionBuilder(token), options)
+        void responseContains(Map<String, Object> options = [:], String token) {
+            configureContainsAssertion(contains(token), options)
         }
 
-        void responseDoesNotContain( Map<String,Object> options = [:], String token) {
-            configureContainsAssertion(new NotContainsAssertionBuilder(token), options)
+        void responseDoesNotContain(Map<String, Object> options = [:], String token) {
+            configureContainsAssertion(notContains(token), options)
         }
 
-        private void configureContainsAssertion(DefaultContainsAssertionBuilder builder, Map<String, Object> options) {
+        private void configureContainsAssertion(ContainsAssertionBuilder builder, Map<String, Object> options) {
             if (options['useRegexp'] as boolean) {
                 builder.useRegEx()
             }
@@ -120,7 +123,7 @@ class RestRequestDelegate {
             assertionBuilders.add(builder)
         }
 
-        void statusNotIn(int... invalidStatuses) {
+        void statusNotIn(int ... invalidStatuses) {
             InvalidHttpStatusCodesAssertionBuilder builder = new InvalidHttpStatusCodesAssertionBuilder()
             for (int httpStatus : invalidStatuses) {
                 builder.addStatusCode(httpStatus)
@@ -129,7 +132,11 @@ class RestRequestDelegate {
         }
 
         void script(String scriptText) {
-            assertionBuilders.add(new DefaultGroovyScriptAssertionBuilder(scriptText))
+            assertionBuilders.add(Assertions.script(scriptText))
+        }
+
+        void contentType(String contentType) {
+            assertionBuilders.add(Assertions.contentType(contentType))
         }
 
         JsonPathAssertionDelegate jsonPath(String jsonPath) {
@@ -144,6 +151,8 @@ class RestRequestDelegate {
             return new XQueryAssertionDelegate(xQuery, assertionBuilders)
         }
 
+        ResponseSlaAssertionDelegate responseSLA(int maxResponseTime) {
+            return new ResponseSlaAssertionDelegate(maxResponseTime, assertionBuilders)
+        }
     }
-
 }
