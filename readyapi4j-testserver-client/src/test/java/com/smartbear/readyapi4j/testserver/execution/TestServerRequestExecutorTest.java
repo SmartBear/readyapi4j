@@ -1,11 +1,11 @@
 package com.smartbear.readyapi4j.testserver.execution;
 
-import com.smartbear.readyapi4j.ExecutionListener;
-import com.smartbear.readyapi4j.TestRecipe;
-import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi4j.ExecutionListener;
+import com.smartbear.readyapi4j.TestRecipe;
+import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.extractor.ExtractorData;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
@@ -13,6 +13,9 @@ import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -81,6 +84,18 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
         when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
 
         Execution execution = recipeExecutor.executeRecipe(recipeToSubmit);
+        assertThat(execution.getCurrentReport(), is(report));
+    }
+
+    @Test
+    public void executesJsonTextRecipeSynchronously() throws Exception {
+        ProjectResultReport report = ExecutionTestHelper.makeFinishedReport("execution_ID");
+        when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
+
+//        new FileInputStream("src/test/resources/project-result-report.json").
+        File recipeFile = new File(TestServerRequestExecutorTest.class.getResource("/test-recipe.json").getFile());
+        String recipeJsonText = new String(Files.readAllBytes(recipeFile.toPath()), StandardCharsets.UTF_8);
+        Execution execution = recipeExecutor.executeRecipe(recipeJsonText);
         assertThat(execution.getCurrentReport(), is(report));
     }
 
@@ -157,6 +172,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
             e.printStackTrace();
         }
     }
+
 
     private ExecutionListener createExecutionListenerWithExpectedErrorMessage(final String expectedErrorMessage) {
         return new ExecutionListener() {

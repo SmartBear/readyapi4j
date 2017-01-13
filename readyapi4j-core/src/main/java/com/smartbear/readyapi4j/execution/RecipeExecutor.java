@@ -2,7 +2,6 @@ package com.smartbear.readyapi4j.execution;
 
 import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.TestRecipe;
-import com.smartbear.readyapi4j.execution.Execution;
 
 import java.util.List;
 
@@ -12,13 +11,54 @@ import java.util.List;
 
 public interface RecipeExecutor {
 
+    /**
+     * Submit a recipe for asynchronous execution.
+     *
+     * @param jsonText recipe to be executed.
+     * @return an instance of <code>Execution</code> containing the current state of execution
+     */
+    Execution submitRecipe(String jsonText);
+
+    /**
+     * Submit a recipe for synchronous execution.
+     *
+     * @param jsonText recipe to be executed.
+     * @return an instance of <code>Execution</code> containing the execution result
+     */
+    Execution executeRecipe(String jsonText);
+
+    /**
+     * Submit a Test recipe for asynchronous execution.
+     *
+     * @param recipe Test recipe to be executed.
+     * @return an instance of <code>Execution</code> containing the current state of execution
+     */
     Execution submitRecipe(TestRecipe recipe);
 
+    /**
+     * Submit a Test recipe for synchronous execution.
+     *
+     * @param recipe Test recipe to be executed.
+     * @return an instance of <code>Execution</code> containing the execution result
+     */
     Execution executeRecipe(TestRecipe recipe);
 
+    /**
+     * @return List of all the execution stored on server
+     */
     List<Execution> getExecutions();
 
+    /**
+     * Adds an execution listener, used when a recipe is submitted for asynchronous execution.
+     *
+     * @param listener listener to be added
+     */
     void addExecutionListener(ExecutionListener listener);
 
+    /**
+     * Removes the provided listener
+     *
+     * @param listener listener to be removed
+     */
     void removeExecutionListener(ExecutionListener listener);
 }
