@@ -13,9 +13,6 @@ import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -84,17 +81,6 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
         when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
 
         Execution execution = recipeExecutor.executeRecipe(recipeToSubmit);
-        assertThat(execution.getCurrentReport(), is(report));
-    }
-
-    @Test
-    public void executesJsonTextRecipeSynchronously() throws Exception {
-        ProjectResultReport report = ExecutionTestHelper.makeFinishedReport("execution_ID");
-        when(apiWrapper.postTestRecipe(any(TestCase.class), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
-
-        File recipeFile = new File(TestServerRequestExecutorTest.class.getResource("/test-recipe.json").getFile());
-        String recipeJsonText = new String(Files.readAllBytes(recipeFile.toPath()), StandardCharsets.UTF_8);
-        Execution execution = recipeExecutor.executeRecipe(recipeJsonText);
         assertThat(execution.getCurrentReport(), is(report));
     }
 
