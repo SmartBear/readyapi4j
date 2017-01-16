@@ -90,9 +90,8 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
     @Test
     public void executesJsonTextRecipeSynchronously() throws Exception {
         ProjectResultReport report = ExecutionTestHelper.makeFinishedReport("execution_ID");
-        when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
+        when(apiWrapper.postTestRecipe(any(TestCase.class), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
 
-//        new FileInputStream("src/test/resources/project-result-report.json").
         File recipeFile = new File(TestServerRequestExecutorTest.class.getResource("/test-recipe.json").getFile());
         String recipeJsonText = new String(Files.readAllBytes(recipeFile.toPath()), StandardCharsets.UTF_8);
         Execution execution = recipeExecutor.executeRecipe(recipeJsonText);

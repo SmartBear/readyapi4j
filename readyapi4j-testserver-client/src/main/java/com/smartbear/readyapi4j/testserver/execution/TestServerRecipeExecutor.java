@@ -2,9 +2,9 @@ package com.smartbear.readyapi4j.testserver.execution;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
-import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi4j.RecipeFilter;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.Execution;
@@ -56,7 +56,7 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
             TestCase testCase = objectMapper.readValue(jsonText, TestCase.class);
             return doExecuteTestCase(testCase, null, async);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to execute recipe", e);
             throw new ApiException(400, e.getMessage());
         }
     }
@@ -64,72 +64,8 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
     private ObjectMapper getObjectMapper() {
         if (objectMapper == null) {
             objectMapper = new ObjectMapper();
-            StdTypeResolverBuilder typeResolverBuilder = new ObjectMapper.DefaultTypeResolverBuilder(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE);
-            typeResolverBuilder.typeProperty("type");
-            typeResolverBuilder.inclusion(JsonTypeInfo.As.EXISTING_PROPERTY);
-            typeResolverBuilder.init(JsonTypeInfo.Id.CUSTOM, new TestStepTypeResolver());
-//            objectMapper.registerModule(new TestStepDeserializerModule());
-            /*objectMapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector() {
-                private static final long serialVersionUID = 1L;
+            objectMapper.addMixIn(TestStep.class, TestStepMixin.class);
 
-                @SuppressWarnings("unchecked")
-                @Override
-                protected <A extends Annotation> A _findAnnotation(Annotated annotated, Class<A> annoClass) {
-                    A annotation = super._findAnnotation(annotated, annoClass);
-                    if (annotated.getAnnotated() == null || !TestStep.class.equals(annotated.getType().getRawClass())) {
-                        System.out.println(annotated.getAnnotated() + " " + TestStep.class.getName() + " " + annotated.getType().getRawClass());
-                        System.out.println(annotated.getAnnotated());
-                        return annotation;
-                    }
-                    if (JsonTypeIdResolver.class.equals(annoClass)) {
-                        return (A) new JsonTypeIdResolver() {
-                            @Override
-                            public Class<? extends Annotation> annotationType() {
-                                return JsonTypeIdResolver.class;
-                            }
-
-                            @Override
-                            public Class<? extends TypeIdResolver> value() {
-                                return TestStepTypeResolver.class;
-                            }
-                        };
-                    } else if (JsonTypeInfo.class.equals(annoClass) && annotation == null) {
-                        return (A) new JsonTypeInfo() {
-
-                            @Override
-                            public Class<? extends Annotation> annotationType() {
-                                return null;
-                            }
-
-                            @Override
-                            public Id use() {
-                                return JsonTypeInfo.Id.CUSTOM;
-                            }
-
-                            @Override
-                            public As include() {
-                                return JsonTypeInfo.As.EXISTING_PROPERTY;
-                            }
-
-                            @Override
-                            public String property() {
-                                return "type";
-                            }
-
-                            @Override
-                            public Class<?> defaultImpl() {
-                                return JsonTypeInfo.class;
-                            }
-
-                            @Override
-                            public boolean visible() {
-                                return true;
-                            }
-                        };
-                    }
-                    return annotation;
-                }
-            });*/
         }
         return objectMapper;
     }
@@ -175,5 +111,10 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
     @Override
     public List<Execution> getExecutions() throws ApiException {
         return testServerClient.getExecutions();
+    }
+
+    @JsonTypeIdResolver(TestStepTypeResolver.class)
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
+    private static class TestStepMixin {
     }
 }
