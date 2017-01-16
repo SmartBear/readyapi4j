@@ -1,7 +1,8 @@
-package com.smartbear.readyapi4j.dsl
+package com.smartbear.readyapi4j.dsl.assertions
 
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
-import com.smartbear.readyapi4j.assertions.XPathContainsAssertionBuilder
+
+import static com.smartbear.readyapi4j.assertions.Assertions.xPathContains
 
 /**
  * Delegate for building XPath assertions using more or less natural language.
@@ -17,7 +18,7 @@ class XPathAssertionDelegate {
     }
 
     void contains(String expectedContent) {
-        assertionBuilders.add(new XPathContainsAssertionBuilder(xPath, expectedContent))
+        assertionBuilders.add(xPathContains(xPath, expectedContent))
     }
 
     OccursDelegate occurs(int times) {
@@ -33,7 +34,7 @@ class XPathAssertionDelegate {
         }
 
         int getTimes() {
-            assertionBuilders.add(new XPathContainsAssertionBuilder("count($xPath)", "$times"))
+            assertionBuilders.add(xPathContains("count($xPath)", "$times"))
             return times
         }
 

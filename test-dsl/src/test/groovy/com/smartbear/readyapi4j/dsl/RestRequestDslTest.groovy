@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j.dsl
 
+import com.smartbear.readyapi.client.model.Assertion
 import com.smartbear.readyapi.client.model.GroovyScriptAssertion
 import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion
 import com.smartbear.readyapi.client.model.JsonPathContentAssertion
@@ -9,6 +10,7 @@ import com.smartbear.readyapi.client.model.RestTestRequestStep
 import com.smartbear.readyapi.client.model.SimpleContainsAssertion
 import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion
 import com.smartbear.readyapi.client.model.XPathContainsAssertion
+import com.smartbear.readyapi.client.model.XQueryContainsAssertion
 import com.smartbear.readyapi4j.TestRecipe
 import org.junit.Test
 
@@ -210,6 +212,20 @@ class RestRequestDslTest {
     }
 
     @Test
+    void createsXQueryMatchAssertion() throws Exception {
+        TestRecipe recipe = recipe {
+            get '/some_uri', {
+                asserting {
+                    xQuery '/customer/address' contains 'Storgatan 1'
+                }
+            }
+        }
+        XQueryContainsAssertion assertion = extractFirstAssertion(recipe) as XQueryContainsAssertion
+        assert assertion.xquery == '/customer/address'
+        assert assertion.expectedContent == 'Storgatan 1'
+    }
+
+    @Test
     void createsGroovyScriptAssertions() throws Exception {
         TestRecipe recipe = recipe {
             get '/some_uri', {
@@ -225,10 +241,29 @@ class RestRequestDslTest {
         assert scriptAssertion.script == "assert response.contentType == 'text/xml'"
     }
 
+    @Test
+    void createsContentTypeAssertions() throws Exception {
+        TestRecipe recipe = recipe {
+            get '/some_uri', {
+                asserting {
+                    contentType 'text/xml'
+                }
+            }
+        }
+
+        GroovyScriptAssertion assertion = extractFirstAssertion(recipe) as GroovyScriptAssertion
+        assert assertion.script == 'assert messageExchange.responseHeaders["Content-Type"].contains( "text/xml")'
+    }
+
     private static void verifyValuesAndMethod(TestRecipe recipe, String method) {
         RestTestRequestStep restRequest = extractFirstTestStep(recipe) as RestTestRequestStep
         assert restRequest.URI == URI
         assert restRequest.method == method
+    }
+
+    private static Assertion extractFirstAssertion(TestRecipe recipe) {
+        RestTestRequestStep testStep = extractFirstTestStep(recipe) as RestTestRequestStep
+        return testStep.assertions[0]
     }
 
 }
