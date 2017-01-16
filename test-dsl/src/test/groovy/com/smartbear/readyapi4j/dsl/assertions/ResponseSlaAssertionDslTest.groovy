@@ -14,7 +14,7 @@ class ResponseSlaAssertionDslTest {
         TestRecipe recipe = recipe {
             get '/myurl', {
                 asserting {
-                    responseSLA 1000 milliseconds
+                    maxResponseTime 1000 milliseconds
                 }
             }
         }
@@ -27,7 +27,7 @@ class ResponseSlaAssertionDslTest {
         TestRecipe recipe = recipe {
             get '/myurl', {
                 asserting {
-                    responseSLA 1000 ms
+                    maxResponseTime 1000 ms
                 }
             }
         }
@@ -40,7 +40,7 @@ class ResponseSlaAssertionDslTest {
         TestRecipe recipe = recipe {
             get '/myurl', {
                 asserting {
-                    responseSLA 1 second
+                    maxResponseTime 1 second
                 }
             }
         }
@@ -53,7 +53,7 @@ class ResponseSlaAssertionDslTest {
         TestRecipe recipe = recipe {
             get '/myurl', {
                 asserting {
-                    responseSLA 20 seconds
+                    maxResponseTime 20 seconds
                 }
             }
         }
@@ -66,7 +66,7 @@ class ResponseSlaAssertionDslTest {
         TestRecipe recipe = recipe {
             get '/myurl', {
                 asserting {
-                    responseSLA 1 minute
+                    maxResponseTime 1 minute
                 }
             }
         }
@@ -79,7 +79,7 @@ class ResponseSlaAssertionDslTest {
         TestRecipe recipe = recipe {
             get '/myurl', {
                 asserting {
-                    responseSLA 12 minute
+                    maxResponseTime 12 minute
                 }
             }
         }

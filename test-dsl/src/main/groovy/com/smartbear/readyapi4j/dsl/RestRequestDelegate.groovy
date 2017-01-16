@@ -151,7 +151,7 @@ class RestRequestDelegate {
             return new XQueryAssertionDelegate(xQuery, assertionBuilders)
         }
 
-        ResponseSlaAssertionDelegate responseSLA(int maxResponseTime) {
+        ResponseSlaAssertionDelegate maxResponseTime(int maxResponseTime) {
             return new ResponseSlaAssertionDelegate(maxResponseTime, assertionBuilders)
         }
     }
