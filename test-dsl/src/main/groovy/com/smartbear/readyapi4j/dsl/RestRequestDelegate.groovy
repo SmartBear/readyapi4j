@@ -5,7 +5,7 @@ import com.smartbear.readyapi4j.dsl.assertions.AssertionsDelegate
 import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder
 
 /**
- * Class created to support soapRequest closures within the DSL's recipe closures etc.
+ * Class created to support restRequest closures within the DSL's recipe closures etc.
  */
 class RestRequestDelegate {
 
