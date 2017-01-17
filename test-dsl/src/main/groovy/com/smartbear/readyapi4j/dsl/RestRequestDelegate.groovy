@@ -1,7 +1,7 @@
 package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
-import com.smartbear.readyapi4j.dsl.assertions.AssertionsDelegate
+import com.smartbear.readyapi4j.dsl.assertions.RestRequestAssertionsDelegate
 import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder
 
 /**
@@ -50,8 +50,8 @@ class RestRequestDelegate {
         this.timeout = String.valueOf(timeout)
     }
 
-    void asserting(@DelegatesTo(AssertionsDelegate) Closure assertionsConfig) {
-        def delegate = new AssertionsDelegate()
+    void asserting(@DelegatesTo(RestRequestAssertionsDelegate) Closure assertionsConfig) {
+        def delegate = new RestRequestAssertionsDelegate()
         assertionsConfig.delegate = delegate
         assertionsConfig.call()
         this.assertions = delegate.assertionBuilders

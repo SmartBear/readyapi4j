@@ -7,7 +7,7 @@ public class DefaultNotSoapFaultAssertionBuilder implements NotSoapFaultAssertio
     private final NotSoapFaultAssertion notSoapFaultAssertion = new NotSoapFaultAssertion();
 
     @Override
-    public DefaultNotSoapFaultAssertionBuilder named(String name) {
+    public NotSoapFaultAssertionBuilder named(String name) {
         notSoapFaultAssertion.setName(name);
         return this;
     }

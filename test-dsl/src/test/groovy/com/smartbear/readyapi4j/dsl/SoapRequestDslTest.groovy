@@ -1,9 +1,12 @@
 package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion
+import com.smartbear.readyapi.client.model.NotSoapFaultAssertion
+import com.smartbear.readyapi.client.model.SoapFaultAssertion
 import com.smartbear.readyapi.client.model.SoapRequestTestStep
 import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion
 import com.smartbear.readyapi4j.TestRecipe
+import com.smartbear.readyapi4j.assertions.Assertions
 import org.junit.Test
 
 import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
@@ -81,6 +84,42 @@ class SoapRequestDslTest {
         assert statusAssertion.validStatusCodes == ['200']
         InvalidHttpStatusCodesAssertion invalidStatusesAssertion = testStep.assertions[1] as InvalidHttpStatusCodesAssertion
         assert invalidStatusesAssertion.invalidStatusCodes == ['401', '404']
+    }
+
+    @Test
+    void createsSoapFaultAssertion() throws Exception {
+        TestRecipe recipe = recipe {
+            soapRequest {
+                wsdl = WSDL_URL
+                binding = BINDING
+                operation = OPERATION
+                asserting {
+                    soapFault()
+                }
+            }
+        }
+
+        SoapRequestTestStep testStep = extractSoapTestStep(recipe)
+        SoapFaultAssertion assertion = testStep.assertions[0] as SoapFaultAssertion
+        assert assertion.type == Assertions.SOAP_FAULT_TYPE
+    }
+
+    @Test
+    void createsNotSoapFaultAssertion() throws Exception {
+        TestRecipe recipe = recipe {
+            soapRequest {
+                wsdl = WSDL_URL
+                binding = BINDING
+                operation = OPERATION
+                asserting {
+                    notSoapFault()
+                }
+            }
+        }
+
+        SoapRequestTestStep testStep = extractSoapTestStep(recipe)
+        NotSoapFaultAssertion assertion = testStep.assertions[0] as NotSoapFaultAssertion
+        assert assertion.type == Assertions.NOT_SOAP_FAULT_TYPE
     }
 
     private static SoapRequestTestStep extractSoapTestStep(TestRecipe recipe) {

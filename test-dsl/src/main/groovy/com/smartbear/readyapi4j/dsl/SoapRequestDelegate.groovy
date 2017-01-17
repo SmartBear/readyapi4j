@@ -1,7 +1,7 @@
 package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
-import com.smartbear.readyapi4j.dsl.assertions.AssertionsDelegate
+import com.smartbear.readyapi4j.dsl.assertions.SoapRequestAssertionsDelegate
 import com.smartbear.readyapi4j.teststeps.soaprequest.SoapRequestStepBuilder
 
 /**
@@ -12,8 +12,8 @@ class SoapRequestDelegate {
     private String wsdlString
     private String binding
     private String operation
-    private Map<String,String> pathParameters = [:]
-    private Map<String,String> namedParameters = [:]
+    private Map<String, String> pathParameters = [:]
+    private Map<String, String> namedParameters = [:]
     private List<AssertionBuilder> assertions
 
     void setWsdl(String wsdlUrl) {
@@ -36,8 +36,8 @@ class SoapRequestDelegate {
         namedParameters[name] = value as String
     }
 
-    void asserting(@DelegatesTo(AssertionsDelegate) Closure assertionsConfig) {
-        def delegate = new AssertionsDelegate()
+    void asserting(@DelegatesTo(SoapRequestAssertionsDelegate) Closure assertionsConfig) {
+        def delegate = new SoapRequestAssertionsDelegate()
         assertionsConfig.delegate = delegate
         assertionsConfig.call()
         this.assertions = delegate.assertionBuilders
@@ -54,7 +54,7 @@ class SoapRequestDelegate {
         namedParameters.each { name, value ->
             builder.withParameter(name, value)
         }
-        assertions.each { assertion -> builder.addAssertion(assertion)}
+        assertions.each { assertion -> builder.addAssertion(assertion) }
         return builder
     }
 }

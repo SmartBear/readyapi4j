@@ -10,13 +10,13 @@ import static com.smartbear.readyapi4j.assertions.Assertions.contains
 import static com.smartbear.readyapi4j.assertions.Assertions.notContains
 
 
-class AssertionsDelegate {
-
+abstract class AbstractAssertionsDelegate {
     private List<AssertionBuilder> assertionBuilders = []
 
     List<AssertionBuilder> getAssertionBuilders() {
         return assertionBuilders
     }
+
 
     void status(int ... httpStatuses) {
         ValidHttpStatusCodesAssertionBuilder builder = new ValidHttpStatusCodesAssertionBuilder()
@@ -58,10 +58,6 @@ class AssertionsDelegate {
 
     void contentType(String contentType) {
         assertionBuilders.add(Assertions.contentType(contentType))
-    }
-
-    JsonPathAssertionDelegate jsonPath(String jsonPath) {
-        return new JsonPathAssertionDelegate(jsonPath, assertionBuilders)
     }
 
     XPathAssertionDelegate xpath(String xpath) {
