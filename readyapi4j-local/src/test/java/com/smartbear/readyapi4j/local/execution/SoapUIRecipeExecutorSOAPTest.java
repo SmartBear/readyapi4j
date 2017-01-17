@@ -66,7 +66,7 @@ public class SoapUIRecipeExecutorSOAPTest {
                         .assertSoapOkResponse()
                         .assertXPath(XPATH_TO_ASSERT, XPATH_RESULT)
         ).buildTestRecipe();
-        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
 
