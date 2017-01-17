@@ -58,9 +58,9 @@ class AssertionTypeResolver implements TypeIdResolver {
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, SimpleContainsAssertion.class);
             case AssertionNames.SIMPLE_NOT_CONTAINS:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, SimpleNotContainsAssertion.class);
-            case AssertionNames.X_PATH_MATCH:
+            case AssertionNames.XPATH_MATCH:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, XPathContainsAssertion.class);
-            case AssertionNames.X_QUERY_MATCH:
+            case AssertionNames.XQUERY_MATCH:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, XQueryContainsAssertion.class);
             case AssertionNames.JSON_PATH_MATCH:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, JsonPathContentAssertion.class);

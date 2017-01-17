@@ -5,8 +5,8 @@ class AssertionNames {
     static final String INVALID_HTTP_STATUS_CODES = "Invalid HTTP Status Codes";
     static final String SIMPLE_CONTAINS = "Contains";
     static final String SIMPLE_NOT_CONTAINS = "Not Contains";
-    static final String X_PATH_MATCH = "XPath Match";
-    static final String X_QUERY_MATCH = "XQuery Match";
+    static final String XPATH_MATCH = "XPath Match";
+    static final String XQUERY_MATCH = "XQuery Match";
     static final String JSON_PATH_MATCH = "JsonPath Match";
     static final String JSON_PATH_COUNT = "JsonPath Count";
     static final String GROOVY_SCRIPT = "Script Assertion";

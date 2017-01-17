@@ -45,6 +45,7 @@ import static com.smartbear.readyapi4j.properties.Properties.property;
 
 public class TestRecipeBuilder {
     private static final String TARGET_STEP = "#TestCase#";
+    private static ObjectMapper objectMapper;
     private List<TestStepBuilder> testStepBuilders = new LinkedList<>();
     private List<PropertyBuilder> propertyBuilders = new LinkedList<>();
     private final TestCase testCase;
@@ -56,12 +57,18 @@ public class TestRecipeBuilder {
     }
 
     public static TestRecipe createFrom(String jsonText) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.addMixIn(TestStep.class, TestStepMixin.class);
-        objectMapper.addMixIn(DataGenerator.class, DataGeneratorTypeMixin.class);
-        objectMapper.addMixIn(Assertion.class, AssertionMixin.class);
-        TestCase testCase = objectMapper.readValue(jsonText, TestCase.class);
+        TestCase testCase = getObjectMapper().readValue(jsonText, TestCase.class);
         return new TestRecipe(testCase);
+    }
+
+    private static ObjectMapper getObjectMapper() {
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper();
+            objectMapper.addMixIn(TestStep.class, TestStepMixin.class);
+            objectMapper.addMixIn(DataGenerator.class, DataGeneratorTypeMixin.class);
+            objectMapper.addMixIn(Assertion.class, AssertionMixin.class);
+        }
+        return objectMapper;
     }
 
     public TestRecipeBuilder addStep(TestStepBuilder testStepBuilder) {
