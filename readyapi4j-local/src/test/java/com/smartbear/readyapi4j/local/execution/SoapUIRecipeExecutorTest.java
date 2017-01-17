@@ -20,8 +20,8 @@ import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.startLocalS
 import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.stopLocalServer;
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
-import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.propertyTransfer;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
 import static com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferSourceBuilder.aSource;
@@ -81,7 +81,7 @@ public class SoapUIRecipeExecutorTest {
         TestRecipe testRecipe = newTestRecipe(
                 groovyScriptStep("println 'Hello Earth'")
         ).buildTestRecipe();
-        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
     }
@@ -93,7 +93,7 @@ public class SoapUIRecipeExecutorTest {
                         .acceptsJson()
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_TEST_VALUE)
         ).buildTestRecipe();
-        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
 
@@ -121,7 +121,7 @@ public class SoapUIRecipeExecutorTest {
                         .acceptsJson()
                         .assertJsonContent(ASSERTION_KEY, ASSERTION_ROOT_VALUE)
         ).buildTestRecipe();
-        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
     }
@@ -129,7 +129,7 @@ public class SoapUIRecipeExecutorTest {
     @Test
     public void runsPropertyTransferRequestWithJsonPathExtraction() {
         TestRecipe testRecipe = buildPropertyTransferWithJsonPathExtractionTestRecipe();
-        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
         assertThat(getPostedJsonTestObject(), is(testObject));
@@ -141,7 +141,7 @@ public class SoapUIRecipeExecutorTest {
 
         ExecutionListener listenerMock = mock(ExecutionListener.class);
         executor.addExecutionListener(listenerMock);
-        Execution execution = executor.postTestCase(testRecipe.getTestCase(), true);
+        Execution execution = executor.submitRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.RUNNING));
 

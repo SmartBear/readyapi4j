@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi4j.extractor.ExtractorData;
 
-import java.util.Optional;
-
 /**
  * Wrapper for a test recipe, which can either be read locally by the SoapUI core or converted to JSON and submitted
  * to a Ready! API TestServer instance.
@@ -29,8 +27,8 @@ public class TestRecipe {
         return testCase;
     }
 
-    public Optional<ExtractorData> getExtractorData() {
-        return extractorData == null ? Optional.empty() : Optional.of(extractorData);
+    public ExtractorData getExtractorData() {
+        return extractorData;
     }
 
     @Override

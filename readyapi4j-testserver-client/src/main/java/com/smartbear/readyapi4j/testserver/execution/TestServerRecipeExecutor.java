@@ -53,9 +53,10 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
         return execution;
     }
 
-    private TestServerExecution doExecuteTestCase(TestCase testCase, Optional<ExtractorData> optionalExtractorData, boolean async) throws ApiException {
+    private TestServerExecution doExecuteTestCase(TestCase testCase, ExtractorData optionalExtractorData, boolean async) throws ApiException {
         try {
-            optionalExtractorData.ifPresent(extractorData -> extractorDataList.add(extractorData));
+            Optional<ExtractorData> extractorDataOptional = Optional.ofNullable(optionalExtractorData);
+            extractorDataOptional.ifPresent(extractorData -> extractorDataList.add(extractorData));
             TestServerExecution execution = testServerClient.postTestRecipe(testCase, async);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), testCase);
             return execution;

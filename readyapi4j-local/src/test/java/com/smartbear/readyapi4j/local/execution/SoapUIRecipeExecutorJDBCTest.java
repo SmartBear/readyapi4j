@@ -76,7 +76,7 @@ public class SoapUIRecipeExecutorJDBCTest {
         TestRecipe testRecipe = newTestRecipe(
                 connection.jdbcRequest(SELECT_STATEMENT).addAssertion(contains("Arvid"))
         ).buildTestRecipe();
-        Execution execution = executor.postTestCase(testRecipe.getTestCase(), false);
+        Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
     }
