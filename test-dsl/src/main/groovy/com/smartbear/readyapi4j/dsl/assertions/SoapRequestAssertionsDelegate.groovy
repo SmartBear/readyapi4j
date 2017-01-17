@@ -6,14 +6,14 @@ import com.smartbear.readyapi4j.assertions.SoapFaultAssertionBuilder
 
 class SoapRequestAssertionsDelegate extends AbstractAssertionsDelegate {
     SoapFaultAssertionBuilder getSoapFault() {
-        SoapFaultAssertionBuilder soapFault = Assertions.soapFault()
-        assertionBuilders.add(soapFault)
-        return soapFault
+        assertionBuilders.add(Assertions.soapFault())
+        //returning null since it's not a real getter but a way to use this method without parentheses in the DSL
+        return null
     }
 
     NotSoapFaultAssertionBuilder getNotSoapFault() {
-        NotSoapFaultAssertionBuilder notSoapFaultAssertionBuilder = Assertions.notSoapFault()
-        assertionBuilders.add(notSoapFaultAssertionBuilder)
-        return notSoapFaultAssertionBuilder
+        assertionBuilders.add(Assertions.notSoapFault())
+        //returning null since it's not a real getter but a way to use this method without parentheses in the DSL
+        return null
     }
 }
