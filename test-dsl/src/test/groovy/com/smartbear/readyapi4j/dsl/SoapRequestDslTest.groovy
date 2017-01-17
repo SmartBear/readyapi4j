@@ -94,7 +94,7 @@ class SoapRequestDslTest {
                 binding = BINDING
                 operation = OPERATION
                 asserting {
-                    soapFault()
+                    soapFault
                 }
             }
         }
@@ -112,7 +112,7 @@ class SoapRequestDslTest {
                 binding = BINDING
                 operation = OPERATION
                 asserting {
-                    notSoapFault()
+                    notSoapFault
                 }
             }
         }

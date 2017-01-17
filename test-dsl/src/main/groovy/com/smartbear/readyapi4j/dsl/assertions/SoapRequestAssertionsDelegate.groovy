@@ -1,14 +1,19 @@
 package com.smartbear.readyapi4j.dsl.assertions
 
 import com.smartbear.readyapi4j.assertions.Assertions
-
+import com.smartbear.readyapi4j.assertions.NotSoapFaultAssertionBuilder
+import com.smartbear.readyapi4j.assertions.SoapFaultAssertionBuilder
 
 class SoapRequestAssertionsDelegate extends AbstractAssertionsDelegate {
-    void soapFault() {
-        assertionBuilders.add(Assertions.soapFault())
+    SoapFaultAssertionBuilder getSoapFault() {
+        SoapFaultAssertionBuilder soapFault = Assertions.soapFault()
+        assertionBuilders.add(soapFault)
+        return soapFault
     }
 
-    void notSoapFault() {
-        assertionBuilders.add(Assertions.notSoapFault())
+    NotSoapFaultAssertionBuilder getNotSoapFault() {
+        NotSoapFaultAssertionBuilder notSoapFaultAssertionBuilder = Assertions.notSoapFault()
+        assertionBuilders.add(notSoapFaultAssertionBuilder)
+        return notSoapFaultAssertionBuilder
     }
 }
