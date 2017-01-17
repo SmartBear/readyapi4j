@@ -1,4 +1,4 @@
-package com.smartbear.readyapi4j.testserver.execution;
+package com.smartbear.readyapi4j;
 
 class AssertionNames {
     static final String VALID_HTTP_STATUS_CODES = "Valid HTTP Status Codes";

@@ -2,6 +2,8 @@ package com.smartbear.readyapi4j.testserver.execution.textrecipe;
 
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi4j.TestRecipe;
+import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.testserver.execution.ExecutionTestHelper;
 import com.smartbear.readyapi4j.testserver.execution.ProjectExecutionTestBase;
@@ -47,8 +49,9 @@ public class JsonTextRecipeExecutorTest extends ProjectExecutionTestBase {
         ProjectResultReport report = ExecutionTestHelper.makeFinishedReport("execution_ID");
         when(apiWrapper.postTestRecipe(any(TestCase.class), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
         String recipeJsonText = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
-        //Mainly it tests that the text recipe is successfully desrialized into TestCase object and submitted to the server
-        Execution execution = recipeExecutor.executeRecipe(recipeJsonText);
+        //Mainly it tests that the text recipe is successfully deserialized into TestCase object and submitted to the server
+        TestRecipe testRecipe = TestRecipeBuilder.createFrom(recipeJsonText);
+        Execution execution = recipeExecutor.executeRecipe(testRecipe);
         assertThat(execution.getCurrentReport(), is(report));
     }
 

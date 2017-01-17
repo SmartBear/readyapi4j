@@ -1,4 +1,4 @@
-package com.smartbear.readyapi4j.testserver.execution;
+package com.smartbear.readyapi4j;
 
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -17,7 +17,7 @@ import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.model.SoapMockResponseTestStep;
 import com.smartbear.readyapi.client.model.SoapRequestTestStep;
 
-public class TestStepTypeResolver implements TypeIdResolver {
+class TestStepTypeResolver implements TypeIdResolver {
     private static final String REST_REQUEST_TYPE = "REST Request";
     private static final String SOAP_REQUEST_TYPE = "SOAP Request";
     private static final String DATA_SOURCE_TYPE = "DataSource";

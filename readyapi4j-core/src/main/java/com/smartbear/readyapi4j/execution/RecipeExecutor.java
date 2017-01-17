@@ -12,22 +12,6 @@ import java.util.List;
 public interface RecipeExecutor {
 
     /**
-     * Submit a recipe for asynchronous execution.
-     *
-     * @param jsonText recipe to be executed.
-     * @return an instance of <code>Execution</code> containing the current state of execution
-     */
-    Execution submitRecipe(String jsonText);
-
-    /**
-     * Submit a recipe for synchronous execution.
-     *
-     * @param jsonText recipe to be executed.
-     * @return an instance of <code>Execution</code> containing the execution result
-     */
-    Execution executeRecipe(String jsonText);
-
-    /**
      * Submit a Test recipe for asynchronous execution.
      *
      * @param recipe Test recipe to be executed.

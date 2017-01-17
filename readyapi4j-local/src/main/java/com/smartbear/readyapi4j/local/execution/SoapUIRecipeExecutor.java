@@ -37,16 +37,6 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     private ObjectMapper objectMapper;
 
     @Override
-    public Execution submitRecipe(String jsonText) {
-        return postRecipe(jsonText, true);
-    }
-
-    @Override
-    public Execution executeRecipe(String jsonText) {
-        return postRecipe(jsonText, false);
-    }
-
-    @Override
     public Execution submitRecipe(TestRecipe recipe) {
         return postTestCase(recipe.getTestCase(), true);
     }
@@ -75,7 +65,6 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
 
         try {
             return postRecipe(getObjectMapper().writeValueAsString(testCase), async);
-
         } catch (Exception e) {
             notifyErrorOccurred(e);
             throw new RecipeExecutionException("Failed to execute Test recipe", e);

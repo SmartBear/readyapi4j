@@ -1,9 +1,28 @@
 package com.smartbear.readyapi4j;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
+import com.smartbear.readyapi.client.model.Assertion;
+import com.smartbear.readyapi.client.model.BooleanDataGenerator;
+import com.smartbear.readyapi.client.model.ComputerAddressDataGenerator;
+import com.smartbear.readyapi.client.model.CustomStringDataGenerator;
+import com.smartbear.readyapi.client.model.DataGenerator;
+import com.smartbear.readyapi.client.model.DateAndTimeDataGenerator;
+import com.smartbear.readyapi.client.model.IntegerDataGenerator;
+import com.smartbear.readyapi.client.model.NameDataGenerator;
+import com.smartbear.readyapi.client.model.PhoneNumberDataGenerator;
 import com.smartbear.readyapi.client.model.PropertyTransfer;
 import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
+import com.smartbear.readyapi.client.model.RealNumberDataGenerator;
+import com.smartbear.readyapi.client.model.StateNameDataGenerator;
+import com.smartbear.readyapi.client.model.StringDataGenerator;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.TestStep;
+import com.smartbear.readyapi.client.model.UKPostCodeDataGenerator;
+import com.smartbear.readyapi.client.model.USZIPCodeDataGenerator;
+import com.smartbear.readyapi.client.model.ValuesFromSetDataGenerator;
 import com.smartbear.readyapi4j.extractor.Extractor;
 import com.smartbear.readyapi4j.extractor.ExtractorData;
 import com.smartbear.readyapi4j.properties.PropertyBuilder;
@@ -15,6 +34,7 @@ import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferTestS
 import com.smartbear.readyapi4j.teststeps.request.HttpRequestStepBuilder;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -33,6 +53,15 @@ public class TestRecipeBuilder {
     public TestRecipeBuilder() {
         testCase = new TestCase();
         testCase.setFailTestCaseOnError(true);
+    }
+
+    public static TestRecipe createFrom(String jsonText) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.addMixIn(TestStep.class, TestStepMixin.class);
+        objectMapper.addMixIn(DataGenerator.class, DataGeneratorTypeMixin.class);
+        objectMapper.addMixIn(Assertion.class, AssertionMixin.class);
+        TestCase testCase = objectMapper.readValue(jsonText, TestCase.class);
+        return new TestRecipe(testCase);
     }
 
     public TestRecipeBuilder addStep(TestStepBuilder testStepBuilder) {
@@ -163,5 +192,40 @@ public class TestRecipeBuilder {
         }
 
         return recipeBuilder;
+    }
+
+    @JsonTypeIdResolver(TestStepTypeResolver.class)
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
+    private static class TestStepMixin {
+    }
+
+    @JsonTypeIdResolver(AssertionTypeResolver.class)
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
+    private static class AssertionMixin {
+    }
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
+    @JsonSubTypes({
+            @JsonSubTypes.Type(value = BooleanDataGenerator.class, name = "Boolean"),
+            @JsonSubTypes.Type(value = ComputerAddressDataGenerator.class, name = "Computer Address"),
+            @JsonSubTypes.Type(value = NameDataGenerator.class, name = "Name"),
+            @JsonSubTypes.Type(value = CustomStringDataGenerator.class, name = "Custom String"),
+            @JsonSubTypes.Type(value = StringDataGenerator.class, name = "String"),
+            @JsonSubTypes.Type(value = PhoneNumberDataGenerator.class, name = "Phone Number"),
+            @JsonSubTypes.Type(value = StateNameDataGenerator.class, name = "State"),
+            @JsonSubTypes.Type(value = UKPostCodeDataGenerator.class, name = "United Kingdom Postcode"),
+            @JsonSubTypes.Type(value = USZIPCodeDataGenerator.class, name = "United States ZIP Code"),
+            @JsonSubTypes.Type(value = IntegerDataGenerator.class, name = "Integer"),
+            @JsonSubTypes.Type(value = RealNumberDataGenerator.class, name = "Real"),
+            @JsonSubTypes.Type(value = ValuesFromSetDataGenerator.class, name = "Value from Set"),
+            @JsonSubTypes.Type(value = DateAndTimeDataGenerator.class, name = "Date and Time"),
+            @JsonSubTypes.Type(value = DataGenerator.class, name = "City"),
+            @JsonSubTypes.Type(value = DataGenerator.class, name = "Country"),
+            @JsonSubTypes.Type(value = DataGenerator.class, name = "Street Address"),
+            @JsonSubTypes.Type(value = DataGenerator.class, name = "E-Mail"),
+            @JsonSubTypes.Type(value = DataGenerator.class, name = "Guid"),
+            @JsonSubTypes.Type(value = DataGenerator.class, name = "Social Security Number")
+    })
+    private static class DataGeneratorTypeMixin {
     }
 }
