@@ -18,6 +18,7 @@ import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.execution.RecipeExecutionException;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
+import com.smartbear.readyapi4j.execution.RecipeFilter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,15 +35,22 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     private final Map<String, SoapUIRecipeExecution> executionsMap = new HashMap<>();
     private final JsonRecipeParser recipeParser = new JsonRecipeParser();
     private final List<ExecutionListener> executionListeners = new CopyOnWriteArrayList<>();
+    private final List<RecipeFilter> recipeFilters = new CopyOnWriteArrayList<>();
     private ObjectMapper objectMapper;
 
     @Override
     public Execution submitRecipe(TestRecipe recipe) {
+        notifyRecipeFilters( recipe );
         return postTestCase(recipe.getTestCase(), true);
+    }
+
+    private void notifyRecipeFilters(TestRecipe recipe) {
+        recipeFilters.stream().forEach( filter -> filter.filterRecipe( recipe ));
     }
 
     @Override
     public Execution executeRecipe(TestRecipe recipe) {
+        notifyRecipeFilters( recipe );
         return postTestCase(recipe.getTestCase(), false);
     }
 
@@ -59,6 +67,16 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     @Override
     public void removeExecutionListener(ExecutionListener listener) {
         executionListeners.remove(listener);
+    }
+
+    @Override
+    public void addRecipeFilter(RecipeFilter recipeFilter) {
+       recipeFilters.add(recipeFilter);
+    }
+
+    @Override
+    public void removeRecipeFilter(RecipeFilter recipeFilter) {
+        recipeFilters.remove(recipeFilter);
     }
 
     private Execution postTestCase(TestCase testCase, boolean async) {

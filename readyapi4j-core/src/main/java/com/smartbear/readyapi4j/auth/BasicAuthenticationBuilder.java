@@ -4,6 +4,10 @@ import com.smartbear.readyapi.client.model.Authentication;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
+/**
+ * Builds an authentication object for basic authentication
+ */
+
 public class BasicAuthenticationBuilder implements AuthenticationBuilder {
     protected Authentication authentication = new Authentication();
 

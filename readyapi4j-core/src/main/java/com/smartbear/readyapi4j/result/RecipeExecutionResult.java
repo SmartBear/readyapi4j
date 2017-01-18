@@ -5,29 +5,79 @@ import com.smartbear.readyapi.client.model.ProjectResultReport;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Provides direct access to TestStepResults after a Recipe has been executed
+ */
+
 public interface RecipeExecutionResult {
+
+    /**
+     * @return the time it took to execute this execution
+     */
 
     long getTimeTaken();
 
+    /**
+     * @return the underlying id of the execution
+     */
+
     String getExecutionId();
+
+    /**
+     * @return the pass/fail status of this execution
+     */
 
     ProjectResultReport.StatusEnum getStatus();
 
+    /**
+     * @return a list of collected error messages
+     */
+
     List<String> getErrorMessages();
+
+    /**
+     * @return the number of TestStepResults collected for this execution
+     */
 
     int getResultCount();
 
+    /**
+     * @param index
+     * @return the TestStepResult at the specified index
+     */
     TestStepResult getTestStepResult(int index);
 
+    /**
+     * @param testStepName
+     * @return the first TestStepResult for the specified TestStep
+     */
     Optional<TestStepResult> getFirstTestStepResult(String testStepName);
 
+    /**
+     * @param testStepName
+     * @return the last TestStepResult for the specified TestStep
+     */
     Optional<TestStepResult> getLastTestStepResult(String testStepName);
 
+    /**
+     * @return a list of all TestStepResults collected for this execution
+     */
     List<TestStepResult> getTestStepResults();
 
+    /**
+     * @param testStepName
+     * @return a list of all TestStepResults collected for the specified TestStep
+     */
     List<TestStepResult> getTestStepResults(String testStepName);
 
+    /**
+     * @return a list of all failed TestStepResults collected for this execution
+     */
     List<TestStepResult> getFailedTestStepsResults();
 
+    /**
+     * @param testStepName
+     * @return a list of all failed TestStepResults collected for the specified TestStep
+     */
     List<TestStepResult> getFailedTestStepsResults(String testStepName);
 }

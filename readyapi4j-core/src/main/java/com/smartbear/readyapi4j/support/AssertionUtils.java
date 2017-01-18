@@ -12,6 +12,10 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+/**
+ * Utility class for asserting an Execution
+ */
+
 public class AssertionUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(AssertionUtils.class);

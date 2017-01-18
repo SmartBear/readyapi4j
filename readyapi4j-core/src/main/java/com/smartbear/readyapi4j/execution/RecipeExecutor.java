@@ -45,4 +45,19 @@ public interface RecipeExecutor {
      * @param listener listener to be removed
      */
     void removeExecutionListener(ExecutionListener listener);
+
+    /**
+     * Adds a recipe filter for preprocessing generated recipes
+     *
+     * @param recipeFilter
+     */
+
+    void addRecipeFilter(RecipeFilter recipeFilter);
+
+    /**
+     * Removes an existing recipe filter
+     * @param recipeFilter
+     */
+
+    void removeRecipeFilter(RecipeFilter recipeFilter);
 }

@@ -1,7 +1,5 @@
 package com.smartbear.readyapi4j.attachments;
 
-
-import com.smartbear.readyapi.client.model.RequestAttachment;
 import com.sun.jersey.core.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.nio.file.Files;
+
+/**
+ * Utility class for creating a RequestAttachmentBuilder for various types of attachments
+ */
 
 public class Attachments {
 

@@ -4,6 +4,10 @@ import com.smartbear.readyapi.client.model.Authentication;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
+/**
+ * Builds an authentication object for Kerberos authentication
+ */
+
 public class KerberosAuthenticationBuilder extends NTLMAuthenticationBuilder {
     public KerberosAuthenticationBuilder(String username, String password) {
         super(username, password);

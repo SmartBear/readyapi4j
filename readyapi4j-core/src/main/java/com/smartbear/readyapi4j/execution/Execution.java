@@ -19,7 +19,15 @@ public interface Execution {
 
     RecipeExecutionResult getExecutionResult();
 
+    /**
+     * Gets a list of error messages collected during this execution
+     */
+
     List<String> getErrorMessages();
+
+    /**
+     * Cancels this execution if it is still ongoing
+     */
 
     void cancelExecution();
 }

@@ -2,6 +2,10 @@ package com.smartbear.readyapi4j.extractor;
 
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PathLanguage;
 
+/**
+ * Defines an object that can extract a value from any recipe property after a recipe has executed
+ */
+
 public class Extractor {
     private String path;
     private String property;
