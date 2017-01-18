@@ -1,5 +1,9 @@
 package com.smartbear.readyapi4j;
 
+/**
+ * Constants for all types of assertions
+ */
+
 class AssertionNames {
     static final String VALID_HTTP_STATUS_CODES = "Valid HTTP Status Codes";
     static final String INVALID_HTTP_STATUS_CODES = "Invalid HTTP Status Codes";

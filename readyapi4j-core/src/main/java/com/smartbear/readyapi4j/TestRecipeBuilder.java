@@ -43,6 +43,10 @@ import java.util.Map;
 
 import static com.smartbear.readyapi4j.properties.Properties.property;
 
+/**
+ * Main class for building TestRecipes through code
+ */
+
 public class TestRecipeBuilder {
     private static final String TARGET_STEP = "#TestCase#";
     private static ObjectMapper objectMapper;
@@ -55,6 +59,14 @@ public class TestRecipeBuilder {
         testCase = new TestCase();
         testCase.setFailTestCaseOnError(true);
     }
+
+    /**
+     * Creates a TestRecipe object from an existing JSON recipe
+     *
+     * @param jsonText the json recipe
+     * @return the created TestRecipe
+     * @throws IOException if there was an error deserializing
+     */
 
     public static TestRecipe createFrom(String jsonText) throws IOException {
         TestCase testCase = getObjectMapper().readValue(jsonText, TestCase.class);
@@ -71,6 +83,13 @@ public class TestRecipeBuilder {
         return objectMapper;
     }
 
+    /**
+     * Adds a TestStep to this TestRecipe
+     *
+     * @param testStepBuilder the builder for the TestTep to add
+     * @return
+     */
+
     public TestRecipeBuilder addStep(TestStepBuilder testStepBuilder) {
         this.testStepBuilders.add(testStepBuilder);
         return this;
@@ -80,17 +99,25 @@ public class TestRecipeBuilder {
      * Certificate file can be added on the TestServer in allowedFilePath directory. Otherwise it should be provided by the client.
      * Client will throw an exception if file doesn't exist on client and on server.
      *
-     * @param filePath Certificate file path
+     * @param filePath Certificate file path on server
      */
     public TestRecipeBuilder withClientCertificate(String filePath) {
         testCase.setClientCertFileName(filePath);
         return this;
     }
 
+    /**
+     * @param password password for certificate configured on server
+     */
+
     public TestRecipeBuilder withClientCertificatePassword(String password) {
         testCase.setClientCertPassword(password);
         return this;
     }
+
+    /**
+     * @param propertyBuilders the PropertyBuilders for properties to add to the created TestCase
+     */
 
     public TestRecipeBuilder withProperties(PropertyBuilder... propertyBuilders) {
         Arrays.asList(propertyBuilders).forEach(propertyBuilder -> {
@@ -101,11 +128,20 @@ public class TestRecipeBuilder {
         return this;
     }
 
+    /**
+     * Adds a single property to the created TestCase
+     * @param key
+     * @param value
+     */
+
     public TestRecipeBuilder withProperty(String key, String value) {
         this.propertyBuilders.add(property(key, value));
         return this;
     }
 
+    /**
+     * @return the TestRecipe built from configured TestSteps and properties
+     */
     public TestRecipe buildTestRecipe() {
         addTestSteps();
         addProperties();
@@ -183,6 +219,10 @@ public class TestRecipeBuilder {
         }
         return propertyTransferTestStep;
     }
+
+    /**
+     * @return a preconfigured instance of this class
+     */
 
     public static TestRecipeBuilder newTestRecipe() {
         return new TestRecipeBuilder();

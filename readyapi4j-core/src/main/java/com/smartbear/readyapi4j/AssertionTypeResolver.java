@@ -21,6 +21,10 @@ import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion;
 import com.smartbear.readyapi.client.model.XPathContainsAssertion;
 import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
 
+/**
+ * Jackson type resolver for parsing assertions in JSON recipes into correct Assertion types
+ */
+
 class AssertionTypeResolver implements TypeIdResolver {
     private JavaType baseType;
 

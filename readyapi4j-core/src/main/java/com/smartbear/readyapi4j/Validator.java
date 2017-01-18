@@ -4,6 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+/**
+ * Utility class for validations
+ */
+
 public class Validator {
     public static void validateNotEmpty(String value, String message) {
         if (StringUtils.isBlank(value)) {
