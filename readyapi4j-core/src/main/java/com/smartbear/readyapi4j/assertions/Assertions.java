@@ -33,16 +33,23 @@ public class Assertions {
         return new JsonPathCountAssertionBuilder(jsonPath, expectedCount);
     }
 
-    public static JsonPathAssertionBuilder json(String jsonPath, String expectedContent) {
-        return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
-    }
-
     @Deprecated
     public static JsonPathAssertionBuilder jsonContent(String jsonPath, String expectedContent) {
         return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
     }
 
+    public static JsonPathAssertionBuilder json(String jsonPath, String expectedContent) {
+        return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
+    }
+
     public static JsonPathAssertionBuilder jsonCount(String jsonPath, int expectedCount) {
+        return new JsonPathCountAssertionBuilder(jsonPath, expectedCount);
+    }
+
+    /**
+     * This makes it possible to provide a property expansion that gives the expected count
+     */
+    public static JsonPathAssertionBuilder jsonCount(String jsonPath, String expectedCount) {
         return new JsonPathCountAssertionBuilder(jsonPath, expectedCount);
     }
 
@@ -94,6 +101,10 @@ public class Assertions {
         return new ValidHttpStatusCodesAssertionBuilder();
     }
 
+    /**
+     * This makes it possible to provide property expansions for status codes
+     */
+
     public static HttpStatusCodeAssertionBuilder statusCodes(String... statusCodes) {
         ValidHttpStatusCodesAssertionBuilder validHttpStatusCodesAssertionBuilder = new ValidHttpStatusCodesAssertionBuilder();
         return validHttpStatusCodesAssertionBuilder.withStatusCodes(asList(statusCodes));
@@ -113,6 +124,10 @@ public class Assertions {
         invalidHttpStatusCodesAssertionBuilder.withIntStatusCodes(asList(statusCodes));
         return invalidHttpStatusCodesAssertionBuilder;
     }
+
+    /**
+     * This makes it possible to provide property expansions for status codes
+     */
 
     public static InvalidHttpStatusCodesAssertionBuilder invalidStatusCodes(String... statusCodes) {
         InvalidHttpStatusCodesAssertionBuilder invalidHttpStatusCodesAssertionBuilder = new InvalidHttpStatusCodesAssertionBuilder();
@@ -137,6 +152,9 @@ public class Assertions {
         return new DefaultResponseSLAAssertionBuilder(maxResponseTime);
     }
 
+    /**
+     * This makes it possible to provide a property expansion that gives the timeout
+     */
     public static ResponseSLAAssertionBuilder maxResponseTime(String maxResponseTime) {
         return new DefaultResponseSLAAssertionBuilder(maxResponseTime);
     }
@@ -147,9 +165,6 @@ public class Assertions {
 
     /**
      * This makes it possible to provide a property expansion that gives the timeout
-     *
-     * @param timeout a String that should expand to a numeric
-     * @return a builder that will construct the JDBC Timeout assertion
      */
 
     public static JdbcTimeoutAssertionBuilder jdbcRequestTimeout(String timeout) {
