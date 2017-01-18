@@ -2,13 +2,12 @@ package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.SoapFaultAssertion;
 
-public class DefaultSoapFaultAssertionBuilder
-implements SoapFaultAssertionBuilder {
+public class DefaultSoapFaultAssertionBuilder implements SoapFaultAssertionBuilder {
 
     private final SoapFaultAssertion soapFaultAssertion = new SoapFaultAssertion();
 
     @Override
-    public DefaultSoapFaultAssertionBuilder named(String name) {
+    public SoapFaultAssertionBuilder named(String name) {
         soapFaultAssertion.setName(name);
         return this;
     }

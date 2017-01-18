@@ -134,6 +134,7 @@ public class Assertions {
 
     /**
      * This makes it possible to provide a property expansion that gives the timeout
+     *
      * @param timeout a String that should expand to a numeric
      * @return a builder that will construct the JDBC Timeout assertion
      */
@@ -144,5 +145,13 @@ public class Assertions {
 
     public static JdbcStatusAssertionBuilder jdbcRequestStatusOk() {
         return new DefaultJdbcStatusAssertionBuilder();
+    }
+
+    public static SoapFaultAssertionBuilder soapFault() {
+        return new DefaultSoapFaultAssertionBuilder();
+    }
+
+    public static NotSoapFaultAssertionBuilder notSoapFault() {
+        return new DefaultNotSoapFaultAssertionBuilder();
     }
 }
