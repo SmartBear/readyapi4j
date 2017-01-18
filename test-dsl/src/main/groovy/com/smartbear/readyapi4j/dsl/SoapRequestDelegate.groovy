@@ -2,6 +2,7 @@ package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
 import com.smartbear.readyapi4j.dsl.assertions.SoapRequestAssertionsDelegate
+import com.smartbear.readyapi4j.execution.RecipeExecutionException
 import com.smartbear.readyapi4j.teststeps.soaprequest.SoapRequestStepBuilder
 
 /**
@@ -45,9 +46,14 @@ class SoapRequestDelegate {
 
     SoapRequestStepBuilder buildSoapRequestStep() {
         SoapRequestStepBuilder builder = new SoapRequestStepBuilder()
-                .withWsdlAt(new URL(wsdlString))
                 .forBinding(binding)
                 .forOperation(operation)
+        try {
+            builder.withWsdlAt(new URL(wsdlString))
+        } catch (MalformedURLException e) {
+            throw new RecipeExecutionException("Not a valid WSDL location: $wsdlString", e)
+        }
+
         pathParameters.each { path, value ->
             builder.withPathParameter(path, value)
         }
