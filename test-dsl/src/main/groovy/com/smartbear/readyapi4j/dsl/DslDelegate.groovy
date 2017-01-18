@@ -3,6 +3,7 @@ package com.smartbear.readyapi4j.dsl
 import com.smartbear.readyapi4j.TestRecipe
 import com.smartbear.readyapi4j.TestRecipeBuilder
 import com.smartbear.readyapi4j.teststeps.TestSteps
+import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcRequestTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder
 
@@ -49,9 +50,9 @@ class DslDelegate {
         return new DeferredDelayStepBuilder(time, recipeBuilder)
     }
 
-    static final Map request = Collections.unmodifiableMap([property : 'Request'])
+    static final Map request = Collections.unmodifiableMap([property: 'Request'])
 
-    static final Map response = Collections.unmodifiableMap([property : 'Response'])
+    static final Map response = Collections.unmodifiableMap([property: 'Response'])
 
     void soapRequest(@DelegatesTo(SoapRequestDelegate) Closure soapRequestDefinition) {
         SoapRequestDelegate delegate = new SoapRequestDelegate()
@@ -64,7 +65,15 @@ class DslDelegate {
         JdbcRequestDelegate delegate = new JdbcRequestDelegate()
         jdbcRequestDefinition.delegate = delegate
         jdbcRequestDefinition.call()
-        recipeBuilder.addStep(delegate.buildJdbcRequestStep())
+
+        JdbcRequestTestStepBuilder builder = new JdbcRequestTestStepBuilder(delegate.driver, delegate.connectionString,
+                delegate.storedProcedure)
+        builder.named(delegate.testStepName)
+        if (delegate.testStepProperties) {
+            builder.withProperties(delegate.testStepProperties)
+        }
+        delegate.assertions.each { assertionBuilder -> builder.addAssertion(assertionBuilder) }
+        recipeBuilder.addStep(builder)
     }
 
     private void createRestRequest(String httpVerb, String URI, Closure configuration = null) {
@@ -92,8 +101,8 @@ class DslDelegate {
             if (delegate.timeout) {
                 request.setTimeout(delegate.timeout)
             }
-            delegate.assertions.each { assertion -> request.addAssertion(assertion)}
-            delegate.parameters.each { param -> request.addParameter(param)}
+            delegate.assertions.each { assertion -> request.addAssertion(assertion) }
+            delegate.parameters.each { param -> request.addParameter(param) }
         }
         recipeBuilder.addStep(request)
     }

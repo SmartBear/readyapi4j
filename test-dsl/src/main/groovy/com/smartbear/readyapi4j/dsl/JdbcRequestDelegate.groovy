@@ -2,15 +2,16 @@ package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
 import com.smartbear.readyapi4j.dsl.assertions.JdbcAssertionDelegate
-import com.smartbear.readyapi4j.teststeps.TestStepBuilder
-import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcRequestTestStepBuilder
 
+/**
+ * Delegate for the 'jdbcRequest'  closure in 'recipe'
+ */
 class JdbcRequestDelegate {
-    private String testStepName;
-    private String driver;
-    private String connectionString;
-    private boolean storedProcedure;
-    private Map<String, String> testStepProperties
+    String testStepName;
+    String driver;
+    String connectionString;
+    boolean storedProcedure;
+    Map<String, String> testStepProperties
     List<AssertionBuilder> assertions
 
     void name(String testStepName) {
@@ -41,15 +42,5 @@ class JdbcRequestDelegate {
         assertionDefinition.resolveStrategy = Closure.DELEGATE_FIRST
         assertionDefinition.call()
         this.assertions = delegate.assertionBuilders
-    }
-
-    TestStepBuilder buildJdbcRequestStep() {
-        JdbcRequestTestStepBuilder builder = new JdbcRequestTestStepBuilder(driver, connectionString, storedProcedure)
-        builder.named(testStepName)
-        if (testStepProperties) {
-            builder.withProperties(testStepProperties)
-        }
-        this.assertions.each { assertionBuilder -> builder.addAssertion(assertionBuilder) }
-        return builder
     }
 }
