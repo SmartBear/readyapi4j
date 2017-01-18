@@ -60,6 +60,13 @@ class DslDelegate {
         recipeBuilder.addStep(delegate.buildSoapRequestStep())
     }
 
+    void jdbcRequest(@DelegatesTo(JdbcRequestDelegate) Closure jdbcRequestDefinition) {
+        JdbcRequestDelegate delegate = new JdbcRequestDelegate()
+        jdbcRequestDefinition.delegate = delegate
+        jdbcRequestDefinition.call()
+        recipeBuilder.addStep(delegate.buildJdbcRequestStep())
+    }
+
     private void createRestRequest(String httpVerb, String URI, Closure configuration = null) {
         RestRequestStepBuilder request = TestSteps."$httpVerb"(URI)
         if (configuration) {
