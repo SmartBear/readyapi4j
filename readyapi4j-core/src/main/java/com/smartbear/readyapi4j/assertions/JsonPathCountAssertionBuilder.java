@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.JsonPathCountAssertion;
+import com.smartbear.readyapi4j.AssertionNames;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
@@ -33,13 +34,13 @@ public class JsonPathCountAssertionBuilder implements JsonPathAssertionBuilder<J
     public JsonPathCountAssertion build() {
         validateNotEmpty(jsonPathCountAssertion.getJsonPath(), "Missing JSON path, it's a mandatory parameter for JsonPathCountAssertion");
         validateNotEmpty(jsonPathCountAssertion.getExpectedCount(), "Missing expected count, it's a mandatory parameter for JsonPathCountAssertion");
-        jsonPathCountAssertion.setType(Assertions.JSON_PATH_COUNT_TYPE);
+        jsonPathCountAssertion.setType(AssertionNames.JSON_PATH_COUNT);
         return jsonPathCountAssertion;
     }
 
     public final static JsonPathCountAssertion create() {
         JsonPathCountAssertion assertion = new JsonPathCountAssertion();
-        assertion.setType(Assertions.JSON_PATH_COUNT_TYPE);
+        assertion.setType(AssertionNames.JSON_PATH_COUNT);
         return assertion;
     }
 }

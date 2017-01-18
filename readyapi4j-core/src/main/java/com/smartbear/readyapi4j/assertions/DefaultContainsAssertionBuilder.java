@@ -1,9 +1,8 @@
 package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.SimpleContainsAssertion;
+import com.smartbear.readyapi4j.AssertionNames;
 import com.smartbear.readyapi4j.Validator;
-
-import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
 public class DefaultContainsAssertionBuilder implements ContainsAssertionBuilder {
     protected SimpleContainsAssertion containsAssertion = new SimpleContainsAssertion();
@@ -33,13 +32,13 @@ public class DefaultContainsAssertionBuilder implements ContainsAssertionBuilder
     @Override
     public SimpleContainsAssertion build() {
         Validator.validateNotEmpty(containsAssertion.getToken(), "Missing token, it's a mandatory parameter for ContainsAssertion");
-        containsAssertion.setType(Assertions.CONTAINS_ASSERTION_TYPE);
+        containsAssertion.setType(AssertionNames.SIMPLE_CONTAINS);
         return containsAssertion;
     }
 
     public static SimpleContainsAssertion create() {
         SimpleContainsAssertion assertion = new SimpleContainsAssertion();
-        assertion.setType(Assertions.CONTAINS_ASSERTION_TYPE);
+        assertion.setType(AssertionNames.SIMPLE_CONTAINS);
         return assertion;
     }
 }

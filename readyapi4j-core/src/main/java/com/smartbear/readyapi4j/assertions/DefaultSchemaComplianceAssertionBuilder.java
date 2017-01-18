@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.SchemaComplianceAssertion;
+import com.smartbear.readyapi4j.AssertionNames;
 
 public class DefaultSchemaComplianceAssertionBuilder
         implements SchemaComplianceAssertionBuilder {
@@ -15,7 +16,7 @@ public class DefaultSchemaComplianceAssertionBuilder
 
     @Override
     public SchemaComplianceAssertion build() {
-        schemaComplianceAssertion.setType(Assertions.SCHEMA_COMPLIANCE_TYPE);
+        schemaComplianceAssertion.setType(AssertionNames.SCHEMA_COMPLIANCE);
         return schemaComplianceAssertion;
     }
 

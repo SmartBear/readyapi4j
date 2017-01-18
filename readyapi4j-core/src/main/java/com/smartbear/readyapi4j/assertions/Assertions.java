@@ -7,22 +7,6 @@ import static java.util.Arrays.asList;
  */
 
 public class Assertions {
-    public static final String CONTAINS_ASSERTION_TYPE = "Contains";
-    public static final String SCRIPT_ASSERTION_TYPE = "Script Assertion";
-    public static final String RESPONSE_SLA_TYPE = "Response SLA";
-    public static final String INVALID_HTTP_STATUS_CODES_TYPE = "Invalid HTTP Status Codes";
-    public static final String JDBC_STATUS_TYPE = "JDBC Status";
-    public static final String JDBC_TIMEOUT_TYPE = "JDBC Timeout";
-    public static final String JSON_PATH_MATCH_TYPE = "JsonPath Match";
-    public static final String JSON_PATH_COUNT_TYPE = "JsonPath Count";
-    public static final String NOT_CONTAINS_TYPE = "Not Contains";
-    public static final String VALID_HTTP_STATUS_CODES_TYPE = "Valid HTTP Status Codes";
-    public static final String XPATH_MATCH_TYPE = "XPath Match";
-    public static final String XQUERY_MATCH_TYPE = "XQuery Match";
-    public static final String SCHEMA_COMPLIANCE_TYPE = "Schema Compliance";
-    public static final String SOAP_FAULT_TYPE = "SOAP Fault";
-    public static final String NOT_SOAP_FAULT_TYPE = "Not SOAP Fault";
-
     @Deprecated
     public static JsonPathAssertionBuilder jsonPathContent(String jsonPath, String expectedContent) {
         return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
