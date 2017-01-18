@@ -3,7 +3,6 @@ package com.smartbear.readyapi4j.dsl.assertions
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
 import com.smartbear.readyapi4j.assertions.Assertions
 
-
 class ResponseSlaAssertionDelegate {
     private int time
     private List<AssertionBuilder> assertionBuilders
@@ -42,6 +41,6 @@ class ResponseSlaAssertionDelegate {
     }
 
     private void addAssertionBuilder(int time) {
-        assertionBuilders.add(Assertions.responseSLA(time))
+        assertionBuilders.add(Assertions.maxResponseTime(time))
     }
 }

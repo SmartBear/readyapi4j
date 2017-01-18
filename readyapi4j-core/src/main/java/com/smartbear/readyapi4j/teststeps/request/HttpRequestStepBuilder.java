@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 
 import static com.smartbear.readyapi4j.assertions.Assertions.contains;
 import static com.smartbear.readyapi4j.assertions.Assertions.invalidStatusCodes;
+import static com.smartbear.readyapi4j.assertions.Assertions.maxResponseTime;
 import static com.smartbear.readyapi4j.assertions.Assertions.notContains;
-import static com.smartbear.readyapi4j.assertions.Assertions.responseSLA;
 import static com.smartbear.readyapi4j.assertions.Assertions.script;
 import static com.smartbear.readyapi4j.assertions.Assertions.validStatusCodes;
 import static com.smartbear.readyapi4j.assertions.Assertions.xPathContains;
@@ -205,7 +205,7 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
     }
 
     public RequestBuilderType assertResponseTime(int timeInMillis) {
-        return addAssertion(responseSLA(timeInMillis));
+        return addAssertion(maxResponseTime(timeInMillis));
     }
 
     public RequestBuilderType assertContentType(String contentType) {

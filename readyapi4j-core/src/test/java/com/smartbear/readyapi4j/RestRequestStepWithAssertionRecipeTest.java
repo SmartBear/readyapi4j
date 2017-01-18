@@ -17,8 +17,8 @@ import java.util.Arrays;
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi4j.assertions.Assertions.contains;
 import static com.smartbear.readyapi4j.assertions.Assertions.invalidStatusCodes;
+import static com.smartbear.readyapi4j.assertions.Assertions.maxResponseTime;
 import static com.smartbear.readyapi4j.assertions.Assertions.notContains;
-import static com.smartbear.readyapi4j.assertions.Assertions.responseSLA;
 import static com.smartbear.readyapi4j.assertions.Assertions.script;
 import static com.smartbear.readyapi4j.assertions.Assertions.validStatusCodes;
 import static com.smartbear.readyapi4j.assertions.Assertions.xPathContains;
@@ -148,7 +148,7 @@ public class RestRequestStepWithAssertionRecipeTest {
     public void buildsRestRequestStepRecipeWithResponseSLAAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
                     GET(URI)
-                        .addAssertion(responseSLA(1000)
+                        .addAssertion(maxResponseTime(1000)
                         )
                 )
                 .buildTestRecipe();

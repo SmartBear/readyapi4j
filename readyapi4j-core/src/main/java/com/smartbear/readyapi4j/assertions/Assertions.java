@@ -2,6 +2,10 @@ package com.smartbear.readyapi4j.assertions;
 
 import static java.util.Arrays.asList;
 
+/**
+ * Utility class for building various types of AssertionBuilders when using the fluent API
+ */
+
 public class Assertions {
     public static final String CONTAINS_ASSERTION_TYPE = "Contains";
     public static final String SCRIPT_ASSERTION_TYPE = "Script Assertion";
@@ -124,7 +128,16 @@ public class Assertions {
         return new XQueryContainsAssertionBuilder(xQuery, expectedContent);
     }
 
+    @Deprecated
     public static ResponseSLAAssertionBuilder responseSLA(int maxResponseTime) {
+        return new DefaultResponseSLAAssertionBuilder(maxResponseTime);
+    }
+
+    public static ResponseSLAAssertionBuilder maxResponseTime(int maxResponseTime) {
+        return new DefaultResponseSLAAssertionBuilder(maxResponseTime);
+    }
+
+    public static ResponseSLAAssertionBuilder maxResponseTime(String maxResponseTime) {
         return new DefaultResponseSLAAssertionBuilder(maxResponseTime);
     }
 
