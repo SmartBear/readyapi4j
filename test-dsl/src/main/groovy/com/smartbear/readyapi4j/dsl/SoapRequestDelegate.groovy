@@ -40,6 +40,9 @@ class SoapRequestDelegate {
     void asserting(@DelegatesTo(SoapRequestAssertionsDelegate) Closure assertionsConfig) {
         def delegate = new SoapRequestAssertionsDelegate()
         assertionsConfig.delegate = delegate
+        //Have to use DELEGATE_FIRST here, otherwise Groovy end up calling 'get' method on DslDelegate with assertion
+        // name being converted into URI, e.g. "soapFault
+        assertionsConfig.resolveStrategy = Closure.DELEGATE_FIRST
         assertionsConfig.call()
         this.assertions = delegate.assertionBuilders
     }
