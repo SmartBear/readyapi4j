@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.SoapFaultAssertion;
+import com.smartbear.readyapi4j.AssertionNames;
 
 public class DefaultSoapFaultAssertionBuilder implements SoapFaultAssertionBuilder {
 
@@ -14,7 +15,7 @@ public class DefaultSoapFaultAssertionBuilder implements SoapFaultAssertionBuild
 
     @Override
     public SoapFaultAssertion build() {
-        soapFaultAssertion.setType(Assertions.SOAP_FAULT_TYPE);
+        soapFaultAssertion.setType(AssertionNames.SOAP_FAULT);
         return soapFaultAssertion;
     }
 

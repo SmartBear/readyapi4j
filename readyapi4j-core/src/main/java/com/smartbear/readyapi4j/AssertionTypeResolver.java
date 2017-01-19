@@ -21,6 +21,10 @@ import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion;
 import com.smartbear.readyapi.client.model.XPathContainsAssertion;
 import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
 
+/**
+ * Jackson type resolver for parsing assertions in JSON recipes into correct Assertion types
+ */
+
 class AssertionTypeResolver implements TypeIdResolver {
     private JavaType baseType;
 
@@ -72,7 +76,7 @@ class AssertionTypeResolver implements TypeIdResolver {
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, ResponseSLAAssertion.class);
             case AssertionNames.JDBC_STATUS:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, JdbcStatusAssertion.class);
-            case AssertionNames.JDBC_TIME_OUT:
+            case AssertionNames.JDBC_TIMEOUT:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, JdbcTimeoutAssertion.class);
             case AssertionNames.SCHEMA_COMPLIANCE:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, SchemaComplianceAssertion.class);

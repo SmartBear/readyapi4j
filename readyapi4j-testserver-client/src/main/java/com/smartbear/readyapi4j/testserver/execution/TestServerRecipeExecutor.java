@@ -1,10 +1,10 @@
 package com.smartbear.readyapi4j.testserver.execution;
 
 import com.smartbear.readyapi.client.model.TestCase;
-import com.smartbear.readyapi4j.RecipeFilter;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
+import com.smartbear.readyapi4j.execution.RecipeFilter;
 import com.smartbear.readyapi4j.extractor.ExtractorData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +25,12 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
         super(testServerClient);
     }
 
+    @Override
     public void addRecipeFilter(RecipeFilter recipeFilter) {
         recipeFilters.add(recipeFilter);
     }
 
+    @Override
     public void removeRecipeFilter(RecipeFilter recipeFilter) {
         recipeFilters.remove(recipeFilter);
     }

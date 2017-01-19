@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.XPathContainsAssertion;
+import com.smartbear.readyapi4j.AssertionNames;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
@@ -40,13 +41,13 @@ public class XPathContainsAssertionBuilder  implements XPathAssertionBuilder {
     public XPathContainsAssertion build() {
         validateNotEmpty(xPathContainsAssertion.getXpath(), "Missing Xpath, it's a mandatory parameter for XPathContainsAssertion");
         validateNotEmpty(xPathContainsAssertion.getExpectedContent(), "Missing expected content, it's a mandatory parameter for XPathContainsAssertion");
-        xPathContainsAssertion.setType(Assertions.XPATH_MATCH_TYPE);
+        xPathContainsAssertion.setType(AssertionNames.XPATH_MATCH);
         return xPathContainsAssertion;
     }
 
     public final static XPathContainsAssertion create() {
         XPathContainsAssertion assertion = new XPathContainsAssertion();
-        assertion.setType(Assertions.XPATH_MATCH_TYPE);
+        assertion.setType(AssertionNames.XPATH_MATCH);
         return assertion;
     }
 }

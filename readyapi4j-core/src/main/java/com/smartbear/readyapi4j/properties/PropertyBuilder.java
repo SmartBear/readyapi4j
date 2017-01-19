@@ -1,5 +1,9 @@
 package com.smartbear.readyapi4j.properties;
 
+/**
+ * Builds a property that will be added to a TestRecipe at the TestCase level
+ */
+
 public class PropertyBuilder {
     public class Property {
         private String key;

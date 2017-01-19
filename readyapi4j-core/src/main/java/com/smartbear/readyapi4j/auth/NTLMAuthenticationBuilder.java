@@ -4,6 +4,10 @@ import com.smartbear.readyapi.client.model.Authentication;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
+/**
+ * Builds an authentication object for NTLM authentication
+ */
+
 public class NTLMAuthenticationBuilder extends BasicAuthenticationBuilder {
 
     public NTLMAuthenticationBuilder(String username, String password) {

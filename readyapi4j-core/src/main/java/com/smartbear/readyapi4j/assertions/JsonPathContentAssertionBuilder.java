@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.JsonPathContentAssertion;
+import com.smartbear.readyapi4j.AssertionNames;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
@@ -28,13 +29,13 @@ public class JsonPathContentAssertionBuilder implements JsonPathAssertionBuilder
     public JsonPathContentAssertion build() {
         validateNotEmpty(jsonPathContentAssertion.getJsonPath(), "Missing JSON path, it's a mandatory parameter for JsonPathContentAssertion");
         validateNotEmpty(jsonPathContentAssertion.getExpectedContent(), "Missing expected content, it's a mandatory parameter for JsonPathContentAssertion");
-        jsonPathContentAssertion.setType(Assertions.JSON_PATH_MATCH_TYPE);
+        jsonPathContentAssertion.setType(AssertionNames.JSON_PATH_MATCH);
         return jsonPathContentAssertion;
     }
 
     public final static JsonPathContentAssertion create(){
         JsonPathContentAssertion assertion = new JsonPathContentAssertion();
-        assertion.setType(Assertions.JSON_PATH_MATCH_TYPE);
+        assertion.setType(AssertionNames.JSON_PATH_MATCH);
         return assertion;
     }
 }

@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
+import com.smartbear.readyapi4j.AssertionNames;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
@@ -28,13 +29,13 @@ public class XQueryContainsAssertionBuilder implements XQueryAssertionBuilder {
     public XQueryContainsAssertion build() {
         validateNotEmpty(xQueryContainsAssertion.getXquery(), "Missing XQuery, it's a mandatory parameter for XQueryContainsAssertion");
         validateNotEmpty(xQueryContainsAssertion.getExpectedContent(), "Missing expected content, it's a mandatory parameter for XQueryContainsAssertion");
-        xQueryContainsAssertion.setType(Assertions.XQUERY_MATCH_TYPE);
+        xQueryContainsAssertion.setType(AssertionNames.XQUERY_MATCH);
         return xQueryContainsAssertion;
     }
 
     public final static XQueryContainsAssertion create() {
         XQueryContainsAssertion assertion = new XQueryContainsAssertion();
-        assertion.setType(Assertions.XQUERY_MATCH_TYPE);
+        assertion.setType(AssertionNames.XQUERY_MATCH);
         return assertion;
     }
 }

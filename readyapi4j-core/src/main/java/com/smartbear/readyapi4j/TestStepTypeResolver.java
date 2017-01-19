@@ -1,6 +1,5 @@
 package com.smartbear.readyapi4j;
 
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
@@ -16,6 +15,10 @@ import com.smartbear.readyapi.client.model.PropertyTransferTestStep;
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.model.SoapMockResponseTestStep;
 import com.smartbear.readyapi.client.model.SoapRequestTestStep;
+
+/**
+ * Jackson type resolver for parsing teststeps in JSON recipes into correct TestStep types
+ */
 
 class TestStepTypeResolver implements TypeIdResolver {
     private static final String REST_REQUEST_TYPE = "REST Request";

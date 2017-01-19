@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.JdbcStatusAssertion;
+import com.smartbear.readyapi4j.AssertionNames;
 
 public class DefaultJdbcStatusAssertionBuilder implements JdbcStatusAssertionBuilder {
     private final JdbcStatusAssertion statusAssertion = new JdbcStatusAssertion();
@@ -13,13 +14,13 @@ public class DefaultJdbcStatusAssertionBuilder implements JdbcStatusAssertionBui
 
     @Override
     public JdbcStatusAssertion build() {
-        statusAssertion.setType(Assertions.JDBC_STATUS_TYPE);
+        statusAssertion.setType(AssertionNames.JDBC_STATUS);
         return statusAssertion;
     }
 
     public final static JdbcStatusAssertion create() {
         JdbcStatusAssertion assertion = new JdbcStatusAssertion();
-        assertion.setType(Assertions.JDBC_STATUS_TYPE);
+        assertion.setType(AssertionNames.JDBC_STATUS);
         return assertion;
     }
 }

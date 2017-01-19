@@ -1,7 +1,5 @@
 package com.smartbear.readyapi4j.attachments;
 
-
-import com.smartbear.readyapi.client.model.RequestAttachment;
 import com.sun.jersey.core.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.nio.file.Files;
+
+/**
+ * Utility class for adding attachments to a request
+ */
 
 public class Attachments {
 
@@ -47,7 +49,7 @@ public class Attachments {
         try {
             byte[] data = new byte[inputStream.available()];
             int readBytes = inputStream.read(data);
-            if(readBytes > 0) {
+            if (readBytes > 0) {
                 return byteArray(data, contentType);
             } else {
                 throw new IOException("Could not read inputStream");
@@ -70,8 +72,8 @@ public class Attachments {
         }
     }
 
-    public static RequestAttachmentBuilder string(String content, String contentType){
-        if(content != null && contentType != null){
+    public static RequestAttachmentBuilder string(String content, String contentType) {
+        if (content != null && contentType != null) {
             return RequestAttachmentBuilder
                     .getInstance()
                     .withContent(Base64.encode(content.getBytes()))
@@ -82,7 +84,7 @@ public class Attachments {
         }
     }
 
-    public static RequestAttachmentBuilder string(String content){
+    public static RequestAttachmentBuilder string(String content) {
         return string(content, "text/plain");
     }
 }

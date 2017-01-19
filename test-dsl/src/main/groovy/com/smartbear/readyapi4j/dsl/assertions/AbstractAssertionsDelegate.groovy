@@ -8,7 +8,6 @@ import com.smartbear.readyapi4j.assertions.ValidHttpStatusCodesAssertionBuilder
 
 import static com.smartbear.readyapi4j.assertions.Assertions.contains
 import static com.smartbear.readyapi4j.assertions.Assertions.notContains
-import static com.smartbear.readyapi4j.assertions.Assertions.responseSLA
 
 /**
  * An abstract class which contains common assertions applicable to multiple requests: SOAP, REST etc.
@@ -112,7 +111,7 @@ abstract class AbstractAssertionsDelegate {
      * @return TimeBasedAssertionDelegate
      */
     TimeBasedAssertionDelegate maxResponseTime(int maxResponseTime) {
-        return new TimeBasedAssertionDelegate({ BigDecimal time -> responseSLA(time.intValue()) },
+        return new TimeBasedAssertionDelegate({ BigDecimal time -> Assertions.maxResponseTime(time.intValue()) },
                 new BigDecimal(maxResponseTime), assertionBuilders)
     }
 }

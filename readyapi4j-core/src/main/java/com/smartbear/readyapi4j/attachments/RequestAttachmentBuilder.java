@@ -2,6 +2,10 @@ package com.smartbear.readyapi4j.attachments;
 
 import com.smartbear.readyapi.client.model.RequestAttachment;
 
+/**
+ * Builder class for RequestAttachment objects
+ */
+
 public class RequestAttachmentBuilder {
    private final RequestAttachment requestAttachment;
 

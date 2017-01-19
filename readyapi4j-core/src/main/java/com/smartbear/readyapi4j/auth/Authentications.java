@@ -1,5 +1,9 @@
 package com.smartbear.readyapi4j.auth;
 
+/**
+ * Utility class for adding authentication to a request
+ */
+
 public class Authentications {
     public static AuthenticationBuilder basic(String username, String password) {
         return new BasicAuthenticationBuilder(username, password);

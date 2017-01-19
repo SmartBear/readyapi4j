@@ -2,6 +2,10 @@ package com.smartbear.readyapi4j.auth;
 
 import com.smartbear.readyapi.client.model.Authentication;
 
+/**
+ * Builds an authentication object for OAuth2 authentication
+ */
+
 public class OAuth2AuthenticationBuilder implements AuthenticationBuilder {
 
     protected Authentication authentication = new Authentication();

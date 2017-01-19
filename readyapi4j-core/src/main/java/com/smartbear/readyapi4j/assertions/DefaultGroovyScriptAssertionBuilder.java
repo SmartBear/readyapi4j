@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.assertions;
 
 import com.smartbear.readyapi.client.model.GroovyScriptAssertion;
+import com.smartbear.readyapi4j.AssertionNames;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
@@ -20,13 +21,13 @@ public class DefaultGroovyScriptAssertionBuilder implements GroovyScriptAssertio
     @Override
     public GroovyScriptAssertion build() {
         validateNotEmpty(scriptAssertion.getScript(), "Missing script. Script is a mandatory parameter for ScriptAssertion");
-        scriptAssertion.setType(Assertions.SCRIPT_ASSERTION_TYPE);
+        scriptAssertion.setType(AssertionNames.GROOVY_SCRIPT);
         return scriptAssertion;
     }
 
     public final static GroovyScriptAssertion create() {
         GroovyScriptAssertion assertion = new GroovyScriptAssertion();
-        assertion.setType(Assertions.SCRIPT_ASSERTION_TYPE);
+        assertion.setType(AssertionNames.GROOVY_SCRIPT);
         return assertion;
     }
 }
