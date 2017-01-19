@@ -17,6 +17,7 @@ class PropertyTransferDslTest {
     public static final String LAST_STEP = 'thePost'
     public static final String sourcePath = '$.customer.address'
     public static final String targetPath = '$.customer'
+    private static final String TEST_STEP_NAME = 'PropertyTransferStep'
 
     @Test
     void buildsPropertyTransfer() throws Exception {
@@ -49,6 +50,24 @@ class PropertyTransferDslTest {
     }
 
     @Test
+    void buildsPropertyTransferStepWithName() throws Exception {
+        TestRecipe recipe = recipe {
+            transfer(fromPreviousResponse(sourcePath).toNextRequest(targetPath), TEST_STEP_NAME)
+        }
+        PropertyTransferTestStep propertyTransferStep = recipe.testCase.testSteps[0] as PropertyTransferTestStep
+        assert propertyTransferStep.name == TEST_STEP_NAME
+    }
+
+    @Test
+    void buildsPropertyTransferWithNameInClosure() throws Exception {
+        TestRecipe recipe = recipe {
+            transfer sourcePath name TEST_STEP_NAME from response to targetPath of request
+        }
+        PropertyTransferTestStep propertyTransferStep = recipe.testCase.testSteps[0] as PropertyTransferTestStep
+        assert propertyTransferStep.name == TEST_STEP_NAME
+    }
+
+    @Test
     void buildsPropertyTransferWithMultipleTargetMaps() throws Exception {
         TestRecipe recipe = recipe {
             get URI, {
@@ -60,7 +79,7 @@ class PropertyTransferDslTest {
             }
         }
 
-        PropertyTransfer transferStep = extractPropertyTransferStep(recipe)
+        PropertyTransfer transferStep = extractPropertyTransferFromTestStep(recipe)
         assert transferStep.target?.targetName == 'TheStep'
         assert transferStep.target?.property == 'Username'
         assert transferStep.target?.path == targetPath
@@ -72,7 +91,7 @@ class PropertyTransferDslTest {
             transfer(step: 'someStep', property: 'SomeProperty', path: sourcePath) to targetPath
         }
 
-        PropertyTransfer transferStep = extractPropertyTransferStep(recipe)
+        PropertyTransfer transferStep = extractPropertyTransferFromTestStep(recipe)
         assert transferStep.source?.sourceName == 'someStep'
         assert transferStep.source?.property == 'SomeProperty'
         assert transferStep.source?.path == sourcePath
@@ -84,13 +103,13 @@ class PropertyTransferDslTest {
             transfer sourcePath from response to(step: 'someStep', property: 'SomeProperty', path: targetPath)
         }
 
-        PropertyTransfer transferStep = extractPropertyTransferStep(recipe)
+        PropertyTransfer transferStep = extractPropertyTransferFromTestStep(recipe)
         assert transferStep.target?.targetName == 'someStep'
         assert transferStep.target?.property == 'SomeProperty'
         assert transferStep.target?.path == targetPath
     }
 
-    private static PropertyTransfer extractPropertyTransferStep(TestRecipe recipe) {
+    private static PropertyTransfer extractPropertyTransferFromTestStep(TestRecipe recipe) {
         List<TestStep> testSteps = recipe?.testCase?.testSteps
         if (!testSteps) {
             fail('No test case or test steps created')
@@ -99,7 +118,7 @@ class PropertyTransferDslTest {
     }
 
     private static void verifyPropertyTransferStep(TestRecipe recipe) {
-        PropertyTransfer transferStep = extractPropertyTransferStep(recipe)
+        PropertyTransfer transferStep = extractPropertyTransferFromTestStep(recipe)
         assert transferStep.source?.sourceName == FIRST_STEP
         assert transferStep.source?.property == 'Response'
         assert transferStep.source?.path == sourcePath
