@@ -1,13 +1,14 @@
 package com.smartbear.readyapi4j.dsl.assertions
 
 import com.smartbear.readyapi4j.assertions.AssertionBuilder
-import com.smartbear.readyapi4j.assertions.Assertions
 
-class ResponseSlaAssertionDelegate {
-    private int time
-    private List<AssertionBuilder> assertionBuilders
+class TimeBasedAssertionDelegate {
+    private Closure assertionBuilder;
+    private BigDecimal time;
+    private List<AssertionBuilder> assertionBuilders;
 
-    ResponseSlaAssertionDelegate(int time, List<AssertionBuilder> assertionBuilders) {
+    TimeBasedAssertionDelegate(Closure assertionBuilder, BigDecimal time, List<AssertionBuilder> assertionBuilders) {
+        this.assertionBuilder = assertionBuilder
         this.time = time
         this.assertionBuilders = assertionBuilders
     }
@@ -40,7 +41,7 @@ class ResponseSlaAssertionDelegate {
         getMinutes()
     }
 
-    private void addAssertionBuilder(int time) {
-        assertionBuilders.add(Assertions.maxResponseTime(time))
+    private void addAssertionBuilder(BigDecimal time) {
+        assertionBuilders.add((AssertionBuilder) assertionBuilder.call(time))
     }
 }
