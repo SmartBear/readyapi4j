@@ -2,8 +2,10 @@ package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.TestRecipe
 import com.smartbear.readyapi4j.TestRecipeBuilder
+import com.smartbear.readyapi4j.execution.RecipeExecutionException
 import com.smartbear.readyapi4j.teststeps.TestSteps
 import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcRequestTestStepBuilder
+import com.smartbear.readyapi4j.teststeps.mockresponse.SoapMockResponseTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder
 
@@ -59,6 +61,25 @@ class DslDelegate {
         soapRequestDefinition.delegate = delegate
         soapRequestDefinition.call()
         recipeBuilder.addStep(delegate.buildSoapRequestStep())
+    }
+
+    void soapMockResponse(@DelegatesTo(SoapMockResponseDelegate) Closure soapMockResponseDefinition) {
+        SoapMockResponseDelegate delegate = new SoapMockResponseDelegate()
+        soapMockResponseDefinition.delegate = delegate
+        soapMockResponseDefinition.call()
+
+        SoapMockResponseTestStepBuilder builder = new SoapMockResponseTestStepBuilder()
+                .named(delegate.testStepName)
+                .forBinding(delegate.binding)
+                .forOperation(delegate.operation)
+                .withPath(delegate.path)
+                .withPort(delegate.port)
+        try {
+            builder.withWsdlAt(new URL(delegate.wsdlUrl))
+        } catch (MalformedURLException e) {
+            throw new RecipeExecutionException("Not a valid WSDL location: $delegate.wsdlUrl", e)
+        }
+        recipeBuilder.addStep(builder)
     }
 
     void jdbcRequest(@DelegatesTo(JdbcRequestDelegate) Closure jdbcRequestDefinition) {
