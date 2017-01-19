@@ -7,6 +7,7 @@ import com.smartbear.readyapi4j.teststeps.TestSteps
 import com.smartbear.readyapi4j.teststeps.groovyscript.GroovyScriptTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcRequestTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.mockresponse.SoapMockResponseTestStepBuilder
+import com.smartbear.readyapi4j.teststeps.plugin.PluginTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.properties.PropertiesTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferTestStepBuilder
@@ -63,6 +64,18 @@ class DslDelegate {
         PropertiesTestStepBuilder propertiesTestStepBuilder = TestSteps.properties(properties)
         propertiesTestStepBuilder.named(testStepName)
         recipeBuilder.addStep(propertiesTestStepBuilder)
+    }
+
+    void pluginProvidedStep(@DelegatesTo(PluginTestStepDelegate) Closure pluginTestStepDefinition) {
+        PluginTestStepDelegate delegate = new PluginTestStepDelegate()
+        pluginTestStepDefinition.delegate = delegate
+        pluginTestStepDefinition.call()
+
+        PluginTestStepBuilder pluginTestStepBuilder = TestSteps.pluginTestStep(delegate.type)
+                .withConfigProperties(delegate.configuration)
+                .named(delegate.testStepName)
+
+        recipeBuilder.addStep(pluginTestStepBuilder)
     }
 
     static final Map request = Collections.unmodifiableMap([property: 'Request'])
