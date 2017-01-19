@@ -5,8 +5,8 @@ import com.smartbear.readyapi.client.model.NotSoapFaultAssertion
 import com.smartbear.readyapi.client.model.SoapFaultAssertion
 import com.smartbear.readyapi.client.model.SoapRequestTestStep
 import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion
+import com.smartbear.readyapi4j.AssertionNames
 import com.smartbear.readyapi4j.TestRecipe
-import com.smartbear.readyapi4j.assertions.Assertions
 import org.junit.Test
 
 import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
@@ -101,7 +101,7 @@ class SoapRequestDslTest {
 
         SoapRequestTestStep testStep = extractSoapTestStep(recipe)
         SoapFaultAssertion assertion = testStep.assertions[0] as SoapFaultAssertion
-        assert assertion.type == Assertions.SOAP_FAULT_TYPE
+        assert assertion.type == AssertionNames.SOAP_FAULT
     }
 
     @Test
@@ -119,7 +119,7 @@ class SoapRequestDslTest {
 
         SoapRequestTestStep testStep = extractSoapTestStep(recipe)
         NotSoapFaultAssertion assertion = testStep.assertions[0] as NotSoapFaultAssertion
-        assert assertion.type == Assertions.NOT_SOAP_FAULT_TYPE
+        assert assertion.type == AssertionNames.NOT_SOAP_FAULT
     }
 
     private static SoapRequestTestStep extractSoapTestStep(TestRecipe recipe) {

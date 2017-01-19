@@ -7,16 +7,25 @@ import static java.util.Arrays.asList;
  */
 
 public class Assertions {
+    /**
+     * Deprecated, use json() instead.
+     */
     @Deprecated
     public static JsonPathAssertionBuilder jsonPathContent(String jsonPath, String expectedContent) {
         return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
     }
 
+    /**
+     * Deprecated, use jsonCount() instead.
+     */
     @Deprecated
     public static JsonPathAssertionBuilder jsonPathCount(String jsonPath, int expectedCount) {
         return new JsonPathCountAssertionBuilder(jsonPath, expectedCount);
     }
 
+    /**
+     * Deprecated, use json() instead.
+     */
     @Deprecated
     public static JsonPathAssertionBuilder jsonContent(String jsonPath, String expectedContent) {
         return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
@@ -47,34 +56,43 @@ public class Assertions {
 
     public static GroovyScriptAssertionBuilder contentType(String contentType) {
         return new DefaultGroovyScriptAssertionBuilder(
-            "assert messageExchange.responseHeaders[\"Content-Type\"].contains( \"" + contentType + "\")");
+                "assert messageExchange.responseHeaders[\"Content-Type\"].contains( \"" + contentType + "\")");
     }
 
     public static GroovyScriptAssertionBuilder headerExists(String header) {
         return new DefaultGroovyScriptAssertionBuilder(
-            "assert messageExchange.responseHeaders.containsKey(\"" + header + "\")");
+                "assert messageExchange.responseHeaders.containsKey(\"" + header + "\")");
     }
 
     public static GroovyScriptAssertionBuilder headerValue(String header, String value) {
         return new DefaultGroovyScriptAssertionBuilder(
-            "assert messageExchange.responseHeaders[\"" + header + "\"].contains( \"" + value + "\")");
+                "assert messageExchange.responseHeaders[\"" + header + "\"].contains( \"" + value + "\")");
     }
 
     public static GroovyScriptAssertionBuilder script(String script) {
         return new DefaultGroovyScriptAssertionBuilder(script);
     }
 
+    /**
+     * Deprecated, use statusCodes() instead.
+     */
     @Deprecated
     public static HttpStatusCodeAssertionBuilder validStatusCodes() {
         return new ValidHttpStatusCodesAssertionBuilder();
     }
 
+    /**
+     * Deprecated, use statusCodes(String... statusCodes) instead.
+     */
     @Deprecated
     public static HttpStatusCodeAssertionBuilder validStatusCodes(String... statusCodes) {
         ValidHttpStatusCodesAssertionBuilder validHttpStatusCodesAssertionBuilder = new ValidHttpStatusCodesAssertionBuilder();
         return validHttpStatusCodesAssertionBuilder.withStatusCodes(asList(statusCodes));
     }
 
+    /**
+     * Deprecated, use statusCodes(Integer... statusCodes) instead.
+     */
     @Deprecated
     public static HttpStatusCodeAssertionBuilder validStatusCodes(Integer... statusCodes) {
         ValidHttpStatusCodesAssertionBuilder validHttpStatusCodesAssertionBuilder = new ValidHttpStatusCodesAssertionBuilder();
@@ -127,6 +145,9 @@ public class Assertions {
         return new XQueryContainsAssertionBuilder(xQuery, expectedContent);
     }
 
+    /**
+     * Deprecated, use maxResponseTime instead.
+     */
     @Deprecated
     public static ResponseSLAAssertionBuilder responseSLA(int maxResponseTime) {
         return new DefaultResponseSLAAssertionBuilder(maxResponseTime);

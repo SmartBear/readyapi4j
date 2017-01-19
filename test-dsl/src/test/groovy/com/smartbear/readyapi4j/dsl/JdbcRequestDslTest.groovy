@@ -4,11 +4,9 @@ import com.smartbear.readyapi.client.model.Assertion
 import com.smartbear.readyapi.client.model.JdbcRequestTestStep
 import com.smartbear.readyapi.client.model.JdbcStatusAssertion
 import com.smartbear.readyapi.client.model.JdbcTimeoutAssertion
+import com.smartbear.readyapi4j.AssertionNames
 import com.smartbear.readyapi4j.TestRecipe
 import org.junit.Test
-
-import static com.smartbear.readyapi4j.assertions.Assertions.JDBC_STATUS_TYPE
-import static com.smartbear.readyapi4j.assertions.Assertions.JDBC_TIMEOUT_TYPE
 
 class JdbcRequestDslTest {
     @Test
@@ -44,7 +42,7 @@ class JdbcRequestDslTest {
         }
 
         JdbcStatusAssertion assertion = extractFirstAssertion(recipe) as JdbcStatusAssertion
-        assert assertion.type == JDBC_STATUS_TYPE
+        assert assertion.type == AssertionNames.JDBC_STATUS
     }
 
     @Test
@@ -60,7 +58,7 @@ class JdbcRequestDslTest {
         }
 
         JdbcTimeoutAssertion assertion = extractFirstAssertion(recipe) as JdbcTimeoutAssertion
-        assert assertion.type == JDBC_TIMEOUT_TYPE
+        assert assertion.type == AssertionNames.JDBC_TIMEOUT
         assert assertion.timeout == '100000'
     }
 
