@@ -1,7 +1,7 @@
 package com.smartbear.readyapi4j.auth;
 
 /**
- * Utility class for creating AuthenticationBuilders
+ * Utility class for adding authentication to a request
  */
 
 public class Authentications {

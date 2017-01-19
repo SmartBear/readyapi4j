@@ -3,7 +3,7 @@ package com.smartbear.readyapi4j.extractor;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PathLanguage;
 
 /**
- * Defines an object that can extract a value from any recipe property after a recipe has executed
+ * Defines an object that can extract a value from any property (e.g. request, response) after a recipe has been executed
  */
 
 public class Extractor {
@@ -14,13 +14,13 @@ public class Extractor {
 
     private final ExtractorOperator operator;
 
-    public Extractor(String extractorProperty, String extractorPath, ExtractorOperator operator){
+    public Extractor(String extractorProperty, String extractorPath, ExtractorOperator operator) {
         this.property = extractorProperty;
         this.path = extractorPath;
         this.operator = operator;
     }
 
-    public Extractor(String extractorProperty, ExtractorOperator operator){
+    public Extractor(String extractorProperty, ExtractorOperator operator) {
         this.property = extractorProperty;
         this.path = "";
         this.operator = operator;
@@ -31,7 +31,7 @@ public class Extractor {
         return path;
     }
 
-    public void setPath(String path){
+    public void setPath(String path) {
         this.path = path;
     }
 
@@ -39,7 +39,7 @@ public class Extractor {
         return property;
     }
 
-    public void setProperty(String property){
+    public void setProperty(String property) {
         this.property = property;
     }
 

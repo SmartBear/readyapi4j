@@ -40,17 +40,17 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
 
     @Override
     public Execution submitRecipe(TestRecipe recipe) {
-        notifyRecipeFilters( recipe );
+        applyRecipeFilters(recipe);
         return postTestCase(recipe.getTestCase(), true);
     }
 
-    private void notifyRecipeFilters(TestRecipe recipe) {
-        recipeFilters.stream().forEach( filter -> filter.filterRecipe( recipe ));
+    private void applyRecipeFilters(TestRecipe recipe) {
+        recipeFilters.forEach(filter -> filter.filterRecipe(recipe));
     }
 
     @Override
     public Execution executeRecipe(TestRecipe recipe) {
-        notifyRecipeFilters( recipe );
+        applyRecipeFilters(recipe);
         return postTestCase(recipe.getTestCase(), false);
     }
 
@@ -71,7 +71,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
 
     @Override
     public void addRecipeFilter(RecipeFilter recipeFilter) {
-       recipeFilters.add(recipeFilter);
+        recipeFilters.add(recipeFilter);
     }
 
     @Override

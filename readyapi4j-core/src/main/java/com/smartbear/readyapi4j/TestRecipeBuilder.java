@@ -65,7 +65,7 @@ public class TestRecipeBuilder {
      *
      * @param jsonText the json recipe
      * @return the created TestRecipe
-     * @throws IOException if there was an error deserializing
+     * @throws IOException if there was an error during deserialization
      */
 
     public static TestRecipe createFrom(String jsonText) throws IOException {
@@ -99,7 +99,7 @@ public class TestRecipeBuilder {
      * Certificate file can be added on the TestServer in allowedFilePath directory. Otherwise it should be provided by the client.
      * Client will throw an exception if file doesn't exist on client and on server.
      *
-     * @param filePath Certificate file path on server
+     * @param filePath Certificate file path on local computer or on server
      */
     public TestRecipeBuilder withClientCertificate(String filePath) {
         testCase.setClientCertFileName(filePath);
@@ -107,7 +107,7 @@ public class TestRecipeBuilder {
     }
 
     /**
-     * @param password password for certificate configured on server
+     * @param password password for client certificate
      */
 
     public TestRecipeBuilder withClientCertificatePassword(String password) {
@@ -130,6 +130,7 @@ public class TestRecipeBuilder {
 
     /**
      * Adds a single property to the created TestCase
+     *
      * @param key
      * @param value
      */

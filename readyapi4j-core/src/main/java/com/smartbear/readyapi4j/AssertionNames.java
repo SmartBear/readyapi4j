@@ -1,7 +1,7 @@
 package com.smartbear.readyapi4j;
 
 /**
- * Constants for all types of assertions
+ * Constants containing the names of all assertions
  */
 
 public class AssertionNames {

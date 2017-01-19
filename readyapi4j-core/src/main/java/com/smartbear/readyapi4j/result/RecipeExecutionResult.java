@@ -18,13 +18,14 @@ public interface RecipeExecutionResult {
     long getTimeTaken();
 
     /**
-     * @return the underlying id of the execution
+     * @return the unique id to identify the execution. This id is used to get execution status/report and transaction
+     * for specific test step in the recipe.
      */
 
     String getExecutionId();
 
     /**
-     * @return the pass/fail status of this execution
+     * @return current status of the execution: INITIALIZED/RUNNING/PASSED/FAILED
      */
 
     ProjectResultReport.StatusEnum getStatus();

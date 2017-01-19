@@ -26,7 +26,7 @@ public interface Execution {
     List<String> getErrorMessages();
 
     /**
-     * Cancels this execution if it is still ongoing
+     * Cancels this execution if it is still running
      */
 
     void cancelExecution();
