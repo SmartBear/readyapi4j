@@ -3,6 +3,8 @@ package com.smartbear.readyapi4j.teststeps.plugin;
 import com.smartbear.readyapi.client.model.PluginTestStep;
 import com.smartbear.readyapi4j.teststeps.TestStepBuilder;
 
+import java.util.Map;
+
 public class PluginTestStepBuilder implements TestStepBuilder<PluginTestStep> {
     private final PluginTestStep pluginTestStep = new PluginTestStep();
 
@@ -12,6 +14,11 @@ public class PluginTestStepBuilder implements TestStepBuilder<PluginTestStep> {
 
     public PluginTestStepBuilder named(String testStepName) {
         pluginTestStep.setName(testStepName);
+        return this;
+    }
+
+    public PluginTestStepBuilder withConfigProperties(Map<String, Object> configuration) {
+        pluginTestStep.getConfiguration().putAll(configuration);
         return this;
     }
 

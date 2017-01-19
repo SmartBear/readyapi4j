@@ -10,6 +10,7 @@ import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
 class ScriptTestStepDslTest {
 
     private static final String SCRIPT_TEXT = "println 'Peekaboo, little Earth'"
+    private static final String TEST_STEP_NAME = 'GroovyTestStep'
 
     @Test
     void buildsSimpleRecipe() throws Exception {
@@ -18,6 +19,17 @@ class ScriptTestStepDslTest {
         }
 
         GroovyScriptTestStep singleStep = extractFirstTestStep(recipe) as GroovyScriptTestStep
+        assert singleStep.script == SCRIPT_TEXT
+    }
+
+    @Test
+    void buildsGroovyStepWithName() throws Exception {
+        TestRecipe recipe = recipe {
+            groovyScriptStep SCRIPT_TEXT, TEST_STEP_NAME
+        }
+
+        GroovyScriptTestStep singleStep = extractFirstTestStep(recipe) as GroovyScriptTestStep
+        assert singleStep.name == TEST_STEP_NAME
         assert singleStep.script == SCRIPT_TEXT
     }
 
