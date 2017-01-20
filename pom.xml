@@ -10,7 +10,7 @@
         <module>readyapi4j-testserver-client</module>
         <module>readyapi4j-local</module>
         <module>readyapi4j-facade</module>
-        <module>test-dsl</module>
+        <module>readyapi4j-groovy-dsl</module>
     </modules>
     <packaging>pom</packaging>
     <name>Ready!API TestServer Client</name>
