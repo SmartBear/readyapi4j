@@ -3,7 +3,9 @@ package com.smartbear.readyapi4j.local.execution;
 import com.eviware.soapui.impl.wsdl.testcase.WsdlProjectRunner;
 import com.eviware.soapui.model.iface.MessageExchange;
 import com.eviware.soapui.model.testsuite.MessageExchangeTestStepResult;
+import com.eviware.soapui.model.testsuite.TestCase;
 import com.eviware.soapui.model.testsuite.TestCaseRunner;
+import com.eviware.soapui.model.testsuite.TestProperty;
 import com.eviware.soapui.model.testsuite.TestRunner;
 import com.eviware.soapui.model.testsuite.TestStepResult;
 import com.eviware.soapui.model.testsuite.TestSuiteRunner;
@@ -20,6 +22,7 @@ import com.smartbear.readyapi4j.result.RecipeExecutionResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,7 +101,13 @@ public class SoapUIRecipeExecution implements Execution {
 
     private TestCaseResultReport makeTestCaseResultReport(TestCaseRunner testCaseResult) {
         TestCaseResultReport report = new TestCaseResultReport();
-        report.setTestCaseName(testCaseResult.getTestCase().getName());
+        TestCase testCase = testCaseResult.getTestCase();
+        report.setTestCaseName(testCase.getName());
+        Map<String, String> testCaseProperties = new HashMap<>();
+        report.setProperties(testCaseProperties);
+        for (TestProperty testProperty : testCase.getProperties().values()) {
+            testCaseProperties.put(testProperty.getName(), testProperty.getValue());
+        }
         List<TestStepResultReport> testStepResultReports = new ArrayList<>();
         for (TestStepResult stepResult : testCaseResult.getResults()) {
             testStepResultReports.add(makeTestStepResultReport(stepResult));

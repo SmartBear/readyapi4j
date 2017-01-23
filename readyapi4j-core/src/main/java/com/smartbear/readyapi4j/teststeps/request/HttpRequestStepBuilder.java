@@ -224,6 +224,9 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
     }
 
     public RequestBuilderType withExtractors(Extractor... argExtractors) {
+        if (testStep.getName() == null) {
+            throw new IllegalStateException("Test step name is required when using data extractors.");
+        }
         extractors.addAll(Arrays.stream(argExtractors)
                 .filter(extractor -> extractor != null)
                 .collect(Collectors.toList()));

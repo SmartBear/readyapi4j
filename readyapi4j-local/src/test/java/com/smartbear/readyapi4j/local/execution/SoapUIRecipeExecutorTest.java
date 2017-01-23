@@ -8,6 +8,7 @@ import com.smartbear.readyapi.util.rest.Pair;
 import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.Execution;
+import com.smartbear.readyapi4j.extractor.ExtractorData;
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PathLanguage;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -19,6 +20,7 @@ import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.getPostedJs
 import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.startLocalServer;
 import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.stopLocalServer;
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
+import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
@@ -49,6 +51,9 @@ public class SoapUIRecipeExecutorTest {
     private static final String ASSERTION_JSON_VALUE = "Json World";
     private static final String JSON_PATH_ALTERNATE = "$.alternatePath";
     private static final String JSON_PATH_MESSAGE = "$.message";
+
+    private static final String GOOGLE_ENDPOINT = "http://maps.googleapis.com";
+    private static final String URI = GOOGLE_ENDPOINT + "/maps/api/geocode/xml";
 
     private SoapUIRecipeExecutor executor = new SoapUIRecipeExecutor();
     private static String serverURL;
@@ -147,6 +152,25 @@ public class SoapUIRecipeExecutorTest {
 
         verify(listenerMock, timeout(1000).times(1)).executionStarted(any());
         verify(listenerMock, timeout(20000).times(1)).executionFinished(any());
+    }
+
+    @Test
+    public void extractsDataAfterRecipeExecution() {
+        final String[] extractedProperty = {""};
+        TestRecipe recipe = newTestRecipe(
+                POST(URI)
+                        .named("RestRequest")
+                        .withExtractors(
+                                propertyExtractor("Endpoint", property -> extractedProperty[0] = property)))
+                .buildTestRecipe();
+
+        assertThat(recipe.getTestCase().getProperties().size(), is(2));
+        assertThat(recipe.getTestCase().getProperties().get("Endpoint" + recipe.getExtractorData().getExtractorDataId()), is(""));
+        assertThat(recipe.getTestCase().getProperties().get(ExtractorData.EXTRACTOR_DATA_KEY), is(not(nullValue())));
+
+        Execution execution = executor.executeRecipe(recipe);
+        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(extractedProperty[0], is(GOOGLE_ENDPOINT)); //Make sure property value is extracted after execution
     }
 
     private TestRecipe buildPropertyTransferWithJsonPathExtractionTestRecipe() {

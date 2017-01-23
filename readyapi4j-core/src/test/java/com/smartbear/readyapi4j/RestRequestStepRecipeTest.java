@@ -394,6 +394,7 @@ public class RestRequestStepRecipeTest {
         final String[] extractedProperty = {""};
         TestRecipe recipe = newTestRecipe(
                     POST(URI)
+                            .named("RestRequest")
                         .withExtractors(
                                 propertyExtractor("Endpoint", property -> extractedProperty[0] = property)))
                 .buildTestRecipe();
@@ -415,6 +416,7 @@ public class RestRequestStepRecipeTest {
         final String[] extractedProperty = {""};
         TestRecipe recipe = newTestRecipe(
                     POST(URI)
+                            .named("RestRequest")
                         .withExtractors(
                                 pathExtractor("$[0].Endpoint", property -> extractedProperty[0] = property)))
                 .buildTestRecipe();
