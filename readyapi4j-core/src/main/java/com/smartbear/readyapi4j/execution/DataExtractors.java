@@ -30,30 +30,27 @@ public class DataExtractors {
                         extractorDataIdList.contains(testCaseResultReport.getProperties().get(ExtractorData.EXTRACTOR_DATA_KEY)))
                 .findAny();
 
-        if (resultReport.isPresent()) {
-            Map<String, String> properties = resultReport.get().getProperties();
+        resultReport.ifPresent(testCaseResultReport -> {
+            Map<String, String> properties = testCaseResultReport.getProperties();
             runExtractorFunctions(extractorDataList, properties);
 
             // After run, remove all unnecessary properties
             properties.entrySet().removeIf(entry -> entry.getKey().contains(properties.get(ExtractorData.EXTRACTOR_DATA_KEY)));
             properties.remove(ExtractorData.EXTRACTOR_DATA_KEY);
-        }
+        });
     }
 
 
     private static void runExtractorFunctions(List<ExtractorData> extractorDataList, Map<String, String> properties) {
-        ExtractorData extractorData = extractorDataList
+        Optional<ExtractorData> extractorData = extractorDataList
                 .stream()
                 .filter(ed -> ed.getExtractorDataId().equals(properties.get(ExtractorData.EXTRACTOR_DATA_KEY)))
-                .findAny()
-                .orElse(null);
-        if (extractorData != null) {
-            properties.forEach((key, value) -> {
-                ExtractorOperator operator = extractorData.getExtractorOperator(key);
-                if (operator != null) {
-                    operator.extractValue(value);
-                }
-            });
-        }
+                .findAny();
+        extractorData.ifPresent(extractorData1 -> properties.forEach((key, value) -> {
+            ExtractorOperator operator = extractorData1.getExtractorOperator(key);
+            if (operator != null) {
+                operator.extractValue(value);
+            }
+        }));
     }
 }
