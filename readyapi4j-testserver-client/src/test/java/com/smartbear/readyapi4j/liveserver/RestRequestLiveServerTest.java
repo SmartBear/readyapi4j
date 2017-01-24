@@ -24,8 +24,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeoutException;
 
 import static com.google.code.tempusfugit.concurrency.CountDownLatchWithTimeout.await;
-import static com.smartbear.readyapi4j.extractor.Extractors.pathExtractor;
-import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
+import static com.smartbear.readyapi4j.extractor.Extractors.fromResponse;
+import static com.smartbear.readyapi4j.extractor.Extractors.fromProperty;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -61,7 +61,7 @@ public class RestRequestLiveServerTest {
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
-                        .withExtractors(pathExtractor("$.name", property -> extractedProperty[0] = property)));
+                        .withExtractors(fromResponse("$.name", property -> extractedProperty[0] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
         if(report.isPresent()){
@@ -76,7 +76,7 @@ public class RestRequestLiveServerTest {
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
-                        .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property)));
+                        .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
         if(report.isPresent()){
@@ -91,8 +91,8 @@ public class RestRequestLiveServerTest {
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
-                        .withExtractors(pathExtractor("$.name", property -> extractedProperty[0] = property),
-                                pathExtractor("$.description", property -> extractedProperty[1] = property)));
+                        .withExtractors(fromResponse("$.name", property -> extractedProperty[0] = property),
+                                fromResponse("$.description", property -> extractedProperty[1] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
         if(report.isPresent()){
@@ -108,8 +108,8 @@ public class RestRequestLiveServerTest {
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
-                        .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property),
-                                propertyExtractor("Response", property -> extractedProperty[1] = property)));
+                        .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property),
+                                fromProperty("Response", property -> extractedProperty[1] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
         if(report.isPresent()){
@@ -126,8 +126,8 @@ public class RestRequestLiveServerTest {
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
-                        .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property),
-                                pathExtractor("$.name", property -> extractedProperty[1] = property)));
+                        .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property),
+                                fromResponse("$.name", property -> extractedProperty[1] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
         if(report.isPresent()){
@@ -143,10 +143,10 @@ public class RestRequestLiveServerTest {
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
-                        .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property)),
+                        .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property)),
                 GET(ENDPOINT_WITH_PATH)
                         .named(SECOND_REST_REQUEST_NAME)
-                        .withExtractors(pathExtractor("$.name", property -> extractedProperty[1] = property)));
+                        .withExtractors(fromResponse("$.name", property -> extractedProperty[1] = property)));
 
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
@@ -163,11 +163,11 @@ public class RestRequestLiveServerTest {
         TestRecipe testRecipe1 = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
-                        .withExtractors(propertyExtractor("Endpoint", property -> extractedProperty[0] = property)));
+                        .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property)));
         TestRecipe testRecipe2 = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(SECOND_REST_REQUEST_NAME)
-                        .withExtractors(pathExtractor("$.name", property -> extractedProperty[1] = property)));
+                        .withExtractors(fromResponse("$.name", property -> extractedProperty[1] = property)));
 
         ExecutionListener listener = new ExecutionListener() {
             private String executionID;

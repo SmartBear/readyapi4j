@@ -12,14 +12,15 @@ import com.google.common.collect.Lists;
 import com.smartbear.ready.recipe.JsonRecipeParser;
 import com.smartbear.ready.recipe.teststeps.TestCaseStruct;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
-import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.TestRecipe;
+import com.smartbear.readyapi4j.execution.DataExtractors;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.execution.RecipeExecutionException;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
 import com.smartbear.readyapi4j.execution.RecipeFilter;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     @Override
     public Execution submitRecipe(TestRecipe recipe) {
         applyRecipeFilters(recipe);
-        return postTestCase(recipe.getTestCase(), true);
+        return postRecipe(recipe, true);
     }
 
     private void applyRecipeFilters(TestRecipe recipe) {
@@ -51,7 +52,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     @Override
     public Execution executeRecipe(TestRecipe recipe) {
         applyRecipeFilters(recipe);
-        return postTestCase(recipe.getTestCase(), false);
+        return postRecipe(recipe, false);
     }
 
     @Override
@@ -79,25 +80,16 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
         recipeFilters.remove(recipeFilter);
     }
 
-    private Execution postTestCase(TestCase testCase, boolean async) {
-
-        try {
-            return postRecipe(getObjectMapper().writeValueAsString(testCase), async);
-        } catch (Exception e) {
-            notifyErrorOccurred(e);
-            throw new RecipeExecutionException("Failed to execute Test recipe", e);
-        }
-    }
-
-    private Execution postRecipe(String jsonText, boolean async) {
+    private Execution postRecipe(TestRecipe testRecipe, boolean async) {
         String executionId = UUID.randomUUID().toString();
         try {
+            String jsonText = getObjectMapper().writeValueAsString(testRecipe.getTestCase());
             TestCaseStruct testCaseStruct = getObjectMapper().readValue(jsonText, TestCaseStruct.class);
             WsdlProject project = recipeParser.parse(testCaseStruct);
             StringToObjectMap properties = new StringToObjectMap();
 
             if (async) {
-                prepareAsyncExecution(executionId, project, properties);
+                prepareAsyncExecution(testRecipe, executionId, project, properties);
             }
 
             WsdlProjectRunner projectRunner = new WsdlProjectRunner(project, properties);
@@ -106,7 +98,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
             executionsMap.put(executionId, execution);
             projectRunner.start(async);
             if (!async) {
-                notifyExecutionFinished(execution.getCurrentReport());
+                notifyExecutionFinished(testRecipe, execution.getCurrentReport());
             }
             return execution;
         } catch (Exception e) {
@@ -124,7 +116,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
         return objectMapper;
     }
 
-    private void prepareAsyncExecution(String executionId, WsdlProject project, StringToObjectMap properties) {
+    private void prepareAsyncExecution(TestRecipe testRecipe, String executionId, WsdlProject project, StringToObjectMap properties) {
         project.addProjectRunListener(new ProjectRunListenerAdapter() {
             @Override
             public void beforeRun(ProjectRunner projectRunner, ProjectRunContext runContext) {
@@ -138,7 +130,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
             public void afterRun(ProjectRunner projectRunner, ProjectRunContext runContext) {
                 String executionId = (String) runContext.getProperty(LOCAL_CLIENT_EXECUTION_ID);
                 if (executionId != null) {
-                    notifyExecutionFinished(executionsMap.get(executionId).getCurrentReport());
+                    notifyExecutionFinished(testRecipe, executionsMap.get(executionId).getCurrentReport());
                 }
             }
         });
@@ -160,7 +152,8 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
         }
     }
 
-    private void notifyExecutionFinished(ProjectResultReport projectResultReport) {
+    private void notifyExecutionFinished(TestRecipe testRecipe, ProjectResultReport projectResultReport) {
+        DataExtractors.runDataExtractors(projectResultReport, Arrays.asList(testRecipe.getExtractorData()));
         for (ExecutionListener executionListener : executionListeners) {
             executionListener.executionFinished(projectResultReport);
         }
