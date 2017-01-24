@@ -9,6 +9,7 @@ import com.smartbear.readyapi4j.extractor.ExtractorOperator;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -20,19 +21,18 @@ public class DataExtractors {
                 .stream()
                 .map(ExtractorData::getExtractorDataId)
                 .collect(Collectors.toList());
-        TestCaseResultReport resultReport = executionStatus
+        Optional<TestCaseResultReport> resultReport = executionStatus
                 .getTestSuiteResultReports()
                 .stream()
                 .map(TestSuiteResultReport::getTestCaseResultReports)
                 .flatMap(Collection::stream)
                 .filter(testCaseResultReport ->
                         extractorDataIdList.contains(testCaseResultReport.getProperties().get(ExtractorData.EXTRACTOR_DATA_KEY)))
-                .findAny()
-                .orElse(null);
+                .findAny();
 
-        if (resultReport != null) {
-            Map<String, String> properties = resultReport.getProperties();
-            runExtractors(extractorDataList, properties);
+        if (resultReport.isPresent()) {
+            Map<String, String> properties = resultReport.get().getProperties();
+            runExtractorFunctions(extractorDataList, properties);
 
             // After run, remove all unnecessary properties
             properties.entrySet().removeIf(entry -> entry.getKey().contains(properties.get(ExtractorData.EXTRACTOR_DATA_KEY)));
@@ -41,7 +41,7 @@ public class DataExtractors {
     }
 
 
-    private static void runExtractors(List<ExtractorData> extractorDataList, Map<String, String> properties) {
+    private static void runExtractorFunctions(List<ExtractorData> extractorDataList, Map<String, String> properties) {
         ExtractorData extractorData = extractorDataList
                 .stream()
                 .filter(ed -> ed.getExtractorDataId().equals(properties.get(ExtractorData.EXTRACTOR_DATA_KEY)))
