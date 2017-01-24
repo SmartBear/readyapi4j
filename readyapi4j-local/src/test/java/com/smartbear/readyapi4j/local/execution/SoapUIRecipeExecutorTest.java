@@ -20,7 +20,7 @@ import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.getPostedJs
 import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.startLocalServer;
 import static com.smartbear.readyapi.util.rest.local.LocalServerUtil.stopLocalServer;
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
-import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
+import static com.smartbear.readyapi4j.extractor.Extractors.fromProperty;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.groovyScriptStep;
@@ -161,7 +161,7 @@ public class SoapUIRecipeExecutorTest {
                 POST(URI)
                         .named("RestRequest")
                         .withExtractors(
-                                propertyExtractor("Endpoint", property -> extractedProperty[0] = property)))
+                                fromProperty("Endpoint", property -> extractedProperty[0] = property)))
                 .buildTestRecipe();
 
         assertThat(recipe.getTestCase().getProperties().size(), is(2));

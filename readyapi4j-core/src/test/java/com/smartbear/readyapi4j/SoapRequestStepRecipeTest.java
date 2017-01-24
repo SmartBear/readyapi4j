@@ -18,8 +18,8 @@ import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi4j.attachments.Attachments.byteArray;
 import static com.smartbear.readyapi4j.attachments.Attachments.stream;
 import static com.smartbear.readyapi4j.attachments.Attachments.string;
-import static com.smartbear.readyapi4j.extractor.Extractors.pathExtractor;
-import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
+import static com.smartbear.readyapi4j.extractor.Extractors.fromResponse;
+import static com.smartbear.readyapi4j.extractor.Extractors.fromProperty;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.soapRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -124,7 +124,7 @@ public class SoapRequestStepRecipeTest {
                         .withParameter("CountryName", "Sweden")
                         .withPathParameter("//*:CityName", "Stockholm")
                         .withExtractors(
-                                propertyExtractor("Endpoint", property -> extractedProperty[0] = property)))
+                                fromProperty("Endpoint", property -> extractedProperty[0] = property)))
                 .buildTestRecipe();
 
         // This should not be set only after building the testrecipe, it should be set after run
@@ -150,7 +150,7 @@ public class SoapRequestStepRecipeTest {
                         .withParameter("CountryName", "Sweden")
                         .withPathParameter("//*:CityName", "Stockholm")
                         .withExtractors(
-                                pathExtractor("$[0].Endpoint", property -> extractedProperty[0] = property)))
+                                fromResponse("$[0].Endpoint", property -> extractedProperty[0] = property)))
                 .buildTestRecipe();
 
         // This should not be set only after building the testrecipe, it should be set after run
