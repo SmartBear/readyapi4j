@@ -28,8 +28,8 @@ import static com.smartbear.readyapi4j.attachments.Attachments.string;
 import static com.smartbear.readyapi4j.auth.Authentications.basic;
 import static com.smartbear.readyapi4j.auth.Authentications.kerberos;
 import static com.smartbear.readyapi4j.auth.Authentications.ntlm;
-import static com.smartbear.readyapi4j.extractor.Extractors.pathExtractor;
-import static com.smartbear.readyapi4j.extractor.Extractors.propertyExtractor;
+import static com.smartbear.readyapi4j.extractor.Extractors.fromResponse;
+import static com.smartbear.readyapi4j.extractor.Extractors.fromProperty;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.DELETE;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.POST;
@@ -394,8 +394,9 @@ public class RestRequestStepRecipeTest {
         final String[] extractedProperty = {""};
         TestRecipe recipe = newTestRecipe(
                     POST(URI)
+                            .named("RestRequest")
                         .withExtractors(
-                                propertyExtractor("Endpoint", property -> extractedProperty[0] = property)))
+                                fromProperty("Endpoint", property -> extractedProperty[0] = property)))
                 .buildTestRecipe();
 
         // This should not be set only after building the testrecipe, it should be set after run
@@ -415,8 +416,9 @@ public class RestRequestStepRecipeTest {
         final String[] extractedProperty = {""};
         TestRecipe recipe = newTestRecipe(
                     POST(URI)
+                            .named("RestRequest")
                         .withExtractors(
-                                pathExtractor("$[0].Endpoint", property -> extractedProperty[0] = property)))
+                                fromResponse("$[0].Endpoint", property -> extractedProperty[0] = property)))
                 .buildTestRecipe();
 
         // This should not be set only after building the testrecipe, it should be set after run
