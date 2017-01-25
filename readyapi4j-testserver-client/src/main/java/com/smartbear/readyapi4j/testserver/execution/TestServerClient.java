@@ -1,11 +1,11 @@
 package com.smartbear.readyapi4j.testserver.execution;
 
-import com.smartbear.readyapi4j.testserver.RepositoryProjectExecutionRequest;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi4j.execution.Execution;
+import com.smartbear.readyapi4j.testserver.RepositoryProjectExecutionRequest;
 import io.swagger.client.auth.HttpBasicAuth;
 
 import java.io.File;
@@ -13,6 +13,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Main class for invoking a Ready! API TestServer instance
+ */
 
 public class TestServerClient {
 
@@ -29,17 +33,47 @@ public class TestServerClient {
     private HttpBasicAuth authentication;
 
 
+    /**
+     * Creates a TestServerClient for a TestServer instance at the specified endpoint
+     *
+     * @param scheme the endpoint protocol to use
+     * @param host the hostname to use
+     * @param port the port to use
+     */
+
     public TestServerClient(Scheme scheme, String host, int port) {
         this(scheme, host, port, ServerDefaults.VERSION_PREFIX, new CodegenBasedTestServerApi());
     }
+
+    /**
+     * Creates a TestServerClient for a TestServer instance at the specified endpoint with the default scheme
+     *
+     * @param host the hostname to use
+     * @param port the port to use
+     */
 
     public TestServerClient(String host, int port) {
         this(ServerDefaults.DEFAULT_SCHEME, host, port);
     }
 
+    /**
+     * Creates a TestServerClient for a TestServer instance at the specified endpoint with the default scheme and port
+     *
+     * @param host the hostname to use
+     */
+
     public TestServerClient(String host) {
         this(host, ServerDefaults.DEFAULT_PORT);
     }
+
+
+    /**
+     * Builds a TestServerClient for the specified URL
+     *
+     * @param testserverUrl the complete URL of the TestServer instance
+     * @return a constructed TestServerClient instance
+     * @throws MalformedURLException if the URL was invalid
+     */
 
     public static TestServerClient fromUrl(String testserverUrl) throws MalformedURLException {
         URL url = new URL(testserverUrl);
@@ -47,13 +81,25 @@ public class TestServerClient {
                 url.getPort() == -1 ? 80 : url.getPort());
     }
 
+    /**
+     * @return a class for executing Test Recipes on the TestServer
+     */
+
     public TestServerRecipeExecutor createRecipeExecutor() {
         return new TestServerRecipeExecutor(this);
     }
 
+    /**
+     * @return a class for executing standalone projects on the TestServer
+     */
+
     public ProjectExecutor createProjectExecutor() {
         return new ProjectExecutor(this);
     }
+
+    /**
+     * @return a class for validating APIs against a Swagger definition
+     */
 
     public SwaggerApiValidator createApiValidator() {
         return new SwaggerApiValidator(this);
@@ -70,23 +116,36 @@ public class TestServerClient {
         return String.format("%s://%s:%d%s", scheme.getValue(), host, port, basePath);
     }
 
+    /**
+     * Sets the user credentials to use to authenticate requests sent to the configured TestServer instance
+     */
+
     public void setCredentials(String username, String password) {
         authentication = new HttpBasicAuth();
         authentication.setUsername(username);
         authentication.setPassword(password);
     }
 
+    /**
+     * Fluent method for setting the user credentials to use to authenticate requests sent to the
+     * configured TestServer instance
+     */
+
     public TestServerClient withCredentials(String username, String password) {
         setCredentials(username, password);
         return this;
     }
+
+    /**
+     * Sets the TestServerApi implementation to use for sending requests to the TestServer
+     */
 
     public TestServerClient withApiStub(TestServerApi apiStub) {
         this.apiStub = apiStub;
         return this;
     }
 
-    public String getBaseUrl() {
+    protected String getBaseUrl() {
         return baseUrl;
     }
 
@@ -123,15 +182,34 @@ public class TestServerClient {
         apiStub.cancelExecution(executionID, authentication);
     }
 
+    /**
+     * Cancels an execution previously created by one of the executors
+     *
+     * @param execution the execution to cancle
+     * @return the canceled execution
+     */
+
     public TestServerExecution cancelExecution(final TestServerExecution execution) {
         ProjectResultReport projectResultReport = apiStub.cancelExecution(execution.getId(), authentication);
         execution.addResultReport(projectResultReport);
         return execution;
     }
 
+    /**
+     * Returns the HAR Log entry/entries for a specified transaction within a TestServer execution
+     *
+     * @param execution the execution to query
+     * @param transactionId the id of a specific transaction within the specified execution
+     * @return the HAR Log for the specified transation
+     */
+
     public HarLogRoot getTransactionLog(final Execution execution, String transactionId) {
         return apiStub.getTransactionLog(execution.getId(), transactionId, authentication);
     }
+
+    /**
+     * @return a list of recent executions stored on the TestServer
+     */
 
     public List<Execution> getExecutions() {
         List<Execution> executions = new ArrayList<>();

@@ -1,8 +1,8 @@
 package com.smartbear.readyapi4j.testserver.execution;
 
-import com.smartbear.readyapi4j.testserver.RepositoryProjectExecutionRequest;
 import com.smartbear.readyapi.client.model.CustomProperties;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
+import com.smartbear.readyapi4j.testserver.RepositoryProjectExecutionRequest;
 import com.sun.jersey.api.client.GenericType;
 import org.junit.Before;
 import org.junit.Test;

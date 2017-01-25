@@ -1,9 +1,9 @@
 package com.smartbear.readyapi4j.testserver.execution;
 
+import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.testserver.RepositoryProjectExecutionRequest;
-import com.smartbear.readyapi.client.model.ProjectResultReport;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Before;
 import org.junit.Test;

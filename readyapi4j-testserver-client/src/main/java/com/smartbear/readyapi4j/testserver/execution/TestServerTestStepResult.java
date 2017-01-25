@@ -1,13 +1,12 @@
-package com.smartbear.readyapi4j.testserver.result;
+package com.smartbear.readyapi4j.testserver.execution;
 
 import com.smartbear.readyapi.client.model.HarEntry;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 import com.smartbear.readyapi4j.result.AbstractTestStepResult;
-import com.smartbear.readyapi4j.testserver.execution.TestServerExecution;
 
 /**
- * Result wrapper for individual TestSteps
+ * Result wrapper for individual TestSteps executed on a TestServer
  */
 
 public class TestServerTestStepResult extends AbstractTestStepResult {
@@ -15,18 +14,9 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
     private boolean hasCheckedForHarEntry;
     private HarEntry harEntry;
 
-    public TestServerTestStepResult(TestStepResultReport testStepResultReport, TestServerExecution execution) {
+    TestServerTestStepResult(TestStepResultReport testStepResultReport, TestServerExecution execution) {
         super(testStepResultReport);
-
         this.execution = execution;
-    }
-
-    public TestStepResultReport setAssertionStatus(TestStepResultReport.AssertionStatusEnum assertionStatus) {
-        return testStepResultReport.assertionStatus(assertionStatus);
-    }
-
-    public boolean hasTransactionData() {
-        return getHarEntry() != null;
     }
 
     @Override

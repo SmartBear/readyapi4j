@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Responsible for executing test recipes and projects on a Ready! API Server, synchronously or asynchronously.
+ * Executor for executing Recipes on a TestServer instances - both synchronously and asynchronously
  */
 public class TestServerRecipeExecutor extends AbstractTestServerExecutor implements RecipeExecutor {
     private static Logger logger = LoggerFactory.getLogger(TestServerRecipeExecutor.class);

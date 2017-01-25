@@ -2,7 +2,10 @@ package com.smartbear.readyapi4j.testserver.execution;
 
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi4j.result.AbstractRecipeExecutionResult;
-import com.smartbear.readyapi4j.testserver.result.TestServerTestStepResult;
+
+/**
+ * ExecutionResult for an execution executed on a TestServer instance
+ */
 
 public class TestServerRecipeExecutionResult extends AbstractRecipeExecutionResult {
     private final TestServerExecution testServerExecution;

@@ -4,8 +4,6 @@ import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.result.RecipeExecutionResult;
-import com.smartbear.readyapi4j.testserver.execution.TestServerApi;
-import com.smartbear.readyapi4j.testserver.execution.TestServerExecution;
 import io.swagger.client.auth.HttpBasicAuth;
 import io.swagger.util.Json;
 import org.junit.Test;

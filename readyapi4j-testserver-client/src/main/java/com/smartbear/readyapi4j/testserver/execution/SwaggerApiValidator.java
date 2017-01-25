@@ -5,6 +5,10 @@ import com.smartbear.readyapi4j.execution.Execution;
 import java.io.File;
 import java.net.URL;
 
+/**
+ * Executor that validates an API instance against a Swagger definition
+ */
+
 public class SwaggerApiValidator extends AbstractTestServerExecutor {
 
     SwaggerApiValidator(TestServerClient testServerClient) {

@@ -22,6 +22,10 @@ import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Base class for the various TestServer executors
+ */
+
 abstract class AbstractTestServerExecutor {
     private static Logger logger = LoggerFactory.getLogger(AbstractTestServerExecutor.class);
     private static final int NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS = 3;

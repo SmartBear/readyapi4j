@@ -6,6 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Request object used when executing tests in server repository project
+ */
+
 public class RepositoryProjectExecutionRequest {
     private String repositoryName;
     private String projectFileName;

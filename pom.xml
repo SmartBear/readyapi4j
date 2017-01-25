@@ -13,7 +13,7 @@
         <module>test-dsl</module>
     </modules>
     <packaging>pom</packaging>
-    <name>Ready!API TestServer Client</name>
+    <name>ReadyAPI4j</name>
     <description>Java library for testing APIs using either a local or remote execution engine</description>
     <url>https://github.com/SmartBear/readyapi4j</url>
     <developers>
