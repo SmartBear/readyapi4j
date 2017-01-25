@@ -1,7 +1,6 @@
 package com.smartbear.readyapi4j.testserver.execution;
 
 import com.google.common.collect.Lists;
-import com.smartbear.readyapi4j.testserver.RepositoryProjectExecutionRequest;
 import com.smartbear.readyapi.client.model.CustomProperties;
 import com.smartbear.readyapi.client.model.DataSource;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
@@ -37,6 +36,10 @@ import java.util.zip.ZipOutputStream;
 
 import static com.smartbear.readyapi4j.teststeps.TestSteps.HttpMethod.POST;
 import static java.nio.charset.StandardCharsets.UTF_8;
+
+/**
+ * TestServerApi implementation that uses a SwaggerCodegen based implementation
+ */
 
 public class CodegenBasedTestServerApi implements TestServerApi {
 

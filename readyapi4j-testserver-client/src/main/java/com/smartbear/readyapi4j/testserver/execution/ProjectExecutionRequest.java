@@ -6,6 +6,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Command wrapper for executing an existing project with the ProjectExcecutor
+ */
+
 public class ProjectExecutionRequest {
     private File projectFile;
     private String testSuiteName;
@@ -33,7 +37,6 @@ public class ProjectExecutionRequest {
     public Map<String, CustomProperties> getCustomPropertiesMap() {
         return customPropertiesMap;
     }
-
 
     public static class Builder {
         protected Builder() {
@@ -78,15 +81,43 @@ public class ProjectExecutionRequest {
             return this;
         }
 
+        /**
+         * Adds a custom property to be passed on to the execution of the project
+         * @param targetName the TestSuite or TestCase that will receive the properties - set to null for project-level properties
+         * @param propertyName the name of the property
+         * @param value the property value
+         * @return Builder
+         */
+
         public Builder withCustomProperty(String targetName, String propertyName, String value) {
             CustomProperties customProperties = getCustomPropertiesForTargetName(targetName);
             customProperties.getProperties().put(propertyName, value);
             return this;
         }
 
+        /**
+         * Adds custom properties to be passed on to the execution of the project
+         * @param targetName the TestSuite or TestCase that will receive the properties - set to null for project-level properties
+         * @param properties a map containing the desired name/value pairs
+         * @return Builder
+         */
+
         public Builder withCustomProperties(String targetName, Map<String, String> properties) {
             CustomProperties customProperties = getCustomPropertiesForTargetName(targetName);
             customProperties.getProperties().putAll(properties);
+            return this;
+        }
+
+        /**
+         * Adds a project property to be passed on to the execution of the project
+         * @param propertyName the name of the property
+         * @param value the property value
+         * @return Builder
+         */
+
+        public Builder withProjectProperty(String propertyName, String value) {
+            CustomProperties customProperties = getCustomPropertiesForTargetName(null);
+            customProperties.getProperties().put(propertyName, value);
             return this;
         }
 
@@ -100,12 +131,20 @@ public class ProjectExecutionRequest {
             return customProperties;
         }
 
+        /**
+         * @return builds the ProjectExecutionRequest as configured
+         */
+
         public ProjectExecutionRequest build() {
             return projectExecutionRequest;
         }
 
-        public static Builder newInstance() {
-            return new Builder();
+        /**
+         * @return a new instance of this builder for the specified project
+         */
+
+        public static Builder forProjectFile(File projectFile ) {
+            return new Builder().withProjectFile(projectFile);
         }
     }
 }

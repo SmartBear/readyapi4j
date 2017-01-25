@@ -2,6 +2,10 @@ package com.smartbear.readyapi4j.testserver.execution;
 
 import javax.ws.rs.core.MultivaluedMap;
 
+/**
+ * Exception thrown for failed TestServer API calls
+ */
+
 public class ApiException extends RuntimeException {
     private int statusCode;
     private String responseBody;

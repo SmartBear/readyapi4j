@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Base class for TestStepResultReport based TestStepResult implementations
+ */
+
 public abstract class AbstractTestStepResult implements TestStepResult {
     private static final List<HarHeader> noHeadersList = Collections.unmodifiableList(new ArrayList());
     protected final TestStepResultReport testStepResultReport;
@@ -58,6 +62,10 @@ public abstract class AbstractTestStepResult implements TestStepResult {
         HarEntry harEntry = getHarEntry();
         return harEntry == null ? null : harEntry.getResponse();
     }
+
+    /**
+     * @return the underlying HAR log entry for this TestStep result - null if no transaction log is available
+     */
 
     public abstract HarEntry getHarEntry();
 

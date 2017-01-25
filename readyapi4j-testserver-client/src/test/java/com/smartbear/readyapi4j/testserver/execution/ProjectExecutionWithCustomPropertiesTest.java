@@ -1,6 +1,5 @@
 package com.smartbear.readyapi4j.testserver.execution;
 
-import com.smartbear.readyapi4j.testserver.RepositoryProjectExecutionRequest;
 import com.smartbear.readyapi.client.model.CustomProperties;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.sun.jersey.api.client.GenericType;
@@ -70,9 +69,8 @@ public class ProjectExecutionWithCustomPropertiesTest {
         testSuiteProperties.put("property1", "value1");
         testSuiteProperties.put("property2", "value2");
 
-        return RepositoryProjectExecutionRequest.Builder.newInstance()
+        return RepositoryProjectExecutionRequest.Builder.forProject("Environment-test.xml")
                 .fromRepository("compositeprojects")
-                .forProject("Environment-test.xml")
                 .forEnvironment("staging")
                 .forTestSuite(TEST_SUITE_NAME)
                 .forTestCase("TestCase-1")

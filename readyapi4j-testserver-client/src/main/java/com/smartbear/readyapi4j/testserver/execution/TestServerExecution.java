@@ -13,13 +13,21 @@ import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+/**
+ * Class corresponding to an execution on a TestServer instance. The execution can be either ongoing or completed.
+ */
+
 public class TestServerExecution implements Execution {
     private final Deque<ProjectResultReport> executionStatusReports = new ConcurrentLinkedDeque<>();
     private final String id;
     private final TestServerApi testServerApi;
     private final HttpBasicAuth auth;
 
-    public TestServerExecution(TestServerApi testServerApi, HttpBasicAuth auth, ProjectResultReport projectResultReport) {
+    /**
+     * Package-scoped constructor since this class should only be created by executors or tests
+     */
+
+    TestServerExecution(TestServerApi testServerApi, HttpBasicAuth auth, ProjectResultReport projectResultReport) {
         this.testServerApi = testServerApi;
         this.auth = auth;
         executionStatusReports.add(projectResultReport);
@@ -41,11 +49,11 @@ public class TestServerExecution implements Execution {
         return executionStatusReports.getLast();
     }
 
-    public TestServerApi getTestServerApi() {
+    TestServerApi getTestServerApi() {
         return testServerApi;
     }
 
-    public HttpBasicAuth getAuth() {
+    HttpBasicAuth getAuth() {
         return auth;
     }
 
