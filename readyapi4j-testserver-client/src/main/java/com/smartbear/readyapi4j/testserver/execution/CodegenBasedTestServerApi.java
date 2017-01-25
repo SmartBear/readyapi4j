@@ -12,7 +12,6 @@ import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.TestStep;
-import com.smartbear.readyapi4j.testserver.RepositoryProjectExecutionRequest;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
 import com.sun.jersey.api.client.GenericType;
 import io.swagger.client.Pair;

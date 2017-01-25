@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Utility class for TestStepResultReport based TestStepResult implementations
+ * Base class for TestStepResultReport based TestStepResult implementations
  */
 
 public abstract class AbstractTestStepResult implements TestStepResult {

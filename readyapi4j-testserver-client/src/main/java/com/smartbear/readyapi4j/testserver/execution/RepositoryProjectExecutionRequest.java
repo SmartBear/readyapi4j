@@ -1,4 +1,4 @@
-package com.smartbear.readyapi4j.testserver;
+package com.smartbear.readyapi4j.testserver.execution;
 
 import com.smartbear.readyapi.client.model.CustomProperties;
 import org.apache.commons.lang3.StringUtils;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Request object used when executing tests in server repository project
+ * Request object used to execute tests in/on a project available in a repository on TestServer
  */
 
 public class RepositoryProjectExecutionRequest {
@@ -55,7 +55,7 @@ public class RepositoryProjectExecutionRequest {
          * @param projectFileName (mandatory) name of the project file in repository
          * @return Builder
          */
-        public Builder forProject(String projectFileName) {
+        public Builder withProject(String projectFileName) {
             projectExecutionRequest.projectFileName = projectFileName;
             return this;
         }
@@ -100,15 +100,44 @@ public class RepositoryProjectExecutionRequest {
             return this;
         }
 
+
+        /**
+         * Adds a custom property to be passed on to the execution of the project
+         * @param targetName the TestSuite or TestCase that will receive the properties - set to null for project-level properties
+         * @param propertyName the name of the property
+         * @param value the property value
+         * @return Builder
+         */
+
         public Builder withCustomProperty(String targetName, String propertyName, String value) {
             CustomProperties customProperties = getCustomPropertiesForTargetName(targetName);
             customProperties.getProperties().put(propertyName, value);
             return this;
         }
 
+        /**
+         * Adds custom properties to be passed on to the execution of the project
+         * @param targetName the TestSuite or TestCase that will receive the properties - set to null for project-level properties
+         * @param properties a map containing the desired name/value pairs
+         * @return Builder
+         */
+
         public Builder withCustomProperties(String targetName, Map<String, String> properties) {
             CustomProperties customProperties = getCustomPropertiesForTargetName(targetName);
             customProperties.getProperties().putAll(properties);
+            return this;
+        }
+
+        /**
+         * Adds a project property to be passed on to the execution of the project
+         * @param propertyName the name of the property
+         * @param value the property value
+         * @return Builder
+         */
+
+        public Builder withProjectProperty(String propertyName, String value) {
+            CustomProperties customProperties = getCustomPropertiesForTargetName(null);
+            customProperties.getProperties().put(propertyName, value);
             return this;
         }
 
@@ -122,6 +151,10 @@ public class RepositoryProjectExecutionRequest {
             return customProperties;
         }
 
+        /**
+         * @return builds the RepositoryProjectExecutionRequest as configured
+         */
+
         public RepositoryProjectExecutionRequest build() {
             if (StringUtils.isEmpty(projectExecutionRequest.projectFileName)) {
                 throw new IllegalArgumentException("Project file name is a mandatory parameter.");
@@ -129,8 +162,12 @@ public class RepositoryProjectExecutionRequest {
             return projectExecutionRequest;
         }
 
-        public static Builder newInstance() {
-            return new Builder();
+        /**
+         * @return a new instance of this builder for the specified repository project
+         */
+
+        public static Builder forProject( String projectFileName ) {
+            return new Builder().withProject(projectFileName);
         }
     }
 }

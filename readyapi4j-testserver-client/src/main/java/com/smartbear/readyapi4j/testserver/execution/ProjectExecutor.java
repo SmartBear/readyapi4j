@@ -1,7 +1,6 @@
 package com.smartbear.readyapi4j.testserver.execution;
 
 import com.smartbear.readyapi4j.execution.Execution;
-import com.smartbear.readyapi4j.testserver.RepositoryProjectExecutionRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

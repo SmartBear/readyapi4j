@@ -96,19 +96,6 @@ public class ProjectExecutionRequest {
         }
 
         /**
-         * Adds a project property to be passed on to the execution of the project
-         * @param propertyName the name of the property
-         * @param value the property value
-         * @return Builder
-         */
-
-        public Builder withProjectProperty(String propertyName, String value) {
-            CustomProperties customProperties = getCustomPropertiesForTargetName(null);
-            customProperties.getProperties().put(propertyName, value);
-            return this;
-        }
-
-        /**
          * Adds custom properties to be passed on to the execution of the project
          * @param targetName the TestSuite or TestCase that will receive the properties - set to null for project-level properties
          * @param properties a map containing the desired name/value pairs
@@ -118,6 +105,19 @@ public class ProjectExecutionRequest {
         public Builder withCustomProperties(String targetName, Map<String, String> properties) {
             CustomProperties customProperties = getCustomPropertiesForTargetName(targetName);
             customProperties.getProperties().putAll(properties);
+            return this;
+        }
+
+        /**
+         * Adds a project property to be passed on to the execution of the project
+         * @param propertyName the name of the property
+         * @param value the property value
+         * @return Builder
+         */
+
+        public Builder withProjectProperty(String propertyName, String value) {
+            CustomProperties customProperties = getCustomPropertiesForTargetName(null);
+            customProperties.getProperties().put(propertyName, value);
             return this;
         }
 
