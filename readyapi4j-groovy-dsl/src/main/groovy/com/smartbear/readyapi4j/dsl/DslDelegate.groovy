@@ -18,7 +18,7 @@ import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder
  */
 class DslDelegate {
 
-    private TestRecipeBuilder recipeBuilder = new TestRecipeBuilder()
+    protected TestRecipeBuilder recipeBuilder = new TestRecipeBuilder()
 
     void groovyScriptStep(String scriptText, String testStepName = null) {
         GroovyScriptTestStepBuilder scriptTestStepBuilder = TestSteps.groovyScriptStep(scriptText)
