@@ -1,5 +1,7 @@
 package com.smartbear.readyapi4j.testserver.teststeps.datasource;
 
+import java.util.List;
+
 public class ExcelDataSourceTestStepBuilder extends DataSourceTestStepBuilder<ExcelDataSourceBuilder> {
 
     public ExcelDataSourceTestStepBuilder() {
@@ -29,5 +31,9 @@ public class ExcelDataSourceTestStepBuilder extends DataSourceTestStepBuilder<Ex
     public ExcelDataSourceTestStepBuilder ignoreEmpty() {
         getDataSourceBuilder().ignoreEmpty();
         return this;
+    }
+
+    public void withProperties(List<String> properties) {
+        getDataSourceBuilder().withProperties(properties);
     }
 }

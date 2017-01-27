@@ -25,4 +25,8 @@ class ExcelDataSourceTestStepDelegate {
     boolean getIgnoreEmpty() {
         dataSourceTestStepBuilder.ignoreEmpty()
     }
+
+    void propertyNames(List<String> properties = []) {
+        dataSourceTestStepBuilder.withProperties(properties)
+    }
 }

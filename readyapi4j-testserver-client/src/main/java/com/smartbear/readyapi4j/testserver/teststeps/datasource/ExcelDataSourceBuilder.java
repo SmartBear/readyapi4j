@@ -15,6 +15,11 @@ public class ExcelDataSourceBuilder implements DataSourceBuilder {
         return this;
     }
 
+    public ExcelDataSourceBuilder withProperties(List<String> properties) {
+        this.properties.addAll(properties);
+        return this;
+    }
+
     public ExcelDataSourceBuilder withFilePath(String filePath) {
         excelDataSource.setFile(filePath);
         return this;

@@ -12,6 +12,7 @@ class ExcelDataSourceTestStepDslTest {
     private static final String EXCEL_FILE_PATH = 'C:/workspace/data-source-excel.xls'
     private static final String SHEET_NAME = 'Sheet1'
     private static final String CELL = 'A1'
+    private static List<String> PROPERTIES = ['Name', 'Address']
 
     @Test
     void createsRecipeWithExcelDataSource() throws Exception {
@@ -21,6 +22,7 @@ class ExcelDataSourceTestStepDslTest {
                 worksheet SHEET_NAME
                 startAtCell CELL
                 ignoreEmpty
+                propertyNames PROPERTIES
             }
         }
         DataSourceTestStep testStep = testRecipe.testCase.testSteps[0] as DataSourceTestStep
@@ -29,5 +31,6 @@ class ExcelDataSourceTestStepDslTest {
         assert dataSource.worksheet == SHEET_NAME
         assert dataSource.startAtCell == CELL
         assert dataSource.ignoreEmpty
+        assert testStep.dataSource.properties == PROPERTIES
     }
 }
