@@ -1,6 +1,9 @@
 package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.TestRecipe
+import com.smartbear.readyapi4j.teststeps.TestStepBuilder
+
+import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe
 
 /**
  * TestDsl for the test steps supported in both local and remote execution.
@@ -12,7 +15,7 @@ class TestDsl {
         DslDelegate delegate = new DslDelegate()
         definition.delegate = delegate
         definition.call()
-        return delegate.buildRecipe()
+        return newTestRecipe(delegate.testStepBuilders.toArray(new TestStepBuilder[delegate.testStepBuilders.size()])).buildTestRecipe()
     }
 
 }

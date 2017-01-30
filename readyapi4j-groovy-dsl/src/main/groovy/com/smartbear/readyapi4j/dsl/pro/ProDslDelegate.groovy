@@ -11,6 +11,6 @@ class ProDslDelegate extends DslDelegate {
         dataSourceConfig.resolveStrategy = Closure.DELEGATE_FIRST
         dataSourceConfig.call()
 
-        recipeBuilder.addStep(delegate.dataSourceTestStepBuilder)
+        testStepBuilders.add(delegate.dataSourceTestStepBuilder)
     }
 }

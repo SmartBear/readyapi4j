@@ -1,6 +1,6 @@
 package com.smartbear.readyapi4j.dsl
 
-import com.smartbear.readyapi4j.TestRecipeBuilder
+import com.smartbear.readyapi4j.teststeps.TestStepBuilder
 import com.smartbear.readyapi4j.teststeps.delay.DelayTestStepBuilder
 
 /**
@@ -10,30 +10,30 @@ import com.smartbear.readyapi4j.teststeps.delay.DelayTestStepBuilder
  */
 class DeferredDelayStepBuilder {
     private BigDecimal time
-    private TestRecipeBuilder recipeBuilder
+    List<TestStepBuilder> testStepBuilders
 
-    DeferredDelayStepBuilder(BigDecimal time, TestRecipeBuilder recipeBuilder) {
+    DeferredDelayStepBuilder(BigDecimal time, List<TestStepBuilder> testStepBuilders) {
         this.time = time
-        this.recipeBuilder = recipeBuilder
+        this.testStepBuilders = testStepBuilders
     }
 
-    TestRecipeBuilder getMilliseconds() {
-        recipeBuilder.addStep(new DelayTestStepBuilder(time as int))
+    boolean getMilliseconds() {
+        testStepBuilders.add(new DelayTestStepBuilder(time as int))
     }
 
-    TestRecipeBuilder getSeconds() {
-        recipeBuilder.addStep(new DelayTestStepBuilder(time * 1000 as int))
+    boolean getSeconds() {
+        testStepBuilders.add(new DelayTestStepBuilder(time * 1000 as int))
     }
 
-    TestRecipeBuilder getSecond() {
+    boolean getSecond() {
         return getSeconds()
     }
 
-    TestRecipeBuilder getMinutes() {
-        recipeBuilder.addStep(new DelayTestStepBuilder(time * 60_000 as int))
+    boolean getMinutes() {
+        testStepBuilders.add(new DelayTestStepBuilder(time * 60_000 as int))
     }
 
-    TestRecipeBuilder getMinute() {
+    boolean getMinute() {
         return getMinutes()
     }
 
