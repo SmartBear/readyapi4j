@@ -2,6 +2,7 @@ package com.smartbear.readyapi4j.dsl.pro
 
 import com.smartbear.readyapi.client.model.DataSourceTestStep
 import com.smartbear.readyapi.client.model.ExcelDataSource
+import com.smartbear.readyapi.client.model.RestTestRequestStep
 import com.smartbear.readyapi4j.TestRecipe
 import org.junit.Test
 
@@ -23,6 +24,10 @@ class ExcelDataSourceTestStepDslTest {
                 startAtCell CELL
                 ignoreEmpty
                 propertyNames PROPERTIES
+
+                testSteps {
+                    get 'http://somehost.com'
+                }
             }
         }
         DataSourceTestStep testStep = testRecipe.testCase.testSteps[0] as DataSourceTestStep
@@ -32,5 +37,6 @@ class ExcelDataSourceTestStepDslTest {
         assert dataSource.startAtCell == CELL
         assert dataSource.ignoreEmpty
         assert testStep.dataSource.properties == PROPERTIES
+        assert (testStep.testSteps[0] as RestTestRequestStep).URI == 'http://somehost.com'
     }
 }

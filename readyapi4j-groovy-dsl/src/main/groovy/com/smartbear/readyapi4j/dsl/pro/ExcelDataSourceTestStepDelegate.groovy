@@ -2,6 +2,8 @@ package com.smartbear.readyapi4j.dsl.pro
 
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.ExcelDataSourceTestStepBuilder
 
+import static groovy.lang.Closure.DELEGATE_FIRST
+
 class ExcelDataSourceTestStepDelegate {
     ExcelDataSourceTestStepBuilder dataSourceTestStepBuilder
 
@@ -28,5 +30,14 @@ class ExcelDataSourceTestStepDelegate {
 
     void propertyNames(List<String> properties = []) {
         dataSourceTestStepBuilder.withProperties(properties)
+    }
+
+    void testSteps(@DelegatesTo(ProDslDelegate) Closure testStepsDefinition) {
+        ProDslDelegate delegate = new ProDslDelegate()
+        testStepsDefinition.delegate = delegate
+        testStepsDefinition.resolveStrategy = DELEGATE_FIRST
+        testStepsDefinition.call()
+
+        delegate.testStepBuilders.each { testStepBuilder -> dataSourceTestStepBuilder.addTestStep(testStepBuilder) }
     }
 }
