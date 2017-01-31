@@ -71,14 +71,14 @@ class DataSourceTestStepDslTest {
         TestRecipe testRecipe = recipe {
             gridDataSource "GridDataSource", {
                 property 'name', ['value1', 'value2']
-                property 'name2', ['value4']
+                property 'name2', ['value3']
                 testSteps {
                     get 'http://somehost.com'
                 }
             }
         }
         DataSourceTestStep testStep = testRecipe.testCase.testSteps[0] as DataSourceTestStep
-        testStep.dataSource.grid == [name: ['value1', 'value2']]
+        assert testStep.dataSource.grid == [name: ['value1', 'value2'], name2: ['value3']]
     }
 
     private static void assertPropertiesAndNestedTestStep(DataSourceTestStep testStep) {
