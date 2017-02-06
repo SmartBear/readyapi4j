@@ -8,6 +8,7 @@ import com.smartbear.readyapi.client.model.DataGenDataSource
 import com.smartbear.readyapi.client.model.DataGenerator
 import com.smartbear.readyapi.client.model.DataSourceTestStep
 import com.smartbear.readyapi.client.model.DateAndTimeDataGenerator
+import com.smartbear.readyapi.client.model.IntegerDataGenerator
 import com.smartbear.readyapi.client.model.StateNameDataGenerator
 import com.smartbear.readyapi.client.model.StringDataGenerator
 import com.smartbear.readyapi4j.TestRecipe
@@ -19,6 +20,8 @@ import static com.smartbear.readyapi.client.model.BooleanDataGenerator.FormatEnu
 import static com.smartbear.readyapi.client.model.ComputerAddressDataGenerator.AddressTypeEnum.IPV4
 import static com.smartbear.readyapi.client.model.ComputerAddressDataGenerator.AddressTypeEnum.MAC48
 import static com.smartbear.readyapi.client.model.DateAndTimeDataGenerator.DateTimeFormatEnum.YYYY_MM_DDTHH_MM_SSZ_ISO_8601_
+import static com.smartbear.readyapi.client.model.IntegerDataGenerator.GenerationModeEnum.RANDOM
+import static com.smartbear.readyapi.client.model.IntegerDataGenerator.GenerationModeEnum.SEQUENTIAL
 import static com.smartbear.readyapi4j.dsl.ServerTestDsl.recipe
 
 class DataGenDataSourceTestStepDslTest {
@@ -167,6 +170,46 @@ class DataGenDataSourceTestStepDslTest {
         assert dateAndTimeDataGenerator.dateTimeFormat == YYYY_MM_DDTHH_MM_SSZ_ISO_8601_
         assert dateAndTimeDataGenerator.minimumValue == startDate
         assert dateAndTimeDataGenerator.maximumValue == endDate
+    }
+
+    @Test
+    void createsRecipeWithDataSourceTestStepWithSequentialIntegerDataGen() throws Exception {
+
+        TestRecipe testRecipe = recipe {
+            dataGenDataSource 'FullStateNamesDataGenDataSource', {
+                sequentialIntegers 'SequentialIntegers', {
+                    minimumValue 1
+                    maximumValue 100
+                    incrementBy 2
+                }
+            }
+        }
+        DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
+        IntegerDataGenerator integerDataGenerator = dataSource.dataGenerators[0] as IntegerDataGenerator
+        assert integerDataGenerator.generationMode == SEQUENTIAL
+        assert integerDataGenerator.propertyName == 'SequentialIntegers'
+        assert integerDataGenerator.minimumValue == 1
+        assert integerDataGenerator.maximumValue == 100
+        assert integerDataGenerator.incrementBy == 2
+    }
+
+    @Test
+    void createsRecipeWithDataSourceTestStepWithRandomIntegerDataGen() throws Exception {
+
+        TestRecipe testRecipe = recipe {
+            dataGenDataSource 'FullStateNamesDataGenDataSource', {
+                randomIntegers 'RandomIntegers', {
+                    minimumValue 100
+                    maximumValue 1000
+                }
+            }
+        }
+        DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
+        IntegerDataGenerator integerDataGenerator = dataSource.dataGenerators[0] as IntegerDataGenerator
+        assert integerDataGenerator.generationMode == RANDOM
+        assert integerDataGenerator.propertyName == 'RandomIntegers'
+        assert integerDataGenerator.minimumValue == 100
+        assert integerDataGenerator.maximumValue == 1000
     }
 
     private static DataGenDataSource extractDataGenDataSource(TestRecipe testRecipe) {
