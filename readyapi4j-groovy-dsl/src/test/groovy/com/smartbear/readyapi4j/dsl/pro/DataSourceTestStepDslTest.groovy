@@ -20,8 +20,7 @@ class DataSourceTestStepDslTest {
     @Test
     void createsRecipeWithExcelDataSource() throws Exception {
         TestRecipe testRecipe = recipe {
-            excelDataSource "ExcelDataSource", {
-                filePath EXCEL_FILE_PATH
+            usingExcelFile EXCEL_FILE_PATH, "ExcelDataSource", {
                 worksheet SHEET_NAME
                 startAtCell CELL
                 ignoreEmpty
@@ -44,8 +43,7 @@ class DataSourceTestStepDslTest {
     @Test
     void createsRecipeWithFileDataSource() throws Exception {
         TestRecipe testRecipe = recipe {
-            fileDataSource "FileDataSource", {
-                filePath FILE_PATH
+            usingCsvFile FILE_PATH, "FileDataSource", {
                 charSet 'UTF-8'
                 separator ';'
                 trim
@@ -68,17 +66,12 @@ class DataSourceTestStepDslTest {
 
     @Test
     void createsRecipeWithGridDataSource() throws Exception {
+        Map<String, List<String>> data = [name: ['value1', 'value2'], name2: ['value3']]
         TestRecipe testRecipe = recipe {
-            gridDataSource "GridDataSource", {
-                property 'name', ['value1', 'value2']
-                property 'name2', ['value3']
-                testSteps {
-                    get 'http://somehost.com'
-                }
-            }
+            usingData data
         }
         DataSourceTestStep testStep = testRecipe.testCase.testSteps[0] as DataSourceTestStep
-        assert testStep.dataSource.grid == [name: ['value1', 'value2'], name2: ['value3']]
+        assert testStep.dataSource.grid == data
     }
 
     private static void assertPropertiesAndNestedTestStep(DataSourceTestStep testStep) {

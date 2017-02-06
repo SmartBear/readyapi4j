@@ -1,22 +1,28 @@
 package com.smartbear.readyapi4j.dsl.pro
 
 import com.smartbear.readyapi4j.dsl.DslDelegate
+import com.smartbear.readyapi4j.testserver.teststeps.datasource.GridDataSourceTestStepBuilder
 
 /**
  * The delegate responding to commands inside the "recipe" closure of ServerTestDsl.
  */
 class ProDslDelegate extends DslDelegate {
 
-    void excelDataSource(String testStepName, @DelegatesTo(ExcelDataSourceTestStepDelegate) Closure dataSourceConfig) {
-        addDataSourceTestStep(new ExcelDataSourceTestStepDelegate(testStepName), dataSourceConfig)
+    void usingExcelFile(String excelFilePath, String testStepName = 'ExcelDataSource',
+                        @DelegatesTo(ExcelDataSourceTestStepDelegate) Closure dataSourceConfig) {
+        addDataSourceTestStep(new ExcelDataSourceTestStepDelegate(excelFilePath, testStepName), dataSourceConfig)
     }
 
-    void fileDataSource(String testStepName, @DelegatesTo(FileDataSourceTestStepDelegate) Closure dataSourceConfig) {
-        addDataSourceTestStep(new FileDataSourceTestStepDelegate(testStepName), dataSourceConfig)
+    void usingCsvFile(String csvFilePath, String testStepName = 'CsvFileDataSource',
+                      @DelegatesTo(FileDataSourceTestStepDelegate) Closure dataSourceConfig) {
+        addDataSourceTestStep(new FileDataSourceTestStepDelegate(csvFilePath, testStepName), dataSourceConfig)
     }
 
-    void gridDataSource(String testStepName, @DelegatesTo(GridDataSourceTestStepDelegate) Closure dataSourceConfig) {
-        addDataSourceTestStep(new GridDataSourceTestStepDelegate(testStepName), dataSourceConfig)
+    void usingData(Map<String, List<String>> data, String testStepName = 'GridDataSource') {
+        GridDataSourceTestStepBuilder gridDataSourceTestStepBuilder = new GridDataSourceTestStepBuilder()
+        gridDataSourceTestStepBuilder.named(testStepName)
+        data.each { gridDataSourceTestStepBuilder.addProperty(it.key, it.value) }
+        testStepBuilders.add(gridDataSourceTestStepBuilder)
     }
 
     private void addDataSourceTestStep(DataSourceTestStepDelegate delegate, Closure dataSourceConfig) {

@@ -3,14 +3,11 @@ package com.smartbear.readyapi4j.dsl.pro
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.FileDataSourceTestStepBuilder
 
 /**
- * Delegate for the 'fileDataSource' closure in 'recipe'
+ * Delegate for the 'usingCsvFile' closure in 'recipe'
  */
 class FileDataSourceTestStepDelegate extends DataSourceTestStepDelegate<FileDataSourceTestStepBuilder> {
-    FileDataSourceTestStepDelegate(String testStepName) {
+    FileDataSourceTestStepDelegate(String filePath, String testStepName) {
         super(new FileDataSourceTestStepBuilder(), testStepName)
-    }
-
-    void filePath(String filePath) {
         dataSourceTestStepBuilder.withFilePath(filePath)
     }
 

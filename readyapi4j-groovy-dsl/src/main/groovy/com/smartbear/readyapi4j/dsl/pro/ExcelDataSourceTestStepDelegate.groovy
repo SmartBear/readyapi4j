@@ -3,15 +3,12 @@ package com.smartbear.readyapi4j.dsl.pro
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.ExcelDataSourceTestStepBuilder
 
 /**
- * Delegate for the 'excelDataSource' closure in 'recipe'
+ * Delegate for the 'usingExcelFile' closure in 'recipe'
  */
 class ExcelDataSourceTestStepDelegate extends DataSourceTestStepDelegate<ExcelDataSourceTestStepBuilder> {
 
-    ExcelDataSourceTestStepDelegate(String testStepName) {
+    ExcelDataSourceTestStepDelegate(String filePath, String testStepName) {
         super(new ExcelDataSourceTestStepBuilder(), testStepName)
-    }
-
-    void filePath(String filePath) {
         dataSourceTestStepBuilder.withFilePath(filePath)
     }
 
