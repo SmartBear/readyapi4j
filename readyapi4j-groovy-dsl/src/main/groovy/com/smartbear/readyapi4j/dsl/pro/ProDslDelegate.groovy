@@ -25,6 +25,11 @@ class ProDslDelegate extends DslDelegate {
         testStepBuilders.add(gridDataSourceTestStepBuilder)
     }
 
+    void dataGenDataSource(String testStepName = 'DataGenDataSource',
+                           @DelegatesTo(DataGenDataSourceTestStepDelegate) Closure dataSourceConfig) {
+        addDataSourceTestStep(new DataGenDataSourceTestStepDelegate(testStepName), dataSourceConfig)
+    }
+
     private void addDataSourceTestStep(DataSourceTestStepDelegate delegate, Closure dataSourceConfig) {
         dataSourceConfig.delegate = delegate
         dataSourceConfig.resolveStrategy = Closure.DELEGATE_FIRST
