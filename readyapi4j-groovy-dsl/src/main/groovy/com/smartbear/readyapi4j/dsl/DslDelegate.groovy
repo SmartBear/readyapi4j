@@ -1,7 +1,7 @@
 package com.smartbear.readyapi4j.dsl
 
+import com.smartbear.readyapi4j.TestRecipeBuilder
 import com.smartbear.readyapi4j.execution.RecipeExecutionException
-import com.smartbear.readyapi4j.teststeps.TestStepBuilder
 import com.smartbear.readyapi4j.teststeps.TestSteps
 import com.smartbear.readyapi4j.teststeps.groovyscript.GroovyScriptTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcRequestTestStepBuilder
@@ -17,12 +17,16 @@ import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder
  */
 class DslDelegate {
 
-    List<TestStepBuilder> testStepBuilders = []
+    protected TestRecipeBuilder testRecipeBuilder
+
+    DslDelegate(TestRecipeBuilder testRecipeBuilder) {
+        this.testRecipeBuilder = testRecipeBuilder
+    }
 
     void groovyScriptStep(String scriptText, String testStepName = null) {
         GroovyScriptTestStepBuilder scriptTestStepBuilder = TestSteps.groovyScriptStep(scriptText)
         scriptTestStepBuilder.named(testStepName)
-        testStepBuilders.add(scriptTestStepBuilder)
+        testRecipeBuilder.addStep(scriptTestStepBuilder)
     }
 
     void get(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
@@ -44,25 +48,25 @@ class DslDelegate {
     void transfer(PropertyTransferBuilder transferBuilder, String testStepName = null) {
         PropertyTransferTestStepBuilder transferTestStepBuilder = TestSteps.propertyTransfer(transferBuilder)
         transferTestStepBuilder.named(testStepName)
-        testStepBuilders.add(transferTestStepBuilder)
+        testRecipeBuilder.addStep(transferTestStepBuilder)
     }
 
     DeferredPropertyTransferBuilder transfer(String sourcePath) {
-        return new DeferredPropertyTransferBuilder([property: 'Response', path: sourcePath], testStepBuilders)
+        return new DeferredPropertyTransferBuilder([property: 'Response', path: sourcePath], testRecipeBuilder)
     }
 
     DeferredPropertyTransferBuilder transfer(Map sourceProperties) {
-        return new DeferredPropertyTransferBuilder(sourceProperties, testStepBuilders)
+        return new DeferredPropertyTransferBuilder(sourceProperties, testRecipeBuilder)
     }
 
     DeferredDelayStepBuilder pause(BigDecimal time) {
-        return new DeferredDelayStepBuilder(time, testStepBuilders)
+        return new DeferredDelayStepBuilder(time, testRecipeBuilder)
     }
 
     void properties(Map<String, String> properties = [:], String testStepName = null) {
         PropertiesTestStepBuilder propertiesTestStepBuilder = TestSteps.properties(properties)
         propertiesTestStepBuilder.named(testStepName)
-        testStepBuilders.add(propertiesTestStepBuilder)
+        testRecipeBuilder.addStep(propertiesTestStepBuilder)
     }
 
     void pluginProvidedStep(@DelegatesTo(PluginTestStepDelegate) Closure pluginTestStepDefinition) {
@@ -74,7 +78,7 @@ class DslDelegate {
                 .withConfigProperties(delegate.configuration)
                 .named(delegate.testStepName)
 
-        testStepBuilders.add(pluginTestStepBuilder)
+        testRecipeBuilder.addStep(pluginTestStepBuilder)
     }
 
     static final Map request = Collections.unmodifiableMap([property: 'Request'])
@@ -85,7 +89,7 @@ class DslDelegate {
         SoapRequestDelegate delegate = new SoapRequestDelegate()
         soapRequestDefinition.delegate = delegate
         soapRequestDefinition.call()
-        testStepBuilders.add(delegate.buildSoapRequestStep())
+        testRecipeBuilder.addStep(delegate.buildSoapRequestStep())
     }
 
     void soapMockResponse(@DelegatesTo(SoapMockResponseDelegate) Closure soapMockResponseDefinition) {
@@ -104,7 +108,7 @@ class DslDelegate {
         } catch (MalformedURLException e) {
             throw new RecipeExecutionException("Not a valid WSDL location: $delegate.wsdlUrl", e)
         }
-        testStepBuilders.add(builder)
+        testRecipeBuilder.addStep(builder)
     }
 
     void jdbcRequest(@DelegatesTo(JdbcRequestDelegate) Closure jdbcRequestDefinition) {
@@ -119,7 +123,7 @@ class DslDelegate {
             builder.withProperties(delegate.testStepProperties)
         }
         delegate.assertions.each { assertionBuilder -> builder.addAssertion(assertionBuilder) }
-        testStepBuilders.add(builder)
+        testRecipeBuilder.addStep(builder)
     }
 
     private void createRestRequest(String httpVerb, String URI, Closure configuration = null) {
@@ -150,6 +154,6 @@ class DslDelegate {
             delegate.assertions.each { assertion -> request.addAssertion(assertion) }
             delegate.parameters.each { param -> request.addParameter(param) }
         }
-        testStepBuilders.add(request)
+        testRecipeBuilder.addStep(request)
     }
 }

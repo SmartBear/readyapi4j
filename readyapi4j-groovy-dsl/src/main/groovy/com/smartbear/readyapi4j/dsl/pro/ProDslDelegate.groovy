@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j.dsl.pro
 
+import com.smartbear.readyapi4j.TestRecipeBuilder
 import com.smartbear.readyapi4j.dsl.DslDelegate
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.GridDataSourceTestStepBuilder
 
@@ -7,6 +8,10 @@ import com.smartbear.readyapi4j.testserver.teststeps.datasource.GridDataSourceTe
  * The delegate responding to commands inside the "recipe" closure of ServerTestDsl.
  */
 class ProDslDelegate extends DslDelegate {
+
+    ProDslDelegate(TestRecipeBuilder testRecipeBuilder) {
+        super(testRecipeBuilder)
+    }
 
     void usingExcelFile(String excelFilePath, String testStepName = 'ExcelDataSource',
                         @DelegatesTo(ExcelDataSourceTestStepDelegate) Closure dataSourceConfig) {
@@ -22,7 +27,7 @@ class ProDslDelegate extends DslDelegate {
         GridDataSourceTestStepBuilder gridDataSourceTestStepBuilder = new GridDataSourceTestStepBuilder()
         gridDataSourceTestStepBuilder.named(testStepName)
         data.each { gridDataSourceTestStepBuilder.addProperty(it.key, it.value) }
-        testStepBuilders.add(gridDataSourceTestStepBuilder)
+        testRecipeBuilder.addStep(gridDataSourceTestStepBuilder)
     }
 
     void dataGeneratorDataSource(String testStepName = 'DataGenDataSource',
@@ -35,6 +40,6 @@ class ProDslDelegate extends DslDelegate {
         dataSourceConfig.resolveStrategy = Closure.DELEGATE_FIRST
         dataSourceConfig.call()
 
-        testStepBuilders.add(delegate.dataSourceTestStepBuilder)
+        testRecipeBuilder.addStep(delegate.dataSourceTestStepBuilder)
     }
 }
