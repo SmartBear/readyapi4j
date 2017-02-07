@@ -5,7 +5,11 @@ import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.CustomSt
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenDataSourceTestStepBuilder
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DateAndTimeDataGeneratorBuilder
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.IntegerDataGeneratorBuilder
+import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.PhoneNumberDataGeneratorBuilder
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.StringDataGeneratorBuilder
+import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.UKPostCodeDataGeneratorBuilder
+import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.USZipDataGeneratorBuilder
+import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.ValuesFromSetDataGeneratorBuilder
 
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.addressTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.anyGenderFirstNameTypeProperty
@@ -16,6 +20,7 @@ import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.D
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.customStringTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.digitsBooleanTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.emailTypeProperty
+import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.femaleFirstNameTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.femaleFullNameTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.femaleLastNameTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.fullStateNameTypeProperty
@@ -25,13 +30,18 @@ import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.D
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.maleFirstNameTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.maleFullNameTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.maleLastNameTypeProperty
+import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.phoneNumberTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.randomDateAndTimeTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.randomIntegerTypeProperty
+import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.randomValueFromSetTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.sequentialIntegerTypeProperty
+import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.sequentialValueFromSetTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.shortStateNameTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.ssnTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.stringTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.trueFalseBooleanTypeProperty
+import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.ukPostCodeTypeProperty
+import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.usZipCodeTypeProperty
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.yesNoBooleanTypeProperty
 import static groovy.lang.Closure.DELEGATE_FIRST
 
@@ -108,8 +118,7 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
         dataSourceTestStepBuilder.withProperty(shortStateNameTypeProperty(propertyName))
     }
 
-    void dateAndTimeValues(String propertyName,
-                           @DelegatesTo(DateAndTimeDataGeneratorDelegate) Closure dataGenConfig) {
+    void dateAndTimeValues(String propertyName, @DelegatesTo(DateAndTimeDataGeneratorDelegate) Closure dataGenConfig) {
         DateAndTimeDataGeneratorBuilder builder = randomDateAndTimeTypeProperty(propertyName)
         DateAndTimeDataGeneratorDelegate delegate = new DateAndTimeDataGeneratorDelegate(builder)
         addDataGenDataSource(delegate, dataGenConfig, builder)
@@ -140,8 +149,8 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
         dataSourceTestStepBuilder.withProperty(maleFullNameTypeProperty(propertyName))
     }
 
-    void femaleFirstlNames(String propertyName) {
-        dataSourceTestStepBuilder.withProperty(femaleFirstlNames(propertyName))
+    void femaleFirstNames(String propertyName) {
+        dataSourceTestStepBuilder.withProperty(femaleFirstNameTypeProperty(propertyName))
     }
 
     void femaleLastNames(String propertyName) {
@@ -153,19 +162,72 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
     }
 
     /**
-     *
-     * @param propertyName
+     * Generates first names for both genders: Male and Female
+     * @param propertyName property name
      */
     void firstNames(String propertyName) {
         dataSourceTestStepBuilder.withProperty(anyGenderFirstNameTypeProperty(propertyName))
     }
 
+    /**
+     * Generates last names for both genders: Male and Female
+     * @param propertyName property name
+     */
     void lastNames(String propertyName) {
         dataSourceTestStepBuilder.withProperty(anyGenderLastNameTypeProperty(propertyName))
     }
 
+    /**
+     * Generates full names for both genders: Male and Female
+     * @param propertyName property name
+     */
     void fullNames(String propertyName) {
         dataSourceTestStepBuilder.withProperty(anyGenderFullNameTypeProperty(propertyName))
+    }
+
+    void randomValueFromSet(String propertyName, Set<String> predefinedValues) {
+        ValuesFromSetDataGeneratorBuilder builder = randomValueFromSetTypeProperty(propertyName)
+        builder.withValues(predefinedValues)
+        dataSourceTestStepBuilder.withProperty(builder)
+    }
+
+    void sequentialValueFromSet(String propertyName, Set<String> predefinedValues) {
+        ValuesFromSetDataGeneratorBuilder builder = sequentialValueFromSetTypeProperty(propertyName)
+        builder.withValues(predefinedValues)
+        dataSourceTestStepBuilder.withProperty(builder)
+    }
+
+    /**
+     * Adds a phone number data generator
+     * @param propertyName property name
+     * @param format one of:'XXX-XXX-XXXX', '+1 XXX-XXX-XXXX', '+1 (XXX)-XXX-XXXX', '+X XXX-XXX-XXXX', '+X (XXX)-XXX-XXXX'
+     */
+    void phoneNumbers(String propertyName, String format = 'XXX-XXX-XXXX') {
+        PhoneNumberDataGeneratorBuilder phoneNumberDataGeneratorBuilder = phoneNumberTypeProperty(propertyName)
+        phoneNumberDataGeneratorBuilder.withNumberFormat(format)
+        dataSourceTestStepBuilder.withProperty(phoneNumberDataGeneratorBuilder)
+    }
+
+    /**
+     * Adds a US ZIP codes generator
+     * @param propertyName
+     * @param format one of: 'All', 'XXXXX', 'XXXXX-XXXX'
+     */
+    void usZipCodes(String propertyName, String format = 'All') {
+        USZipDataGeneratorBuilder uSZipDataGeneratorBuilder = usZipCodeTypeProperty(propertyName)
+        uSZipDataGeneratorBuilder.setFormat(format)
+        dataSourceTestStepBuilder.withProperty(uSZipDataGeneratorBuilder)
+    }
+
+    /**
+     * Adds a UK post codes generator
+     * @param propertyName
+     * @param format one of: 'All', 'A9 9AA', 'A99 9AA', 'AA9 9AA', 'A9A 9AA', 'AA99 9AA', 'AA9A 9AA'
+     */
+    void ukPostCodes(String propertyName = 'UKPostCodes', String format = 'All') {
+        UKPostCodeDataGeneratorBuilder ukPostCodeDataGeneratorBuilder = ukPostCodeTypeProperty(propertyName)
+        ukPostCodeDataGeneratorBuilder.setFormat(format)
+        dataSourceTestStepBuilder.withProperty(ukPostCodeDataGeneratorBuilder)
     }
 
     private void addDataGenDataSource(Object delegate, Closure dataGenConfig, AbstractDataGeneratorBuilder builder) {

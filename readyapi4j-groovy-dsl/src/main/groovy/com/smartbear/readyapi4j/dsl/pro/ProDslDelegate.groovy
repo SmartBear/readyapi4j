@@ -25,8 +25,8 @@ class ProDslDelegate extends DslDelegate {
         testStepBuilders.add(gridDataSourceTestStepBuilder)
     }
 
-    void dataGenDataSource(String testStepName = 'DataGenDataSource',
-                           @DelegatesTo(DataGenDataSourceTestStepDelegate) Closure dataSourceConfig) {
+    void dataGeneratorDataSource(String testStepName = 'DataGenDataSource',
+                                 @DelegatesTo(DataGenDataSourceTestStepDelegate) Closure dataSourceConfig) {
         addDataSourceTestStep(new DataGenDataSourceTestStepDelegate(testStepName), dataSourceConfig)
     }
 

@@ -9,8 +9,15 @@ import com.smartbear.readyapi.client.model.DataGenerator
 import com.smartbear.readyapi.client.model.DataSourceTestStep
 import com.smartbear.readyapi.client.model.DateAndTimeDataGenerator
 import com.smartbear.readyapi.client.model.IntegerDataGenerator
+import com.smartbear.readyapi.client.model.NameDataGenerator
+import com.smartbear.readyapi.client.model.NameDataGenerator.GenderEnum
+import com.smartbear.readyapi.client.model.NameDataGenerator.NameTypeEnum
+import com.smartbear.readyapi.client.model.PhoneNumberDataGenerator
 import com.smartbear.readyapi.client.model.StateNameDataGenerator
 import com.smartbear.readyapi.client.model.StringDataGenerator
+import com.smartbear.readyapi.client.model.UKPostCodeDataGenerator
+import com.smartbear.readyapi.client.model.USZIPCodeDataGenerator
+import com.smartbear.readyapi.client.model.ValuesFromSetDataGenerator
 import com.smartbear.readyapi4j.TestRecipe
 import org.junit.Test
 
@@ -20,15 +27,23 @@ import static com.smartbear.readyapi.client.model.BooleanDataGenerator.FormatEnu
 import static com.smartbear.readyapi.client.model.ComputerAddressDataGenerator.AddressTypeEnum.IPV4
 import static com.smartbear.readyapi.client.model.ComputerAddressDataGenerator.AddressTypeEnum.MAC48
 import static com.smartbear.readyapi.client.model.DateAndTimeDataGenerator.DateTimeFormatEnum.YYYY_MM_DDTHH_MM_SSZ_ISO_8601_
-import static com.smartbear.readyapi.client.model.IntegerDataGenerator.GenerationModeEnum.RANDOM
-import static com.smartbear.readyapi.client.model.IntegerDataGenerator.GenerationModeEnum.SEQUENTIAL
+import static com.smartbear.readyapi.client.model.NameDataGenerator.GenderEnum.ANY
+import static com.smartbear.readyapi.client.model.NameDataGenerator.GenderEnum.FEMALE
+import static com.smartbear.readyapi.client.model.NameDataGenerator.GenderEnum.MALE
+import static com.smartbear.readyapi.client.model.NameDataGenerator.NameTypeEnum.FIRSTNAME
+import static com.smartbear.readyapi.client.model.NameDataGenerator.NameTypeEnum.FULL
+import static com.smartbear.readyapi.client.model.NameDataGenerator.NameTypeEnum.LASTNAME
+import static com.smartbear.readyapi.client.model.UKPostCodeDataGenerator.CodeFormatEnum.AA99_9AA
+import static com.smartbear.readyapi.client.model.USZIPCodeDataGenerator.CodeFormatEnum.XXXXX_XXXX
+import static com.smartbear.readyapi.client.model.ValuesFromSetDataGenerator.GenerationModeEnum.RANDOM
+import static com.smartbear.readyapi.client.model.ValuesFromSetDataGenerator.GenerationModeEnum.SEQUENTIAL
 import static com.smartbear.readyapi4j.dsl.ServerTestDsl.recipe
 
 class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithBasicDataGenerators() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'CityDataGenDataSource', {
+            dataGeneratorDataSource 'CityDataGenDataSource', {
                 numberOfRows 2
                 cityNames 'cityNames'
                 countryNames 'countryNames'
@@ -56,7 +71,7 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithBooleanDataGenerators() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'BooleanDataGenDataSource', {
+            dataGeneratorDataSource 'BooleanDataGenDataSource', {
                 yesNoBooleanValues 'YesNoBooleanValues'
                 trueFalseBooleanValues 'TrueFalseBooleanValues'
                 digitsBooleanValues 'ZeroOneBooleanValues'
@@ -72,10 +87,15 @@ class DataGenDataSourceTestStepDslTest {
         assertBooleanDataGen(dataSource.dataGenerators[2], 'ZeroOneBooleanValues', _1_0)
     }
 
+    private static void assertBooleanDataGen(DataGenerator dataGenerator, String propertyName, FormatEnum format) {
+        assertDataGenerator(dataGenerator, 'Boolean', propertyName)
+        assert ((BooleanDataGenerator) dataGenerator).format == format
+    }
+
     @Test
     void createsRecipeWithDataSourceTestStepWithComputerAddressDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'ComputerAddressDataGenDataSource', {
+            dataGeneratorDataSource 'ComputerAddressDataGenDataSource', {
                 ipv4ComputerAddresses 'IPv4Adresses'
                 mac48ComputerAddresses 'Mac48Addresses'
             }
@@ -90,7 +110,7 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithStringDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'StringDataGenDataSource', {
+            dataGeneratorDataSource 'StringDataGenDataSource', {
                 stringValues 'Strings', {
                     minimumCharacters 8
                     maximumCharacters 20
@@ -114,7 +134,7 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithCustomStringDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'CustomStringDataGenDataSource', {
+            dataGeneratorDataSource 'CustomStringDataGenDataSource', {
                 customString 'ConstantString', 'This is a custom string!'
             }
         }
@@ -127,7 +147,7 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithShortStateNameDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'ShortStateNamesDataGenDataSource', {
+            dataGeneratorDataSource 'ShortStateNamesDataGenDataSource', {
                 abbreviatedStateNames 'StateNames'
             }
         }
@@ -140,7 +160,7 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithFullStateNameDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'FullStateNamesDataGenDataSource', {
+            dataGeneratorDataSource 'FullStateNamesDataGenDataSource', {
                 fullStateNames 'FullStateNames'
             }
         }
@@ -156,7 +176,7 @@ class DataGenDataSourceTestStepDslTest {
         Date endDate = Date.parse("yyyy-MM-dd hh:mm:ss", "2016-04-03 23:59:59")
 
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'FullStateNamesDataGenDataSource', {
+            dataGeneratorDataSource 'FullStateNamesDataGenDataSource', {
                 dateAndTimeValues 'DateAndTimes', {
                     startingAt startDate
                     endingAt endDate
@@ -176,7 +196,7 @@ class DataGenDataSourceTestStepDslTest {
     void createsRecipeWithDataSourceTestStepWithSequentialIntegerDataGen() throws Exception {
 
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'FullStateNamesDataGenDataSource', {
+            dataGeneratorDataSource 'FullStateNamesDataGenDataSource', {
                 sequentialIntegers 'SequentialIntegers', {
                     minimumValue 1
                     maximumValue 100
@@ -186,7 +206,7 @@ class DataGenDataSourceTestStepDslTest {
         }
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
         IntegerDataGenerator integerDataGenerator = dataSource.dataGenerators[0] as IntegerDataGenerator
-        assert integerDataGenerator.generationMode == SEQUENTIAL
+        assert integerDataGenerator.generationMode == IntegerDataGenerator.GenerationModeEnum.SEQUENTIAL
         assert integerDataGenerator.propertyName == 'SequentialIntegers'
         assert integerDataGenerator.minimumValue == 1
         assert integerDataGenerator.maximumValue == 100
@@ -197,7 +217,7 @@ class DataGenDataSourceTestStepDslTest {
     void createsRecipeWithDataSourceTestStepWithRandomIntegerDataGen() throws Exception {
 
         TestRecipe testRecipe = recipe {
-            dataGenDataSource 'FullStateNamesDataGenDataSource', {
+            dataGeneratorDataSource 'FullStateNamesDataGenDataSource', {
                 randomIntegers 'RandomIntegers', {
                     minimumValue 100
                     maximumValue 1000
@@ -206,10 +226,128 @@ class DataGenDataSourceTestStepDslTest {
         }
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
         IntegerDataGenerator integerDataGenerator = dataSource.dataGenerators[0] as IntegerDataGenerator
-        assert integerDataGenerator.generationMode == RANDOM
+        assert integerDataGenerator.generationMode == IntegerDataGenerator.GenerationModeEnum.RANDOM
         assert integerDataGenerator.propertyName == 'RandomIntegers'
         assert integerDataGenerator.minimumValue == 100
         assert integerDataGenerator.maximumValue == 1000
+    }
+
+    @Test
+    void createsRecipeWithDataSourceTestStepWithNamesDataGen() throws Exception {
+
+        TestRecipe testRecipe = recipe {
+            dataGeneratorDataSource 'NamesDataGenDataSource', {
+                firstNames 'AnyGenderFirstNames'
+                lastNames 'AnyGenderLastNames'
+                fullNames 'AnyGenderFullNames'
+                maleFirstNames 'MaleFirstNames'
+                maleLastNames 'MaleLastNames'
+                maleFullNames 'MaleFullNames'
+                femaleFirstNames 'FemaleFirstNames'
+                femaleLastNames 'FemaleLastNames'
+                femaleFullNames 'FemaleFullNames'
+            }
+        }
+        DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
+        assertNamesDataGenerator(dataSource.dataGenerators[0], 'AnyGenderFirstNames', ANY, FIRSTNAME)
+        assertNamesDataGenerator(dataSource.dataGenerators[1], 'AnyGenderLastNames', ANY, LASTNAME)
+        assertNamesDataGenerator(dataSource.dataGenerators[2], 'AnyGenderFullNames', ANY, FULL)
+        assertNamesDataGenerator(dataSource.dataGenerators[3], 'MaleFirstNames', MALE, FIRSTNAME)
+        assertNamesDataGenerator(dataSource.dataGenerators[4], 'MaleLastNames', MALE, LASTNAME)
+        assertNamesDataGenerator(dataSource.dataGenerators[5], 'MaleFullNames', MALE, FULL)
+        assertNamesDataGenerator(dataSource.dataGenerators[6], 'FemaleFirstNames', FEMALE, FIRSTNAME)
+        assertNamesDataGenerator(dataSource.dataGenerators[7], 'FemaleLastNames', FEMALE, LASTNAME)
+        assertNamesDataGenerator(dataSource.dataGenerators[8], 'FemaleFullNames', FEMALE, FULL)
+    }
+
+    private static void assertNamesDataGenerator(DataGenerator dataGenerator, String propertyName, GenderEnum gender,
+                                                 NameTypeEnum nameType) {
+        assertDataGenerator(dataGenerator, 'Name', propertyName)
+        NameDataGenerator nameDataGenerator = dataGenerator as NameDataGenerator
+        assert nameDataGenerator.gender == gender
+        assert nameDataGenerator.nameType == nameType
+    }
+
+    @Test
+    void createsRecipeWithDataSourceTestStepWithValueFromSetDataGen() throws Exception {
+
+        TestRecipe testRecipe = recipe {
+            dataGeneratorDataSource {
+                randomValueFromSet 'RandomValues', ['Value1', 'Value2'].toSet()
+                sequentialValueFromSet 'SequentialValues', ['Value3', 'Value4'].toSet()
+            }
+        }
+        DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
+        assertValueFromSetDataGen(dataSource.dataGenerators[0], 'RandomValues', RANDOM, ['Value1', 'Value2'])
+        assertValueFromSetDataGen(dataSource.dataGenerators[1], 'SequentialValues', SEQUENTIAL, ['Value3', 'Value4'])
+    }
+
+    private static void assertValueFromSetDataGen(DataGenerator dataGenerator, String property,
+                                                  ValuesFromSetDataGenerator.GenerationModeEnum generationMode,
+                                                  List<String> values) {
+        assertDataGenerator(dataGenerator, 'Value from Set', property)
+        ValuesFromSetDataGenerator valuesFromSetDataGenerator = dataGenerator as ValuesFromSetDataGenerator
+        assert valuesFromSetDataGenerator.generationMode == generationMode
+        assert valuesFromSetDataGenerator.values == values
+    }
+
+    @Test
+    void createsRecipeWithDataSourceTestStepWithPhoneNumberDataGen() throws Exception {
+
+        TestRecipe testRecipe = recipe {
+            dataGeneratorDataSource {
+                phoneNumbers 'PhoneNumbers'
+                phoneNumbers 'PhonesWithDifferentFormat', '+X XXX-XXX-XXXX'
+            }
+        }
+        DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
+        assertPhoneNumberDataGen(dataSource.dataGenerators[0], 'PhoneNumbers', 'XXX-XXX-XXXX')
+        assertPhoneNumberDataGen(dataSource.dataGenerators[1], 'PhonesWithDifferentFormat', '+X XXX-XXX-XXXX')
+    }
+
+    private static void assertPhoneNumberDataGen(DataGenerator dataGenerator, String property, String format) {
+        assertDataGenerator(dataGenerator, 'Phone Number', property)
+        assert ((PhoneNumberDataGenerator) dataGenerator).numberFormat == format
+    }
+
+    @Test
+    void createsRecipeWithDataSourceTestStepWithUKPostCodeDataGen() throws Exception {
+
+        TestRecipe testRecipe = recipe {
+            dataGeneratorDataSource {
+                ukPostCodes 'UKPostCodes'
+                ukPostCodes 'UKPostcodesWithDifferentFormat', 'AA99 9AA'
+            }
+        }
+        DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
+        assertUkPostCodeDataGen(dataSource.dataGenerators[0], 'UKPostCodes', UKPostCodeDataGenerator.CodeFormatEnum.ALL)
+        assertUkPostCodeDataGen(dataSource.dataGenerators[1], 'UKPostcodesWithDifferentFormat', AA99_9AA)
+    }
+
+    private static void assertUkPostCodeDataGen(DataGenerator dataGenerator, String property,
+                                                UKPostCodeDataGenerator.CodeFormatEnum format) {
+        assertDataGenerator(dataGenerator, 'United Kingdom Postcode', property)
+        assert ((UKPostCodeDataGenerator) dataGenerator).codeFormat == format
+    }
+
+    @Test
+    void createsRecipeWithDataSourceTestStepWithUSZipCodeDataGen() throws Exception {
+
+        TestRecipe testRecipe = recipe {
+            dataGeneratorDataSource {
+                usZipCodes 'ZipCodes'
+                usZipCodes 'ZipCodesWithDifferentFormat', 'XXXXX-XXXX'
+            }
+        }
+        DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
+        assertUSZipCodeDataGen(dataSource.dataGenerators[0], 'ZipCodes', USZIPCodeDataGenerator.CodeFormatEnum.ALL)
+        assertUSZipCodeDataGen(dataSource.dataGenerators[1], 'ZipCodesWithDifferentFormat', XXXXX_XXXX)
+    }
+
+    private static void assertUSZipCodeDataGen(DataGenerator dataGenerator, String property,
+                                               USZIPCodeDataGenerator.CodeFormatEnum format) {
+        assertDataGenerator(dataGenerator, 'United States ZIP Code', property)
+        assert ((USZIPCodeDataGenerator) dataGenerator).codeFormat == format
     }
 
     private static DataGenDataSource extractDataGenDataSource(TestRecipe testRecipe) {
@@ -220,10 +358,5 @@ class DataGenDataSourceTestStepDslTest {
     private static void assertDataGenerator(DataGenerator dataGenerator, String type, String propertyName) {
         assert dataGenerator.type == type
         assert dataGenerator.propertyName == propertyName
-    }
-
-    private static void assertBooleanDataGen(DataGenerator dataGenerator, String propertyName, FormatEnum format) {
-        assertDataGenerator(dataGenerator, 'Boolean', propertyName)
-        assert ((BooleanDataGenerator) dataGenerator).format == format
     }
 }
