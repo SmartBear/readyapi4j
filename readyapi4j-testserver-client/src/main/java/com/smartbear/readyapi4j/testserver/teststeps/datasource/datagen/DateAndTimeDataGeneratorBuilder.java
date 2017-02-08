@@ -3,6 +3,7 @@ package com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.smartbear.readyapi.client.model.DataGenerator;
 import com.smartbear.readyapi.client.model.DateAndTimeDataGenerator;
+import com.smartbear.readyapi.client.model.DateAndTimeDataGenerator.DateTimeFormatEnum;
 
 import java.util.Date;
 
@@ -17,7 +18,7 @@ public class DateAndTimeDataGeneratorBuilder extends AbstractDataGeneratorBuilde
     DateAndTimeDataGeneratorBuilder(String property) {
         super(property);
         dateAndTimeDataGenerator.setType("Date and Time");
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.HH_MM_AM_PM);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.HH_MM_AM_PM);
         dateAndTimeDataGenerator.setGenerationMode(DateAndTimeDataGenerator.GenerationModeEnum.RANDOM);
         dateAndTimeDataGenerator.setIncrementValueDay(1);
         dateAndTimeDataGenerator.setIncrementValueHour(0);
@@ -36,6 +37,19 @@ public class DateAndTimeDataGeneratorBuilder extends AbstractDataGeneratorBuilde
         return this;
     }
 
+    public DateAndTimeDataGeneratorBuilder withFormat(String format) {
+        for (DateTimeFormatEnum dateTimeFormat : DateTimeFormatEnum.values()) {
+            if (dateTimeFormat.toString().equals(format)) {
+                dateAndTimeDataGenerator.setDateTimeFormat(dateTimeFormat);
+                return this;
+            }
+        }
+        throw new IllegalArgumentException(String.format("Unsupported date format: %s. Allowed values:[%s]", format,
+                "'HH:MM AM/PM','HH:MM (24-hour)','HH:MM:SS AM/PM','HH:MM:SS (24-hour)','M/D/YYYY HH:MM:SS AM/PM',"
+                        + "'M/D/YYYY HH:MM:SS (24-hour)','M/D/YYYY','D Month YYYY','DayOfWeek D Month YYYY'," +
+                        "'YYYY-MM-DDTHH:mm:ssZ (ISO-8601)'"));
+    }
+
     public DateAndTimeDataGeneratorBuilder startingAt(Date startDate) {
         dateAndTimeDataGenerator.setMinimumValue(startDate);
         return this;
@@ -47,52 +61,52 @@ public class DateAndTimeDataGeneratorBuilder extends AbstractDataGeneratorBuilde
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatHH_MM_AM_PM() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.HH_MM_AM_PM);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.HH_MM_AM_PM);
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatHH_MM_24_HOUR() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.HH_MM_24_HOUR_);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.HH_MM_24_HOUR_);
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatHH_MM_SS_AM_PM() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.HH_MM_SS_AM_PM);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.HH_MM_SS_AM_PM);
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatHH_MM_SS_24_HOUR() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.HH_MM_SS_24_HOUR_);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.HH_MM_SS_24_HOUR_);
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatM_D_YYYY_HH_MM_SS_AM_PM() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.M_D_YYYY_HH_MM_SS_AM_PM);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.M_D_YYYY_HH_MM_SS_AM_PM);
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatM_D_YYYY_HH_MM_SS_24_HOUR() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.M_D_YYYY_HH_MM_SS_24_HOUR_);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.M_D_YYYY_HH_MM_SS_24_HOUR_);
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatM_D_YYYY() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.M_D_YYYY);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.M_D_YYYY);
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatD_MONTH_YYYY() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.D_MONTH_YYYY);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.D_MONTH_YYYY);
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatDAY_OF_WEEK_D_MONTH_YYYY() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.DAYOFWEEK_D_MONTH_YYYY);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.DAYOFWEEK_D_MONTH_YYYY);
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder withFormatISO_8601() {
-        dateAndTimeDataGenerator.setDateTimeFormat(DateAndTimeDataGenerator.DateTimeFormatEnum.YYYY_MM_DDTHH_MM_SSZ_ISO_8601_);
+        dateAndTimeDataGenerator.setDateTimeFormat(DateTimeFormatEnum.YYYY_MM_DDTHH_MM_SSZ_ISO_8601_);
         return this;
     }
 
