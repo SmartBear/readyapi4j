@@ -90,11 +90,11 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
         dataSourceTestStepBuilder.withProperty(digitsBooleanTypeProperty(propertyName))
     }
 
-    void ipv4ComputerAddresse(String propertyName) {
+    void ipv4ComputerAddress(String propertyName) {
         dataSourceTestStepBuilder.withProperty(ipv4ComputerAddressTypeProperty(propertyName))
     }
 
-    void mac48ComputerAddresse(String propertyName) {
+    void mac48ComputerAddress(String propertyName) {
         dataSourceTestStepBuilder.withProperty(mac48ComputerAddressTypeProperty(propertyName))
     }
 
