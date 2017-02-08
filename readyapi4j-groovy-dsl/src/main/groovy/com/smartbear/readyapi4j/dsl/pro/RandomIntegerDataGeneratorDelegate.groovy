@@ -3,7 +3,7 @@ package com.smartbear.readyapi4j.dsl.pro
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.IntegerDataGeneratorBuilder
 
 /**
- * Delegate for the 'randomIntegers' closure in 'recipe'
+ * Delegate for the 'randomInteger' closure in 'recipe'
  */
 class RandomIntegerDataGeneratorDelegate {
     protected IntegerDataGeneratorBuilder integerDataGeneratorBuilder

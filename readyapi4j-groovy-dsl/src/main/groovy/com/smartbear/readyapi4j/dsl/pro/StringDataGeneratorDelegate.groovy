@@ -3,7 +3,7 @@ package com.smartbear.readyapi4j.dsl.pro
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.StringDataGeneratorBuilder
 
 /**
- * Delegate for the 'stringValues' closure in 'recipe'
+ * Delegate for the 'stringValue' closure in 'recipe'
  */
 class StringDataGeneratorDelegate {
     private StringDataGeneratorBuilder dataGeneratorBuilder;

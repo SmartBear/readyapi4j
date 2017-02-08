@@ -43,14 +43,14 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithBasicDataGenerators() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'CityDataGenDataSource', {
+            withGeneratedData 'CityDataGenDataSource', {
                 numberOfRows 2
-                cityNames 'cityNames'
-                countryNames 'countryNames'
-                streetAddresses 'addresses'
-                emails 'emails'
-                guidValues 'id'
-                socialSecurityNumbers 'SocialSecurityNumbers'
+                cityName 'cityName'
+                countryName 'countryName'
+                streetAddress 'addresse'
+                email 'email'
+                guidValue 'id'
+                socialSecurityNumber 'SocialSecurityNumber'
 
                 testSteps {
                     get 'http://hostname.com'
@@ -60,21 +60,21 @@ class DataGenDataSourceTestStepDslTest {
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
         assert dataSource.numberOfRows == '2'
         assert dataSource.dataGenerators.size() == 6
-        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[0], 'City', 'cityNames')
-        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[1], 'Country', 'countryNames')
-        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[2], 'Street Address', 'addresses')
-        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[3], 'E-Mail', 'emails')
+        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[0], 'City', 'cityName')
+        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[1], 'Country', 'countryName')
+        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[2], 'Street Address', 'addresse')
+        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[3], 'E-Mail', 'email')
         verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[4], 'Guid', 'id')
-        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[5], 'Social Security Number', 'SocialSecurityNumbers')
+        verifyDataGeneratorTypeAndProperty(dataSource.dataGenerators[5], 'Social Security Number', 'SocialSecurityNumber')
     }
 
     @Test
     void createsRecipeWithDataSourceTestStepWithBooleanDataGenerators() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'BooleanDataGenDataSource', {
-                yesNoBooleanValues 'YesNoBooleanValues'
-                trueFalseBooleanValues 'TrueFalseBooleanValues'
-                digitsBooleanValues 'ZeroOneBooleanValues'
+            withGeneratedData 'BooleanDataGenDataSource', {
+                yesNoBooleanValue 'YesNoBooleanValues'
+                trueFalseBooleanValue 'TrueFalseBooleanValues'
+                digitsBooleanValue 'ZeroOneBooleanValues'
 
                 testSteps {
                     get 'http://somehost.com'
@@ -96,9 +96,9 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithComputerAddressDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'ComputerAddressDataGenDataSource', {
-                ipv4ComputerAddresses 'IPv4Adresses'
-                mac48ComputerAddresses 'Mac48Addresses'
+            withGeneratedData 'ComputerAddressDataGenDataSource', {
+                ipv4ComputerAddresse 'IPv4Adresses'
+                mac48ComputerAddresse 'Mac48Addresses'
             }
         }
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
@@ -111,8 +111,8 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithStringDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'StringDataGenDataSource', {
-                stringValues 'Strings', {
+            withGeneratedData 'StringDataGenDataSource', {
+                stringValue 'Strings', {
                     minimumCharacters 8
                     maximumCharacters 20
                     withoutSpaces
@@ -135,7 +135,7 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithCustomStringDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'CustomStringDataGenDataSource', {
+            withGeneratedData 'CustomStringDataGenDataSource', {
                 customString 'ConstantString', 'This is a custom string!'
             }
         }
@@ -148,8 +148,8 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithShortStateNameDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'ShortStateNamesDataGenDataSource', {
-                abbreviatedStateNames 'StateNames'
+            withGeneratedData 'ShortStateNamesDataGenDataSource', {
+                abbreviatedStateName 'StateNames'
             }
         }
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
@@ -161,8 +161,8 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithFullStateNameDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'FullStateNamesDataGenDataSource', {
-                fullStateNames 'FullStateNames'
+            withGeneratedData 'FullStateNamesDataGenDataSource', {
+                fullStateName 'FullStateNames'
             }
         }
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
@@ -177,8 +177,8 @@ class DataGenDataSourceTestStepDslTest {
         Date endDate = Date.parse('yyyy-MM-dd hh:mm:ss', '2016-04-03 23:59:59')
 
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'FullStateNamesDataGenDataSource', {
-                dateAndTimeValues 'DateAndTimes', {
+            withGeneratedData 'FullStateNamesDataGenDataSource', {
+                dateAndTimeValue 'DateAndTimes', {
                     between '2014-04-03 1:23:45' and '2016-04-03 23:59:59', 'yyyy-MM-dd hh:mm:ss'
                     format 'YYYY-MM-DDTHH:mm:ssZ (ISO-8601)'
                 }
@@ -196,8 +196,8 @@ class DataGenDataSourceTestStepDslTest {
     void createsRecipeWithDataSourceTestStepWithSequentialIntegerDataGen() throws Exception {
 
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'FullStateNamesDataGenDataSource', {
-                sequentialIntegers 'SequentialIntegers', {
+            withGeneratedData 'FullStateNamesDataGenDataSource', {
+                sequentialInteger 'SequentialIntegers', {
                     minimumValue 1
                     maximumValue 100
                     incrementBy 2
@@ -217,8 +217,8 @@ class DataGenDataSourceTestStepDslTest {
     void createsRecipeWithDataSourceTestStepWithRandomIntegerDataGen() throws Exception {
 
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'FullStateNamesDataGenDataSource', {
-                randomIntegers 'RandomIntegers', {
+            withGeneratedData 'FullStateNamesDataGenDataSource', {
+                randomInteger 'RandomIntegers', {
                     minimumValue 100
                     maximumValue 1000
                 }
@@ -235,16 +235,16 @@ class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithNamesDataGen() throws Exception {
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource 'NamesDataGenDataSource', {
-                firstNames 'AnyGenderFirstNames'
-                lastNames 'AnyGenderLastNames'
-                fullNames 'AnyGenderFullNames'
-                maleFirstNames 'MaleFirstNames'
-                maleLastNames 'MaleLastNames'
-                maleFullNames 'MaleFullNames'
-                femaleFirstNames 'FemaleFirstNames'
-                femaleLastNames 'FemaleLastNames'
-                femaleFullNames 'FemaleFullNames'
+            withGeneratedData 'NamesDataGenDataSource', {
+                firstName 'AnyGenderFirstNames'
+                lastName 'AnyGenderLastNames'
+                fullName 'AnyGenderFullNames'
+                maleFirstName 'MaleFirstNames'
+                maleLastName 'MaleLastNames'
+                maleFullName 'MaleFullNames'
+                femaleFirstName 'FemaleFirstNames'
+                femaleLastName 'FemaleLastNames'
+                femaleFullName 'FemaleFullNames'
             }
         }
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
@@ -271,7 +271,7 @@ class DataGenDataSourceTestStepDslTest {
     void createsRecipeWithDataSourceTestStepWithValueFromSetDataGen() throws Exception {
 
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource {
+            withGeneratedData {
                 randomValueFromSet 'RandomValues', ['Value1', 'Value2'].toSet()
                 sequentialValueFromSet 'SequentialValues', ['Value3', 'Value4'].toSet()
             }
@@ -294,9 +294,9 @@ class DataGenDataSourceTestStepDslTest {
     void createsRecipeWithDataSourceTestStepWithPhoneNumberDataGen() throws Exception {
 
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource {
-                phoneNumbers 'PhoneNumbers'
-                phoneNumbers 'PhonesWithDifferentFormat', '+X XXX-XXX-XXXX'
+            withGeneratedData {
+                phoneNumber 'PhoneNumbers'
+                phoneNumber 'PhonesWithDifferentFormat', '+X XXX-XXX-XXXX'
             }
         }
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
@@ -313,9 +313,9 @@ class DataGenDataSourceTestStepDslTest {
     void createsRecipeWithDataSourceTestStepWithUKPostCodeDataGen() throws Exception {
 
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource {
-                ukPostCodes 'UKPostCodes'
-                ukPostCodes 'UKPostcodesWithDifferentFormat', 'AA99 9AA'
+            withGeneratedData {
+                ukPostCode 'UKPostCodes'
+                ukPostCode 'UKPostcodesWithDifferentFormat', 'AA99 9AA'
             }
         }
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)
@@ -333,9 +333,9 @@ class DataGenDataSourceTestStepDslTest {
     void createsRecipeWithDataSourceTestStepWithUSZipCodeDataGen() throws Exception {
 
         TestRecipe testRecipe = recipe {
-            dataGeneratorDataSource {
-                usZipCodes 'ZipCodes'
-                usZipCodes 'ZipCodesWithDifferentFormat', 'XXXXX-XXXX'
+            withGeneratedData {
+                usZipCode 'ZipCodes'
+                usZipCode 'ZipCodesWithDifferentFormat', 'XXXXX-XXXX'
             }
         }
         DataGenDataSource dataSource = extractDataGenDataSource(testRecipe)

@@ -4,7 +4,7 @@ import com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DateAndT
 
 
 /**
- * Delegate for the 'dateAndTimeValues' closure in 'recipe'
+ * Delegate for the 'dateAndTimeValue' closure in 'recipe'
  */
 class DateAndTimeDataGeneratorDelegate {
     private DateAndTimeDataGeneratorBuilder dateAndTimeDataGeneratorBuilder;

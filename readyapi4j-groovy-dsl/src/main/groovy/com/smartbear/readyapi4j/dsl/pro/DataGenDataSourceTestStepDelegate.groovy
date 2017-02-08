@@ -54,47 +54,47 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
         dataSourceTestStepBuilder.withNumberOfRows(numberOfRows)
     }
 
-    void cityNames(String propertyName) {
+    void cityName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(cityTypeProperty(propertyName))
     }
 
-    void countryNames(String propertyName) {
+    void countryName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(countryTypeProperty(propertyName))
     }
 
-    void streetAddresses(String propertyName) {
+    void streetAddress(String propertyName) {
         dataSourceTestStepBuilder.withProperty(addressTypeProperty(propertyName))
     }
 
-    void emails(String propertyName) {
+    void email(String propertyName) {
         dataSourceTestStepBuilder.withProperty(emailTypeProperty(propertyName))
     }
 
-    void guidValues(String propertyName) {
+    void guidValue(String propertyName) {
         dataSourceTestStepBuilder.withProperty(guidTypeProperty(propertyName))
     }
 
-    void socialSecurityNumbers(String propertyName) {
+    void socialSecurityNumber(String propertyName) {
         dataSourceTestStepBuilder.withProperty(ssnTypeProperty(propertyName))
     }
 
-    void trueFalseBooleanValues(String propertyName) {
+    void trueFalseBooleanValue(String propertyName) {
         dataSourceTestStepBuilder.withProperty(trueFalseBooleanTypeProperty(propertyName))
     }
 
-    void yesNoBooleanValues(String propertyName) {
+    void yesNoBooleanValue(String propertyName) {
         dataSourceTestStepBuilder.withProperty(yesNoBooleanTypeProperty(propertyName))
     }
 
-    void digitsBooleanValues(String propertyName) {
+    void digitsBooleanValue(String propertyName) {
         dataSourceTestStepBuilder.withProperty(digitsBooleanTypeProperty(propertyName))
     }
 
-    void ipv4ComputerAddresses(String propertyName) {
+    void ipv4ComputerAddresse(String propertyName) {
         dataSourceTestStepBuilder.withProperty(ipv4ComputerAddressTypeProperty(propertyName))
     }
 
-    void mac48ComputerAddresses(String propertyName) {
+    void mac48ComputerAddresse(String propertyName) {
         dataSourceTestStepBuilder.withProperty(mac48ComputerAddressTypeProperty(propertyName))
     }
 
@@ -104,60 +104,60 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
         dataSourceTestStepBuilder.withProperty(propertyBuilder)
     }
 
-    void stringValues(String propertyName, @DelegatesTo(StringDataGeneratorDelegate) Closure dataGenConfig) {
+    void stringValue(String propertyName, @DelegatesTo(StringDataGeneratorDelegate) Closure dataGenConfig) {
         StringDataGeneratorBuilder stringDataGeneratorBuilder = stringTypeProperty(propertyName)
         StringDataGeneratorDelegate delegate = new StringDataGeneratorDelegate(stringDataGeneratorBuilder)
         addDataGenDataSource(delegate, dataGenConfig, stringDataGeneratorBuilder)
     }
 
-    void fullStateNames(String propertyName) {
+    void fullStateName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(fullStateNameTypeProperty(propertyName))
     }
 
-    void abbreviatedStateNames(String propertyName) {
+    void abbreviatedStateName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(shortStateNameTypeProperty(propertyName))
     }
 
-    void dateAndTimeValues(String propertyName, @DelegatesTo(DateAndTimeDataGeneratorDelegate) Closure dataGenConfig) {
+    void dateAndTimeValue(String propertyName, @DelegatesTo(DateAndTimeDataGeneratorDelegate) Closure dataGenConfig) {
         DateAndTimeDataGeneratorBuilder builder = randomDateAndTimeTypeProperty(propertyName)
         DateAndTimeDataGeneratorDelegate delegate = new DateAndTimeDataGeneratorDelegate(builder)
         addDataGenDataSource(delegate, dataGenConfig, builder)
     }
 
-    void randomIntegers(String propertyName, @DelegatesTo(RandomIntegerDataGeneratorDelegate) Closure dataGenConfig) {
+    void randomInteger(String propertyName, @DelegatesTo(RandomIntegerDataGeneratorDelegate) Closure dataGenConfig) {
         IntegerDataGeneratorBuilder builder = randomIntegerTypeProperty(propertyName)
         RandomIntegerDataGeneratorDelegate delegate = new RandomIntegerDataGeneratorDelegate(builder)
         addDataGenDataSource(delegate, dataGenConfig, builder)
     }
 
-    void sequentialIntegers(String propertyName,
-                            @DelegatesTo(SequentialIntegerDataGeneratorDelegate) Closure dataGenConfig) {
+    void sequentialInteger(String propertyName,
+                           @DelegatesTo(SequentialIntegerDataGeneratorDelegate) Closure dataGenConfig) {
         IntegerDataGeneratorBuilder builder = sequentialIntegerTypeProperty(propertyName)
         SequentialIntegerDataGeneratorDelegate delegate = new SequentialIntegerDataGeneratorDelegate(builder)
         addDataGenDataSource(delegate, dataGenConfig, builder)
     }
 
-    void maleFirstNames(String propertyName) {
+    void maleFirstName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(maleFirstNameTypeProperty(propertyName))
     }
 
-    void maleLastNames(String propertyName) {
+    void maleLastName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(maleLastNameTypeProperty(propertyName))
     }
 
-    void maleFullNames(String propertyName) {
+    void maleFullName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(maleFullNameTypeProperty(propertyName))
     }
 
-    void femaleFirstNames(String propertyName) {
+    void femaleFirstName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(femaleFirstNameTypeProperty(propertyName))
     }
 
-    void femaleLastNames(String propertyName) {
+    void femaleLastName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(femaleLastNameTypeProperty(propertyName))
     }
 
-    void femaleFullNames(String propertyName) {
+    void femaleFullName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(femaleFullNameTypeProperty(propertyName))
     }
 
@@ -165,7 +165,7 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
      * Generates first names for both genders: Male and Female
      * @param propertyName property name
      */
-    void firstNames(String propertyName) {
+    void firstName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(anyGenderFirstNameTypeProperty(propertyName))
     }
 
@@ -173,7 +173,7 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
      * Generates last names for both genders: Male and Female
      * @param propertyName property name
      */
-    void lastNames(String propertyName) {
+    void lastName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(anyGenderLastNameTypeProperty(propertyName))
     }
 
@@ -181,7 +181,7 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
      * Generates full names for both genders: Male and Female
      * @param propertyName property name
      */
-    void fullNames(String propertyName) {
+    void fullName(String propertyName) {
         dataSourceTestStepBuilder.withProperty(anyGenderFullNameTypeProperty(propertyName))
     }
 
@@ -202,7 +202,7 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
      * @param propertyName property name
      * @param format one of:'XXX-XXX-XXXX', '+1 XXX-XXX-XXXX', '+1 (XXX)-XXX-XXXX', '+X XXX-XXX-XXXX', '+X (XXX)-XXX-XXXX'
      */
-    void phoneNumbers(String propertyName, String format = 'XXX-XXX-XXXX') {
+    void phoneNumber(String propertyName, String format = 'XXX-XXX-XXXX') {
         PhoneNumberDataGeneratorBuilder phoneNumberDataGeneratorBuilder = phoneNumberTypeProperty(propertyName)
         phoneNumberDataGeneratorBuilder.withNumberFormat(format)
         dataSourceTestStepBuilder.withProperty(phoneNumberDataGeneratorBuilder)
@@ -213,7 +213,7 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
      * @param propertyName
      * @param format one of: 'All', 'XXXXX', 'XXXXX-XXXX'
      */
-    void usZipCodes(String propertyName, String format = 'All') {
+    void usZipCode(String propertyName, String format = 'All') {
         USZipDataGeneratorBuilder uSZipDataGeneratorBuilder = usZipCodeTypeProperty(propertyName)
         uSZipDataGeneratorBuilder.setFormat(format)
         dataSourceTestStepBuilder.withProperty(uSZipDataGeneratorBuilder)
@@ -224,7 +224,7 @@ class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataG
      * @param propertyName
      * @param format one of: 'All', 'A9 9AA', 'A99 9AA', 'AA9 9AA', 'A9A 9AA', 'AA99 9AA', 'AA9A 9AA'
      */
-    void ukPostCodes(String propertyName = 'UKPostCodes', String format = 'All') {
+    void ukPostCode(String propertyName = 'UKPostCodes', String format = 'All') {
         UKPostCodeDataGeneratorBuilder ukPostCodeDataGeneratorBuilder = ukPostCodeTypeProperty(propertyName)
         ukPostCodeDataGeneratorBuilder.setFormat(format)
         dataSourceTestStepBuilder.withProperty(ukPostCodeDataGeneratorBuilder)
