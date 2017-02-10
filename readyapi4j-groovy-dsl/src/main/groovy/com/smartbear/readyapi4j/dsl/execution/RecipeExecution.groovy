@@ -10,7 +10,7 @@ import com.smartbear.readyapi4j.testserver.execution.TestServerClient
 class RecipeExecution {
 
     /**
-     * Creates an instance of TestServerClient for remote execution of recipes.
+     * Creates an instance of TestServerClient for remote execution of recipes. Can be used in set-up methods in tests.
      * @param testServerUrl https://<server hostname or ip> : <port>
      * @param username username
      * @param password password

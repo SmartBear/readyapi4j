@@ -1,7 +1,6 @@
 package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.TestRecipeBuilder
-import com.smartbear.readyapi4j.execution.RecipeExecutionException
 import com.smartbear.readyapi4j.teststeps.TestSteps
 import com.smartbear.readyapi4j.teststeps.groovyscript.GroovyScriptTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.jdbcrequest.JdbcRequestTestStepBuilder
@@ -11,6 +10,7 @@ import com.smartbear.readyapi4j.teststeps.properties.PropertiesTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferTestStepBuilder
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder
+import com.smartbear.readyapi4j.teststeps.soaprequest.SoapRequestStepBuilder
 
 /**
  * The delegate responding to commands inside the "recipe" closure.
@@ -86,28 +86,21 @@ class DslDelegate {
     static final Map response = Collections.unmodifiableMap([property: 'Response'])
 
     void soapRequest(@DelegatesTo(SoapRequestDelegate) Closure soapRequestDefinition) {
-        SoapRequestDelegate delegate = new SoapRequestDelegate()
+        SoapRequestStepBuilder soapRequestStepBuilder = new SoapRequestStepBuilder()
+
+        SoapRequestDelegate delegate = new SoapRequestDelegate(soapRequestStepBuilder)
         soapRequestDefinition.delegate = delegate
         soapRequestDefinition.call()
-        testRecipeBuilder.addStep(delegate.buildSoapRequestStep())
+        testRecipeBuilder.addStep(soapRequestStepBuilder)
     }
 
     void soapMockResponse(@DelegatesTo(SoapMockResponseDelegate) Closure soapMockResponseDefinition) {
-        SoapMockResponseDelegate delegate = new SoapMockResponseDelegate()
+        SoapMockResponseTestStepBuilder builder = new SoapMockResponseTestStepBuilder()
+
+        SoapMockResponseDelegate delegate = new SoapMockResponseDelegate(builder)
         soapMockResponseDefinition.delegate = delegate
         soapMockResponseDefinition.call()
 
-        SoapMockResponseTestStepBuilder builder = new SoapMockResponseTestStepBuilder()
-                .named(delegate.testStepName)
-                .forBinding(delegate.binding)
-                .forOperation(delegate.operation)
-                .withPath(delegate.path)
-                .withPort(delegate.port)
-        try {
-            builder.withWsdlAt(new URL(delegate.wsdlUrl))
-        } catch (MalformedURLException e) {
-            throw new RecipeExecutionException("Not a valid WSDL location: $delegate.wsdlUrl", e)
-        }
         testRecipeBuilder.addStep(builder)
     }
 
@@ -127,33 +120,12 @@ class DslDelegate {
     }
 
     private void createRestRequest(String httpVerb, String URI, Closure configuration = null) {
-        RestRequestStepBuilder request = TestSteps."$httpVerb"(URI)
+        RestRequestStepBuilder requestBuilder = TestSteps."$httpVerb"(URI)
         if (configuration) {
-            RestRequestDelegate delegate = new RestRequestDelegate()
+            RestRequestDelegate delegate = new RestRequestDelegate(requestBuilder)
             configuration.delegate = delegate
             configuration.call()
-            request.named(delegate.stepName)
-            Map<String, Object> headers = delegate.headers
-            if (headers) {
-                headers.each { name, value ->
-                    request.addHeader(name, value)
-                }
-            }
-            if (delegate.followRedirects) {
-                request.followRedirects()
-            }
-            if (delegate.entitizeParameters) {
-                request.entitizeParameters()
-            }
-            if (delegate.postQueryString) {
-                request.postQueryString()
-            }
-            if (delegate.timeout) {
-                request.setTimeout(delegate.timeout)
-            }
-            delegate.assertions.each { assertion -> request.addAssertion(assertion) }
-            delegate.parameters.each { param -> request.addParameter(param) }
         }
-        testRecipeBuilder.addStep(request)
+        testRecipeBuilder.addStep(requestBuilder)
     }
 }

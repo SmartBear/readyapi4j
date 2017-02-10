@@ -1,38 +1,43 @@
 package com.smartbear.readyapi4j.dsl
 
+import com.smartbear.readyapi4j.execution.RecipeExecutionException
+import com.smartbear.readyapi4j.teststeps.mockresponse.SoapMockResponseTestStepBuilder
+
 /**
  * Delegate for the 'soapMockResponse'  closure in 'recipe' closure
  */
 class SoapMockResponseDelegate {
+    private SoapMockResponseTestStepBuilder soapMockResponseTestStepBuilder
 
-    String testStepName
-    String wsdlUrl
-    String binding
-    String operation
-    String path
-    int port
+    SoapMockResponseDelegate(SoapMockResponseTestStepBuilder soapMockResponseTestStepBuilder) {
+        this.soapMockResponseTestStepBuilder = soapMockResponseTestStepBuilder
+    }
 
     void setName(String testStepName) {
-        this.testStepName = testStepName
+        soapMockResponseTestStepBuilder.named(testStepName)
     }
 
     void setWsdl(String wsdlUrl) {
-        this.wsdlUrl = wsdlUrl
+        try {
+            soapMockResponseTestStepBuilder.withWsdlAt(new URL(wsdlUrl))
+        } catch (MalformedURLException e) {
+            throw new RecipeExecutionException("Not a valid WSDL location: $wsdlUrl", e)
+        }
     }
 
     void setBinding(String binding) {
-        this.binding = binding
+        soapMockResponseTestStepBuilder.forBinding(binding)
     }
 
     void setOperation(String operation) {
-        this.operation = operation
+        soapMockResponseTestStepBuilder.forOperation(operation)
     }
 
     void setPath(String path) {
-        this.path = path
+        soapMockResponseTestStepBuilder.withPath(path)
     }
 
     void setPort(int port) {
-        this.port = port
+        soapMockResponseTestStepBuilder.withPort(port)
     }
 }
