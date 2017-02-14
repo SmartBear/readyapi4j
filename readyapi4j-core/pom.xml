@@ -12,15 +12,10 @@
     <name>readyapi4j-core</name>
 
     <properties>
-        <jersey-version>1.19</jersey-version>
-        <jodatime-version>2.3</jodatime-version>
-        <swagger-version>1.5.10</swagger-version>
-        <jackson-version>2.8.5</jackson-version>
         <swagger-codegen.version>2.1.6</swagger-codegen.version>
         <swagger.url>https://api.swaggerhub.com/apis/smartbear/ready-api-testserver/1.3.3</swagger.url>
         <swagger.directory>${project.basedir}/src/main/resources</swagger.directory>
         <swagger.file>swagger.json</swagger.file>
-        <junit-version>4.8.1</junit-version>
     </properties>
     <dependencies>
         <dependency>
