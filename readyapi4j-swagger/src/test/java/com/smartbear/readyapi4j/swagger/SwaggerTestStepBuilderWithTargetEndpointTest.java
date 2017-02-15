@@ -18,7 +18,7 @@ public class SwaggerTestStepBuilderWithTargetEndpointTest {
     @BeforeClass
     public static void setup() {
         petstore = new SwaggerTestStepBuilder(
-            "http://petstore.swagger.io/v2/swagger.json", TARGET_ENDPOINT);
+            "src/test/resources/petstore-swagger.json", TARGET_ENDPOINT);
     }
 
     @Test

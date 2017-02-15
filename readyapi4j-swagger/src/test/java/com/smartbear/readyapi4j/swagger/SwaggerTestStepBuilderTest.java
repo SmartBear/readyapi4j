@@ -17,7 +17,7 @@ public class SwaggerTestStepBuilderTest {
 
     @BeforeClass
     public static void setup() {
-        petstore = new SwaggerTestStepBuilder("http://petstore.swagger.io/v2/swagger.json");
+        petstore = new SwaggerTestStepBuilder("src/test/resources/petstore-swagger.json");
     }
 
     @Test
