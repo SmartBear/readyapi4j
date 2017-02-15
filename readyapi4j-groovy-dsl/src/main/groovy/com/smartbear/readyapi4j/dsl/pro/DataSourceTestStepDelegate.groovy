@@ -1,6 +1,8 @@
 package com.smartbear.readyapi4j.dsl.pro
 
+import com.smartbear.readyapi4j.TestRecipeBuilder
 import com.smartbear.readyapi4j.testserver.teststeps.datasource.DataSourceTestStepBuilder
+import com.smartbear.readyapi4j.teststeps.TestStepBuilder
 
 import static groovy.lang.Closure.DELEGATE_FIRST
 
@@ -17,11 +19,18 @@ class DataSourceTestStepDelegate<Builder extends DataSourceTestStepBuilder> {
     }
 
     void testSteps(@DelegatesTo(ProDslDelegate) Closure testStepsDefinition) {
-        ProDslDelegate delegate = new ProDslDelegate()
+        final List<TestStepBuilder> testStepBuilders = []
+        ProDslDelegate delegate = new ProDslDelegate(new TestRecipeBuilder() {
+            @Override
+            TestRecipeBuilder addStep(TestStepBuilder testStepBuilder) {
+                testStepBuilders.add(testStepBuilder)
+                return this
+            }
+        })
         testStepsDefinition.delegate = delegate
         testStepsDefinition.resolveStrategy = DELEGATE_FIRST
         testStepsDefinition.call()
 
-        delegate.testStepBuilders.each { testStepBuilder -> dataSourceTestStepBuilder.addTestStep(testStepBuilder) }
+        testStepBuilders.each { testStepBuilder -> dataSourceTestStepBuilder.addTestStep(testStepBuilder) }
     }
 }

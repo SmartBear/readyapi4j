@@ -27,6 +27,17 @@ public class USZipDataGeneratorBuilder extends AbstractDataGeneratorBuilder<USZi
         return this;
     }
 
+    public USZipDataGeneratorBuilder setFormat(String format) {
+        for (USZIPCodeDataGenerator.CodeFormatEnum formatEnum : USZIPCodeDataGenerator.CodeFormatEnum.values()) {
+            if (formatEnum.toString().equals(format)) {
+                usZipCodeSetDataGenerator.setCodeFormat(formatEnum);
+                return this;
+            }
+        }
+        throw new IllegalArgumentException(String.format("Unsupported ZIP code format: %s. Allowed values:[%s]",
+                format, "'ALL', 'XXXXX', 'XXXXX-XXXX'"));
+    }
+
     @Override
     protected DataGenerator buildDataGenerator() {
         return usZipCodeSetDataGenerator;

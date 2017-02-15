@@ -47,6 +47,17 @@ public class UKPostCodeDataGeneratorBuilder extends AbstractDataGeneratorBuilder
         return this;
     }
 
+    public UKPostCodeDataGeneratorBuilder setFormat(String format) {
+        for (UKPostCodeDataGenerator.CodeFormatEnum formatEnum : UKPostCodeDataGenerator.CodeFormatEnum.values()) {
+            if (formatEnum.toString().equals(format)) {
+                ukPostCodeSetDataGenerator.setCodeFormat(formatEnum);
+                return this;
+            }
+        }
+        throw new IllegalArgumentException(String.format("Unsupported post code format: %s. Allowed values:[%s]",
+                format, "'ALL', 'A9 9AA', 'A99 9AA', 'AA9 9AA', 'A9A 9AA', 'AA99 9AA', 'AA9A 9AA'"));
+    }
+
     @Override
     protected DataGenerator buildDataGenerator() {
         return ukPostCodeSetDataGenerator;

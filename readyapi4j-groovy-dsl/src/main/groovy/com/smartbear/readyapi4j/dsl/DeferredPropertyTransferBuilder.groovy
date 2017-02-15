@@ -1,6 +1,6 @@
 package com.smartbear.readyapi4j.dsl
 
-import com.smartbear.readyapi4j.teststeps.TestStepBuilder
+import com.smartbear.readyapi4j.TestRecipeBuilder
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferBuilder
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferSourceBuilder
 import com.smartbear.readyapi4j.teststeps.propertytransfer.PropertyTransferTargetBuilder
@@ -15,14 +15,14 @@ class DeferredPropertyTransferBuilder {
     private String sourceStepName
     private String sourcePropertyName
     private String sourcePath
-    private List<TestStepBuilder> testStepBuilders
+    private TestRecipeBuilder testRecipeBuilder
     private Map targetOptions
     private PropertyTransferBuilder transfer
     private String testStepName
 
-    DeferredPropertyTransferBuilder(Map sourceProperties, List<TestStepBuilder> testStepBuilders) {
+    DeferredPropertyTransferBuilder(Map sourceProperties, TestRecipeBuilder testRecipeBuilder) {
         extractSourceProperties(sourceProperties)
-        this.testStepBuilders = testStepBuilders
+        this.testRecipeBuilder = testRecipeBuilder
     }
 
     private void extractSourceProperties(Map sourceProperties) {
@@ -61,7 +61,7 @@ class DeferredPropertyTransferBuilder {
         transfer = new PropertyTransferBuilder().withSource(source).withTarget(target)
         PropertyTransferTestStepBuilder testStepBuilder = new PropertyTransferTestStepBuilder().addTransfer(this.transfer)
         testStepBuilder.named(testStepName)
-        testStepBuilders.add(testStepBuilder)
+        testRecipeBuilder.addStep(testStepBuilder)
         return this
     }
 
