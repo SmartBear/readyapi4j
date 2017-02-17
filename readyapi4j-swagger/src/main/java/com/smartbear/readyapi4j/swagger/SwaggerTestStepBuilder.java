@@ -6,13 +6,16 @@ import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepWithBodyBui
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import io.swagger.models.Path;
-import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
+import io.swagger.models.parameters.BodyParameter;
+import io.swagger.models.parameters.Parameter;
 import io.swagger.parser.SwaggerParser;
 import io.swagger.parser.util.SwaggerDeserializationResult;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Map;
 
 /**
  * Utility class for building RestRequestStepBuilders for operations in a Swagger 2.0 definition
@@ -20,8 +23,11 @@ import java.util.List;
 
 public class SwaggerTestStepBuilder {
 
+    private static final Collection<TestSteps.HttpMethod> HTTP_METHODS_WITH_BODY =
+            EnumSet.of(TestSteps.HttpMethod.POST, TestSteps.HttpMethod.PUT, TestSteps.HttpMethod.PATCH);
     private final Swagger swagger;
     private String targetEndpoint;
+    private String targetBasePath;
 
     /**
      * Creates a SwaggerTestStepBuilder for the specified Swagger definition and target targetEndpoint
@@ -31,8 +37,8 @@ public class SwaggerTestStepBuilder {
      * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
      */
     public SwaggerTestStepBuilder(String swaggerUrl, String targetEndpoint) throws IllegalArgumentException {
-        swagger = parseSwagger(swaggerUrl);
-        this.targetEndpoint = targetEndpoint;
+        this.swagger = parseSwagger(swaggerUrl);
+        setTargetEndpoint(targetEndpoint);
     }
 
     /**
@@ -43,9 +49,7 @@ public class SwaggerTestStepBuilder {
      * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
      */
     public SwaggerTestStepBuilder(String swaggerUrl) throws IllegalArgumentException {
-        swagger = parseSwagger(swaggerUrl);
-        List<Scheme> schemes = swagger.getSchemes();
-        this.targetEndpoint = schemes.isEmpty() ? "http": schemes.get(0).toValue().toLowerCase() + "://" + swagger.getHost();
+        this(swaggerUrl, null);
     }
 
     private Swagger parseSwagger(String swaggerUrl) throws IllegalArgumentException {
@@ -65,25 +69,41 @@ public class SwaggerTestStepBuilder {
      * @return a RestRequestStepBuilder with the correct path and method
      * @throws IllegalArgumentException if the operationId is not found in the Swagger definition
      */
-    public RestRequestStepBuilder<? extends RestRequestStepBuilder> operation(String operationId) {
+    public RestRequestStepBuilder<RestRequestStepBuilder> operation(String operationId) {
         for( String path : swagger.getPaths().keySet()){
             Path swaggerPath = swagger.getPaths().get( path );
 
             for(HttpMethod method: swaggerPath.getOperationMap().keySet()) {
                 Operation swaggerOperation = swaggerPath.getOperationMap().get(method);
                 if (operationId.equalsIgnoreCase(swaggerOperation.getOperationId())) {
-                    TestSteps.HttpMethod httpMethod = TestSteps.HttpMethod.valueOf(method.name().toUpperCase());
-                    if( isHttpMethodWithBody( httpMethod )) {
-                        return new RestRequestStepWithBodyBuilder(
-                            targetEndpoint + swagger.getBasePath() + path, httpMethod
-                        );
-                    }
-                    else {
-                        return new RestRequestStepBuilder<>(
-                            targetEndpoint + swagger.getBasePath() + path, httpMethod
-                        );
-                    }
+                    return new RestRequestStepBuilder<>(targetBasePath + path, toHttpMethod(method));
                 }
+            }
+        }
+
+        throw new IllegalArgumentException("operationId [" + operationId + "] not found in Swagger definition" );
+    }
+
+    /**
+     * Creates a RestRequestStepBuilder for the specified operation with body
+     *
+     * @param operationId the operationId of an operation in the Swagger definition
+     * @return a RestRequestStepWithBodyBuilder with the correct path and method
+     * @throws IllegalArgumentException if the operationId is not found in the Swagger definition
+     */
+    public RestRequestStepWithBodyBuilder operationWithBody(String operationId) {
+        for (Map.Entry<String, Path> path : swagger.getPaths().entrySet()) {
+
+            for(Map.Entry<HttpMethod, Operation> method: path.getValue().getOperationMap().entrySet()) {
+                Operation swaggerOperation = method.getValue();
+                if (!operationId.equalsIgnoreCase(swaggerOperation.getOperationId())) {
+                    continue;
+                }
+                final TestSteps.HttpMethod verb = toHttpMethod(method.getKey());
+                ensureHttpMethodWithBody(verb);
+                ensureBodyParameter(swaggerOperation);
+
+                return new RestRequestStepWithBodyBuilder(targetBasePath + path.getKey(), verb);
             }
         }
 
@@ -97,25 +117,41 @@ public class SwaggerTestStepBuilder {
      * @param path the path to append to the targetEndpoint and basePath
      * @param method the HTTP method to use
      */
-    public RestRequestStepBuilder<? extends RestRequestStepBuilder> request(String path, TestSteps.HttpMethod method){
-        String basePath = swagger.getBasePath();
-        if( basePath == null ){
-            basePath = "";
-        } else if( basePath.endsWith("/")){
-            basePath = basePath.substring(0, basePath.length()-1);
-        }
+    public RestRequestStepBuilder<RestRequestStepBuilder> request(String path, TestSteps.HttpMethod method){
+        return new RestRequestStepBuilder<>(targetBasePath + path, method);
+    }
 
-        if( isHttpMethodWithBody( method )){
-            return new RestRequestStepWithBodyBuilder(targetEndpoint + basePath + path, method);
+    /**
+     * Creates a RestRequestStepWithBodyBuilder for an arbitrary path and method - the
+     * targetEndpoint and basePath will be prefixed to the specified path.
+     *
+     * @param path   the path to append to the targetEndpoint and basePath
+     * @param method the HTTP method to use
+     */
+    public RestRequestStepWithBodyBuilder requestWithBody(String path, TestSteps.HttpMethod method){
+        ensureHttpMethodWithBody(method);
+        return new RestRequestStepWithBodyBuilder(targetBasePath + path, method);
+    }
+
+    private void ensureBodyParameter(Operation operation) {
+        for (Parameter param : operation.getParameters()) {
+            if (param instanceof BodyParameter) {
+                return;
+            }
         }
-        else {
-            return new RestRequestStepBuilder<>(targetEndpoint + basePath + path, method);
+        throw new IllegalArgumentException(
+                "Body parameter is not defined for the [" + operation.getOperationId() + "] operation");
+    }
+
+    private void ensureHttpMethodWithBody(TestSteps.HttpMethod method) {
+        if (!HTTP_METHODS_WITH_BODY.contains(method)) {
+            throw new IllegalArgumentException(
+                    "Body parameter is not allowed for [" + method + "] methods");
         }
     }
 
-    private boolean isHttpMethodWithBody(TestSteps.HttpMethod method) {
-        return method.equals( TestSteps.HttpMethod.POST ) || method.equals(TestSteps.HttpMethod.PUT) ||
-            method.equals( TestSteps.HttpMethod.PATCH );
+    private TestSteps.HttpMethod toHttpMethod(HttpMethod swaggerMethod) {
+        return TestSteps.HttpMethod.valueOf(swaggerMethod.name().toUpperCase());
     }
 
     /**
@@ -136,6 +172,19 @@ public class SwaggerTestStepBuilder {
      * @param targetEndpoint the target endpoint of the API under test
      */
     public void setTargetEndpoint(String targetEndpoint) {
-        this.targetEndpoint = targetEndpoint;
+        final String endpoint;
+        if (targetEndpoint == null) {
+            endpoint = swagger.getSchemes().isEmpty() ? "http" : swagger.getSchemes().get(0).toValue().toLowerCase() + "://" + swagger.getHost();
+        } else {
+            endpoint = targetEndpoint;
+        }
+        final String basePath = swagger.getBasePath();
+        if (basePath == null) {
+            this.targetEndpoint = endpoint;
+        } else if (basePath.endsWith("/")) {
+            this.targetBasePath = endpoint + basePath.substring(0, basePath.length() - 1);
+        } else {
+            this.targetBasePath = endpoint + basePath;
+        }
     }
 }
