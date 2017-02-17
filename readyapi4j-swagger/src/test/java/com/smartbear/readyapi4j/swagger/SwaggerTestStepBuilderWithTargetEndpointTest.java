@@ -7,9 +7,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created on 2017-02-15.
- */
 public class SwaggerTestStepBuilderWithTargetEndpointTest {
 
     public static final String TARGET_ENDPOINT = "http://api.myhost.com";

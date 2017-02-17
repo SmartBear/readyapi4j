@@ -8,9 +8,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-/**
- * Created on 2017-02-15.
- */
 public class SwaggerTestStepBuilderTest {
 
     private static SwaggerTestStepBuilder petstore;
