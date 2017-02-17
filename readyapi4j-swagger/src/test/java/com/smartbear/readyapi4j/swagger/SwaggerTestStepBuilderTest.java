@@ -1,20 +1,30 @@
 package com.smartbear.readyapi4j.swagger;
 
+import static org.junit.Assert.assertEquals;
+
+import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
+import com.smartbear.readyapi4j.teststeps.TestSteps.HttpMethod;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import java.net.URL;
+import java.nio.file.Paths;
 
 public class SwaggerTestStepBuilderTest {
 
     private static SwaggerTestStepBuilder petstore;
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @BeforeClass
-    public static void setup() {
-        petstore = new SwaggerTestStepBuilder("src/test/resources/petstore-swagger.json");
+    public static void setup() throws Exception {
+        final URL url = SwaggerTestStepBuilderTest.class.getResource("/petstore-swagger.json");
+        petstore = new SwaggerTestStepBuilder(Paths.get(url.toURI()).toString());
     }
 
     @Test
@@ -27,11 +37,31 @@ public class SwaggerTestStepBuilderTest {
 
     @Test
     public void testMissingOperation() throws Exception {
-        try {
-            petstore.operation("tjoho");
-            assertFalse("Expected IllegalArgumentException for invalid operationId", true);
-        } catch (IllegalArgumentException e) {
-        }
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("operationId [tjoho] not found in Swagger definition");
+        petstore.operation("tjoho");
+    }
+
+    @Test
+    public void testOperationWithBody() {
+        final RestTestRequestStep step = petstore.operationWithBody("addPet")
+                .withRequestBody("body").build();
+        assertEquals("body", step.getRequestBody());
+
+    }
+
+    @Test
+    public void testGetAsOperationWithoutBody() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Body parameter is not allowed for [GET] methods");
+        petstore.operationWithBody("findPetsByTags");
+    }
+
+    @Test
+    public void testOperationWithoutBody() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Body parameter is not defined for the [updatePetWithForm] operation");
+        petstore.operationWithBody("updatePetWithForm");
     }
 
     @Test
@@ -40,5 +70,19 @@ public class SwaggerTestStepBuilderTest {
 
         assertEquals(builder.build().getMethod(), "GET");
         assertEquals(builder.build().getURI(), "http://petstore.swagger.io/v2/some/endpoint");
+    }
+
+    @Test
+    public void testRequestWithBody() throws Exception {
+        RestTestRequestStep step = petstore.requestWithBody("/some/endpoint", HttpMethod.POST)
+                .withRequestBody("body").build();
+        assertEquals("body", step.getRequestBody());
+    }
+
+    @Test
+    public void testGetRequestWithBody() throws Exception {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Body parameter is not allowed for [GET] methods");
+        petstore.requestWithBody("/some/endpoint", HttpMethod.GET);
     }
 }
