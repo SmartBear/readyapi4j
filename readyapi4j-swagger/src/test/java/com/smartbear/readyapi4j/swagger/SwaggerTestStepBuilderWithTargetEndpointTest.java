@@ -23,17 +23,17 @@ public class SwaggerTestStepBuilderWithTargetEndpointTest {
 
     @Test
     public void testExistingOperation() throws Exception {
-        RestRequestStepBuilder<RestRequestStepBuilder> builder = petstore.operation("addPet");
+        RestRequestStepBuilder<? extends RestRequestStepBuilder> builder = petstore.operation("addPet");
 
-        assertEquals( builder.build().getMethod(), "POST");
-        assertEquals( builder.build().getURI(), TARGET_ENDPOINT + "/v2/pet");
+        assertEquals(builder.build().getMethod(), "POST");
+        assertEquals(builder.build().getURI(), TARGET_ENDPOINT + "/v2/pet");
     }
 
     @Test
     public void testRequest() throws Exception {
-        RestRequestStepBuilder<RestRequestStepBuilder> builder = petstore.request("/some/endpoint", TestSteps.HttpMethod.GET);
+        RestRequestStepBuilder<? extends RestRequestStepBuilder> builder = petstore.request("/some/endpoint", TestSteps.HttpMethod.GET);
 
-        assertEquals( builder.build().getMethod(), "GET");
-        assertEquals( builder.build().getURI(), TARGET_ENDPOINT + "/v2/some/endpoint");
-   }
+        assertEquals(builder.build().getMethod(), "GET");
+        assertEquals(builder.build().getURI(), TARGET_ENDPOINT + "/v2/some/endpoint");
+    }
 }

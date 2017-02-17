@@ -22,27 +22,26 @@ public class SwaggerTestStepBuilderTest {
 
     @Test
     public void testExistingOperation() throws Exception {
-        RestRequestStepBuilder<RestRequestStepBuilder> builder = petstore.operation("addPet");
+        RestRequestStepBuilder<? extends RestRequestStepBuilder> builder = petstore.operation("addPet");
 
-        assertEquals( builder.build().getMethod(), "POST");
-        assertEquals( builder.build().getURI(), "http://petstore.swagger.io/v2/pet");
+        assertEquals(builder.build().getMethod(), "POST");
+        assertEquals(builder.build().getURI(), "http://petstore.swagger.io/v2/pet");
     }
 
     @Test
     public void testMissingOperation() throws Exception {
         try {
             petstore.operation("tjoho");
-            assertFalse( "Expected IllegalArgumentException for invalid operationId", true );
-        }
-        catch (IllegalArgumentException e ){
+            assertFalse("Expected IllegalArgumentException for invalid operationId", true);
+        } catch (IllegalArgumentException e) {
         }
     }
 
     @Test
     public void testRequest() throws Exception {
-        RestRequestStepBuilder<RestRequestStepBuilder> builder = petstore.request("/some/endpoint", TestSteps.HttpMethod.GET);
+        RestRequestStepBuilder<? extends RestRequestStepBuilder> builder = petstore.request("/some/endpoint", TestSteps.HttpMethod.GET);
 
-        assertEquals( builder.build().getMethod(), "GET");
-        assertEquals( builder.build().getURI(), "http://petstore.swagger.io/v2/some/endpoint");
-   }
+        assertEquals(builder.build().getMethod(), "GET");
+        assertEquals(builder.build().getURI(), "http://petstore.swagger.io/v2/some/endpoint");
+    }
 }
