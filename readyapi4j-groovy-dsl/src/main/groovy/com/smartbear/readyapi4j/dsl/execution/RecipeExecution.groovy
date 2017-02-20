@@ -67,10 +67,11 @@ class RecipeExecution {
     }
 
     /**
-     * Asynchronous execution: submits recipe for execution and returns current state of execution.
+     * Executes recipe locally and returns execution results.
+     * It requires dependency on com.smartbear.readyapi:readyapi4j-local or the corresponding jars in classpath.
      * @param executor
      * @param recipeDefinition
-     * @return Execution : with current state of execution
+     * @return Execution : execution result
      */
     static Execution executeRecipeLocally(@DelegatesTo(ProDslDelegate) recipeDefinition) {
         TestRecipe testRecipe = createTestRecipe(recipeDefinition)
