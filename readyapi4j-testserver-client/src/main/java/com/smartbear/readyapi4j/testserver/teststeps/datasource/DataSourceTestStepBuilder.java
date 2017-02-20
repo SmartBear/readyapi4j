@@ -39,4 +39,11 @@ public class DataSourceTestStepBuilder<DataSourceBuilderType extends DataSourceB
         testStep.setTestSteps(nestedTestSteps);
         return testStep;
     }
+
+    public DataSourceTestStepBuilder withTestSteps( TestStepBuilder... testStepBuilders ){
+        for( TestStepBuilder testStepBuilder : testStepBuilders ){
+            addTestStep( testStepBuilder );
+        }
+        return this;
+    }
 }
