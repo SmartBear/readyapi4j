@@ -73,7 +73,7 @@ class RecipeExecution {
      * @param recipeDefinition
      * @return Execution : execution result
      */
-    static Execution executeRecipeLocally(@DelegatesTo(ProDslDelegate) recipeDefinition) {
+    static Execution executeRecipe(@DelegatesTo(ProDslDelegate) recipeDefinition) {
         TestRecipe testRecipe = createTestRecipe(recipeDefinition)
         Class soapUIRecipeExecutorClass
         try {
