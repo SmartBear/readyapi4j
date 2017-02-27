@@ -94,6 +94,39 @@
 
     <profiles>
         <profile>
+            <id>java-docs</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
+                        <configuration>
+                            <aggregate>true</aggregate>
+                            <source>1.8</source>
+                            <encoding>UTF-8</encoding>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <sourcepath>readyapi4j-core/src/main/java:readyapi4j-core/target/generated-sources/swagger/src/main/java:readyapi4j-facade/src/main/java:readyapi4j-groovy-dsl/src/main/groovy:readyapi4j-local/src/main/java:readyapi4j-swagger/src/main/java:readyapi4j-testserver-client/src/main/java</sourcepath>
+                            <!--<sourcepath>src/main/java;target/generated-sources/swagger/src/main/java</sourcepath>-->
+                            <includes>*.java,*.groovy</includes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>aggregate</id>
+                                <goals>
+                                    <goal>aggregate</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <!-- Specific configuration for the aggregate report -->
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>soapui-client</id>
             <activation>
                 <property>
@@ -127,7 +160,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.7</version>
+                        <version>2.10.3</version>
                         <configuration>
                             <aggregate>true</aggregate>
                             <source>1.7</source>
@@ -136,6 +169,9 @@
                             <links>
                                 <link>http://java.sun.com/javase/6/docs/api/</link>
                             </links>
+                            <sourcepath>src/main/java;target/generated-sources/swagger/src/main/java</sourcepath>
+                            <excludePackageNames>io.swagger.client.*</excludePackageNames>
+                            <additionalparam>-Xdoclint:none</additionalparam>
                         </configuration>
                         <executions>
                             <execution>
