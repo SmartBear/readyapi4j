@@ -1,60 +1,65 @@
 package com.smartbear.readyapi4j.dsl
 
-import com.smartbear.readyapi4j.assertions.AssertionBuilder
 import com.smartbear.readyapi4j.dsl.assertions.RestRequestAssertionsDelegate
 import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder
+import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder
 
 /**
  * Class created to support restRequest closures within the DSL's recipe closures etc.
  */
 class RestRequestDelegate {
 
-    String stepName
-    Map<String, Object> headers = [:]
-    boolean followRedirects
-    boolean entitizeParameters
-    boolean postQueryString
-    String timeout
-    List<AssertionBuilder> assertions
-    List<ParameterBuilder> parameters = []
+    private RestRequestStepBuilder requestBuilder
+
+    RestRequestDelegate(RestRequestStepBuilder requestBuilder) {
+        this.requestBuilder = requestBuilder
+    }
 
     void name(String name) {
-        this.stepName = name
+        requestBuilder.named(name)
     }
 
     void headers(Map<String, Object> headers) {
-        this.headers = headers
+        headers.each { name, value ->
+            requestBuilder.addHeader(name, value)
+        }
     }
 
     void header(String name, String value) {
-        headers[name] = value
+        requestBuilder.addHeader(name, value)
     }
 
     void header(String name, List<String> values) {
-        headers[name] = values
+        requestBuilder.addHeader(name, values)
     }
 
     void followRedirects(boolean followRedirects) {
-        this.followRedirects = followRedirects
+        if (followRedirects) {
+            requestBuilder.followRedirects()
+        }
     }
 
     void entitizeParameters(boolean entitize) {
-        this.entitizeParameters = entitize
+        if (entitize) {
+            requestBuilder.entitizeParameters()
+        }
     }
 
     void postQueryString(boolean postQueryString) {
-        this.postQueryString = postQueryString
+        if (postQueryString) {
+            requestBuilder.postQueryString()
+        }
     }
 
     void timeout(int timeout) {
-        this.timeout = String.valueOf(timeout)
+        requestBuilder.setTimeout(String.valueOf(timeout))
     }
 
     void asserting(@DelegatesTo(RestRequestAssertionsDelegate) Closure assertionsConfig) {
         def delegate = new RestRequestAssertionsDelegate()
         assertionsConfig.delegate = delegate
         assertionsConfig.call()
-        this.assertions = delegate.assertionBuilders
+        delegate.assertionBuilders.each { assertion -> requestBuilder.addAssertion(assertion) }
     }
 
     void parameters(@DelegatesTo(ParametersDelegate) Closure parametersConfig) {
@@ -66,20 +71,19 @@ class RestRequestDelegate {
     class ParametersDelegate {
 
         void query(String name, String value) {
-            parameters.add(ParameterBuilder.query(name, value))
+            requestBuilder.addParameter(ParameterBuilder.query(name, value))
         }
 
         void path(String name, String value) {
-            parameters.add(ParameterBuilder.path(name, value))
+            requestBuilder.addParameter(ParameterBuilder.path(name, value))
         }
 
         void matrix(String name, String value) {
-            parameters.add(ParameterBuilder.matrix(name, value))
+            requestBuilder.addParameter(ParameterBuilder.matrix(name, value))
         }
 
         void headerParam(String name, String value) {
-            parameters.add(ParameterBuilder.header(name, value))
+            requestBuilder.addParameter(ParameterBuilder.header(name, value))
         }
-
     }
 }
