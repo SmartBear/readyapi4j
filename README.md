@@ -111,8 +111,8 @@ Ready! API or any other API testing tool on your computer.
 4. [Dive into the javadocs](http://smartbear.github.io/readyapi4j/apidocs/) to get an overview of the Java API
 
 ## Groovy DSL for creating and executing API tests
-ReadyApi4J provides a Groovy DSL to create and execute API test locally or on TestServer. 
-Following steps explain how recipe are created and executed using DSL.
+ReadyApi4J provides a Groovy DSL to create and execute API tests locally or on TestServer. 
+The following steps explain how to use this DSL in a JUnit test.
 
 1. Add the following Maven dependency to your project:
  
@@ -124,10 +124,10 @@ Following steps explain how recipe are created and executed using DSL.
 	</dependency>
 	```
 
-2. Create a test recipe and execute it in Groovy:
+2. Create a JUnit test with a test recipe in Groovy:
 
-  Below example shows how to create and execute recipe locally, using SoapUI OS engine. 
-  This requires additional dependency on com.smartbear.readyapi:readyapi4j-local, there is no need to install SoapUI however. 
+  The example below shows how to create and execute a recipe with one single step locally, using the SoapUI OS engine. 
+  This requires the additional dependency on com.smartbear.readyapi:readyapi4j-local, but there is no need to install SoapUI. 
    ```groovy
    import com.smartbear.readyapi4j.execution.Execution
    import org.junit.Test
@@ -136,18 +136,17 @@ Following steps explain how recipe are created and executed using DSL.
    import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
 
     class DslTestDemo {
+    
         @Test
         void testSwaggerHubApi() {
-           //Executes recipe locally, this requires additional dependency on com.smartbear.readyapi:readyapi4j-local
+           //Executes recipe locally - this requires the additional dependency com.smartbear.readyapi:readyapi4j-local
             Execution execution = executeRecipe {
-                recipe {
-                    get 'https://api.swaggerhub.com/apis', {
-                        parameters {
-                            query 'query', 'testserver'
-                        }
-                        asserting {
-                            jsonPath '$.totalCount' occurs 0 times
-                        }
+                get 'https://api.swaggerhub.com/apis', {
+                    parameters {
+                        query 'query', 'testserver'
+                    }
+                    asserting {
+                        jsonPath '$.totalCount' occurs 0 times
                     }
                 }
             }
@@ -155,12 +154,12 @@ Following steps explain how recipe are created and executed using DSL.
         }
     }   
    ```
-   Here is sample output of above execution:
+   Here is sample output from this test:
    ```
    [[JsonPath Count] Comparison failed for path [$.totalCount], expecting [0], actual was [1]]
    ```
    
-   Similary you can execute the recipe on TestServer as following:
+   Similarly, you can execute the recipe on TestServer with the following:
    ```groovy
    import com.smartbear.readyapi4j.execution.Execution
    import org.junit.Test
@@ -172,14 +171,12 @@ Following steps explain how recipe are created and executed using DSL.
        @Test
        void testSwaggerHubApi() {
            Execution execution = executeRecipeOnServer '<your TestServer url, e.g. http://localhost:8080>', '<your user>', '<your password>', {
-               recipe {
-                   get 'https://api.swaggerhub.com/apis', {
-                       parameters {
-                           query 'query', 'testserver'
-                       }
-                       asserting {
-                           jsonPath '$.totalCount' occurs 0 times
-                       }
+               get 'https://api.swaggerhub.com/apis', {
+                   parameters {
+                       query 'query', 'testserver'
+                   }
+                   asserting {
+                       jsonPath '$.totalCount' occurs 0 times
                    }
                }
            }
@@ -187,7 +184,7 @@ Following steps explain how recipe are created and executed using DSL.
        }
    }
    ```
-Here is sample output of above execution:
+Here is sample output from this test:
 ```
 [TestStepName: GET request 1, messages: [JsonPath Count] Comparison failed. Path: [$.totalCount]; Expected value: [0]; Actual value: [1].]
 ```
