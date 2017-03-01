@@ -117,9 +117,6 @@
                                     <goal>aggregate</goal>
                                 </goals>
                                 <phase>package</phase>
-                                <configuration>
-                                    <!--Specific configuration for the aggregate report -->
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
