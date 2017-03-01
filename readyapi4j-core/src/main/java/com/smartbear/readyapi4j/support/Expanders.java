@@ -15,6 +15,10 @@ public class Expanders {
         return expand(testStep, "Response", path);
     }
 
+    public static String fromXmlResponse(String testStep, String path) {
+        return expand(testStep, "ResponseAsXml", path);
+    }
+
     public static String script(String script) {
         return "${=" + script + "}";
     }
