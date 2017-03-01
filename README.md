@@ -132,7 +132,6 @@ The following steps explain how to use this DSL in a JUnit test.
    import com.smartbear.readyapi4j.execution.Execution
    import org.junit.Test
    
-   import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
    import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
 
     class DslTestDemo {
@@ -150,6 +149,8 @@ The following steps explain how to use this DSL in a JUnit test.
                     }
                 }
             }
+            assert execution.currentStatus == ProjectResultReport.StatusEnum.FAILED
+            assert !execution.errorMessages.empty
             println execution.errorMessages
         }
     }   
@@ -164,7 +165,6 @@ The following steps explain how to use this DSL in a JUnit test.
    import com.smartbear.readyapi4j.execution.Execution
    import org.junit.Test
    
-   import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
    import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipeOnServer
    
    class DslTestDemo {
@@ -180,6 +180,8 @@ The following steps explain how to use this DSL in a JUnit test.
                    }
                }
            }
+           assert execution.currentStatus == ProjectResultReport.StatusEnum.FAILED
+           assert !execution.errorMessages.empty
            println execution.errorMessages
        }
    }
