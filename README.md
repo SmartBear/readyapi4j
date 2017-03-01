@@ -4,7 +4,7 @@ The ReadyApi4J library lets Java developers use the API testing functionality in
 
 ReadyApi4J builds *test recipes*, which describe API tests to be executed.
 
-Under the hood ReadyApi4J uses a JSON format, but there's no need to learn it, because you typically create and run test recipes using a fluent Java API. Nor do you need to install SoapUI or any other software to be able to execute recipes.
+Under the hood ReadyApi4J uses a JSON format, but there's no need to learn it, because you typically create and run test recipes using a fluent Java API or the Groovy DSL. Nor do you need to install SoapUI or any other software to be able to execute recipes.
 
 ## Running local SoapUI tests on your machine
 
@@ -110,7 +110,87 @@ Ready! API or any other API testing tool on your computer.
 
 4. [Dive into the javadocs](http://smartbear.github.io/readyapi4j/apidocs/) to get an overview of the Java API
 
+## Groovy DSL for creating and executing API tests
+ReadyApi4J provides a Groovy DSL to create and execute API test locally or on TestServer. 
+Following steps explain how recipe are created and executed using DSL.
 
+1. Add the following Maven dependency to your project:
+ 
+	```xml
+	<dependency>
+		<groupId>com.smartbear.readyapi</groupId>
+		<artifactId>readyapi4j-groovy-dsl</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</dependency>
+	```
+
+2. Create a test recipe and execute it in Groovy:
+
+  Below example shows how to create and execute recipe locally, using SoapUI OS engine. 
+  This requires additional dependency on com.smartbear.readyapi:readyapi4j-local, there is no need to install SoapUI however. 
+   ```groovy
+   import com.smartbear.readyapi4j.execution.Execution
+   import org.junit.Test
+   
+   import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
+   import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
+
+    class DslTestDemo {
+        @Test
+        void testSwaggerHubApi() {
+           //Executes recipe locally, this requires additional dependency on com.smartbear.readyapi:readyapi4j-local
+            Execution execution = executeRecipe {
+                recipe {
+                    get 'https://api.swaggerhub.com/apis', {
+                        parameters {
+                            query 'query', 'testserver'
+                        }
+                        asserting {
+                            jsonPath '$.totalCount' occurs 0 times
+                        }
+                    }
+                }
+            }
+            println execution.errorMessages
+        }
+    }   
+   ```
+   Here is sample output of above execution:
+   ```
+   [[JsonPath Count] Comparison failed for path [$.totalCount], expecting [0], actual was [1]]
+   ```
+   
+   Similary you can execute the recipe on TestServer as following:
+   ```groovy
+   import com.smartbear.readyapi4j.execution.Execution
+   import org.junit.Test
+   
+   import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
+   import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipeOnServer
+   
+   class DslTestDemo {
+       @Test
+       void testSwaggerHubApi() {
+           Execution execution = executeRecipeOnServer '<your TestServer url, e.g. http://localhost:8080>', '<your user>', '<your password>', {
+               recipe {
+                   get 'https://api.swaggerhub.com/apis', {
+                       parameters {
+                           query 'query', 'testserver'
+                       }
+                       asserting {
+                           jsonPath '$.totalCount' occurs 0 times
+                       }
+                   }
+               }
+           }
+           println execution.errorMessages
+       }
+   }
+   ```
+Here is sample output of above execution:
+```
+[TestStepName: GET request 1, messages: [JsonPath Count] Comparison failed. Path: [$.totalCount]; Expected value: [0]; Actual value: [1].]
+```
 ## More samples / tutorials
 
 Tutorial in the Ready! API TestServer documentation: 
