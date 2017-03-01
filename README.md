@@ -4,7 +4,7 @@ The ReadyApi4J library lets Java developers use the API testing functionality in
 
 ReadyApi4J builds *test recipes*, which describe API tests to be executed.
 
-Under the hood ReadyApi4J uses a JSON format, but there's no need to learn it, because you typically create and run test recipes using a fluent Java API. Nor do you need to install SoapUI or any other software to be able to execute recipes.
+Under the hood ReadyApi4J uses a JSON format, but there's no need to learn it, because you typically create and run test recipes using a fluent Java API or the Groovy DSL. Nor do you need to install SoapUI or any other software to be able to execute recipes.
 
 ## Running local SoapUI tests on your machine
 
@@ -110,7 +110,94 @@ Ready! API or any other API testing tool on your computer.
 
 4. [Dive into the javadocs](http://smartbear.github.io/readyapi4j/apidocs/) to get an overview of the Java API
 
+## Groovy DSL for creating and executing API tests
+ReadyApi4J provides a Groovy DSL to create and execute API tests locally or on TestServer. 
+The following steps explain how to use this DSL in a JUnit test.
 
+1. Add the following Maven dependency to your project:
+ 
+	```xml
+	<dependency>
+		<groupId>com.smartbear.readyapi</groupId>
+		<artifactId>readyapi4j-groovy-dsl</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</dependency>
+	```
+
+2. Create a JUnit test with a test recipe in Groovy:
+
+  The example below shows how to create and execute a recipe with one single step locally, using the SoapUI OS engine. 
+  This requires the additional dependency on com.smartbear.readyapi:readyapi4j-local, but there is no need to install SoapUI. 
+   ```groovy
+   import com.smartbear.readyapi4j.execution.Execution
+   import org.junit.Test
+   
+   import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
+
+    class DslTestDemo {
+    
+        @Test
+        void testSwaggerHubApi() {
+           //Executes recipe locally - this requires the additional dependency com.smartbear.readyapi:readyapi4j-local
+            Execution execution = executeRecipe {
+                get 'https://api.swaggerhub.com/apis', {
+                    parameters {
+                        query 'query', 'testserver'
+                    }
+                    asserting {
+                        jsonPath '$.totalCount' occurs 0 times
+                    }
+                }
+            }
+            assert execution.errorMessages.empty
+        }
+    }   
+   ```
+   Here is sample output from this test. It shows that the assertion on the test step has failed:
+   ```
+   Assertion failed: 
+   
+   assert execution.errorMessages.empty
+          |         |             |
+          |         |             false
+          |         [[JsonPath Count] Comparison failed for path [$.totalCount], expecting [0], actual was [1]]
+          com.smartbear.readyapi4j.local.execution.SoapUIRecipeExecution@f810c18
+   ```
+   
+   Similarly, you can execute the recipe on TestServer with the following:
+   ```groovy
+   import com.smartbear.readyapi4j.execution.Execution
+   import org.junit.Test
+   
+   import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipeOnServer
+   
+   class DslTestDemo {
+       @Test
+       void testSwaggerHubApi() {
+           Execution execution = executeRecipeOnServer '<your TestServer url, e.g. http://localhost:8080>', '<your user>', '<your password>', {
+               get 'https://api.swaggerhub.com/apis', {
+                   parameters {
+                       query 'query', 'testserver'
+                   }
+                   asserting {
+                       jsonPath '$.totalCount' occurs 0 times
+                   }
+               }
+           }
+           assert execution.errorMessages.empty
+       }
+   }
+   ```
+Here is sample output from this test:
+```
+Assertion failed: 
+
+assert execution.errorMessages.empty
+       |         |             |
+       |         |             false
+       |         [TestStepName: GET request 1, messages: [JsonPath Count] Comparison failed. Path: [$.totalCount]; Expected value: [0]; Actual value: [1].]
+       com.smartbear.readyapi4j.testserver.execution.TestServerExecution@dfddc9a
+```
 ## More samples / tutorials
 
 Tutorial in the Ready! API TestServer documentation: 
