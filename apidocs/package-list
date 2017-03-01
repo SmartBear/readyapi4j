@@ -5,6 +5,9 @@ com.smartbear.readyapi4j.assertions
 com.smartbear.readyapi4j.attachments
 com.smartbear.readyapi4j.auth
 com.smartbear.readyapi4j.dsl
+com.smartbear.readyapi4j.dsl.assertions
+com.smartbear.readyapi4j.dsl.execution
+com.smartbear.readyapi4j.dsl.pro
 com.smartbear.readyapi4j.execution
 com.smartbear.readyapi4j.extractor
 com.smartbear.readyapi4j.facade.execution
