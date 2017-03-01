@@ -149,15 +149,19 @@ The following steps explain how to use this DSL in a JUnit test.
                     }
                 }
             }
-            assert execution.currentStatus == ProjectResultReport.StatusEnum.FAILED
-            assert !execution.errorMessages.empty
-            println execution.errorMessages
+            assert execution.errorMessages.empty
         }
     }   
    ```
-   Here is sample output from this test:
+   Here is sample output from this test. It shows that the assertion on the test step has failed:
    ```
-   [[JsonPath Count] Comparison failed for path [$.totalCount], expecting [0], actual was [1]]
+   Assertion failed: 
+   
+   assert execution.errorMessages.empty
+          |         |             |
+          |         |             false
+          |         [[JsonPath Count] Comparison failed for path [$.totalCount], expecting [0], actual was [1]]
+          com.smartbear.readyapi4j.local.execution.SoapUIRecipeExecution@f810c18
    ```
    
    Similarly, you can execute the recipe on TestServer with the following:
@@ -180,15 +184,19 @@ The following steps explain how to use this DSL in a JUnit test.
                    }
                }
            }
-           assert execution.currentStatus == ProjectResultReport.StatusEnum.FAILED
-           assert !execution.errorMessages.empty
-           println execution.errorMessages
+           assert execution.errorMessages.empty
        }
    }
    ```
 Here is sample output from this test:
 ```
-[TestStepName: GET request 1, messages: [JsonPath Count] Comparison failed. Path: [$.totalCount]; Expected value: [0]; Actual value: [1].]
+Assertion failed: 
+
+assert execution.errorMessages.empty
+       |         |             |
+       |         |             false
+       |         [TestStepName: GET request 1, messages: [JsonPath Count] Comparison failed. Path: [$.totalCount]; Expected value: [0]; Actual value: [1].]
+       com.smartbear.readyapi4j.testserver.execution.TestServerExecution@dfddc9a
 ```
 ## More samples / tutorials
 
