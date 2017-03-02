@@ -259,15 +259,15 @@ class RestRequestDslTest {
 
     @Test
     void addsExtractor() {
-        final String[] extractedProperty = { '' }
+        def values = []
         TestRecipe recipe = recipe {
             get '/some_uri', {
                 name 'RestRequest'
-                extractors fromResponse('$[0].Endpoint', { value -> extractedProperty[0] = value })
+                extractors fromResponse('$[0].Endpoint', { value -> values.add(value) })
             }
         }
         assert recipe.testCase.properties.size() == 2
-        recipe.getTestCase().getProperties().each {
+        recipe.testCase.properties.each {
             key, value ->
                 if (key.contains('$[0].Endpoint')) {
                     assert value == ''

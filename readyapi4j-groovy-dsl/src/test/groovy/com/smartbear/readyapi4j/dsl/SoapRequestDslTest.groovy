@@ -126,8 +126,8 @@ class SoapRequestDslTest {
 
     @Test
     void addsExtractor() {
-        final String[] extractedProperty = { '' }
-        def endpointExtractor = fromResponse('$[0].Endpoint', { value -> extractedProperty[0] = value })
+        def extractedProperty = []
+        def endpointExtractor = fromResponse('$[0].Endpoint', { value -> extractedProperty.add(value) })
         TestRecipe recipe = recipe {
             soapRequest {
                 wsdl = WSDL_URL
@@ -138,7 +138,7 @@ class SoapRequestDslTest {
             }
         }
         assert recipe.testCase.properties.size() == 2
-        recipe.getTestCase().getProperties().each {
+        recipe.testCase.properties.each {
             key, value ->
                 if (key.contains('$[0].Endpoint')) {
                     assert value == ''
