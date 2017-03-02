@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.dsl.assertions.RestRequestAssertionsDelegate
+import com.smartbear.readyapi4j.extractor.Extractor
 import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder
 
@@ -66,6 +67,10 @@ class RestRequestDelegate {
         ParametersDelegate delegate = new ParametersDelegate()
         parametersConfig.delegate = delegate
         parametersConfig.call()
+    }
+
+    void extractors(Extractor... extractors) {
+        requestBuilder.withExtractors(extractors)
     }
 
     class ParametersDelegate {

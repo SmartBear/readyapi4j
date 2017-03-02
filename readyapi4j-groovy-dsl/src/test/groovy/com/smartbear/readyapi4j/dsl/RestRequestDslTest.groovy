@@ -12,10 +12,12 @@ import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion
 import com.smartbear.readyapi.client.model.XPathContainsAssertion
 import com.smartbear.readyapi.client.model.XQueryContainsAssertion
 import com.smartbear.readyapi4j.TestRecipe
+import com.smartbear.readyapi4j.extractor.ExtractorData
 import org.junit.Test
 
-import static TestDsl.recipe
 import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
+import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
+import static com.smartbear.readyapi4j.extractor.Extractors.fromResponse
 
 class RestRequestDslTest {
 
@@ -253,6 +255,26 @@ class RestRequestDslTest {
 
         GroovyScriptAssertion assertion = extractFirstAssertion(recipe) as GroovyScriptAssertion
         assert assertion.script == 'assert messageExchange.responseHeaders["Content-Type"].contains( "text/xml")'
+    }
+
+    @Test
+    void addsExtractor() {
+        final String[] extractedProperty = { '' }
+        TestRecipe recipe = recipe {
+            get '/some_uri', {
+                name 'RestRequest'
+                extractors fromResponse('$[0].Endpoint', { value -> extractedProperty[0] = value })
+            }
+        }
+        assert recipe.testCase.properties.size() == 2
+        recipe.getTestCase().getProperties().each {
+            key, value ->
+                if (key.contains('$[0].Endpoint')) {
+                    assert value == ''
+                } else {
+                    assert key == ExtractorData.EXTRACTOR_DATA_KEY
+                }
+        }
     }
 
     private static void verifyValuesAndMethod(TestRecipe recipe, String method) {
