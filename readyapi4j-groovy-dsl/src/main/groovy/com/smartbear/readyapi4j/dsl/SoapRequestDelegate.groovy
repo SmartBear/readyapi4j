@@ -2,6 +2,7 @@ package com.smartbear.readyapi4j.dsl
 
 import com.smartbear.readyapi4j.dsl.assertions.SoapRequestAssertionsDelegate
 import com.smartbear.readyapi4j.execution.RecipeExecutionException
+import com.smartbear.readyapi4j.extractor.Extractor
 import com.smartbear.readyapi4j.teststeps.soaprequest.SoapRequestStepBuilder
 
 /**
@@ -13,6 +14,10 @@ class SoapRequestDelegate {
 
     SoapRequestDelegate(SoapRequestStepBuilder soapRequestStepBuilder) {
         this.soapRequestStepBuilder = soapRequestStepBuilder
+    }
+
+    void name(String name) {
+        soapRequestStepBuilder.named(name)
     }
 
     void setWsdl(String wsdlUrl) {
@@ -37,6 +42,10 @@ class SoapRequestDelegate {
 
     void namedParam(String name, Object value) {
         soapRequestStepBuilder.withParameter(name, value as String)
+    }
+
+    void extractors(Extractor... extractors) {
+        soapRequestStepBuilder.withExtractors(extractors)
     }
 
     void asserting(@DelegatesTo(SoapRequestAssertionsDelegate) Closure assertionsConfig) {

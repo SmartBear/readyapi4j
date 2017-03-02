@@ -7,10 +7,12 @@ import com.smartbear.readyapi.client.model.SoapRequestTestStep
 import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion
 import com.smartbear.readyapi4j.AssertionNames
 import com.smartbear.readyapi4j.TestRecipe
+import com.smartbear.readyapi4j.extractor.ExtractorData
 import org.junit.Test
 
 import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
 import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
+import static com.smartbear.readyapi4j.extractor.Extractors.fromResponse
 
 class SoapRequestDslTest {
 
@@ -120,6 +122,30 @@ class SoapRequestDslTest {
         SoapRequestTestStep testStep = extractSoapTestStep(recipe)
         NotSoapFaultAssertion assertion = testStep.assertions[0] as NotSoapFaultAssertion
         assert assertion.type == AssertionNames.NOT_SOAP_FAULT
+    }
+
+    @Test
+    void addsExtractor() {
+        def extractedProperty = []
+        def endpointExtractor = fromResponse('$[0].Endpoint', { value -> extractedProperty.add(value) })
+        TestRecipe recipe = recipe {
+            soapRequest {
+                wsdl = WSDL_URL
+                binding = BINDING
+                operation = OPERATION
+                name 'SoapRequest'
+                extractors endpointExtractor
+            }
+        }
+        assert recipe.testCase.properties.size() == 2
+        recipe.testCase.properties.each {
+            key, value ->
+                if (key.contains('$[0].Endpoint')) {
+                    assert value == ''
+                } else {
+                    assert key == ExtractorData.EXTRACTOR_DATA_KEY
+                }
+        }
     }
 
     private static SoapRequestTestStep extractSoapTestStep(TestRecipe recipe) {
