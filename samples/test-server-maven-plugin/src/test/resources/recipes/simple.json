@@ -1,0 +1,15 @@
+{
+    "testSteps": [
+        {
+            "type": "REST Request",
+            "method": "GET",
+            "URI": "${apitest.host}/apis",
+            "assertions": [
+                {
+                    "type": "Valid HTTP Status Codes",
+                    "validStatusCodes": [200]
+                }
+            ]
+        }
+    ]
+}
