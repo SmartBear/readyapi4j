@@ -57,7 +57,7 @@ public class RecipeExecutionFacade {
         return execution.getExecutionResult();
     }
 
-    private static RecipeExecutor createRecipeExecutor() {
+    static RecipeExecutor createRecipeExecutor() {
         Map<String, String> env = System.getenv();
         String endpoint = env.getOrDefault(TESTSERVER_ENDPOINT, System.getProperty(TESTSERVER_ENDPOINT));
         if (endpoint != null) {
@@ -66,10 +66,10 @@ public class RecipeExecutionFacade {
                 TestServerClient testServerClient = TestServerClient.fromUrl(url.toString());
 
                 String user = env.getOrDefault(TESTSERVER_USER,
-                        System.getProperty(TESTSERVER_USER));
+                    System.getProperty(TESTSERVER_USER));
 
                 String password = env.getOrDefault(TESTSERVER_PASSWORD,
-                        System.getProperty(TESTSERVER_PASSWORD));
+                    System.getProperty(TESTSERVER_PASSWORD));
 
                 testServerClient.setCredentials(user, password);
                 executor = testServerClient.createRecipeExecutor();

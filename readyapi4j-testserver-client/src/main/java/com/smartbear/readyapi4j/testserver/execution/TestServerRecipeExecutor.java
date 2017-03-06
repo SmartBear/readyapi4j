@@ -48,6 +48,10 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
 
     @Override
     public TestServerExecution executeRecipe(TestRecipe recipe) throws ApiException {
+        for (RecipeFilter recipeFilter : recipeFilters) {
+            recipeFilter.filterRecipe(recipe);
+        }
+
         TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), recipe.getExtractorData(), false);
         if (execution != null) {
             notifyExecutionFinished(execution.getCurrentReport());
