@@ -1,6 +1,7 @@
 package com.smartbear.readyapi4j.support;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.swagger.util.Json;
 import io.swagger.util.Yaml;
 import org.slf4j.Logger;
@@ -24,9 +25,13 @@ public class ContentUtils {
         mediaType = mediaType.toLowerCase();
         try {
             if (mediaType.endsWith("json")) {
-                result = Json.mapper().writer().writeValueAsString(requestBody);
-            } else if (mediaType.endsWith("yaml")) {
-                result = Yaml.mapper().writer().writeValueAsString(requestBody);
+                result = Json.mapper().writeValueAsString(requestBody);
+            }
+            else if (mediaType.endsWith("yaml")) {
+                result = Yaml.mapper().writeValueAsString(requestBody);
+            }
+            else if (mediaType.endsWith("xml")) {
+                result = new XmlMapper().writeValueAsString( requestBody);
             }
         } catch (JsonProcessingException e) {
             LOG.error("Failed to serialize body with mediaType " + mediaType, e);

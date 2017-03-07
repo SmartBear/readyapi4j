@@ -55,7 +55,7 @@
     <properties>
         <jersey-version>1.19</jersey-version>
         <jodatime-version>2.3</jodatime-version>
-        <swagger-version>1.5.10</swagger-version>
+        <swagger-version>1.5.12</swagger-version>
         <jackson-version>2.8.5</jackson-version>
         <junit-version>4.8.1</junit-version>
     </properties>
