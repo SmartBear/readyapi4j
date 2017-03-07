@@ -13,7 +13,7 @@ class DataGenDataSourceTest {
 
     @Test
     void dataGenDataSourceTest() throws Exception {
-        //Data Source test step is a Pro test step and hence can be used with TestServer, not with SoapUI OS engine
+        //Data Source test step is a Pro test step and hence can be used with TestServer, but not with SoapUI OS engine and local execution
         Execution execution = executeRecipeOnServer(TEST_SERVER_URL, TEST_SERVER_USER, TEST_SERVER_PASSWORD, {
             withGeneratedData 'DataSourceTestStep', {
                 numberOfRows 10

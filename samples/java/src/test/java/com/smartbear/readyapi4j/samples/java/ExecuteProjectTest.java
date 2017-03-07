@@ -17,7 +17,7 @@ public class ExecuteProjectTest extends ApiTestBase {
             AssertionUtils.assertExecution(executeProject(projectFile));
             assertFalse(true);
         } catch (AssertionError e) {
-            // expect json count assertion in project to fail
+            // expect the JSON count assertion in the project to fail
         }
     }
 
@@ -29,7 +29,7 @@ public class ExecuteProjectTest extends ApiTestBase {
             AssertionUtils.assertExecution(executeProject(projectDirectory));
             assertFalse(true);
         } catch (AssertionError e) {
-            // expect json count assertion in project to fail
+            // expect the JSON count assertion in the project to fail
         }
     }
 }

@@ -17,7 +17,7 @@ class RestRequestTest {
 
     @Test
     void testSimpleCountUsingSoapUIEngine() throws Exception {
-        //This requires additional dependency com.smartbear.readyapi:readyapi4j-local
+        //This requires the additional dependency com.smartbear.readyapi:readyapi4j-local
         Execution execution = executeRecipe {
             get 'https://api.swaggerhub.com/apis', {
                 parameters {
@@ -52,7 +52,7 @@ class RestRequestTest {
 
     @Test
     void testSimpleCountByRunningWithTheProvidedExecutor() throws Exception {
-        //The executor can be initialized in set-up method if used in multiple tests
+        //The executor can be initialized in the setup method if used in multiple tests
         RecipeExecutor executor = remoteRecipeExecutor(TEST_SERVER_URL, TEST_SERVER_USER, TEST_SERVER_PASSWORD)
 
         Execution execution = executeRecipe executor, {
