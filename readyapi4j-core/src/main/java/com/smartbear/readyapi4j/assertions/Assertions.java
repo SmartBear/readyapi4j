@@ -46,6 +46,25 @@ public class Assertions {
         return new JsonPathCountAssertionBuilder(jsonPath, expectedCount);
     }
 
+    public static JsonPathExistenceAssertionBuilder jsonPathExists(String jsonPath) {
+        return new JsonPathExistenceAssertionBuilder(jsonPath, true);
+    }
+
+    public static JsonPathExistenceAssertionBuilder jsonPathDoesNotExist(String jsonPath) {
+        return new JsonPathExistenceAssertionBuilder(jsonPath, false);
+    }
+
+    /**
+     * Used when expected value is provided as a property expansion expression.
+     *
+     * @param jsonPath      JSONPath to check existence of.
+     * @param expectedValue Property expansion syntax for expected value, evaluated to true/false.
+     * @return JsonPathExistenceAssertionBuilder
+     */
+    public static JsonPathExistenceAssertionBuilder jsonPathExistence(String jsonPath, String expectedValue) {
+        return new JsonPathExistenceAssertionBuilder(jsonPath, expectedValue);
+    }
+
     public static ContainsAssertionBuilder contains(String token) {
         return new DefaultContainsAssertionBuilder(token);
     }

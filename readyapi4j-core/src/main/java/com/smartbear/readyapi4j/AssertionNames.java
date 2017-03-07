@@ -20,4 +20,5 @@ public class AssertionNames {
     public static final String SCHEMA_COMPLIANCE = "Schema Compliance";
     public static final String SOAP_FAULT = "SOAP Fault";
     public static final String NOT_SOAP_FAULT = "Not SOAP Fault";
+    public static final String JSON_EXISTENCE = "JsonPath Existence Match";
 }

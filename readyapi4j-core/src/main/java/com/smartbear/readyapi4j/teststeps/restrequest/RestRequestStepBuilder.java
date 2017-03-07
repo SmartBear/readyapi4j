@@ -15,6 +15,8 @@ import java.util.List;
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 import static com.smartbear.readyapi4j.assertions.Assertions.jsonContent;
 import static com.smartbear.readyapi4j.assertions.Assertions.jsonCount;
+import static com.smartbear.readyapi4j.assertions.Assertions.jsonPathExists;
+import static com.smartbear.readyapi4j.assertions.Assertions.jsonPathDoesNotExist;
 
 public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestStepBuilder> extends HttpRequestStepBuilder<RestRequestBuilderType, RestTestRequestStep> {
 
@@ -106,6 +108,14 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
 
     public RestRequestBuilderType assertJsonCount(String jsonPath, int expectedCount) {
         return addAssertion(jsonCount(jsonPath, expectedCount).allowWildcards());
+    }
+
+    public RestRequestBuilderType assertJsonPathExists(String jsonPath) {
+        return addAssertion(jsonPathExists(jsonPath));
+    }
+
+    public RestRequestBuilderType assertJsonPathDoesNotExist(String jsonPath) {
+        return addAssertion(jsonPathDoesNotExist(jsonPath));
     }
 
     public RestRequestBuilderType get(String uri) {
