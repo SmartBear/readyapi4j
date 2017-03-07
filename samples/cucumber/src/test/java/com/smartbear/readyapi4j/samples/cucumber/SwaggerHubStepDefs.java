@@ -1,4 +1,4 @@
-package com.smartbear.readyapi.testserver;
+package com.smartbear.readyapi4j.samples.cucumber;
 
 import com.google.inject.Inject;
 import com.smartbear.readyapi.client.model.Assertion;

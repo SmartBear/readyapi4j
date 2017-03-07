@@ -15,7 +15,7 @@
         <module>java</module>
         <module>groovy</module>
         <module>cucumber</module>
-        <module>test-server-maven-plugin</module>
+        <module>maven-plugin</module>
     </modules>
     <properties>
         <skip.samples>false</skip.samples>

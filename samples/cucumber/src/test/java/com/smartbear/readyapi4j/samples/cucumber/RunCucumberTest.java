@@ -1,4 +1,4 @@
-package com.smartbear.readyapi.testserver;
+package com.smartbear.readyapi4j.samples.cucumber;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;

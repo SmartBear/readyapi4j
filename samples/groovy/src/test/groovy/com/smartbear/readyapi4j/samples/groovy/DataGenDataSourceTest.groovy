@@ -1,4 +1,4 @@
-package com.smartbear.readyapi4j
+package com.smartbear.readyapi4j.samples.groovy
 
 import com.smartbear.readyapi4j.execution.Execution
 import org.junit.Test

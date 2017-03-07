@@ -1,4 +1,4 @@
-package com.smartbear.readyapi;
+package com.smartbear.readyapi4j.samples.java;
 
 import com.smartbear.readyapi.client.TestRecipe;
 import com.smartbear.readyapi.client.teststeps.soaprequest.SoapRequestStepBuilder;
