@@ -31,7 +31,5 @@ public class ContentUtilsTest {
 
         content = ContentUtils.serializeContent( map, "some/type");
         assertEquals( content, map.toString());
-
     }
-
 }
