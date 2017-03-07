@@ -12,7 +12,6 @@ import java.io.IOException;
 /**
  * RecipeFilter that writes all recipes as files to the specified folder
  */
-
 public class FileLoggingRecipeFilter implements RecipeFilter {
 
     private final static Logger LOG = LoggerFactory.getLogger(FileLoggingRecipeFilter.class);

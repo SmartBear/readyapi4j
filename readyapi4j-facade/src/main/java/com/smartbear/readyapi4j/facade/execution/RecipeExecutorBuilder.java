@@ -16,7 +16,6 @@ import java.util.Map;
 /**
  * Builder class for building a configured RecipeExecutor.
  */
-
 public class RecipeExecutorBuilder {
 
     private final static Logger LOG = LoggerFactory.getLogger(RecipeExecutorBuilder.class);
