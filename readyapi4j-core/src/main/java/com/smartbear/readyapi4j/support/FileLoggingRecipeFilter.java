@@ -2,7 +2,6 @@ package com.smartbear.readyapi4j.support;
 
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.RecipeFilter;
-import io.swagger.util.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +39,7 @@ public class FileLoggingRecipeFilter implements RecipeFilter {
 
             File file = File.createTempFile(prefix, "." + extension, directory);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(Json.pretty(testRecipe).getBytes());
+            fileOutputStream.write(testRecipe.toString().getBytes());
             fileOutputStream.close();
         } catch (Exception e) {
             LOG.error("Failed to write recipe to file", e);
