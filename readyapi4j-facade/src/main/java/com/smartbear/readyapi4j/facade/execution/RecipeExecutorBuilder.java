@@ -60,7 +60,7 @@ public class RecipeExecutorBuilder {
         String endpoint = env.getOrDefault(TESTSERVER_ENDPOINT_PROPERTY, System.getProperty(TESTSERVER_ENDPOINT_PROPERTY));
         if (endpoint != null) {
             try {
-                return buildRemote(testServerEndpoint);
+                return buildRemote(endpoint);
             } catch (Exception e) {
                 LOG.error("Failed to build remote RecipeExecutor",e);
             }
