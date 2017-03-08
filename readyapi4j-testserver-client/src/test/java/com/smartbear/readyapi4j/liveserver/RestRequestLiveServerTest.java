@@ -13,6 +13,7 @@ import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
 import com.smartbear.readyapi4j.testserver.execution.TestServerRecipeExecutor;
 import com.smartbear.readyapi4j.teststeps.TestStepBuilder;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

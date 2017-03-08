@@ -1,9 +1,11 @@
 package com.smartbear.readyapi4j;
 
+import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.GroovyScriptAssertion;
 import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion;
 import com.smartbear.readyapi.client.model.JsonPathContentAssertion;
 import com.smartbear.readyapi.client.model.JsonPathCountAssertion;
+import com.smartbear.readyapi.client.model.JsonPathExistenceAssertion;
 import com.smartbear.readyapi.client.model.ResponseSLAAssertion;
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.model.SimpleContainsAssertion;
@@ -13,6 +15,7 @@ import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi4j.assertions.Assertions.contains;
@@ -34,9 +37,9 @@ public class RestRequestStepWithAssertionRecipeTest {
     @Test
     public void buildsRestRequestStepRecipeWitJsonPathContentAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
-                    GET(URI).
+                GET(URI).
                         assertJsonContent("$.results[0].address_components[1].long_name", "Amphitheatre Parkway")
-                )
+        )
                 .buildTestRecipe();
 
         JsonPathContentAssertion assertion = (JsonPathContentAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
@@ -49,9 +52,9 @@ public class RestRequestStepWithAssertionRecipeTest {
     @Test
     public void buildsRestRequestStepRecipeWitJsonPathCountAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
-                    GET(URI)
+                GET(URI)
                         .assertJsonCount("$.results[0].address_components[1].long_name", 1)
-                )
+        )
                 .buildTestRecipe();
 
         JsonPathCountAssertion assertion = (JsonPathCountAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
@@ -61,15 +64,35 @@ public class RestRequestStepWithAssertionRecipeTest {
         assertThat(assertion.getAllowWildcards(), is(true));
     }
 
+
+    @Test
+    public void buildsRestRequestStepRecipeWitJsonPathExistenceAssertion() throws Exception {
+        TestRecipe recipe = newTestRecipe(GET(URI)
+                .assertJsonPathExists("$.results[0].address_components[1].long_name")
+                .assertJsonPathDoesNotExist("$.results[0].address_components[100].long_name")
+        )
+                .buildTestRecipe();
+
+        List<Assertion> assertions = ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions();
+        JsonPathExistenceAssertion existsAssertion = (JsonPathExistenceAssertion) assertions.get(0);
+        assertThat(existsAssertion.getType(), is(AssertionNames.JSON_EXISTENCE));
+        assertThat(existsAssertion.getJsonPath(), is("$.results[0].address_components[1].long_name"));
+        assertThat(existsAssertion.getExpectedContent(), is("true"));
+        JsonPathExistenceAssertion notExistsAssertion = (JsonPathExistenceAssertion) assertions.get(1);
+        assertThat(notExistsAssertion.getType(), is(AssertionNames.JSON_EXISTENCE));
+        assertThat(notExistsAssertion.getJsonPath(), is("$.results[0].address_components[100].long_name"));
+        assertThat(notExistsAssertion.getExpectedContent(), is("false"));
+    }
+
     @Test
     public void buildsRestRequestStepRecipeWithContainsAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
-                    GET(URI)
+                GET(URI)
                         .addAssertion(contains("bla bla")
                                 .ignoreCase()
                                 .useRegEx()
                         )
-                )
+        )
                 .buildTestRecipe();
 
         SimpleContainsAssertion assertion = (SimpleContainsAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
@@ -82,12 +105,12 @@ public class RestRequestStepWithAssertionRecipeTest {
     @Test
     public void buildsRestRequestStepRecipeWithNotContainsAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
-                    GET(URI)
+                GET(URI)
                         .addAssertion(notContains("bla bla")
                                 .ignoreCase()
                                 .useRegEx()
                         )
-                )
+        )
                 .buildTestRecipe();
 
         SimpleContainsAssertion assertion = (SimpleContainsAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
@@ -115,12 +138,12 @@ public class RestRequestStepWithAssertionRecipeTest {
     @Test
     public void buildsRestRequestStepRecipeWithValidHttpStatusCodesAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
-                    GET(URI)
+                GET(URI)
                         .addAssertion(validStatusCodes("202")
                                 .withStatusCode(100)
                                 .withStatusCodes(Arrays.asList("200", "201"))
                         )
-                )
+        )
                 .buildTestRecipe();
 
         ValidHttpStatusCodesAssertion assertion = (ValidHttpStatusCodesAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
@@ -131,12 +154,12 @@ public class RestRequestStepWithAssertionRecipeTest {
     @Test
     public void buildsRestRequestStepRecipeWithInValidHttpStatusCodesAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
-                    GET(URI)
+                GET(URI)
                         .addAssertion(invalidStatusCodes()
                                 .withStatusCode("100")
                                 .withStatusCodes(Arrays.asList("200", "201"))
                         )
-                )
+        )
                 .buildTestRecipe();
 
         InvalidHttpStatusCodesAssertion assertion = (InvalidHttpStatusCodesAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
@@ -147,10 +170,10 @@ public class RestRequestStepWithAssertionRecipeTest {
     @Test
     public void buildsRestRequestStepRecipeWithResponseSLAAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
-                    GET(URI)
+                GET(URI)
                         .addAssertion(maxResponseTime(1000)
                         )
-                )
+        )
                 .buildTestRecipe();
 
         ResponseSLAAssertion assertion = (ResponseSLAAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
@@ -161,13 +184,13 @@ public class RestRequestStepWithAssertionRecipeTest {
     @Test
     public void buildsRestRequestStepRecipeWithXPathContainsAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
-                    GET(URI)
+                GET(URI)
                         .addAssertion(xPathContains("//Addresses/address[0]/name", "Stockholm")
                                 .allowWildCards()
                                 .ignoreComments()
                                 .ignoreNamespaces()
                         )
-                )
+        )
                 .buildTestRecipe();
 
         XPathContainsAssertion assertion = (XPathContainsAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
@@ -182,11 +205,11 @@ public class RestRequestStepWithAssertionRecipeTest {
     @Test
     public void buildsRestRequestStepRecipeWithXQueryContainsAssertion() throws Exception {
         TestRecipe recipe = newTestRecipe(
-                    GET(URI)
+                GET(URI)
                         .addAssertion(xQueryContains("//Addresses/address[0]/name", "Stockholm")
                                 .allowWildcards()
                         )
-                )
+        )
                 .buildTestRecipe();
 
         XQueryContainsAssertion assertion = (XQueryContainsAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);

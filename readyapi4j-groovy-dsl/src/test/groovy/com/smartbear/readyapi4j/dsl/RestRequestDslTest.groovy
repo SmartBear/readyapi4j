@@ -5,6 +5,7 @@ import com.smartbear.readyapi.client.model.GroovyScriptAssertion
 import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion
 import com.smartbear.readyapi.client.model.JsonPathContentAssertion
 import com.smartbear.readyapi.client.model.JsonPathCountAssertion
+import com.smartbear.readyapi.client.model.JsonPathExistenceAssertion
 import com.smartbear.readyapi.client.model.RestParameter
 import com.smartbear.readyapi.client.model.RestTestRequestStep
 import com.smartbear.readyapi.client.model.SimpleContainsAssertion
@@ -189,6 +190,30 @@ class RestRequestDslTest {
         JsonPathCountAssertion countAssertion = restRequest.assertions[1] as JsonPathCountAssertion
         assert countAssertion.jsonPath == '$.customer.order'
         assert countAssertion.expectedCount == '3'
+    }
+
+    @Test
+    void createsJsonPathExistenceAssertions() throws Exception {
+        TestRecipe recipe = recipe {
+            get '/some_uri', {
+                asserting {
+                    jsonExists '$.customer.address'
+                    jsonNotExists '$.owner'
+                    jsonExistence '$.customer.address', '#Project#shouldAddressBePresent'
+                }
+            }
+        }
+        RestTestRequestStep restTestRequestStep = extractFirstTestStep(recipe) as RestTestRequestStep
+        List<Assertion> assertions = restTestRequestStep.getAssertions()
+        verifyJsonPathExistsAssertion(assertions.get(0), '$.customer.address', 'true')
+        verifyJsonPathExistsAssertion(assertions.get(1), '$.owner', 'false')
+        verifyJsonPathExistsAssertion(assertions.get(2), '$.customer.address', '#Project#shouldAddressBePresent')
+    }
+
+    private static void verifyJsonPathExistsAssertion(Assertion assertion, String jsonPath, String shouldExist) {
+        JsonPathExistenceAssertion existenceAssertion = assertion as JsonPathExistenceAssertion
+        assert existenceAssertion.jsonPath == jsonPath
+        assert existenceAssertion.expectedContent == shouldExist
     }
 
     @Test
