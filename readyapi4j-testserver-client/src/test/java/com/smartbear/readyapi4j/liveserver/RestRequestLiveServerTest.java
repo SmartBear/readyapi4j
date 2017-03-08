@@ -13,7 +13,6 @@ import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
 import com.smartbear.readyapi4j.testserver.execution.TestServerRecipeExecutor;
 import com.smartbear.readyapi4j.teststeps.TestStepBuilder;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +24,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeoutException;
 
 import static com.google.code.tempusfugit.concurrency.CountDownLatchWithTimeout.await;
-import static com.smartbear.readyapi4j.extractor.Extractors.fromResponse;
+import static com.smartbear.readyapi.client.model.TestStepResultReport.AssertionStatusEnum.UNKNOWN;
 import static com.smartbear.readyapi4j.extractor.Extractors.fromProperty;
+import static com.smartbear.readyapi4j.extractor.Extractors.fromResponse;
 import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -36,7 +36,7 @@ public class RestRequestLiveServerTest {
     private static Logger logger = LoggerFactory.getLogger(RestRequestLiveServerTest.class);
     private static final String ENDPOINT = "http://api.swaggerhub.com";
     private static final String ENDPOINT_WITH_PATH = ENDPOINT + "/apis";
-    private static final String ENDPOINT_NAME ="Default listing";
+    private static final String ENDPOINT_NAME = "Default listing";
     private static final String ENDPOINT_DESCRIPTION = "Default registry listing";
     private static final String TESTSERVER_URL = "http://testserver.readyapi.io:8080";
     private static final String TESTSERVER_USER = "demoUser";
@@ -57,90 +57,80 @@ public class RestRequestLiveServerTest {
     }
 
     @Test
-    public void sendRequestWithPathExtractor(){
+    public void sendRequestWithPathExtractor() {
         final String[] extractedProperty = {""};
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromResponse("$.name", property -> extractedProperty[0] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
-        Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
-        if(report.isPresent()){
-            assertThat(report.get().getAssertionStatus(), is(TestStepResultReport.AssertionStatusEnum.UNKNOWN));
-        }
+        Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
+        report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT_NAME));
     }
 
     @Test
-    public void sendRequestWithPropertyExtractor(){
+    public void sendRequestWithPropertyExtractor() {
         final String[] extractedProperty = {""};
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
-        Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
-        if(report.isPresent()){
-            assertThat(report.get().getAssertionStatus(), is(TestStepResultReport.AssertionStatusEnum.UNKNOWN));
-        }
+        Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
+        report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT));
     }
 
     @Test
-    public void sendRequestWithSeveralPathExtractors(){
-        final String[] extractedProperty = {"",""};
+    public void sendRequestWithSeveralPathExtractors() {
+        final String[] extractedProperty = {"", ""};
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromResponse("$.name", property -> extractedProperty[0] = property),
                                 fromResponse("$.description", property -> extractedProperty[1] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
-        Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
-        if(report.isPresent()){
-            assertThat(report.get().getAssertionStatus(), is(TestStepResultReport.AssertionStatusEnum.UNKNOWN));
-        }
+        Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
+        report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT_NAME));
         assertThat(extractedProperty[1], is(ENDPOINT_DESCRIPTION));
     }
 
     @Test
-    public void sendRequestWithSeveralPropertyExtractors(){
-        final String[] extractedProperty = {"",""};
+    public void sendRequestWithSeveralPropertyExtractors() {
+        final String[] extractedProperty = {"", ""};
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property),
                                 fromProperty("Response", property -> extractedProperty[1] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
-        Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
-        if(report.isPresent()){
-            assertThat(report.get().getAssertionStatus(), is(TestStepResultReport.AssertionStatusEnum.UNKNOWN));
-        }
+        Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
+        report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT));
         assertThat(extractedProperty[1], containsString(ENDPOINT_NAME));
         assertThat(extractedProperty[1], containsString(ENDPOINT_DESCRIPTION));
     }
 
     @Test
-    public void sendRequestWithPathAndPropertyExtractors(){
-        final String[] extractedProperty = {"",""};
+    public void sendRequestWithPathAndPropertyExtractors() {
+        final String[] extractedProperty = {"", ""};
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property),
                                 fromResponse("$.name", property -> extractedProperty[1] = property)));
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
-        Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
-        if(report.isPresent()){
-            assertThat(report.get().getAssertionStatus(), is(TestStepResultReport.AssertionStatusEnum.UNKNOWN));
-        }
+        Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
+        report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT));
         assertThat(extractedProperty[1], is(ENDPOINT_NAME));
     }
 
     @Test
-    public void sendSeveralRequestsWithExtractors(){
-        final String[] extractedProperty = {"",""};
+    public void sendSeveralRequestsWithExtractors() {
+        final String[] extractedProperty = {"", ""};
         TestRecipe testRecipe = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
@@ -150,17 +140,15 @@ public class RestRequestLiveServerTest {
                         .withExtractors(fromResponse("$.name", property -> extractedProperty[1] = property)));
 
         Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
-        Optional<TestStepResultReport> report  = extractTestStepResultReport(execution.getCurrentReport());
-        if(report.isPresent()){
-            assertThat(report.get().getAssertionStatus(), is(TestStepResultReport.AssertionStatusEnum.UNKNOWN));
-        }
+        Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
+        report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT));
         assertThat(extractedProperty[1], is(ENDPOINT_NAME));
     }
 
     @Test
     public void sendSeveralRequestWithExtractorsAsync() throws TimeoutException, InterruptedException {
-        final String[] extractedProperty = {"",""};
+        final String[] extractedProperty = {"", ""};
         TestRecipe testRecipe1 = createTestRecipe(
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
@@ -181,15 +169,16 @@ public class RestRequestLiveServerTest {
 
             @Override
             public void executionFinished(ProjectResultReport projectResultReport) {
-                Optional<TestStepResultReport> report  = extractTestStepResultReport(projectResultReport);
-                if(report.isPresent()){
-                    assertThat(report.get().getAssertionStatus(), is(TestStepResultReport.AssertionStatusEnum.UNKNOWN));
-                }
-                if(report.get().getTestStepName().equals(REST_REQUEST_NAME)) {
-                    assertThat(extractedProperty[0], is(ENDPOINT));
-                } else {
-                    assertThat(extractedProperty[1], is(ENDPOINT_NAME));
-                }
+                Optional<TestStepResultReport> report = extractTestStepResultReport(projectResultReport);
+                report.ifPresent(testStepResultReport -> {
+                    assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN));
+                    if (report.get().getTestStepName().equals(REST_REQUEST_NAME)) {
+                        assertThat(extractedProperty[0], is(ENDPOINT));
+                    } else {
+                        assertThat(extractedProperty[1], is(ENDPOINT_NAME));
+                    }
+                });
+
                 waitForExecution.countDown();
             }
 
@@ -200,13 +189,13 @@ public class RestRequestLiveServerTest {
         };
 
         TestServerRecipeExecutor executor = testServerClient.createRecipeExecutor();
+        executor.addExecutionListener(listener);
         executor.submitRecipe(testRecipe1);
         executor.submitRecipe(testRecipe2);
-        executor.addExecutionListener(listener);
         await(waitForExecution).with(LATCH_TIMEOUT);
     }
 
-    private Optional<TestStepResultReport> extractTestStepResultReport(ProjectResultReport projectResultReport){
+    private Optional<TestStepResultReport> extractTestStepResultReport(ProjectResultReport projectResultReport) {
         Optional<TestStepResultReport> result = Optional.empty();
         TestCaseResultReport report = projectResultReport
                 .getTestSuiteResultReports()
@@ -215,7 +204,7 @@ public class RestRequestLiveServerTest {
                 .flatMap(Collection::stream)
                 .findAny()
                 .orElse(null);
-        if(report != null && !report.getTestStepResultReports().isEmpty()) {
+        if (report != null && !report.getTestStepResultReports().isEmpty()) {
             result = Optional.ofNullable(report.getTestStepResultReports().get(0));
         }
         return result;
