@@ -13,6 +13,7 @@
         <module>modules/groovy-dsl</module>
         <module>modules/swagger</module>
         <module>modules/samples</module>
+        <module>modules/cucumber</module>
     </modules>
     <packaging>pom</packaging>
     <name>ReadyAPI4j</name>
