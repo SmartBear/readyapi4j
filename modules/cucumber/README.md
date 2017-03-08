@@ -43,9 +43,9 @@ dependency to your pom:
 
 ```xml
 <dependency>
-    <groupId>com.smartbear.readyapi.testserver.cucumber</groupId>
-    <artifactId>testserver-cucumber-stepdefs</artifactId>
-    <version>1.0.0</version>
+    <groupId>com.smartbear.readyapi.readyapi4j.cucumber</groupId>
+    <artifactId>readyapi4j-cucumber-stepdefs</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -70,7 +70,7 @@ can use the testserver-cucumber-runner jar file which includes all required libr
 runtime. Run tests with:
 
 ```
-java -jar testserver-cucumber-runner-1.0.0.jar <path to feature-files>
+java -jar readyapi4j-cucumber-runner-2.0.0-SNAPSHOT.jar <path to feature-files>
 ```
 
 Internally this will call the regular cucumber.api.cli.Main class with an added -g argument to the
@@ -85,7 +85,7 @@ available at https://hub.docker.com/r/smartbear/cucumber4apis instead - it packa
 super-easy to run feature files for your APIs, for example:
 
 ```
-docker run -v /Users/Ole/cucumber:/features smartbear/cucumber4apis -p pretty /features
+docker run -v /Users/Ole/cucumber:/features smartbear/readyapi4j-cucumber -p pretty /features
 ```
 
 Here I mounted my local folder containing feature files into a volume named "/features" in the container - and then 
@@ -99,9 +99,9 @@ to import them into Ready API for load-testing/monitoring/etc.
 
 ### Configuring Ready! API TestServer access
  
-The included [Cucumber StepDefs](modules/stepdefs/src/main/java/com/smartbear/readyapi/testserver/cucumber/GenericRestStepDefs.java) 
+The included [Cucumber StepDefs](modules/stepdefs/src/main/java/com/smartbear/readyapi/readyapi4j/cucumber/RestStepDefs.java) 
 build and execute test recipes agains the Ready! API TestServer using the 
-[testserver-java-client](https://github.com/SmartBear/ready-api-testserver-client), by default they 
+[readyapi4j-testserver](../../modules/testserver) library, by default they 
 will submit recipes to the publicly available TestServer at http://testserver.readyapi.io. If you 
 want to run against your own TestServer instance to be able to access internal APIs or not run into 
 throttling issues you need to download and install the TestServer from 

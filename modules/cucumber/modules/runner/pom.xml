@@ -69,13 +69,13 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.16.5</version>
+                        <version>0.20.0</version>
                         <configuration>
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <alias>testserver-cucumber</alias>
-                                    <name>smartbear/cucumber4apis:latest</name>
+                                    <alias>readyapi4j-cucumber</alias>
+                                    <name>smartbear/readyapi4j-cucumber:latest</name>
                                     <build>
                                         <from>java:8-jre</from>
                                         <maintainer>ole.lensmar@smartbear.com</maintainer>
