@@ -39,7 +39,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.smartbear.readyapi.testserver.cucumber.CucumberRunner</mainClass>
+                                    <mainClass>com.smartbear.readyapi.readyapi4j.cucumber.CucumberRunner</mainClass>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                             </transformers>

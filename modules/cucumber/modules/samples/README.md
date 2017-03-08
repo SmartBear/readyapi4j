@@ -22,7 +22,7 @@ which will use JUnit to run them via the CucumberTest runner, output should be s
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running com.smartbear.readyapi.testserver.cucumber.CucumberTest
+Running CucumberTest
 Feature: Petstore API
 
   Scenario: Find pet by status                             # petstore-imperative.feature:3
@@ -172,7 +172,7 @@ reading from https://api.swaggerhub.com/apis/swagger-hub/registry-api/1.0.10
 71 Steps (71 passed)
 0m6.197s
 
-Tests run: 84, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.776 sec - in com.smartbear.readyapi.testserver.cucumber.CucumberTest
+Tests run: 84, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.776 sec - in CucumberTest
 
 Results :
 

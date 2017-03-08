@@ -289,8 +289,8 @@ The below class shows all the above concepts:
 ```java
 package com.smartbear.samples.cucumber.extension;
 
-import com.smartbear.readyapi.testserver.cucumber.CucumberRecipeBuilder;
-import com.smartbear.readyapi.testserver.cucumber.RestStepDefs;
+import CucumberRecipeBuilder;
+import RestStepDefs;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -330,7 +330,7 @@ For example (line-breaks and comments added for readability):
 ```
 java -cp modules/samples/target/testserver-cucumber-samples-1.0.1-SNAPSHOT.jar: // the extension jar
    modules/runner/target/testserver-cucumber-runner-1.0.1-SNAPSHOT.jar          // the runner jar  
-   com.smartbear.readyapi.testserver.cucumber.CucumberRunner                    // the runner class 
+   CucumberRunner                    // the runner class 
    -g com.smartbear.samples.cucumber.extension                                  // the extension package 
    modules/samples/src/test/resources/cucumber                                  // the features folder
 ```

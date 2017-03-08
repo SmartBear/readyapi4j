@@ -17,7 +17,6 @@
         <module>modules/core</module>
         <module>modules/stepdefs</module>
         <module>modules/runner</module>
-        <module>modules/codegen</module>
         <module>modules/samples</module>
     </modules>
 
