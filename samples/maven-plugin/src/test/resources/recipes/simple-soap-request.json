@@ -1,0 +1,16 @@
+{
+  "testSteps": [
+    {
+      "type": "SOAP Request",
+      "wsdl": "http://www.webservicex.com/globalweather.asmx?WSDL",
+      "binding": "GlobalWeatherSoap",
+      "operation": "GetCitiesByCountry",
+      "parameters": [
+        {
+          "name": "CountryName",
+          "value": "Sweden"
+        }
+      ]
+    }
+  ]
+}
