@@ -16,12 +16,12 @@ class RestRequestAssertionsDelegate extends AbstractAssertionsDelegate {
         return new JsonPathAssertionDelegate(jsonPath, assertionBuilders)
     }
 
-    void jsonPathExists(String jsonPath) {
-        assertionBuilders.add(Assertions.jsonPathExists(jsonPath))
+    void jsonExists(String jsonPath) {
+        assertionBuilders.add(Assertions.jsonExists(jsonPath))
     }
 
-    void jsonPathDoesNotExist(String jsonPath) {
-        assertionBuilders.add(Assertions.jsonPathDoesNotExist(jsonPath))
+    void jsonNotExists(String jsonPath) {
+        assertionBuilders.add(Assertions.jsonNotExists(jsonPath))
     }
 
     /**
@@ -29,7 +29,7 @@ class RestRequestAssertionsDelegate extends AbstractAssertionsDelegate {
      * @param jsonPath
      * @param expectedValue
      */
-    void jsonPathExistence(String jsonPath, String expectedValue) {
-        assertionBuilders.add(Assertions.jsonPathExistence(jsonPath, expectedValue))
+    void jsonExistence(String jsonPath, String expectedValue) {
+        assertionBuilders.add(Assertions.jsonExistence(jsonPath, expectedValue))
     }
 }

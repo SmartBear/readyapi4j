@@ -46,11 +46,11 @@ public class Assertions {
         return new JsonPathCountAssertionBuilder(jsonPath, expectedCount);
     }
 
-    public static JsonPathExistenceAssertionBuilder jsonPathExists(String jsonPath) {
+    public static JsonPathExistenceAssertionBuilder jsonExists(String jsonPath) {
         return new JsonPathExistenceAssertionBuilder(jsonPath, true);
     }
 
-    public static JsonPathExistenceAssertionBuilder jsonPathDoesNotExist(String jsonPath) {
+    public static JsonPathExistenceAssertionBuilder jsonNotExists(String jsonPath) {
         return new JsonPathExistenceAssertionBuilder(jsonPath, false);
     }
 
@@ -61,7 +61,7 @@ public class Assertions {
      * @param expectedValue Property expansion syntax for expected value, evaluated to true/false.
      * @return JsonPathExistenceAssertionBuilder
      */
-    public static JsonPathExistenceAssertionBuilder jsonPathExistence(String jsonPath, String expectedValue) {
+    public static JsonPathExistenceAssertionBuilder jsonExistence(String jsonPath, String expectedValue) {
         return new JsonPathExistenceAssertionBuilder(jsonPath, expectedValue);
     }
 

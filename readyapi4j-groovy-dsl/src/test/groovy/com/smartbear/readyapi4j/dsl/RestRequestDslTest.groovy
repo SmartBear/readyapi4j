@@ -197,9 +197,9 @@ class RestRequestDslTest {
         TestRecipe recipe = recipe {
             get '/some_uri', {
                 asserting {
-                    jsonPathExists '$.customer.address'
-                    jsonPathDoesNotExist '$.owner'
-                    jsonPathExistence '$.customer.address', '#Project#shouldAddressBePresent'
+                    jsonExists '$.customer.address'
+                    jsonNotExists '$.owner'
+                    jsonExistence '$.customer.address', '#Project#shouldAddressBePresent'
                 }
             }
         }
