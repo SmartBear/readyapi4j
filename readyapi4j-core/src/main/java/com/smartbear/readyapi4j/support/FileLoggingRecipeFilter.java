@@ -15,6 +15,9 @@ public class FileLoggingRecipeFilter implements RecipeFilter {
 
     private final static Logger LOG = LoggerFactory.getLogger(FileLoggingRecipeFilter.class);
 
+    public static final String DEFAULT_TARGET_FOLDER = "recipe";
+    public static final String DEFAULT_EXTENSION = "json";
+
     private final String targetFolder;
     private final String prefix;
     private final String extension;
@@ -26,7 +29,7 @@ public class FileLoggingRecipeFilter implements RecipeFilter {
     }
 
     public FileLoggingRecipeFilter(String targetFolder) {
-        this(targetFolder, "recipe", "json");
+        this(targetFolder, DEFAULT_TARGET_FOLDER, DEFAULT_EXTENSION);
     }
 
     @Override
@@ -38,9 +41,9 @@ public class FileLoggingRecipeFilter implements RecipeFilter {
             }
 
             File file = File.createTempFile(prefix, "." + extension, directory);
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(testRecipe.toString().getBytes());
-            fileOutputStream.close();
+            try ( FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                fileOutputStream.write(testRecipe.toString().getBytes());
+            }
         } catch (Exception e) {
             LOG.error("Failed to write recipe to file", e);
         }

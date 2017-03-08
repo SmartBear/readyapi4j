@@ -1,6 +1,5 @@
 package com.smartbear.readyapi4j.assertions;
 
-import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion;
 import com.smartbear.readyapi4j.AssertionNames;
 import com.smartbear.readyapi4j.Validator;
@@ -8,7 +7,7 @@ import com.smartbear.readyapi4j.Validator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InvalidHttpStatusCodesAssertionBuilder<T extends Assertion> implements HttpStatusCodeAssertionBuilder {
+public class InvalidHttpStatusCodesAssertionBuilder implements HttpStatusCodeAssertionBuilder {
     protected List<String> statusCodes = new ArrayList<>();
     protected String name;
 
