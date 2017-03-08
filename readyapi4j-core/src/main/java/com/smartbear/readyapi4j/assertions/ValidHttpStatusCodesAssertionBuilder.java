@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
-public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion>  implements HttpStatusCodeAssertionBuilder {
+public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion> implements HttpStatusCodeAssertionBuilder {
     protected List<String> statusCodes = new ArrayList<>();
     protected String name;
 
@@ -76,9 +76,9 @@ public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion>  implemen
         return (T) statusCodesAssertion;
     }
 
-    public static <T extends Assertion> T create() {
+    public static ValidHttpStatusCodesAssertion create() {
         ValidHttpStatusCodesAssertion assertion = new ValidHttpStatusCodesAssertion();
         assertion.setType(AssertionNames.VALID_HTTP_STATUS_CODES);
-        return (T) assertion;
+        return assertion;
     }
 }

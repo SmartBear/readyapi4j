@@ -1,12 +1,65 @@
 package com.smartbear.readyapi4j.assertions;
 
+import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.InvalidHttpStatusCodesAssertion;
 import com.smartbear.readyapi4j.AssertionNames;
 import com.smartbear.readyapi4j.Validator;
 
-public class InvalidHttpStatusCodesAssertionBuilder extends ValidHttpStatusCodesAssertionBuilder<InvalidHttpStatusCodesAssertion> {
+import java.util.ArrayList;
+import java.util.List;
 
-    public InvalidHttpStatusCodesAssertionBuilder() {
+public class InvalidHttpStatusCodesAssertionBuilder<T extends Assertion> implements HttpStatusCodeAssertionBuilder {
+    protected List<String> statusCodes = new ArrayList<>();
+    protected String name;
+
+    @Override
+    public InvalidHttpStatusCodesAssertionBuilder addStatusCode(int statusCode) {
+        statusCodes.add(String.valueOf(statusCode));
+        return this;
+    }
+
+    @Override
+    public InvalidHttpStatusCodesAssertionBuilder addStatusCodes(List<Integer> statusCodes) {
+        this.statusCodes.addAll(covertListIntegersToString(statusCodes));
+        return this;
+    }
+
+    @Override
+    public InvalidHttpStatusCodesAssertionBuilder withStatusCode(int statusCode) {
+        statusCodes.add(String.valueOf(statusCode));
+        return this;
+    }
+
+    @Override
+    public InvalidHttpStatusCodesAssertionBuilder withStatusCode(String statusCode) {
+        statusCodes.add(statusCode);
+        return this;
+    }
+
+    @Override
+    public InvalidHttpStatusCodesAssertionBuilder withStatusCodes(List<String> statusCodes) {
+        this.statusCodes.addAll(statusCodes);
+        return this;
+    }
+
+    @Override
+    public InvalidHttpStatusCodesAssertionBuilder withIntStatusCodes(List<Integer> statusCodes) {
+        this.statusCodes.addAll(covertListIntegersToString(statusCodes));
+        return this;
+    }
+
+    @Override
+    public InvalidHttpStatusCodesAssertionBuilder named(String name) {
+        this.name = name;
+        return this;
+    }
+
+    private List<String> covertListIntegersToString(List<Integer> statusCodes) {
+        List<String> result = new ArrayList<>();
+        for (int code : statusCodes) {
+            result.add(String.valueOf(code));
+        }
+        return result;
     }
 
     @Override
@@ -21,7 +74,7 @@ public class InvalidHttpStatusCodesAssertionBuilder extends ValidHttpStatusCodes
         return invalidHttpStatusCodesAssertion;
     }
 
-    public final static InvalidHttpStatusCodesAssertion create() {
+    public static InvalidHttpStatusCodesAssertion create() {
         InvalidHttpStatusCodesAssertion assertion = new InvalidHttpStatusCodesAssertion();
         assertion.setType(AssertionNames.INVALID_HTTP_STATUS_CODES);
         return assertion;
