@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j.teststeps.restrequest;
 
+import com.smartbear.readyapi4j.support.ContentUtils;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
 
 public class RestRequestStepWithBodyBuilder extends RestRequestStepBuilder<RestRequestStepWithBodyBuilder> {
@@ -8,8 +9,10 @@ public class RestRequestStepWithBodyBuilder extends RestRequestStepBuilder<RestR
         super(uri, post);
     }
 
-    public RestRequestStepWithBodyBuilder withRequestBody(String requestBody) {
-        getTestStep().setRequestBody(requestBody);
+    public RestRequestStepWithBodyBuilder withRequestBody(Object requestBody) {
+        getTestStep().setRequestBody(
+            ContentUtils.serializeContent(requestBody, getTestStep().getMediaType()));
+
         return this;
     }
 

@@ -67,10 +67,19 @@ public class TestRecipeBuilder {
      * @return the created TestRecipe
      * @throws IOException if there was an error during deserialization
      */
-
     public static TestRecipe createFrom(String jsonText) throws IOException {
         TestCase testCase = getObjectMapper().readValue(jsonText, TestCase.class);
         return new TestRecipe(testCase);
+    }
+
+    /**
+     * Builds a recipe for the specified TestStep builders
+     *
+     * @param builders the TestStep builders
+     * @return the resulting TestRecipe
+     */
+    public static TestRecipe buildRecipe(TestStepBuilder... builders) {
+        return newTestRecipe(builders).buildTestRecipe();
     }
 
     private static ObjectMapper getObjectMapper() {
@@ -198,23 +207,23 @@ public class TestRecipeBuilder {
             extractors.forEach(extractor -> {
                 // Base the extractorId on the property if the path is empty, otherwise on the path
                 String extractorId = extractorData
-                        .addExtractorOperator(StringUtils.isEmpty(extractor.getPath()) ?
-                                extractor.getProperty() : extractor.getPath(), extractor.getOperator());
+                    .addExtractorOperator(StringUtils.isEmpty(extractor.getPath()) ?
+                        extractor.getProperty() : extractor.getPath(), extractor.getOperator());
                 withProperty(extractorId, "");
                 propertyTransferTestStepBuilder
-                        .addTransfer(PropertyTransferBuilder
-                                .newTransfer()
-                                .named(extractorId)
-                                .withSource(PropertyTransferSourceBuilder
-                                        .aSource()
-                                        .withPath(extractor.getPath())
-                                        .withProperty(extractor.getProperty())
-                                        .withSourceStep(extractor.getSource())
-                                        .withPathLanguage(extractor.getPathLanguage())
-                                ).withTarget(PropertyTransferTargetBuilder
-                                        .aTarget()
-                                        .withProperty(extractorId)
-                                        .withTargetStep(TARGET_STEP)));
+                    .addTransfer(PropertyTransferBuilder
+                        .newTransfer()
+                        .named(extractorId)
+                        .withSource(PropertyTransferSourceBuilder
+                            .aSource()
+                            .withPath(extractor.getPath())
+                            .withProperty(extractor.getProperty())
+                            .withSourceStep(extractor.getSource())
+                            .withPathLanguage(extractor.getPathLanguage())
+                        ).withTarget(PropertyTransferTargetBuilder
+                            .aTarget()
+                            .withProperty(extractorId)
+                            .withTargetStep(TARGET_STEP)));
             });
             propertyTransferTestStep = propertyTransferTestStepBuilder.build();
         }
@@ -254,25 +263,25 @@ public class TestRecipeBuilder {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
     @JsonSubTypes({
-            @JsonSubTypes.Type(value = BooleanDataGenerator.class, name = "Boolean"),
-            @JsonSubTypes.Type(value = ComputerAddressDataGenerator.class, name = "Computer Address"),
-            @JsonSubTypes.Type(value = NameDataGenerator.class, name = "Name"),
-            @JsonSubTypes.Type(value = CustomStringDataGenerator.class, name = "Custom String"),
-            @JsonSubTypes.Type(value = StringDataGenerator.class, name = "String"),
-            @JsonSubTypes.Type(value = PhoneNumberDataGenerator.class, name = "Phone Number"),
-            @JsonSubTypes.Type(value = StateNameDataGenerator.class, name = "State"),
-            @JsonSubTypes.Type(value = UKPostCodeDataGenerator.class, name = "United Kingdom Postcode"),
-            @JsonSubTypes.Type(value = USZIPCodeDataGenerator.class, name = "United States ZIP Code"),
-            @JsonSubTypes.Type(value = IntegerDataGenerator.class, name = "Integer"),
-            @JsonSubTypes.Type(value = RealNumberDataGenerator.class, name = "Real"),
-            @JsonSubTypes.Type(value = ValuesFromSetDataGenerator.class, name = "Value from Set"),
-            @JsonSubTypes.Type(value = DateAndTimeDataGenerator.class, name = "Date and Time"),
-            @JsonSubTypes.Type(value = DataGenerator.class, name = "City"),
-            @JsonSubTypes.Type(value = DataGenerator.class, name = "Country"),
-            @JsonSubTypes.Type(value = DataGenerator.class, name = "Street Address"),
-            @JsonSubTypes.Type(value = DataGenerator.class, name = "E-Mail"),
-            @JsonSubTypes.Type(value = DataGenerator.class, name = "Guid"),
-            @JsonSubTypes.Type(value = DataGenerator.class, name = "Social Security Number")
+        @JsonSubTypes.Type(value = BooleanDataGenerator.class, name = "Boolean"),
+        @JsonSubTypes.Type(value = ComputerAddressDataGenerator.class, name = "Computer Address"),
+        @JsonSubTypes.Type(value = NameDataGenerator.class, name = "Name"),
+        @JsonSubTypes.Type(value = CustomStringDataGenerator.class, name = "Custom String"),
+        @JsonSubTypes.Type(value = StringDataGenerator.class, name = "String"),
+        @JsonSubTypes.Type(value = PhoneNumberDataGenerator.class, name = "Phone Number"),
+        @JsonSubTypes.Type(value = StateNameDataGenerator.class, name = "State"),
+        @JsonSubTypes.Type(value = UKPostCodeDataGenerator.class, name = "United Kingdom Postcode"),
+        @JsonSubTypes.Type(value = USZIPCodeDataGenerator.class, name = "United States ZIP Code"),
+        @JsonSubTypes.Type(value = IntegerDataGenerator.class, name = "Integer"),
+        @JsonSubTypes.Type(value = RealNumberDataGenerator.class, name = "Real"),
+        @JsonSubTypes.Type(value = ValuesFromSetDataGenerator.class, name = "Value from Set"),
+        @JsonSubTypes.Type(value = DateAndTimeDataGenerator.class, name = "Date and Time"),
+        @JsonSubTypes.Type(value = DataGenerator.class, name = "City"),
+        @JsonSubTypes.Type(value = DataGenerator.class, name = "Country"),
+        @JsonSubTypes.Type(value = DataGenerator.class, name = "Street Address"),
+        @JsonSubTypes.Type(value = DataGenerator.class, name = "E-Mail"),
+        @JsonSubTypes.Type(value = DataGenerator.class, name = "Guid"),
+        @JsonSubTypes.Type(value = DataGenerator.class, name = "Social Security Number")
     })
     private static class DataGeneratorTypeMixin {
     }

@@ -1,6 +1,5 @@
 package com.smartbear.readyapi4j.assertions;
 
-import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion;
 import com.smartbear.readyapi4j.AssertionNames;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 import static com.smartbear.readyapi4j.Validator.validateNotEmpty;
 
-public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion>  implements HttpStatusCodeAssertionBuilder {
+public class ValidHttpStatusCodesAssertionBuilder implements HttpStatusCodeAssertionBuilder {
     protected List<String> statusCodes = new ArrayList<>();
     protected String name;
 
@@ -65,7 +64,7 @@ public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion>  implemen
     }
 
     @Override
-    public T build() {
+    public ValidHttpStatusCodesAssertion build() {
         validateNotEmpty(statusCodes, "Missing status codes. Status codes are mandatory for ValidHttpStatusCodesAssertion");
         ValidHttpStatusCodesAssertion statusCodesAssertion = new ValidHttpStatusCodesAssertion();
         statusCodesAssertion.setType(AssertionNames.VALID_HTTP_STATUS_CODES);
@@ -73,12 +72,12 @@ public class ValidHttpStatusCodesAssertionBuilder<T extends Assertion>  implemen
         if (name != null) {
             statusCodesAssertion.setName(name);
         }
-        return (T) statusCodesAssertion;
+        return statusCodesAssertion;
     }
 
-    public static <T extends Assertion> T create() {
+    public static ValidHttpStatusCodesAssertion create() {
         ValidHttpStatusCodesAssertion assertion = new ValidHttpStatusCodesAssertion();
         assertion.setType(AssertionNames.VALID_HTTP_STATUS_CODES);
-        return (T) assertion;
+        return assertion;
     }
 }
