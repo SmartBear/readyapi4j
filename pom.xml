@@ -12,7 +12,9 @@
         <module>modules/facade</module>
         <module>modules/groovy-dsl</module>
         <module>modules/swagger</module>
+        <module>modules/maven-plugin</module>
         <module>modules/samples</module>
+        <module>modules/maven-plugin-tester</module>
     </modules>
     <packaging>pom</packaging>
     <name>ReadyAPI4j</name>
