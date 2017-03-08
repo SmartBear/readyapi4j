@@ -3,7 +3,7 @@ package com.smartbear.readyapi4j.dsl.execution
 import com.smartbear.readyapi4j.execution.Execution
 import com.smartbear.readyapi4j.execution.RecipeExecutor
 
-import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
+import static RecipeExecution.executeRecipe
 
 class RecipeExecutionTest extends GroovyTestCase {
 

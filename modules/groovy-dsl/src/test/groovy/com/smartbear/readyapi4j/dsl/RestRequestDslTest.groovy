@@ -16,8 +16,8 @@ import com.smartbear.readyapi4j.TestRecipe
 import com.smartbear.readyapi4j.extractor.ExtractorData
 import org.junit.Test
 
-import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
-import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
+import static DataExtractor.extractFirstTestStep
+import static TestDsl.recipe
 import static com.smartbear.readyapi4j.extractor.Extractors.fromResponse
 
 class RestRequestDslTest {

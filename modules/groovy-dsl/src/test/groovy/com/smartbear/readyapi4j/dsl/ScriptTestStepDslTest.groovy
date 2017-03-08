@@ -5,7 +5,7 @@ import com.smartbear.readyapi4j.TestRecipe
 import org.junit.Test
 
 import static TestDsl.recipe
-import static com.smartbear.readyapi4j.dsl.DataExtractor.extractFirstTestStep
+import static DataExtractor.extractFirstTestStep
 
 class ScriptTestStepDslTest {
 

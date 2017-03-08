@@ -4,7 +4,7 @@ import com.smartbear.readyapi.client.model.PluginTestStep
 import com.smartbear.readyapi4j.TestRecipe
 import org.junit.Test
 
-import static com.smartbear.readyapi4j.dsl.TestDsl.recipe
+import static TestDsl.recipe
 
 
 class PluginTestStepDslTest {
