@@ -38,7 +38,6 @@
         <connection>scm:git:ssh://git@github.com/SmartBear/readyapi4j.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/SmartBear/readyapi4j.git
         </developerConnection>
-        <tag>ready-api-testserver-client-1.2.0</tag>
     </scm>
 
     <issueManagement>

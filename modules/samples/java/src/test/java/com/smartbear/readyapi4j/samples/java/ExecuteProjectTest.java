@@ -1,6 +1,6 @@
 package com.smartbear.readyapi4j.samples.java;
 
-import com.smartbear.readyapi.client.support.AssertionUtils;
+import com.smartbear.readyapi4j.support.AssertionUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 

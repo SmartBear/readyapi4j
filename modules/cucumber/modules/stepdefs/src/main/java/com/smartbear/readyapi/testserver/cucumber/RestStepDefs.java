@@ -12,17 +12,15 @@ import com.smartbear.readyapi.testserver.cucumber.builders.Parameters;
 import com.smartbear.readyapi.testserver.cucumber.builders.Support;
 import com.smartbear.readyapi4j.assertions.DefaultResponseSLAAssertionBuilder;
 import com.smartbear.readyapi4j.assertions.ValidHttpStatusCodesAssertionBuilder;
+import com.smartbear.readyapi4j.support.ContentUtils;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import io.swagger.util.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -176,14 +174,8 @@ public class RestStepDefs {
         }
 
         if (!bodyValues.isEmpty()) {
-            try {
-                StringWriter writer = new StringWriter();
-                Json.mapper().writer().writeValue(writer, bodyValues);
-                testStep.setRequestBody(writer.toString());
-                testStep.setMediaType("application/json");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            testStep.setMediaType("application/json");
+            testStep.setRequestBody(ContentUtils.serializeContent(bodyValues,"application/json"));
         }
 
         if( !assertions.isEmpty() ) {

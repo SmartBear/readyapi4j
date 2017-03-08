@@ -5,6 +5,7 @@
         <artifactId>readyapi4j-cucumber</artifactId>
         <groupId>com.smartbear.readyapi</groupId>
         <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
     </parent>
 
     <artifactId>readyapi4j-cucumber-core</artifactId>

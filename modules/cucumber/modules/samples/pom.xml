@@ -5,6 +5,7 @@
         <artifactId>readyapi4j-cucumber</artifactId>
         <groupId>com.smartbear.readyapi</groupId>
         <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
     </parent>
 
     <artifactId>readyapi4j-cucumber-samples</artifactId>
@@ -12,9 +13,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.smartbear.readyapi.testserver.cucumber</groupId>
-            <artifactId>testserver-cucumber-stepdefs</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <groupId>com.smartbear.readyapi</groupId>
+            <artifactId>readyapi4j-cucumber-stepdefs</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

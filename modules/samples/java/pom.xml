@@ -18,7 +18,9 @@
     <dependencies>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
-            <artifactId>ready-api-testserver-client</artifactId>
+            <artifactId>readyapi4j-facade</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

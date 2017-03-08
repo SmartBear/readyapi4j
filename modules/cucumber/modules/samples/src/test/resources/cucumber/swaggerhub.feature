@@ -24,7 +24,7 @@ Feature: SwaggerHub REST API
     And owner is <owner>
     And api is <api>
     And version is <version>
-    Then a 200 response is returned within 500ms
+    Then a 200 response is returned within 2000ms
     And the response type is json
     And the response body contains
     """

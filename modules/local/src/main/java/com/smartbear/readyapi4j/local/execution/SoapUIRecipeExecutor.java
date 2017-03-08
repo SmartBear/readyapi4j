@@ -153,7 +153,10 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     }
 
     private void notifyExecutionFinished(TestRecipe testRecipe, ProjectResultReport projectResultReport) {
-        DataExtractors.runDataExtractors(projectResultReport, Arrays.asList(testRecipe.getExtractorData()));
+        if( testRecipe.getExtractorData() != null ) {
+            DataExtractors.runDataExtractors(projectResultReport, Arrays.asList(testRecipe.getExtractorData()));
+        }
+
         for (ExecutionListener executionListener : executionListeners) {
             executionListener.executionFinished(projectResultReport);
         }

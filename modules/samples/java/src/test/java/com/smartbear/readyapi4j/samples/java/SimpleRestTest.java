@@ -1,10 +1,10 @@
 package com.smartbear.readyapi4j.samples.java;
 
-import com.smartbear.readyapi.client.TestRecipe;
+import com.smartbear.readyapi4j.TestRecipe;
 import org.junit.Test;
 
-import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.getRequest;
+import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 
 public class SimpleRestTest extends ApiTestBase {
 
