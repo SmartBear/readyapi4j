@@ -10,14 +10,15 @@
     <artifactId>readyapi4j-cucumber</artifactId>
     <packaging>pom</packaging>
 
-    <name>ReadyApi4j Cucumber Integration</name>
-    <description>Java library for BDD/Cucumber driven design/testing of APIs</description>
-
     <modules>
         <module>modules/core</module>
         <module>modules/stepdefs</module>
         <module>modules/runner</module>
         <module>modules/samples</module>
     </modules>
+
+    <properties>
+        <cucumber.version>1.2.5</cucumber.version>
+    </properties>
 
 </project>

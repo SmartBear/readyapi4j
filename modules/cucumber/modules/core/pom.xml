@@ -15,19 +15,19 @@
         <dependency>
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-junit</artifactId>
-            <version>1.2.4</version>
+            <version>${cucumber.version}</version>
         </dependency>
 
         <dependency>
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-java</artifactId>
-            <version>1.2.4</version>
+            <version>${cucumber.version}</version>
         </dependency>
 
         <dependency>
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-guice</artifactId>
-            <version>1.2.4</version>
+            <version>${cucumber.version}</version>
         </dependency>
 
         <dependency>
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
             <artifactId>readyapi4j-facade</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -59,10 +59,11 @@
             <artifactId>logback-classic</artifactId>
             <version>1.1.2</version>
         </dependency>
+
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-parser</artifactId>
-            <version>1.0.23</version>
+            <version>${swagger-parser.version}</version>
         </dependency>
     </dependencies>
 </project>

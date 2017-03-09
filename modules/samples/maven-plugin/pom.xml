@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>readyapi4j-maven-plugin-samples</artifactId>
-    <name>ReadyApi4j Maven Sample</name>
 
     <properties>
         <testserver.user>demoUser</testserver.user>

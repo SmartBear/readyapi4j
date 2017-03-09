@@ -60,6 +60,7 @@
         <jackson-version>2.8.5</jackson-version>
         <junit-version>4.8.1</junit-version>
         <DoNotRunSamples>true</DoNotRunSamples>
+        <swagger-parser.version>1.0.26</swagger-parser.version>
     </properties>
 
     <build>
