@@ -89,13 +89,13 @@ public class RunMojo
     @Parameter(defaultValue = "true")
     private boolean failOnFailures;
 
-    @Parameter(required = true, property = "ready-api-test-server.username")
+    @Parameter(required = true, property = "testserver.username")
     private String username;
 
-    @Parameter(required = true, property = "ready-api-test-server.password")
+    @Parameter(required = true, property = "testserver.password")
     private String password;
 
-    @Parameter(required = true, property = "ready-api-test-server.endpoint")
+    @Parameter(required = true, property = "testserver.endpoint")
     private String server;
 
     @Parameter(defaultValue = "${project.basedir}/src/test/resources/recipes", required = true)
