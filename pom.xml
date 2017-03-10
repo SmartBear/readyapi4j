@@ -144,8 +144,8 @@
                 </property>
             </activation>
             <modules>
-                <module>readyapi4j-core</module>
-                <module>readyapi4j-local</module>
+                <module>modules/core</module>
+                <module>modules/local</module>
             </modules>
         </profile>
         <profile>

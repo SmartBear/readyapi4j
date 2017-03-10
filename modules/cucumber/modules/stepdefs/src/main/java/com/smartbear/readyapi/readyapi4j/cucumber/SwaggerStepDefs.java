@@ -3,7 +3,6 @@ package com.smartbear.readyapi.readyapi4j.cucumber;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.smartbear.readyapi.client.model.RestParameter;
-import com.smartbear.readyapi.readyapi4j.cucumber.builders.Parameters;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -104,7 +103,8 @@ public class SwaggerStepDefs {
                 if (parameter.getName().equalsIgnoreCase(name)) {
                     String type = parameter.getIn();
                     if (PARAM_TYPES.contains(type)) {
-                        restStepDefs.addParameter( Parameters.buildParameter(RestParameter.TypeEnum.valueOf(type.toUpperCase()), name, value));
+                        restStepDefs.addParameter(
+                            new RestParameter().type(RestParameter.TypeEnum.valueOf(type.toUpperCase())).name(name).value( value));
                     } else if (type.equals("body")) {
                         restStepDefs.setRequestBody(value);
                     }
