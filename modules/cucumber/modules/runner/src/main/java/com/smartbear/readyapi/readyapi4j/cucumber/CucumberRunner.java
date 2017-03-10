@@ -11,8 +11,6 @@ import java.util.ArrayList;
 
 public class CucumberRunner {
 
-    private static final String STEPDEFS_PACKAGE = "com.smartbear.readyapi.testserver.cucumber";
-
     /**
      * Invokes the Cucumber CLI with the internal StepDefs package
      *
@@ -24,7 +22,7 @@ public class CucumberRunner {
         System.out.println( "Ready! API TestServer Cucumber Runner" );
 
         ArrayList<String> argsList = Lists.newArrayList(args);
-        argsList.add(0, STEPDEFS_PACKAGE);
+        argsList.add(0, RestStepDefs.class.getPackage().getName());
         argsList.add(0, "-g");
 
         cucumber.api.cli.Main.main( argsList.toArray( new String[argsList.size()]) );

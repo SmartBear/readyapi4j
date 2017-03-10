@@ -7,7 +7,6 @@ import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
 import com.smartbear.readyapi4j.facade.execution.RecipeExecutorBuilder;
 import cucumber.api.Scenario;
-import io.swagger.util.Json;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +23,7 @@ import java.io.FileWriter;
 public class CucumberRecipeExecutor {
 
     private final static Logger LOG = LoggerFactory.getLogger(CucumberRecipeExecutor.class);
+    public static final String RECIPE_LOG_FOLDER = "readyapi.cucumber.logfolder";
 
     private RecipeExecutor executor;
     private boolean async = false;
@@ -54,7 +54,7 @@ public class CucumberRecipeExecutor {
             LOG.debug(testRecipe.toString());
         }
 
-        String logFolder = System.getProperty( "testserver.cucumber.logfolder", null );
+        String logFolder = System.getProperty(RECIPE_LOG_FOLDER, System.getenv(RECIPE_LOG_FOLDER) );
         if( scenario != null && logFolder != null ){
             logScenarioToFile(testRecipe, scenario, logFolder);
         }
@@ -107,7 +107,7 @@ public class CucumberRecipeExecutor {
             LOG.info("Writing recipe to " + folder.getName() + File.separatorChar + scenarioFolder.getName() +
                 File.separatorChar + scenarioFile.getName());
 
-            writer.write( Json.pretty(testRecipe) );
+            writer.write( testRecipe.toString() );
             writer.close();
         } catch (Exception e) {
             LOG.error("Failed to write recipe to logFolder [" + logFolder + "]", e );

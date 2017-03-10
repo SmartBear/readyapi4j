@@ -43,6 +43,11 @@ public class CucumberRecipeBuilder {
 
     @After
     public void run(Scenario scenario) {
+
+        if( testSteps.isEmpty()){
+            throw new RuntimeException("Missing teststeps in scenario [" + scenario.getName() + "]");
+        }
+
         testCase.setTestSteps(testSteps);
         Execution execution = executor.runTestCase(testCase, scenario);
 
