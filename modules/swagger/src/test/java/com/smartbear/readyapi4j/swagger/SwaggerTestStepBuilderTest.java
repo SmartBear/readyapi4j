@@ -1,7 +1,5 @@
 package com.smartbear.readyapi4j.swagger;
 
-import static org.junit.Assert.assertEquals;
-
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
 import com.smartbear.readyapi4j.teststeps.TestSteps.HttpMethod;
@@ -15,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
+
+import static org.junit.Assert.assertEquals;
 
 public class SwaggerTestStepBuilderTest {
 

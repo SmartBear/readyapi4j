@@ -9,7 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>readyapi4j-local</artifactId>
-    <name>SoapUI Client</name>
     <dependencies>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>

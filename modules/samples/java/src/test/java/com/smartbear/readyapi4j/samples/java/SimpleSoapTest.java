@@ -1,13 +1,13 @@
 package com.smartbear.readyapi4j.samples.java;
 
-import com.smartbear.readyapi.client.TestRecipe;
-import com.smartbear.readyapi.client.teststeps.soaprequest.SoapRequestStepBuilder;
+import com.smartbear.readyapi4j.TestRecipe;
+import com.smartbear.readyapi4j.teststeps.soaprequest.SoapRequestStepBuilder;
 import org.junit.Test;
 
 import java.net.URL;
 
-import static com.smartbear.readyapi.client.TestRecipeBuilder.newTestRecipe;
 import static com.smartbear.readyapi.client.teststeps.TestSteps.soapRequest;
+import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
 
 public class SimpleSoapTest extends ApiTestBase {
 

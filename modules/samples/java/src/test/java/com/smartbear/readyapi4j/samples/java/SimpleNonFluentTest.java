@@ -1,6 +1,5 @@
 package com.smartbear.readyapi4j.samples.java;
 
-import com.smartbear.readyapi.client.TestRecipe;
 import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.JsonPathContentAssertion;
 import com.smartbear.readyapi.client.model.RestParameter;
@@ -8,8 +7,8 @@ import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.model.ValidHttpStatusCodesAssertion;
-import com.smartbear.readyapi.client.teststeps.TestStepTypes;
-import com.smartbear.readyapi.client.teststeps.TestSteps;
+import com.smartbear.readyapi4j.TestRecipe;
+import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -25,7 +24,7 @@ public class SimpleNonFluentTest extends ApiTestBase {
 
         RestTestRequestStep restTestRequestStep = new RestTestRequestStep();
         restTestRequestStep.setURI("https://api.swaggerhub.com/apis");
-        restTestRequestStep.setMethod(TestSteps.HttpMethod.GET.name());
+        restTestRequestStep.setMethod("GET");
         restTestRequestStep.setType(TestStepTypes.REST_REQUEST.getName());
 
         RestParameter parameter = new RestParameter();
@@ -54,7 +53,7 @@ public class SimpleNonFluentTest extends ApiTestBase {
 
         RestTestRequestStep restTestRequestStep = new RestTestRequestStep();
         restTestRequestStep.setURI("https://api.swaggerhub.com/apis");
-        restTestRequestStep.setMethod(TestSteps.HttpMethod.GET.name());
+        restTestRequestStep.setMethod("GET");
         restTestRequestStep.setType(TestStepTypes.REST_REQUEST.getName());
 
         ValidHttpStatusCodesAssertion assertion = new ValidHttpStatusCodesAssertion();

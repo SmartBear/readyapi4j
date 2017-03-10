@@ -17,7 +17,7 @@
         </dependency>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
-            <artifactId>readyapi4j-local</artifactId>
+            <artifactId>readyapi4j-facade</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

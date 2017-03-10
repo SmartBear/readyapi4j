@@ -8,8 +8,7 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>readyapi4j-testserver-client</artifactId>
-    <name>Ready!API TestServer Client Core</name>
+    <artifactId>readyapi4j-testserver</artifactId>
 
     <dependencies>
         <dependency>

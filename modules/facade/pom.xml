@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
-            <artifactId>readyapi4j-testserver-client</artifactId>
+            <artifactId>readyapi4j-testserver</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

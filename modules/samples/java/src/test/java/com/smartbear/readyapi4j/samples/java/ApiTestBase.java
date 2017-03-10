@@ -1,12 +1,12 @@
 package com.smartbear.readyapi4j.samples.java;
 
-import com.smartbear.readyapi.client.TestRecipe;
-import com.smartbear.readyapi.client.execution.Execution;
-import com.smartbear.readyapi.client.execution.ProjectExecutionRequest;
-import com.smartbear.readyapi.client.execution.ProjectExecutor;
-import com.smartbear.readyapi.client.execution.RecipeExecutor;
-import com.smartbear.readyapi.client.execution.TestServerClient;
-import com.smartbear.readyapi.client.support.AssertionUtils;
+import com.smartbear.readyapi4j.TestRecipe;
+import com.smartbear.readyapi4j.execution.Execution;
+import com.smartbear.readyapi4j.execution.RecipeExecutor;
+import com.smartbear.readyapi4j.support.AssertionUtils;
+import com.smartbear.readyapi4j.testserver.execution.ProjectExecutionRequest;
+import com.smartbear.readyapi4j.testserver.execution.ProjectExecutor;
+import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class ApiTestBase {
     }
 
     public static Execution executeProject(File file) throws Exception {
-        ProjectExecutionRequest request = ProjectExecutionRequest.Builder.newInstance().withProjectFile(file).build();
+        ProjectExecutionRequest request = ProjectExecutionRequest.Builder.forProjectFile(file).build();
         return projectExecutor.executeProject(request);
     }
 }
