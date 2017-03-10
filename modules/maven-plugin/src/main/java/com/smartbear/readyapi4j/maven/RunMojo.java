@@ -89,20 +89,29 @@ public class RunMojo
     @Parameter(defaultValue = "true")
     private boolean failOnFailures;
 
-    @Parameter(required = true, property = "testserver.username")
+    @Parameter(required = false, property = "testserver.username")
     private String username;
 
-    @Parameter(required = true, property = "testserver.password")
+    @Parameter(required = false, property = "testserver.password")
     private String password;
 
-    @Parameter(required = true, property = "testserver.endpoint")
+    @Parameter(required = false, property = "testserver.endpoint")
     private String server;
 
     @Parameter(defaultValue = "${project.basedir}/src/test/resources/recipes", required = true)
     private File recipeDirectory;
 
+    @Parameter(defaultValue = "${project.basedir}/src/test/resources/projects", required = true)
+    private File xmlProjectDirectory;
+
     @Parameter(defaultValue = "${project.basedir}/target/test-recipes", required = true)
     private File targetDirectory;
+
+    @Parameter(required = true, defaultValue = "true")
+    private boolean runRecipes;
+
+    @Parameter(required = true, defaultValue = "true")
+    private boolean runXmlProjects;
 
     @Parameter(defaultValue = "${basedir}/target/surefire-reports")
     private File reportTarget;
@@ -116,10 +125,25 @@ public class RunMojo
                 return;
             }
 
-            List<String> files = getIncludedFiles();
+            List<String> recipeFiles = null;
+            List<String> xmlProjectFiles = null;
+            if (runRecipes) {
+                recipeFiles = getIncludedFiles(recipeDirectory, "**/*.json");
+            }
 
-            if (files.isEmpty()) {
-                getLog().warn("Missing matching files in project");
+            if (runXmlProjects) {
+                xmlProjectFiles = getIncludedFiles(xmlProjectDirectory, "**/*.xml");
+            }
+
+            if (runRecipes && notPresent(recipeFiles)) {
+                getLog().warn("No recipe present to be executed in recipe directory: " + recipeDirectory);
+            }
+            if (runXmlProjects && notPresent(xmlProjectFiles)) {
+                getLog().warn("No XML projects present to be executed in xml-project directory: " + xmlProjectDirectory);
+            }
+
+            if (notPresent(recipeFiles) && notPresent(xmlProjectFiles)) {
+                getLog().warn("No recipe or project found to run.");
                 return;
             }
 
@@ -133,29 +157,50 @@ public class RunMojo
             int failCount = 0;
 
             ProjectResultReport response;
-            for (String file : files) {
-                String fileName = file.toLowerCase();
+            //Run recipes
+            if (runRecipes && recipeFiles != null) {
+                for (String file : recipeFiles) {
+                    String fileName = file.toLowerCase();
 
-                File f = new File(recipeDirectory, file);
+                    File f = new File(recipeDirectory, file);
 
-                if (fileName.endsWith(".json")) {
-                    recipeCount++;
-                    response = runJsonRecipe(f);
-                } else if (fileName.endsWith(".xml")) {
-                    projectCount++;
-                    response = runXmlProject(f);
-                } else {
-                    getLog().warn("Unexpected filename: " + fileName);
-                    continue;
-                }
+                    if (fileName.endsWith(".json")) {
+                        recipeCount++;
+                        response = runJsonRecipe(f);
+                    } else {
+                        getLog().warn("Unexpected filename: " + fileName);
+                        continue;
+                    }
 
-                try {
-                    handleResponse(response, report, file);
-                } catch (MojoFailureException exception) {
-                    failCount++;
+                    try {
+                        handleResponse(response, report, file);
+                    } catch (MojoFailureException exception) {
+                        failCount++;
+                    }
                 }
             }
+            //Run XML projects
+            if (runXmlProjects && xmlProjectFiles != null) {
+                for (String file : xmlProjectFiles) {
+                    String fileName = file.toLowerCase();
 
+                    File f = new File(xmlProjectDirectory, file);
+
+                    if (fileName.endsWith(".xml")) {
+                        projectCount++;
+                        response = runXmlProject(f);
+                    } else {
+                        getLog().warn("Unexpected filename: " + fileName);
+                        continue;
+                    }
+
+                    try {
+                        handleResponse(response, report, file);
+                    } catch (MojoFailureException exception) {
+                        failCount++;
+                    }
+                }
+            }
             getLog().info("Ready! API TestServer Maven Plugin");
             getLog().info("--------------------------------------");
             getLog().info("Recipes run: " + recipeCount);
@@ -186,6 +231,10 @@ public class RunMojo
         }
     }
 
+    private boolean notPresent(List<String> recipeFiles) {
+        return recipeFiles == null || recipeFiles.isEmpty();
+    }
+
     private void initRecipeExecutor() {
         RecipeExecutorBuilder recipeExecutorBuilder = new RecipeExecutorBuilder();
         if (StringUtils.isNotEmpty(server)) {
@@ -194,6 +243,7 @@ public class RunMojo
             recipeExecutorBuilder.withPassword(password);
         }
         recipeExecutor = recipeExecutorBuilder.build();
+        getLog().info("Execution mode: " + recipeExecutor.getExecutionMode());
     }
 
     private void readRecipeProperties() throws IOException {
@@ -215,14 +265,13 @@ public class RunMojo
         }
     }
 
-    private List<String> getIncludedFiles() {
+    private List<String> getIncludedFiles(File rootDirectory, String fileExtensionFilter) {
 
         FileSetManager fileSetManager = new FileSetManager();
 
         FileSet fileSet = new FileSet();
-        fileSet.setDirectory(recipeDirectory.getAbsolutePath());
-        fileSet.addInclude("**/*.json");
-        fileSet.addInclude("**/*.xml");
+        fileSet.setDirectory(rootDirectory.getAbsolutePath());
+        fileSet.addInclude(fileExtensionFilter);
 
         return Arrays.asList(fileSetManager.getIncludedFiles(fileSet));
     }

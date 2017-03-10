@@ -16,6 +16,7 @@ import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.DataExtractors;
 import com.smartbear.readyapi4j.execution.Execution;
+import com.smartbear.readyapi4j.execution.ExecutionMode;
 import com.smartbear.readyapi4j.execution.RecipeExecutionException;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
 import com.smartbear.readyapi4j.execution.RecipeFilter;
@@ -78,6 +79,11 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     @Override
     public void removeRecipeFilter(RecipeFilter recipeFilter) {
         recipeFilters.remove(recipeFilter);
+    }
+
+    @Override
+    public ExecutionMode getExecutionMode() {
+        return ExecutionMode.LOCAL;
     }
 
     private Execution postRecipe(TestRecipe testRecipe, boolean async) {
