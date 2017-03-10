@@ -11,7 +11,11 @@ import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.parser.SwaggerParser;
 import io.swagger.parser.util.SwaggerDeserializationResult;
+import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -52,12 +56,48 @@ public class SwaggerTestStepBuilder {
         this(swaggerUrl, null);
     }
 
+    /**
+     * Creates a SwaggerTestStepBuilder for the specified Swagger definition and target targetEndpoint
+     *
+     * @param swaggerInputStream stream from which the Swagger definition can be read
+     * @param targetEndpoint where the target API under test running
+     * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
+     * @throws IOException if the Swagger definition can not be read
+     */
+    public SwaggerTestStepBuilder(InputStream swaggerInputStream, String targetEndpoint) throws IllegalArgumentException, IOException {
+        this.swagger = parseSwagger(swaggerInputStream);
+        setTargetEndpoint(targetEndpoint);
+    }
+
+    /**
+     * Creates a SwaggerTestStepBuilder for the specified Swagger definition, uses the host and first scheme in the
+     * definition for the target endpoint.
+     *
+     * @param swaggerInputStream stream from which the swagger definition can be read
+     * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
+     * @throws IOException if the Swagger definition can not be read
+     */
+    public SwaggerTestStepBuilder(InputStream swaggerInputStream) throws IllegalArgumentException, IOException {
+        this(swaggerInputStream, null);
+    }
+
     private Swagger parseSwagger(String swaggerUrl) throws IllegalArgumentException {
         SwaggerDeserializationResult result = new SwaggerParser().readWithInfo(swaggerUrl, null, true);
         Swagger swagger = result.getSwagger();
         if( swagger == null ){
             throw new IllegalArgumentException( "Failed to parse Swagger definition at [" + swaggerUrl + "]; " +
                 Arrays.toString(result.getMessages().toArray()));
+        }
+        return swagger;
+    }
+
+    private Swagger parseSwagger(InputStream swaggerInputStream) throws IllegalArgumentException, IOException {
+        String swaggerAsString = IOUtils.toString(swaggerInputStream, StandardCharsets.UTF_8);
+        SwaggerDeserializationResult result = new SwaggerParser().readWithInfo(swaggerAsString);
+        Swagger swagger = result.getSwagger();
+        if (swagger == null) {
+            throw new IllegalArgumentException("Failed to parse Swagger definition; " +
+                    Arrays.toString(result.getMessages().toArray()));
         }
         return swagger;
     }
@@ -178,9 +218,12 @@ public class SwaggerTestStepBuilder {
         } else {
             endpoint = targetEndpoint;
         }
+
+        this.targetEndpoint = endpoint;
+
         final String basePath = swagger.getBasePath();
         if (basePath == null) {
-            this.targetEndpoint = endpoint;
+            this.targetBasePath = endpoint;
         } else if (basePath.endsWith("/")) {
             this.targetBasePath = endpoint + basePath.substring(0, basePath.length() - 1);
         } else {

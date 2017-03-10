@@ -11,6 +11,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 
@@ -84,5 +86,19 @@ public class SwaggerTestStepBuilderTest {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Body parameter is not allowed for [GET] methods");
         petstore.requestWithBody("/some/endpoint", HttpMethod.GET);
+    }
+
+    @Test
+    public void testParseSwaggerFromInputStream() throws IOException {
+        final InputStream is = SwaggerTestStepBuilderTest.class.getResourceAsStream("/petstore-swagger.json");
+        final SwaggerTestStepBuilder swaggerTestStepBuilder = new SwaggerTestStepBuilder(is);
+        assertEquals("petstore.swagger.io", swaggerTestStepBuilder.getSwagger().getHost());
+    }
+
+    @Test
+    public void testParseSwaggerFromInputStreamWithTargetEndpoint() throws IOException {
+        final InputStream is = SwaggerTestStepBuilderTest.class.getResourceAsStream("/petstore-swagger.json");
+        final SwaggerTestStepBuilder swaggerTestStepBuilder = new SwaggerTestStepBuilder(is, "http://apan.com");
+        assertEquals("http://apan.com", swaggerTestStepBuilder.getTargetEndpoint());
     }
 }
