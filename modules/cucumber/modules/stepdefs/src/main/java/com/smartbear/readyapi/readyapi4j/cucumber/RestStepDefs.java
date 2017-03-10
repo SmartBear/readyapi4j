@@ -7,13 +7,12 @@ import com.smartbear.readyapi.client.model.Assertion;
 import com.smartbear.readyapi.client.model.Authentication;
 import com.smartbear.readyapi.client.model.RestParameter;
 import com.smartbear.readyapi.client.model.RestTestRequestStep;
-import com.smartbear.readyapi.readyapi4j.cucumber.builders.Assertions;
-import com.smartbear.readyapi.readyapi4j.cucumber.builders.Parameters;
-import com.smartbear.readyapi.readyapi4j.cucumber.builders.Support;
+import com.smartbear.readyapi4j.assertions.Assertions;
 import com.smartbear.readyapi4j.assertions.DefaultResponseSLAAssertionBuilder;
 import com.smartbear.readyapi4j.assertions.ValidHttpStatusCodesAssertionBuilder;
 import com.smartbear.readyapi4j.support.ContentUtils;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
+import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -102,26 +101,26 @@ public class RestStepDefs {
 
     @Then("^the response body contains$")
     public void theResponseBodyContains(String responseBody) throws Throwable {
-        addAssertion( Assertions.bodyContains( responseBody ));
+        addAssertion( Assertions.contains( responseBody ).build());
     }
 
     @Then("^the response body matches$")
     public void theResponseBodyMatches(String responseBodyRegEx) throws Throwable {
-        addAssertion( Assertions.bodyMatches( responseBodyRegEx ));
+        addAssertion( Assertions.matches( responseBodyRegEx ).build());
     }
 
     @Given("^the (.*) parameter is (.*)$")
     public void theParameterIs(String name, String value) throws Throwable {
 
-        RestParameter.TypeEnum type = (endpoint+path).contains("{" + name + "}") ?
-            RestParameter.TypeEnum.PATH :
-            RestParameter.TypeEnum.QUERY;
-        parameters.add( Parameters.buildParameter(type, name, value));
+        ParameterBuilder parameterBuilder = (endpoint+path).contains("{" + name + "}") ?
+            ParameterBuilder.path(name,value) :
+            ParameterBuilder.query(name,value) ;
+        parameters.add( parameterBuilder.build() );
     }
 
     @Given("^the (.*) header is (.*)$")
     public void theHeaderIs(String name, String value) throws Throwable {
-        parameters.add( Parameters.headerParameter(name,value));
+        parameters.add( ParameterBuilder.header(name,value).build());
     }
 
     @Given("^the type is (.*)$")
@@ -131,22 +130,22 @@ public class RestStepDefs {
 
     @Given("^the request expects (.*)")
     public void theRequestExpects(String format) throws Throwable {
-        theHeaderIs("Accept", Support.expandContentType( format ));
+        theHeaderIs("Accept", ContentUtils.expandContentType( format ));
     }
 
     @Then("^the response type is (.*)$")
     public void theResponseTypeIs(String format) throws Throwable {
-        addAssertion( Assertions.responseType( format ));
+        addAssertion( Assertions.contentType( format ).build());
     }
 
     @Then("^the response contains a (.*) header$")
     public void theResponseContainsHeader(String header) throws Throwable {
-        addAssertion( Assertions.responseContainsHeader( header ));
+        addAssertion( Assertions.headerExists( header ).build());
     }
 
     @Then("^the response (.*) header is (.*)$")
     public void theResponseHeaderIs(String header, String value) throws Throwable {
-        addAssertion( Assertions.responseHeader( header, value ));
+        addAssertion( Assertions.headerValue( header, value ).build());
     }
 
     @Then("^the response body contains (.*)$")

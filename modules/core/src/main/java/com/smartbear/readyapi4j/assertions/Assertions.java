@@ -69,6 +69,10 @@ public class Assertions {
         return new DefaultContainsAssertionBuilder(token);
     }
 
+    public static ContainsAssertionBuilder matches(String token) {
+        return new DefaultContainsAssertionBuilder(token).useRegEx();
+    }
+
     public static ContainsAssertionBuilder notContains(String token) {
         return new NotContainsAssertionBuilder(token);
     }

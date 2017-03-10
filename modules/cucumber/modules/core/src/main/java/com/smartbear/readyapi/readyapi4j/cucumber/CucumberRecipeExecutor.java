@@ -24,9 +24,6 @@ import java.io.FileWriter;
 public class CucumberRecipeExecutor {
 
     private final static Logger LOG = LoggerFactory.getLogger(CucumberRecipeExecutor.class);
-    private static final String TESTSERVER_ENDPOINT = "testserver.endpoint";
-    private static final String TESTSERVER_USER = "testserver.user";
-    private static final String TESTSERVER_PASSWORD = "testserver.password";
 
     private RecipeExecutor executor;
     private boolean async = false;
@@ -47,7 +44,6 @@ public class CucumberRecipeExecutor {
      * @param testCase the TestCase to execute
      * @param scenario the Cucumber scenario used to generate the specified Recipe
      * @return the TestServer Execution for the executed TestCase
-     * @throws com.smartbear.readyapi.client.execution.ApiException if recipe execution failes
      */
 
     public Execution runTestCase(TestCase testCase, Scenario scenario) {
