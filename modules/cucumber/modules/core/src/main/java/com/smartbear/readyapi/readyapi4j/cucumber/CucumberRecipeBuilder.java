@@ -43,7 +43,6 @@ public class CucumberRecipeBuilder {
 
     @After
     public void run(Scenario scenario) {
-
         if( testSteps.isEmpty()){
             throw new RuntimeException("Missing teststeps in scenario [" + scenario.getName() + "]");
         }
@@ -51,7 +50,7 @@ public class CucumberRecipeBuilder {
         testCase.setTestSteps(testSteps);
         Execution execution = executor.runTestCase(testCase, scenario);
 
-        if( assertResult && !executor.isAsync() ) {
+        if( execution != null && assertResult && !executor.isAsync() ) {
             AssertionUtils.assertExecution(execution);
         }
     }

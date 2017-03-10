@@ -24,6 +24,7 @@ public class CucumberRecipeExecutor {
 
     private final static Logger LOG = LoggerFactory.getLogger(CucumberRecipeExecutor.class);
     public static final String RECIPE_LOG_FOLDER = "readyapi.cucumber.logfolder";
+    public static final String SILENT_EXECUTION = "readyapi.cucumber.silent";
 
     private RecipeExecutor executor;
     private boolean async = false;
@@ -34,20 +35,19 @@ public class CucumberRecipeExecutor {
 
     /**
      * Executes the specified TestCase and returns the Execution. If a scenario
-     * is specified and the testserver.cucumber.logfolder system property is set,
+     * is specified and the readyapi.cucumber.logfolder system property is set,
      * the generated recipe will be written to the specified folder.
      *
      * It is possible to temporarily "bypass" recipe execution by specifying
-     * a testserver.cucumber.silent property - in which case testcases will not be
+     * a readyapi.cucumber.silent property - in which case testcases will not be
      * submitted to the server, but still logged to the above folder.
      *
      * @param testCase the TestCase to execute
      * @param scenario the Cucumber scenario used to generate the specified Recipe
-     * @return the TestServer Execution for the executed TestCase
+     * @return the TestServer Execution for the executed TestCase, null if execution was bypassed
      */
 
     public Execution runTestCase(TestCase testCase, Scenario scenario) {
-
         TestRecipe testRecipe = new TestRecipe(testCase);
 
         if (LOG.isDebugEnabled()) {
@@ -57,6 +57,10 @@ public class CucumberRecipeExecutor {
         String logFolder = System.getProperty(RECIPE_LOG_FOLDER, System.getenv(RECIPE_LOG_FOLDER) );
         if( scenario != null && logFolder != null ){
             logScenarioToFile(testRecipe, scenario, logFolder);
+        }
+
+        if( System.getProperty(SILENT_EXECUTION, System.getenv(SILENT_EXECUTION) ) != null ){
+            return null;
         }
 
         return async ? executor.submitRecipe( testRecipe ) : executor.executeRecipe(testRecipe);
@@ -75,7 +79,10 @@ public class CucumberRecipeExecutor {
         try {
             File folder = new File( logFolder );
             if( !folder.exists() || !folder.isDirectory()){
-                folder.mkdirs();
+                if( !folder.mkdirs()){
+                    LOG.warn( "Failed to created logFolder [" + logFolder + "]" );
+                    return;
+                }
             }
 
             String[] pathSegments = scenario.getId().split(";");
@@ -85,7 +92,10 @@ public class CucumberRecipeExecutor {
             if( pathSegments.length > 1 ) {
                 scenarioFolder = new File(folder, pathSegments[0]);
                 if (scenarioFolder.exists() || !scenarioFolder.isDirectory()) {
-                    scenarioFolder.mkdirs();
+                    if( !scenarioFolder.mkdirs()){
+                        LOG.warn( "Failed to created scenarioFolder [" + scenarioFolder + "]" );
+                        return;
+                    }
                 }
 
                 fileIndex = 1;
