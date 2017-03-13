@@ -9,6 +9,7 @@ import io.swagger.models.Path;
 import io.swagger.models.Swagger;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
+import io.swagger.models.parameters.RefParameter;
 import io.swagger.parser.SwaggerParser;
 import io.swagger.parser.util.SwaggerDeserializationResult;
 import org.apache.commons.io.IOUtils;
@@ -177,10 +178,19 @@ public class SwaggerTestStepBuilder {
         for (Parameter param : operation.getParameters()) {
             if (param instanceof BodyParameter) {
                 return;
+            } else if (param instanceof RefParameter){
+                final Parameter unboxedParam = unboxRefParameter((RefParameter) param);
+                if (unboxedParam instanceof BodyParameter){
+                    return;
+                }
             }
         }
         throw new IllegalArgumentException(
                 "Body parameter is not defined for the [" + operation.getOperationId() + "] operation");
+    }
+
+    private Parameter unboxRefParameter(RefParameter param) {
+        return swagger.getParameter(param.getSimpleRef());
     }
 
     private void ensureHttpMethodWithBody(TestSteps.HttpMethod method) {

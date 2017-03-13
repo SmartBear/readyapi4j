@@ -6,6 +6,7 @@ import com.smartbear.readyapi.client.model.RestTestRequestStep;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
 import com.smartbear.readyapi4j.teststeps.TestSteps.HttpMethod;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder;
+import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepWithBodyBuilder;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -100,5 +101,12 @@ public class SwaggerTestStepBuilderTest {
         final InputStream is = SwaggerTestStepBuilderTest.class.getResourceAsStream("/petstore-swagger.json");
         final SwaggerTestStepBuilder swaggerTestStepBuilder = new SwaggerTestStepBuilder(is, "http://apan.com");
         assertEquals("http://apan.com", swaggerTestStepBuilder.getTargetEndpoint());
+    }
+
+    @Test
+    public void refParameterCanBeBodyParameter() throws IOException {
+        final InputStream is = SwaggerTestStepBuilderTest.class.getResourceAsStream("/test-swagger.json");
+        final SwaggerTestStepBuilder swaggerTestStepBuilder = new SwaggerTestStepBuilder(is, "http://apan.com");
+        swaggerTestStepBuilder.operationWithBody("testBodyParam").withRequestBody("{}");
     }
 }
