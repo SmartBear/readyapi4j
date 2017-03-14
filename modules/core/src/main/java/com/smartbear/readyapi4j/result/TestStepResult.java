@@ -47,7 +47,7 @@ public interface TestStepResult {
      * @return the underlying HAR log entry for this TestStep result if this was an HTTP-based
      * TestStep, null if no transaction log is available
      */
-    public abstract HarEntry getHarEntry();
+    HarEntry getHarEntry();
 
     /**
      * @return the response content for this TestStep if available
