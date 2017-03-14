@@ -48,6 +48,6 @@ class RecipeExecutorAdaptor implements RecipeExecutor {
 
     @Override
     ExecutionMode getExecutionMode() {
-        return null
+        return ExecutionMode.REMOTE
     }
 }

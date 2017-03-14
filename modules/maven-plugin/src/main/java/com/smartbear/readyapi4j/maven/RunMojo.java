@@ -162,11 +162,11 @@ public class RunMojo
                 for (String file : recipeFiles) {
                     String fileName = file.toLowerCase();
 
-                    File f = new File(recipeDirectory, file);
+                    File recipeFile = new File(recipeDirectory, file);
 
                     if (fileName.endsWith(".json")) {
                         recipeCount++;
-                        response = runJsonRecipe(f);
+                        response = runJsonRecipe(recipeFile);
                     } else {
                         getLog().warn("Unexpected filename: " + fileName);
                         continue;
@@ -184,11 +184,11 @@ public class RunMojo
                 for (String file : xmlProjectFiles) {
                     String fileName = file.toLowerCase();
 
-                    File f = new File(xmlProjectDirectory, file);
+                    File projectFile = new File(xmlProjectDirectory, file);
 
                     if (fileName.endsWith(".xml")) {
                         projectCount++;
-                        response = runXmlProject(f);
+                        response = runXmlProject(projectFile);
                     } else {
                         getLog().warn("Unexpected filename: " + fileName);
                         continue;
@@ -239,8 +239,8 @@ public class RunMojo
         return !ignoreRecipes;
     }
 
-    private boolean notPresent(List<String> recipeFiles) {
-        return recipeFiles == null || recipeFiles.isEmpty();
+    private boolean notPresent(List<String> files) {
+        return files == null || files.isEmpty();
     }
 
     private void initRecipeExecutor() {
