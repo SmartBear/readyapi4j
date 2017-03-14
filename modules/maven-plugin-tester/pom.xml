@@ -25,14 +25,24 @@
                 <groupId>com.smartbear.readyapi</groupId>
                 <artifactId>readyapi4j-maven-plugin</artifactId>
                 <version>${project.version}</version>
-                <configuration>
-                    <username>demoUser</username>
-                    <password>demoPassword</password>
-                    <server>http://testserver.readyapi.io:8080</server>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>run</id>
+                        <id>RunLocally</id>
+                        <configuration>
+                            <ignoreProjectFiles>true</ignoreProjectFiles>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>RunWithTestServer</id>
+                        <configuration>
+                            <username>demoUser</username>
+                            <password>demoPassword</password>
+                            <server>http://testserver.readyapi.io:8080</server>
+                        </configuration>
                         <phase>test</phase>
                         <goals>
                             <goal>run</goal>
