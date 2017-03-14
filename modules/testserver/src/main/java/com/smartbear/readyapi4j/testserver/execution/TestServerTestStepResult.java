@@ -36,7 +36,6 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
                 }
             }
 
-
             hasCheckedForHarEntry = true;
         }
 
