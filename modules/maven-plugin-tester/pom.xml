@@ -29,7 +29,7 @@
                     <execution>
                         <id>RunLocally</id>
                         <configuration>
-                            <ignoreXmlProjects>true</ignoreXmlProjects>
+                            <ignoreProjectFiles>true</ignoreProjectFiles>
                         </configuration>
                         <phase>test</phase>
                         <goals>

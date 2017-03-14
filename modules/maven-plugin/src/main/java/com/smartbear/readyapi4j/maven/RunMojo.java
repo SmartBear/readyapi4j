@@ -111,7 +111,7 @@ public class RunMojo
     private boolean ignoreRecipes;
 
     @Parameter(required = true, defaultValue = "false")
-    private boolean ignoreXmlProjects;
+    private boolean ignoreProjectFiles;
 
     @Parameter(defaultValue = "${basedir}/target/surefire-reports")
     private File reportTarget;
@@ -131,14 +131,14 @@ public class RunMojo
                 recipeFiles = getIncludedFiles(recipeDirectory, "**/*.json");
             }
 
-            if (shouldRunXmlProjects()) {
+            if (shouldRunProjects()) {
                 xmlProjectFiles = getIncludedFiles(xmlProjectDirectory, "**/*.xml");
             }
 
             if (shouldRunRecipes() && notPresent(recipeFiles)) {
                 getLog().warn("No recipe present to be executed in recipe directory: " + recipeDirectory);
             }
-            if (shouldRunXmlProjects() && notPresent(xmlProjectFiles)) {
+            if (shouldRunProjects() && notPresent(xmlProjectFiles)) {
                 getLog().warn("No XML projects present to be executed in xml-project directory: " + xmlProjectDirectory);
             }
 
@@ -180,7 +180,7 @@ public class RunMojo
                 }
             }
             //Run XML projects
-            if (shouldRunXmlProjects() && xmlProjectFiles != null) {
+            if (shouldRunProjects() && xmlProjectFiles != null) {
                 for (String file : xmlProjectFiles) {
                     String fileName = file.toLowerCase();
 
@@ -231,8 +231,8 @@ public class RunMojo
         }
     }
 
-    private boolean shouldRunXmlProjects() {
-        return !ignoreXmlProjects;
+    private boolean shouldRunProjects() {
+        return !ignoreProjectFiles;
     }
 
     private boolean shouldRunRecipes() {
