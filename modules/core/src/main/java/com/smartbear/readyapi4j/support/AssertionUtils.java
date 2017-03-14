@@ -25,13 +25,13 @@ public class AssertionUtils {
 
         if (LOG.isDebugEnabled()) {
             for (TestStepResult result : execution.getExecutionResult().getTestStepResults()) {
-
-                try {
-                    HarResponse response = result.getHarResponse();
+                if( result.getHarEntry() != null && result.getHarEntry().getResponse() != null )
+                {
+                    HarResponse response = result.getHarEntry().getResponse();
                     LOG.info("TestStep [" + result.getTestStepName() + "] response: " + response.getStatus() +
                             " - " + response.getContent().getText());
-                } catch (RuntimeException e) {
-                    LOG.debug("Missing  HAR response for TestStep [" + result.getTestStepName() + "]", e);
+                } else {
+                    LOG.debug("Missing HAR response for TestStep [" + result.getTestStepName() + "]");
                 }
             }
         }

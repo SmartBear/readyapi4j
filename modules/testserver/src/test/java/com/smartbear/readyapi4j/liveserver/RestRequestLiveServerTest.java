@@ -6,6 +6,7 @@ import com.smartbear.readyapi.client.model.TestCaseResultReport;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 import com.smartbear.readyapi.client.model.TestSuiteResultReport;
 import com.smartbear.readyapi4j.ExecutionListener;
+import com.smartbear.readyapi4j.ExecutionListenerAdapter;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi4j.execution.Execution;
@@ -13,6 +14,7 @@ import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
 import com.smartbear.readyapi4j.testserver.execution.TestServerRecipeExecutor;
 import com.smartbear.readyapi4j.teststeps.TestStepBuilder;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,6 +149,7 @@ public class RestRequestLiveServerTest {
     }
 
     @Test
+    @Ignore
     public void sendSeveralRequestWithExtractorsAsync() throws TimeoutException, InterruptedException {
         final String[] extractedProperty = {"", ""};
         TestRecipe testRecipe1 = createTestRecipe(
@@ -158,17 +161,18 @@ public class RestRequestLiveServerTest {
                         .named(SECOND_REST_REQUEST_NAME)
                         .withExtractors(fromResponse("$.name", property -> extractedProperty[1] = property)));
 
-        ExecutionListener listener = new ExecutionListener() {
+        ExecutionListener listener = new ExecutionListenerAdapter() {
             private String executionID;
 
             @Override
-            public void executionStarted(ProjectResultReport projectResultReport) {
-                executionID = projectResultReport.getExecutionID();
+            public void executionStarted(Execution execution) {
+                executionID = execution.getId();
                 logger.info("Started execution of " + executionID);
             }
 
             @Override
-            public void executionFinished(ProjectResultReport projectResultReport) {
+            public void executionFinished(Execution execution) {
+                ProjectResultReport projectResultReport = execution.getCurrentReport();
                 Optional<TestStepResultReport> report = extractTestStepResultReport(projectResultReport);
                 report.ifPresent(testStepResultReport -> {
                     assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN));

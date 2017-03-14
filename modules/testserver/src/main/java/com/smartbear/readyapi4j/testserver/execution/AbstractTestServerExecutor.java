@@ -7,6 +7,7 @@ import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi.client.model.UnresolvedFile;
 import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.execution.DataExtractors;
+import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.extractor.ExtractorData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ abstract class AbstractTestServerExecutor {
     void notifyExecutionStarted(TestServerExecution execution) {
         if (execution != null) {
             for (ExecutionListener executionListener : executionListeners) {
+                executionListener.executionStarted(execution);
                 executionListener.executionStarted(execution.getCurrentReport());
             }
             new ExecutionStatusChecker(execution).start();
@@ -56,9 +58,11 @@ abstract class AbstractTestServerExecutor {
         }
     }
 
-    void notifyExecutionFinished(ProjectResultReport executionReport) {
+    void notifyExecutionFinished(Execution execution) {
+        ProjectResultReport executionReport = execution.getCurrentReport();
         DataExtractors.runDataExtractors(executionReport, extractorDataList);
         for (ExecutionListener executionListener : executionListeners) {
+            executionListener.executionFinished(execution);
             executionListener.executionFinished(executionReport);
         }
     }
@@ -112,7 +116,7 @@ abstract class AbstractTestServerExecutor {
                     ProjectResultReport executionStatus = testServerClient.getExecutionStatus(execution.getId());
                     execution.addResultReport(executionStatus);
                     if (!ProjectResultReport.StatusEnum.RUNNING.equals(executionStatus.getStatus())) {
-                        notifyExecutionFinished(executionStatus);
+                        notifyExecutionFinished(execution);
                         timer.cancel();
                     }
                     errorCount = 0;

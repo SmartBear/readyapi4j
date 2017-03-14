@@ -4,6 +4,7 @@ import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi4j.ExecutionListener;
+import com.smartbear.readyapi4j.ExecutionListenerAdapter;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi4j.execution.Execution;
@@ -160,15 +161,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
 
 
     private ExecutionListener createExecutionListenerWithExpectedErrorMessage(final String expectedErrorMessage) {
-        return new ExecutionListener() {
-            @Override
-            public void executionStarted(ProjectResultReport projectResultReport) {
-            }
-
-            @Override
-            public void executionFinished(ProjectResultReport projectResultReport) {
-            }
-
+        return new ExecutionListenerAdapter() {
             @Override
             public void errorOccurred(Exception exception) {
                 assertThat(exception.getMessage(), is(expectedErrorMessage));

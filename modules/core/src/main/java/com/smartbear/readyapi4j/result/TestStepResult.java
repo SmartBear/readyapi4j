@@ -1,7 +1,7 @@
 package com.smartbear.readyapi4j.result;
 
+import com.smartbear.readyapi.client.model.HarEntry;
 import com.smartbear.readyapi.client.model.HarHeader;
-import com.smartbear.readyapi.client.model.HarResponse;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 
 import java.util.List;
@@ -44,9 +44,10 @@ public interface TestStepResult {
     List<String> getMessages();
 
     /**
-     * @return the HAR response for the underlying HTTP transaction if this was an HTTP-based TestStep - null otherwise
+     * @return the underlying HAR log entry for this TestStep result if this was an HTTP-based
+     * TestStep, null if no transaction log is available
      */
-    HarResponse getHarResponse();
+    public abstract HarEntry getHarEntry();
 
     /**
      * @return the response content for this TestStep if available

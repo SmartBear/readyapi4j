@@ -102,7 +102,7 @@ public class SoapUIRecipeExecutorTest {
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
 
-        HarResponse harResponse = execution.getExecutionResult().getTestStepResult(0).getHarResponse();
+        HarResponse harResponse = execution.getExecutionResult().getTestStepResult(0).getHarEntry().getResponse();
         assertThat(harResponse, is(not(nullValue())));
         assertEquals("{\"message\":\"Hello World\"}", harResponse.getContent().getText());
     }
@@ -150,8 +150,8 @@ public class SoapUIRecipeExecutorTest {
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.RUNNING));
 
-        verify(listenerMock, timeout(1000).times(1)).executionStarted(any());
-        verify(listenerMock, timeout(20000).times(1)).executionFinished(any());
+        verify(listenerMock, timeout(1000).times(1)).executionStarted((Execution) any());
+        verify(listenerMock, timeout(20000).times(1)).executionFinished((Execution) any());
     }
 
     @Test

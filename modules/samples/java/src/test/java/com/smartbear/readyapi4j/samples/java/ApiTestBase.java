@@ -4,6 +4,7 @@ import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
 import com.smartbear.readyapi4j.support.AssertionUtils;
+import com.smartbear.readyapi4j.support.FileLoggingExecutionListener;
 import com.smartbear.readyapi4j.testserver.execution.ProjectExecutionRequest;
 import com.smartbear.readyapi4j.testserver.execution.ProjectExecutor;
 import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
@@ -31,7 +32,9 @@ public class ApiTestBase {
         testServerClient.setCredentials(user, password);
 
         recipeExecutor = testServerClient.createRecipeExecutor();
+        recipeExecutor.addExecutionListener( new FileLoggingExecutionListener( "logs"));
         projectExecutor = testServerClient.createProjectExecutor();
+        projectExecutor.addExecutionListener( new FileLoggingExecutionListener( "logs"));
     }
 
     public static void executeAndAssert(TestRecipe recipe) {

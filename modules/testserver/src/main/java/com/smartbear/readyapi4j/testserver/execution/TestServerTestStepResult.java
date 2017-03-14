@@ -22,12 +22,20 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
     @Override
     public HarEntry getHarEntry() {
         if (harEntry == null && !hasCheckedForHarEntry) {
-            HarLogRoot logRoot = execution.getTestServerApi().getTransactionLog(execution.getId(),
-                    testStepResultReport.getTransactionId(), execution.getAuth());
+            HarLogRoot logRoot = null;
+            try {
+                logRoot = execution.getTestServerApi().getTransactionLog(execution.getId(),
+                        testStepResultReport.getTransactionId(), execution.getAuth());
 
-            if (hasHarEntry(logRoot)) {
-                harEntry = logRoot.getLog().getEntries().get(0);
+                if (hasHarEntry(logRoot)) {
+                    harEntry = logRoot.getLog().getEntries().get(0);
+                }
+            } catch (ApiException e) {
+                if( e.getStatusCode() != 404 ){
+                    e.printStackTrace();
+                }
             }
+
 
             hasCheckedForHarEntry = true;
         }

@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import java.net.URL;
 
-import static com.smartbear.readyapi.client.teststeps.TestSteps.soapRequest;
 import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
+import static com.smartbear.readyapi4j.teststeps.TestSteps.soapRequest;
 
 public class SimpleSoapTest extends ApiTestBase {
 

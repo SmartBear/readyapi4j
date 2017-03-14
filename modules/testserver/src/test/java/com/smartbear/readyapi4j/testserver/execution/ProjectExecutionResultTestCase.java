@@ -57,7 +57,7 @@ public class ProjectExecutionResultTestCase {
         assertTrue(result.getLastTestStepResult("get request 1").isPresent());
         assertEquals(1, result.getFailedTestStepsResults("GET request 1").size());
 
-        assertNotNull(result.getTestStepResult(0).getHarResponse());
+        assertNotNull(result.getTestStepResult(0).getHarEntry().getResponse());
         assertEquals("Test response", result.getTestStepResult(0).getResponseContent());
     }
 }

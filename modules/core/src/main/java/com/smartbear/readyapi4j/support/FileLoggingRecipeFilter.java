@@ -15,7 +15,7 @@ public class FileLoggingRecipeFilter implements RecipeFilter {
 
     private final static Logger LOG = LoggerFactory.getLogger(FileLoggingRecipeFilter.class);
 
-    public static final String DEFAULT_TARGET_FOLDER = "recipe";
+    public static final String DEFAULT_PREFIX = "recipe";
     public static final String DEFAULT_EXTENSION = "json";
 
     private final String targetFolder;
@@ -29,7 +29,7 @@ public class FileLoggingRecipeFilter implements RecipeFilter {
     }
 
     public FileLoggingRecipeFilter(String targetFolder) {
-        this(targetFolder, DEFAULT_TARGET_FOLDER, DEFAULT_EXTENSION);
+        this(targetFolder, DEFAULT_PREFIX, DEFAULT_EXTENSION);
     }
 
     @Override

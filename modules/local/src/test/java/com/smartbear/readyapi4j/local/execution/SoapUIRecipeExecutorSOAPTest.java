@@ -70,7 +70,7 @@ public class SoapUIRecipeExecutorSOAPTest {
         assertThat(execution.getId(), is(not(nullValue())));
         assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
 
-        HarResponse harResponse = execution.getExecutionResult().getTestStepResult(0).getHarResponse();
+        HarResponse harResponse = execution.getExecutionResult().getTestStepResult(0).getHarEntry().getResponse();
         assertThat(harResponse, is(not(nullValue())));
         assertTrue(XmlUtils.seemsToBeXml(harResponse.getContent().getText()));
     }
