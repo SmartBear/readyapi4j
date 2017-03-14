@@ -107,11 +107,11 @@ public class RunMojo
     @Parameter(defaultValue = "${project.basedir}/target/test-recipes", required = true)
     private File targetDirectory;
 
-    @Parameter(required = true, defaultValue = "true")
-    private boolean runRecipes;
+    @Parameter(required = true, defaultValue = "false")
+    private boolean ignoreRecipes;
 
-    @Parameter(required = true, defaultValue = "true")
-    private boolean runXmlProjects;
+    @Parameter(required = true, defaultValue = "false")
+    private boolean ignoreXmlProjects;
 
     @Parameter(defaultValue = "${basedir}/target/surefire-reports")
     private File reportTarget;
@@ -127,18 +127,18 @@ public class RunMojo
 
             List<String> recipeFiles = null;
             List<String> xmlProjectFiles = null;
-            if (runRecipes) {
+            if (shouldRunRecipes()) {
                 recipeFiles = getIncludedFiles(recipeDirectory, "**/*.json");
             }
 
-            if (runXmlProjects) {
+            if (shouldRunXmlProjects()) {
                 xmlProjectFiles = getIncludedFiles(xmlProjectDirectory, "**/*.xml");
             }
 
-            if (runRecipes && notPresent(recipeFiles)) {
+            if (shouldRunRecipes() && notPresent(recipeFiles)) {
                 getLog().warn("No recipe present to be executed in recipe directory: " + recipeDirectory);
             }
-            if (runXmlProjects && notPresent(xmlProjectFiles)) {
+            if (shouldRunXmlProjects() && notPresent(xmlProjectFiles)) {
                 getLog().warn("No XML projects present to be executed in xml-project directory: " + xmlProjectDirectory);
             }
 
@@ -158,7 +158,7 @@ public class RunMojo
 
             ProjectResultReport response;
             //Run recipes
-            if (runRecipes && recipeFiles != null) {
+            if (shouldRunRecipes() && recipeFiles != null) {
                 for (String file : recipeFiles) {
                     String fileName = file.toLowerCase();
 
@@ -180,7 +180,7 @@ public class RunMojo
                 }
             }
             //Run XML projects
-            if (runXmlProjects && xmlProjectFiles != null) {
+            if (shouldRunXmlProjects() && xmlProjectFiles != null) {
                 for (String file : xmlProjectFiles) {
                     String fileName = file.toLowerCase();
 
@@ -229,6 +229,14 @@ public class RunMojo
         } catch (Exception e) {
             throw new MojoExecutionException("Error running recipe", e);
         }
+    }
+
+    private boolean shouldRunXmlProjects() {
+        return !ignoreXmlProjects;
+    }
+
+    private boolean shouldRunRecipes() {
+        return !ignoreRecipes;
     }
 
     private boolean notPresent(List<String> recipeFiles) {
