@@ -6,7 +6,7 @@ import com.smartbear.readyapi.client.model.ExcelDataSource;
 import com.smartbear.readyapi.client.model.FileDataSource;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.TestStep;
-import com.smartbear.readyapi4j.ExecutionListenerAdapter;
+import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.testserver.execution.ApiClientWrapper;
@@ -134,7 +134,7 @@ public class DataSourceTestStepRecipeTest {
                 .buildTestRecipe();
 
         TestServerRecipeExecutor recipeExecutor = new TestServerClient("localhost", ServerDefaults.DEFAULT_PORT).createRecipeExecutor();
-        recipeExecutor.addExecutionListener(new ExecutionListenerAdapter() {
+        recipeExecutor.addExecutionListener(new ExecutionListener() {
             @Override
             public void errorOccurred(Exception exception) {
                 assertThat(exception.getMessage(), is("Data source file not found: abc.xlsx"));

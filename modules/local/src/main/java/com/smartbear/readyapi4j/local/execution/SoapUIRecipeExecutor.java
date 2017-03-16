@@ -98,7 +98,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
             SoapUIRecipeExecution execution = new SoapUIRecipeExecution(executionId, projectRunner);
 
             if (async) {
-                prepareAsyncExecution(testRecipe, execution, properties);
+                prepareAsyncExecution(testRecipe, execution, projectRunner );
             }
 
             executionsMap.put(executionId, execution);
@@ -122,7 +122,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
         return objectMapper;
     }
 
-    private void prepareAsyncExecution(TestRecipe testRecipe, SoapUIRecipeExecution execution, StringToObjectMap properties) {
+    private void prepareAsyncExecution(TestRecipe testRecipe, SoapUIRecipeExecution execution, WsdlProjectRunner projectRunner ) {
         WsdlProject project = execution.getProject();
         project.addProjectRunListener(new ProjectRunListenerAdapter() {
             @Override
@@ -141,17 +141,13 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
                 }
             }
         });
-        properties.put(LOCAL_CLIENT_EXECUTION_ID, execution.getId());
+
+        projectRunner.getRunContext().put(LOCAL_CLIENT_EXECUTION_ID, execution.getId());
     }
 
-
     private void notifyExecutionStarted(Execution execution) {
-        ProjectResultReport projectResultReport = execution.getCurrentReport();
-        if (projectResultReport != null) {
-            for (ExecutionListener executionListener : executionListeners) {
-                executionListener.executionStarted(execution);
-                executionListener.executionStarted(projectResultReport);
-            }
+        for (ExecutionListener executionListener : executionListeners) {
+            executionListener.executionStarted(execution);
         }
     }
 
@@ -169,7 +165,6 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
 
         for (ExecutionListener executionListener : executionListeners) {
             executionListener.executionFinished(execution);
-            executionListener.executionFinished(projectResultReport);
         }
     }
 }

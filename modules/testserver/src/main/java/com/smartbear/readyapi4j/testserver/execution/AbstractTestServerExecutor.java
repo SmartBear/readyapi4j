@@ -46,7 +46,6 @@ abstract class AbstractTestServerExecutor {
         if (execution != null) {
             for (ExecutionListener executionListener : executionListeners) {
                 executionListener.executionStarted(execution);
-                executionListener.executionStarted(execution.getCurrentReport());
             }
             new ExecutionStatusChecker(execution).start();
         }
@@ -63,7 +62,6 @@ abstract class AbstractTestServerExecutor {
         DataExtractors.runDataExtractors(executionReport, extractorDataList);
         for (ExecutionListener executionListener : executionListeners) {
             executionListener.executionFinished(execution);
-            executionListener.executionFinished(executionReport);
         }
     }
 
@@ -106,7 +104,7 @@ abstract class AbstractTestServerExecutor {
         }
 
         void start() {
-            timer.schedule(new CheckingExpireDateTask(), 0, 1000);
+            timer.schedule(new CheckingExpireDateTask(), 1000, 1000);
         }
 
         class CheckingExpireDateTask extends TimerTask {

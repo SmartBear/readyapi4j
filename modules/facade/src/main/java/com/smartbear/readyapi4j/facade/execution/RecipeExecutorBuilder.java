@@ -1,8 +1,12 @@
 package com.smartbear.readyapi4j.facade.execution;
 
+import com.smartbear.readyapi4j.ExecutionListener;
+import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
 import com.smartbear.readyapi4j.execution.RecipeFilter;
 import com.smartbear.readyapi4j.local.execution.SoapUIRecipeExecutor;
+import com.smartbear.readyapi4j.support.ExecutionLogger;
+import com.smartbear.readyapi4j.support.RecipeLogger;
 import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +33,21 @@ public class RecipeExecutorBuilder {
     private String testServerEndpoint;
 
     private List<RecipeFilter> filters = new ArrayList<>();
+    private List<ExecutionListener> listeners = new ArrayList<>();
 
     /**
      * @param filter RecipeFilter to add to the resulting executor
      */
-    public RecipeExecutorBuilder withFilter(RecipeFilter filter) {
+    public RecipeExecutorBuilder withRecipeFilter(RecipeFilter filter) {
         filters.add(filter);
+        return this;
+    }
+
+    /**
+     * @param listener ExecutionListener to add to the resulting executor
+     */
+    public RecipeExecutorBuilder withExecutionListener(ExecutionListener listener ){
+        listeners.add(listener);
         return this;
     }
 
@@ -73,6 +86,9 @@ public class RecipeExecutorBuilder {
         for (RecipeFilter filter : filters) {
             executor.addRecipeFilter(filter);
         }
+        for( ExecutionListener listener : listeners){
+            executor.addExecutionListener(listener);
+        }
         return executor;
     }
 
@@ -98,6 +114,20 @@ public class RecipeExecutorBuilder {
     public RecipeExecutorBuilder withPassword(String testServerPassword) {
         this.testServerPassword = testServerPassword;
         return this;
+    }
+
+    /**
+     * @param recipeLogFolder folder to log recipes to before execution
+     */
+    public RecipeExecutorBuilder withRecipeLog( String recipeLogFolder ){
+        return withRecipeFilter( new RecipeLogger( recipeLogFolder ));
+    }
+
+    /**
+     * @param executionLogFolder folder to log executions to after execution
+     */
+    public RecipeExecutorBuilder withExecutionLog( String executionLogFolder ){
+        return withExecutionListener( new ExecutionLogger( executionLogFolder ));
     }
 
     /**

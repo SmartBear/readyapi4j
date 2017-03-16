@@ -4,7 +4,6 @@ import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi4j.ExecutionListener;
-import com.smartbear.readyapi4j.ExecutionListenerAdapter;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi4j.execution.Execution;
@@ -13,6 +12,7 @@ import com.smartbear.readyapi4j.teststeps.TestSteps;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -71,9 +72,19 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
 
         recipeExecutor.addExecutionListener(executionListener);
         recipeExecutor.submitRecipe(recipeToSubmit);
+        verify(executionListener).executionStarted(argThat(new ArgumentMatcher<Execution>(){
+            @Override
+            public boolean matches(Object o) {
+                return ((Execution)o).getCurrentReport().equals( startReport );
+            }
+        }));
         Thread.sleep(1500);
-        verify(executionListener).executionStarted(startReport);
-        verify(executionListener).executionFinished(endReport);
+        verify(executionListener).executionFinished(argThat(new ArgumentMatcher<Execution>(){
+            @Override
+            public boolean matches(Object o) {
+                return ((Execution)o).getCurrentReport().equals( endReport );
+            }
+        }));
     }
 
     @Test
@@ -93,7 +104,12 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
 
         recipeExecutor.addExecutionListener(executionListener);
         recipeExecutor.executeRecipe(recipeToSubmit);
-        verify(executionListener).executionFinished(report);
+        verify(executionListener).executionFinished(argThat(new ArgumentMatcher<Execution>(){
+            @Override
+            public boolean matches(Object o) {
+                return ((Execution)o).getCurrentReport().equals( report );
+            }
+        }));
 
     }
 
@@ -161,7 +177,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
 
 
     private ExecutionListener createExecutionListenerWithExpectedErrorMessage(final String expectedErrorMessage) {
-        return new ExecutionListenerAdapter() {
+        return new ExecutionListener() {
             @Override
             public void errorOccurred(Exception exception) {
                 assertThat(exception.getMessage(), is(expectedErrorMessage));

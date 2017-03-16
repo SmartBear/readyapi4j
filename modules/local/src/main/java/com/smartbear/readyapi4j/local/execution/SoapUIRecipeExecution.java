@@ -49,10 +49,6 @@ public class SoapUIRecipeExecution implements Execution {
         return convertTestRunnerStatus(projectRunner.getStatus());
     }
 
-    public WsdlProjectRunner getProjectRunner() {
-        return projectRunner;
-    }
-
     public WsdlProject getProject() {
         return (WsdlProject) projectRunner.getProject();
     }

@@ -2,7 +2,7 @@ package com.smartbear.readyapi4j.support;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.smartbear.readyapi4j.ExecutionListenerAdapter;
+import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.result.TestStepResult;
 import io.swagger.util.Json;
@@ -17,21 +17,21 @@ import java.util.Map;
 /**
  * ExecutionListener that writes response HAR entries to a single log file after execution
  */
-public class FileLoggingExecutionListener extends ExecutionListenerAdapter {
+public class ExecutionLogger implements ExecutionListener {
 
-    private final static Logger LOG = LoggerFactory.getLogger(FileLoggingExecutionListener.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ExecutionLogger.class);
 
     public static final String DEFAULT_EXTENSION = "log";
 
     private final String targetFolder;
     private final String extension;
 
-    public FileLoggingExecutionListener(String targetFolder, String extension) {
+    public ExecutionLogger(String targetFolder, String extension) {
         this.targetFolder = targetFolder;
         this.extension = extension;
     }
 
-    public FileLoggingExecutionListener(String targetFolder) {
+    public ExecutionLogger(String targetFolder) {
         this(targetFolder, DEFAULT_EXTENSION);
     }
 

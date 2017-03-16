@@ -6,7 +6,6 @@ import com.smartbear.readyapi.client.model.TestCaseResultReport;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 import com.smartbear.readyapi.client.model.TestSuiteResultReport;
 import com.smartbear.readyapi4j.ExecutionListener;
-import com.smartbear.readyapi4j.ExecutionListenerAdapter;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.TestRecipeBuilder;
 import com.smartbear.readyapi4j.execution.Execution;
@@ -161,7 +160,7 @@ public class RestRequestLiveServerTest {
                         .named(SECOND_REST_REQUEST_NAME)
                         .withExtractors(fromResponse("$.name", property -> extractedProperty[1] = property)));
 
-        ExecutionListener listener = new ExecutionListenerAdapter() {
+        ExecutionListener listener = new ExecutionListener() {
             private String executionID;
 
             @Override

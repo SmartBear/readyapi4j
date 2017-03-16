@@ -4,6 +4,8 @@ import com.smartbear.readyapi.client.model.HarEntry;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 import com.smartbear.readyapi4j.result.AbstractTestStepResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Result wrapper for individual TestSteps executed on a TestServer
@@ -13,6 +15,7 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
     private final TestServerExecution execution;
     private boolean hasCheckedForHarEntry;
     private HarEntry harEntry;
+    private final static Logger LOG = LoggerFactory.getLogger(TestServerTestStepResult.class);
 
     TestServerTestStepResult(TestStepResultReport testStepResultReport, TestServerExecution execution) {
         super(testStepResultReport);
@@ -32,7 +35,10 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
                 }
             } catch (ApiException e) {
                 if( e.getStatusCode() != 404 ){
-                    e.printStackTrace();
+                    LOG.error( "Error when trying to get transaction log for execution " + execution.getId(), e );
+                }
+                else {
+                    LOG.info( "No transaction log available for execution " + execution.getId());
                 }
             }
 
