@@ -44,8 +44,7 @@ public interface TestStepResult {
     List<String> getMessages();
 
     /**
-     * @return the underlying HAR log entry for this TestStep result if this was an HTTP-based
-     * TestStep, null if no transaction log is available
+     * @return the underlying HAR log entry for this TestStep result if this was an HTTP-based TestStep, null if no transaction log is available
      */
     HarEntry getHarEntry();
 
