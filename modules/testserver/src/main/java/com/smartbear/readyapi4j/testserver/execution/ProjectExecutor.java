@@ -26,9 +26,7 @@ public class ProjectExecutor extends AbstractTestServerExecutor {
 
     public Execution executeRepositoryProject(RepositoryProjectExecutionRequest executionRequest) {
         Execution execution = doExecuteProjectFromRepository(executionRequest, false);
-        if (execution != null) {
-            notifyExecutionFinished(execution.getCurrentReport());
-        }
+        notifyExecutionFinished(execution.getCurrentReport());
         return execution;
     }
 
@@ -100,13 +98,11 @@ public class ProjectExecutor extends AbstractTestServerExecutor {
 
     public Execution executeProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
         Execution execution = doExecuteProject(projectExecutionRequest, false);
-        if (execution != null) {
-            notifyExecutionFinished(execution.getCurrentReport());
-        }
+        notifyExecutionFinished(execution.getCurrentReport());
         return execution;
     }
 
-    private TestServerExecution doExecuteProjectFromRepository(RepositoryProjectExecutionRequest executionRequest, boolean async) {
+    private TestServerExecution doExecuteProjectFromRepository(RepositoryProjectExecutionRequest executionRequest, boolean async) throws ApiException {
         try {
             TestServerExecution execution = testServerClient.postRepositoryProject(executionRequest, async);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), null);

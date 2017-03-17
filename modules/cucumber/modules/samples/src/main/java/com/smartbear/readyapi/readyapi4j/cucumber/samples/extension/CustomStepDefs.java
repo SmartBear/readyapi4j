@@ -24,7 +24,7 @@ public class CustomStepDefs {
     }
 
     @Given("^an endpoint of (.*)$")
-    public void anEndpointOf( String endpoint ) throws Throwable {
+    public void anEndpointOf( String endpoint ) {
         restStepDefs.setEndpoint( endpoint );
     }
 }

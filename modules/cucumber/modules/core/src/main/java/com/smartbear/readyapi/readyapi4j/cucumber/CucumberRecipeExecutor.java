@@ -21,8 +21,8 @@ import java.io.FileWriter;
  */
 
 public class CucumberRecipeExecutor {
+    private static final Logger LOG = LoggerFactory.getLogger(CucumberRecipeExecutor.class);
 
-    private final static Logger LOG = LoggerFactory.getLogger(CucumberRecipeExecutor.class);
     public static final String RECIPE_LOG_FOLDER = "readyapi.cucumber.logfolder";
     public static final String SILENT_EXECUTION = "readyapi.cucumber.silent";
 
@@ -101,24 +101,23 @@ public class CucumberRecipeExecutor {
                 fileIndex = 1;
             }
 
-            String filename = pathSegments[fileIndex];
+            StringBuilder filename = new StringBuilder( pathSegments[fileIndex] );
             for( int c = fileIndex+1; c < pathSegments.length; c++ ){
                 String segment = pathSegments[c].trim();
                 if( !StringUtils.isBlank( segment )){
-                    filename += "_" + segment;
+                    filename.append( '_' ).append( segment );
                 }
             }
 
-            filename += ".json";
+            filename.append( ".json" );
+            File scenarioFile = new File( scenarioFolder, filename.toString() );
 
-            File scenarioFile = new File( scenarioFolder, filename );
-            FileWriter writer = new FileWriter( scenarioFile );
+            try( FileWriter writer = new FileWriter( scenarioFile )) {
+                LOG.info("Writing recipe to " + folder.getName() + File.separatorChar + scenarioFolder.getName() +
+                    File.separatorChar + scenarioFile.getName());
 
-            LOG.info("Writing recipe to " + folder.getName() + File.separatorChar + scenarioFolder.getName() +
-                File.separatorChar + scenarioFile.getName());
-
-            writer.write( testRecipe.toString() );
-            writer.close();
+                writer.write(testRecipe.toString());
+            }
         } catch (Exception e) {
             LOG.error("Failed to write recipe to logFolder [" + logFolder + "]", e );
         }
