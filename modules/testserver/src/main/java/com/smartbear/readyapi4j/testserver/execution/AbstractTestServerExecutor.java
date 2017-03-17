@@ -68,7 +68,7 @@ abstract class AbstractTestServerExecutor {
     void cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(ProjectResultReport projectResultReport, TestCase testCase) {
         if (ProjectResultReport.StatusEnum.PENDING.equals(projectResultReport.getStatus())) {
             List<UnresolvedFile> unresolvedFiles = projectResultReport.getUnresolvedFiles();
-            if (unresolvedFiles.size() > 0) {
+            if (!unresolvedFiles.isEmpty()) {
                 testServerClient.cancelExecution(projectResultReport.getExecutionID());
             }
             for (UnresolvedFile unresolvedFile : unresolvedFiles) {

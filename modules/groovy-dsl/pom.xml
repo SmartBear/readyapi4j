@@ -7,18 +7,18 @@
         <artifactId>readyapi4j</artifactId>
         <groupId>com.smartbear.readyapi</groupId>
         <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
     </parent>
     <artifactId>readyapi4j-groovy-dsl</artifactId>
 
     <properties>
-        <!-- Groovy version needs to be kept in sync with the Groovy Compiler Maven Plugins -->
         <groovy.version>2.4.4</groovy.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
-            <artifactId>readyapi4j-testserver-client</artifactId>
+            <artifactId>readyapi4j-testserver</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

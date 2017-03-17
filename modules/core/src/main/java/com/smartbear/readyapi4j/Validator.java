@@ -22,7 +22,7 @@ public class Validator {
     }
 
     public static void validateNotEmpty(List<? extends Object> values, String message) {
-        if (values.size() == 0) {
+        if (values == null || values.isEmpty()) {
             throw new IllegalStateException(message);
         }
     }

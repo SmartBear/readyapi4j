@@ -60,7 +60,7 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
 
         TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), recipe.getExtractorData(), false);
         if (execution != null) {
-            notifyExecutionFinished(execution);
+            notifyExecutionFinished(execution.getCurrentReport());
         }
         return execution;
     }
