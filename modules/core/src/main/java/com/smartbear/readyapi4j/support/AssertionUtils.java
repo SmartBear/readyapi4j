@@ -24,9 +24,8 @@ public class AssertionUtils {
         assertNotNull(execution);
 
         if (LOG.isDebugEnabled()) {
-            for (TestStepResult result : execution.getExecutionResult().getTestStepResults()) {
-                if( result.getHarEntry() != null && result.getHarEntry().getResponse() != null )
-                {
+            for (TestStepResult result : execution.getExecutionResult().getTestStepResults()){
+                if( result.getHarEntry() != null && result.getHarEntry().getResponse() != null ){
                     HarResponse response = result.getHarEntry().getResponse();
                     LOG.info("TestStep [" + result.getTestStepName() + "] response: " + response.getStatus() +
                             " - " + response.getContent().getText());

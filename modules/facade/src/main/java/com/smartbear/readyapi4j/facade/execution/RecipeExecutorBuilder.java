@@ -52,7 +52,7 @@ public class RecipeExecutorBuilder {
     /**
      * @param listener ExecutionListener to add to the resulting executor
      */
-    public RecipeExecutorBuilder withExecutionListener(ExecutionListener listener ){
+    public RecipeExecutorBuilder withExecutionListener(ExecutionListener listener) {
         listeners.add(listener);
         return this;
     }
@@ -71,7 +71,7 @@ public class RecipeExecutorBuilder {
             try {
                 return buildRemote(testServerEndpoint);
             } catch (Exception e) {
-                LOG.error("Failed to build remote RecipeExecutor for",e);
+                LOG.error("Failed to build remote RecipeExecutor for", e);
             }
         }
 
@@ -81,7 +81,7 @@ public class RecipeExecutorBuilder {
             try {
                 return buildRemote(endpoint);
             } catch (Exception e) {
-                LOG.error("Failed to build remote RecipeExecutor",e);
+                LOG.error("Failed to build remote RecipeExecutor", e);
             }
         }
 
@@ -92,19 +92,19 @@ public class RecipeExecutorBuilder {
         for (RecipeFilter filter : filters) {
             executor.addRecipeFilter(filter);
         }
-        for( ExecutionListener listener : listeners){
+        for (ExecutionListener listener : listeners) {
             executor.addExecutionListener(listener);
         }
 
         Map<String, String> env = System.getenv();
         String recipeLogFolder = env.getOrDefault(RECIPE_LOG_FOLDER_PROPERTY, System.getProperty(RECIPE_LOG_FOLDER_PROPERTY));
-        if( recipeLogFolder != null ){
-            executor.addRecipeFilter( new RecipeLogger( recipeLogFolder ));
+        if (recipeLogFolder != null) {
+            executor.addRecipeFilter(new RecipeLogger(recipeLogFolder));
         }
 
         String executionLogFolder = env.getOrDefault(EXECUTION_LOG_FOLDER_PROPERTY, System.getProperty(EXECUTION_LOG_FOLDER_PROPERTY));
-        if( executionLogFolder != null ){
-            executor.addExecutionListener( new ExecutionLogger( executionLogFolder ));
+        if (executionLogFolder != null) {
+            executor.addExecutionListener(new ExecutionLogger(executionLogFolder));
         }
 
         return executor;
@@ -137,15 +137,15 @@ public class RecipeExecutorBuilder {
     /**
      * @param recipeLogFolder folder to log recipes to before execution
      */
-    public RecipeExecutorBuilder withRecipeLog( String recipeLogFolder ){
-        return withRecipeFilter( new RecipeLogger( recipeLogFolder ));
+    public RecipeExecutorBuilder withRecipeLog(String recipeLogFolder) {
+        return withRecipeFilter(new RecipeLogger(recipeLogFolder));
     }
 
     /**
      * @param executionLogFolder folder to log executions to after execution
      */
-    public RecipeExecutorBuilder withExecutionLog( String executionLogFolder ){
-        return withExecutionListener( new ExecutionLogger( executionLogFolder ));
+    public RecipeExecutorBuilder withExecutionLog(String executionLogFolder) {
+        return withExecutionListener(new ExecutionLogger(executionLogFolder));
     }
 
     /**

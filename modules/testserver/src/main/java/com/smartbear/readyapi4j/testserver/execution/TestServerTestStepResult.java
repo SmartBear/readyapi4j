@@ -28,17 +28,16 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
             HarLogRoot logRoot = null;
             try {
                 logRoot = execution.getTestServerApi().getTransactionLog(execution.getId(),
-                        testStepResultReport.getTransactionId(), execution.getAuth());
+                    testStepResultReport.getTransactionId(), execution.getAuth());
 
                 if (hasHarEntry(logRoot)) {
                     harEntry = logRoot.getLog().getEntries().get(0);
                 }
             } catch (ApiException e) {
-                if( e.getStatusCode() != 404 ){
-                    LOG.error( "Error when trying to get transaction log for execution " + execution.getId(), e );
-                }
-                else {
-                    LOG.info( "No transaction log available for execution " + execution.getId());
+                if (e.getStatusCode() != 404) {
+                    LOG.error("Error when trying to get transaction log for execution " + execution.getId(), e);
+                } else {
+                    LOG.info("No transaction log available for execution " + execution.getId());
                 }
             }
 
@@ -50,6 +49,6 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
 
     private boolean hasHarEntry(HarLogRoot logRoot) {
         return logRoot != null && logRoot.getLog() != null && logRoot.getLog().getEntries() != null &&
-                logRoot.getLog().getEntries().size() > 0;
+            logRoot.getLog().getEntries().size() > 0;
     }
 }
