@@ -101,16 +101,16 @@ public class CucumberRecipeExecutor {
                 fileIndex = 1;
             }
 
-            StringBuilder filename = new StringBuilder( pathSegments[fileIndex] );
+            StringBuilder filenameBuilder = new StringBuilder( pathSegments[fileIndex] );
             for( int c = fileIndex+1; c < pathSegments.length; c++ ){
                 String segment = pathSegments[c].trim();
                 if( !StringUtils.isBlank( segment )){
-                    filename.append( '_' ).append( segment );
+                    filenameBuilder.append( '_' ).append( segment );
                 }
             }
 
-            filename.append( ".json" );
-            File scenarioFile = new File( scenarioFolder, filename.toString() );
+            filenameBuilder.append( ".json" );
+            File scenarioFile = new File( scenarioFolder, filenameBuilder.toString() );
 
             try( FileWriter writer = new FileWriter( scenarioFile )) {
                 LOG.info("Writing recipe to " + folder.getName() + File.separatorChar + scenarioFolder.getName() +
