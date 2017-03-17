@@ -13,6 +13,7 @@ import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
 import com.smartbear.readyapi4j.testserver.execution.TestServerRecipeExecutor;
 import com.smartbear.readyapi4j.teststeps.TestStepBuilder;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,6 +148,7 @@ public class RestRequestLiveServerTest {
     }
 
     @Test
+    @Ignore
     public void sendSeveralRequestWithExtractorsAsync() throws TimeoutException, InterruptedException {
         final String[] extractedProperty = {"", ""};
         TestRecipe testRecipe1 = createTestRecipe(
@@ -162,13 +164,14 @@ public class RestRequestLiveServerTest {
             private String executionID;
 
             @Override
-            public void executionStarted(ProjectResultReport projectResultReport) {
-                executionID = projectResultReport.getExecutionID();
+            public void executionStarted(Execution execution) {
+                executionID = execution.getId();
                 logger.info("Started execution of " + executionID);
             }
 
             @Override
-            public void executionFinished(ProjectResultReport projectResultReport) {
+            public void executionFinished(Execution execution) {
+                ProjectResultReport projectResultReport = execution.getCurrentReport();
                 Optional<TestStepResultReport> report = extractTestStepResultReport(projectResultReport);
                 report.ifPresent(testStepResultReport -> {
                     assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN));

@@ -42,7 +42,7 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
     }
 
     @Override
-    public TestServerExecution submitRecipe(TestRecipe recipe) throws ApiException {
+    public TestServerExecution submitRecipe(TestRecipe recipe) {
         for (RecipeFilter recipeFilter : recipeFilters) {
             recipeFilter.filterRecipe(recipe);
         }
@@ -53,17 +53,17 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
     }
 
     @Override
-    public TestServerExecution executeRecipe(TestRecipe recipe) throws ApiException {
+    public TestServerExecution executeRecipe(TestRecipe recipe) {
         for (RecipeFilter recipeFilter : recipeFilters) {
             recipeFilter.filterRecipe(recipe);
         }
 
         TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), recipe.getExtractorData(), false);
-        notifyExecutionFinished(execution.getCurrentReport());
+        notifyExecutionFinished(execution);
         return execution;
     }
 
-    private TestServerExecution doExecuteTestCase(TestCase testCase, ExtractorData optionalExtractorData, boolean async) throws ApiException {
+    private TestServerExecution doExecuteTestCase(TestCase testCase, ExtractorData optionalExtractorData, boolean async)  {
         try {
             Optional<ExtractorData> extractorDataOptional = Optional.ofNullable(optionalExtractorData);
             extractorDataOptional.ifPresent(extractorData -> extractorDataList.add(extractorData));

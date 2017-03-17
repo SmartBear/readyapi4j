@@ -1,21 +1,21 @@
 package com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen;
 
-import com.smartbear.readyapi4j.ExecutionListener;
-import com.smartbear.readyapi4j.TestRecipe;
-import com.smartbear.readyapi4j.testserver.execution.ApiClientWrapper;
-import com.smartbear.readyapi4j.testserver.execution.CodegenBasedTestServerApi;
-import com.smartbear.readyapi4j.execution.Execution;
-import com.smartbear.readyapi4j.testserver.execution.RecipeExecutorTestCreator;
-import com.smartbear.readyapi4j.testserver.execution.ServerDefaults;
-import com.smartbear.readyapi4j.testserver.execution.TestServerApi;
-import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
-import com.smartbear.readyapi4j.testserver.execution.TestServerRecipeExecutor;
 import com.smartbear.readyapi.client.model.DataSource;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.ExcelDataSource;
 import com.smartbear.readyapi.client.model.FileDataSource;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.TestStep;
+import com.smartbear.readyapi4j.ExecutionListener;
+import com.smartbear.readyapi4j.TestRecipe;
+import com.smartbear.readyapi4j.execution.Execution;
+import com.smartbear.readyapi4j.testserver.execution.ApiClientWrapper;
+import com.smartbear.readyapi4j.testserver.execution.CodegenBasedTestServerApi;
+import com.smartbear.readyapi4j.testserver.execution.RecipeExecutorTestCreator;
+import com.smartbear.readyapi4j.testserver.execution.ServerDefaults;
+import com.smartbear.readyapi4j.testserver.execution.TestServerApi;
+import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
+import com.smartbear.readyapi4j.testserver.execution.TestServerRecipeExecutor;
 import com.smartbear.readyapi4j.testserver.teststeps.ServerTestSteps;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import com.sun.jersey.api.client.GenericType;
@@ -135,16 +135,6 @@ public class DataSourceTestStepRecipeTest {
 
         TestServerRecipeExecutor recipeExecutor = new TestServerClient("localhost", ServerDefaults.DEFAULT_PORT).createRecipeExecutor();
         recipeExecutor.addExecutionListener(new ExecutionListener() {
-            @Override
-            public void executionStarted(ProjectResultReport projectResultReport) {
-
-            }
-
-            @Override
-            public void executionFinished(ProjectResultReport projectResultReport) {
-
-            }
-
             @Override
             public void errorOccurred(Exception exception) {
                 assertThat(exception.getMessage(), is("Data source file not found: abc.xlsx"));

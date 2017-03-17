@@ -1,33 +1,33 @@
 package com.smartbear.readyapi4j;
 
-import com.smartbear.readyapi.client.model.ProjectResultReport;
+import com.smartbear.readyapi4j.execution.Execution;
 
 /**
- * Listener for events related to TestRecipe execution
+ * Listener for events related to test execution
  */
-
 public interface ExecutionListener {
+
+    /**
+     * Called if an error occurs during recipe execution
+
+     * @param exception
+     */
+
+    default void errorOccurred(Exception exception){}
 
     /**
      * Called when a recipe has been submitted for execution - this is only called for asynchronous executions
      *
-     * @param projectResultReport the current ProjectResultReport
+     * @param execution the started execution
      */
 
-    void executionStarted(ProjectResultReport projectResultReport);
+    default void executionStarted(Execution execution){}
 
     /**
      * Called when a recipe execution has finished - this is called for both synchronous and asynchronous executions
      *
-     * @param projectResultReport the final ProjectResultReport
+     * @param execution the finished execution
      */
 
-    void executionFinished(ProjectResultReport projectResultReport);
-
-    /**
-     * Called if an error occurs during recipe execution
-     * @param exception
-     */
-
-    void errorOccurred(Exception exception);
+    default void executionFinished(Execution execution){}
 }

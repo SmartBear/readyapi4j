@@ -4,6 +4,8 @@ import com.smartbear.readyapi.client.model.HarEntry;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 import com.smartbear.readyapi4j.result.AbstractTestStepResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Result wrapper for individual TestSteps executed on a TestServer
@@ -13,6 +15,7 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
     private final TestServerExecution execution;
     private boolean hasCheckedForHarEntry;
     private HarEntry harEntry;
+    private final static Logger LOG = LoggerFactory.getLogger(TestServerTestStepResult.class);
 
     TestServerTestStepResult(TestStepResultReport testStepResultReport, TestServerExecution execution) {
         super(testStepResultReport);
@@ -22,11 +25,20 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
     @Override
     public HarEntry getHarEntry() {
         if (harEntry == null && !hasCheckedForHarEntry) {
-            HarLogRoot logRoot = execution.getTestServerApi().getTransactionLog(execution.getId(),
+            HarLogRoot logRoot = null;
+            try {
+                logRoot = execution.getTestServerApi().getTransactionLog(execution.getId(),
                     testStepResultReport.getTransactionId(), execution.getAuth());
 
-            if (hasHarEntry(logRoot)) {
-                harEntry = logRoot.getLog().getEntries().get(0);
+                if (hasHarEntry(logRoot)) {
+                    harEntry = logRoot.getLog().getEntries().get(0);
+                }
+            } catch (ApiException e) {
+                if (e.getStatusCode() != 404) {
+                    LOG.error("Error when trying to get transaction log for execution " + execution.getId(), e);
+                } else {
+                    LOG.info("No transaction log available for execution " + execution.getId());
+                }
             }
 
             hasCheckedForHarEntry = true;
@@ -37,6 +49,6 @@ public class TestServerTestStepResult extends AbstractTestStepResult {
 
     private boolean hasHarEntry(HarLogRoot logRoot) {
         return logRoot != null && logRoot.getLog() != null && logRoot.getLog().getEntries() != null &&
-                logRoot.getLog().getEntries().size() > 0;
+            logRoot.getLog().getEntries().size() > 0;
     }
 }

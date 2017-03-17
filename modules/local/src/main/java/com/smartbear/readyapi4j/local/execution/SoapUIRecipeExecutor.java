@@ -94,17 +94,17 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
             WsdlProject project = recipeParser.parse(testCaseStruct);
             StringToObjectMap properties = new StringToObjectMap();
 
+            WsdlProjectRunner projectRunner = new WsdlProjectRunner(project, properties);
+            SoapUIRecipeExecution execution = new SoapUIRecipeExecution(executionId, projectRunner);
+
             if (async) {
-                prepareAsyncExecution(testRecipe, executionId, project, properties);
+                prepareAsyncExecution(testRecipe, execution, projectRunner );
             }
 
-            WsdlProjectRunner projectRunner = new WsdlProjectRunner(project, properties);
-
-            SoapUIRecipeExecution execution = new SoapUIRecipeExecution(executionId, projectRunner);
             executionsMap.put(executionId, execution);
             projectRunner.start(async);
             if (!async) {
-                notifyExecutionFinished(testRecipe, execution.getCurrentReport());
+                notifyExecutionFinished(testRecipe, execution);
             }
             return execution;
         } catch (Exception e) {
@@ -122,13 +122,14 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
         return objectMapper;
     }
 
-    private void prepareAsyncExecution(TestRecipe testRecipe, String executionId, WsdlProject project, StringToObjectMap properties) {
+    private void prepareAsyncExecution(TestRecipe testRecipe, SoapUIRecipeExecution execution, WsdlProjectRunner projectRunner ) {
+        WsdlProject project = execution.getProject();
         project.addProjectRunListener(new ProjectRunListenerAdapter() {
             @Override
             public void beforeRun(ProjectRunner projectRunner, ProjectRunContext runContext) {
                 String executionId = (String) runContext.getProperty(LOCAL_CLIENT_EXECUTION_ID);
                 if (executionId != null) {
-                    notifyExecutionStarted(executionsMap.get(executionId).getCurrentReport());
+                    notifyExecutionStarted(executionsMap.get(executionId));
                 }
             }
 
@@ -136,19 +137,17 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
             public void afterRun(ProjectRunner projectRunner, ProjectRunContext runContext) {
                 String executionId = (String) runContext.getProperty(LOCAL_CLIENT_EXECUTION_ID);
                 if (executionId != null) {
-                    notifyExecutionFinished(testRecipe, executionsMap.get(executionId).getCurrentReport());
+                    notifyExecutionFinished(testRecipe, executionsMap.get(executionId));
                 }
             }
         });
-        properties.put(LOCAL_CLIENT_EXECUTION_ID, executionId);
+
+        projectRunner.getRunContext().put(LOCAL_CLIENT_EXECUTION_ID, execution.getId());
     }
 
-
-    private void notifyExecutionStarted(ProjectResultReport projectResultReport) {
-        if (projectResultReport != null) {
-            for (ExecutionListener executionListener : executionListeners) {
-                executionListener.executionStarted(projectResultReport);
-            }
+    private void notifyExecutionStarted(Execution execution) {
+        for (ExecutionListener executionListener : executionListeners) {
+            executionListener.executionStarted(execution);
         }
     }
 
@@ -158,13 +157,14 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
         }
     }
 
-    private void notifyExecutionFinished(TestRecipe testRecipe, ProjectResultReport projectResultReport) {
+    private void notifyExecutionFinished(TestRecipe testRecipe, Execution execution) {
+        ProjectResultReport projectResultReport = execution.getCurrentReport();
         if( testRecipe.getExtractorData() != null ) {
             DataExtractors.runDataExtractors(projectResultReport, Arrays.asList(testRecipe.getExtractorData()));
         }
 
         for (ExecutionListener executionListener : executionListeners) {
-            executionListener.executionFinished(projectResultReport);
+            executionListener.executionFinished(execution);
         }
     }
 }

@@ -11,25 +11,25 @@ import java.io.FileOutputStream;
 /**
  * RecipeFilter that writes all recipes as files to the specified folder
  */
-public class FileLoggingRecipeFilter implements RecipeFilter {
+public class RecipeLogger implements RecipeFilter {
 
-    private final static Logger LOG = LoggerFactory.getLogger(FileLoggingRecipeFilter.class);
+    private final static Logger LOG = LoggerFactory.getLogger(RecipeLogger.class);
 
-    public static final String DEFAULT_TARGET_FOLDER = "recipe";
+    public static final String DEFAULT_PREFIX = "recipe";
     public static final String DEFAULT_EXTENSION = "json";
 
     private final String targetFolder;
     private final String prefix;
     private final String extension;
 
-    public FileLoggingRecipeFilter(String targetFolder, String prefix, String extension) {
+    public RecipeLogger(String targetFolder, String prefix, String extension) {
         this.targetFolder = targetFolder;
         this.prefix = prefix;
         this.extension = extension;
     }
 
-    public FileLoggingRecipeFilter(String targetFolder) {
-        this(targetFolder, DEFAULT_TARGET_FOLDER, DEFAULT_EXTENSION);
+    public RecipeLogger(String targetFolder) {
+        this(targetFolder, DEFAULT_PREFIX, DEFAULT_EXTENSION);
     }
 
     @Override

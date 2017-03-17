@@ -6,10 +6,15 @@ import com.smartbear.readyapi4j.execution.Execution;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatcher;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -42,13 +47,25 @@ public class RepositoryProjectExecutionTest extends ProjectExecutionTestBase {
         when(apiWrapper.getExecutionStatus(eq(executionID), any(HttpBasicAuth.class))).thenReturn(endReport);
         ExecutionListener executionListener = mock(ExecutionListener.class);
 
+
         projectExecutor.addExecutionListener(executionListener);
         projectExecutor.submitRepositoryProject(executionRequest);
-        Thread.sleep(1500);
-        verify(executionListener).executionStarted(startReport);
-        verify(executionListener).executionFinished(endReport);
-    }
 
+        verify(executionListener).executionStarted(argThat(new ArgumentMatcher<Execution>(){
+            @Override
+            public boolean matches(Object o) {
+                return ((Execution)o).getCurrentReport().equals( startReport );
+            }
+        }));
+
+        Thread.sleep(1500);
+        verify(executionListener).executionFinished(argThat(new ArgumentMatcher<Execution>(){
+            @Override
+            public boolean matches(Object o) {
+                return ((Execution)o).getCurrentReport().equals( endReport );
+            }
+        }));
+    }
 
     private RepositoryProjectExecutionRequest createRepositoryProjectExecutionRequest() {
         return RepositoryProjectExecutionRequest.Builder.forProject("Environment-test.xml")

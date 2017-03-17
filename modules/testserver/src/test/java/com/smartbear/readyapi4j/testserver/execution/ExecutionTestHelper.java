@@ -4,9 +4,13 @@ package com.smartbear.readyapi4j.testserver.execution;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.UnresolvedFile;
+import com.smartbear.readyapi4j.execution.Execution;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ExecutionTestHelper {
     public static ProjectResultReports makeProjectResultReports() {
@@ -22,6 +26,12 @@ public class ExecutionTestHelper {
         ProjectResultReport startReport = new ProjectResultReport();
         startReport.setExecutionID(executionID);
         startReport.setStatus(ProjectResultReport.StatusEnum.RUNNING);
+
+        Execution execution = mock( Execution.class );
+        when(execution.getId()).thenReturn(executionID);
+        when(execution.getCurrentReport()).thenReturn(startReport);
+        when(execution.getCurrentStatus()).thenReturn(startReport.getStatus());
+
         return startReport;
     }
 

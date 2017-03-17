@@ -57,17 +57,10 @@ public abstract class AbstractTestStepResult implements TestStepResult {
         return testStepResultReport.getMessages();
     }
 
-    @Override
     public HarResponse getHarResponse() {
         HarEntry harEntry = getHarEntry();
         return harEntry == null ? null : harEntry.getResponse();
     }
-
-    /**
-     * @return the underlying HAR log entry for this TestStep result - null if no transaction log is available
-     */
-
-    public abstract HarEntry getHarEntry();
 
     @Override
     public String getResponseContent() {

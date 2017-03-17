@@ -1,5 +1,6 @@
 package com.smartbear.readyapi4j.local.execution;
 
+import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.impl.wsdl.testcase.WsdlProjectRunner;
 import com.eviware.soapui.model.iface.MessageExchange;
 import com.eviware.soapui.model.testsuite.MessageExchangeTestStepResult;
@@ -46,6 +47,10 @@ public class SoapUIRecipeExecution implements Execution {
     @Override
     public ProjectResultReport.StatusEnum getCurrentStatus() {
         return convertTestRunnerStatus(projectRunner.getStatus());
+    }
+
+    public WsdlProject getProject() {
+        return (WsdlProject) projectRunner.getProject();
     }
 
     @Override

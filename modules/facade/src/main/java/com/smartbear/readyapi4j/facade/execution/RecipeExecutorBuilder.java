@@ -1,8 +1,11 @@
 package com.smartbear.readyapi4j.facade.execution;
 
+import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
 import com.smartbear.readyapi4j.execution.RecipeFilter;
 import com.smartbear.readyapi4j.local.execution.SoapUIRecipeExecutor;
+import com.smartbear.readyapi4j.support.ExecutionLogger;
+import com.smartbear.readyapi4j.support.RecipeLogger;
 import com.smartbear.readyapi4j.testserver.execution.TestServerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Builder class for building a configured RecipeExecutor.
+ * Builder class for building a configured RecipeExecutor. The following env/system properties will be used if available:
+ * - testserver.endpoint - endpoint to a TestServer installation
+ * - testserver.user - used for TestServer authentication
+ * - testserver.password - for TestServer authentication
+ * - readyapi4j.log.executions.folder - all executions will be logged to this folder
+ * - readyapi4j.log.recipes.folder - all recipes will be logged to this folder
  */
 public class RecipeExecutorBuilder {
 
@@ -23,18 +31,29 @@ public class RecipeExecutorBuilder {
     private static final String TESTSERVER_ENDPOINT_PROPERTY = "testserver.endpoint";
     private static final String TESTSERVER_USER_PROPERTY = "testserver.user";
     private static final String TESTSERVER_PASSWORD_PROPERTY = "testserver.password";
+    private static final String EXECUTION_LOG_FOLDER_PROPERTY = "readyapi4j.log.executions.folder";
+    private static final String RECIPE_LOG_FOLDER_PROPERTY = "readyapi4j.log.recipes.folder";
 
     private String testServerUser;
     private String testServerPassword;
     private String testServerEndpoint;
 
     private List<RecipeFilter> filters = new ArrayList<>();
+    private List<ExecutionListener> listeners = new ArrayList<>();
 
     /**
      * @param filter RecipeFilter to add to the resulting executor
      */
-    public RecipeExecutorBuilder withFilter(RecipeFilter filter) {
+    public RecipeExecutorBuilder withRecipeFilter(RecipeFilter filter) {
         filters.add(filter);
+        return this;
+    }
+
+    /**
+     * @param listener ExecutionListener to add to the resulting executor
+     */
+    public RecipeExecutorBuilder withExecutionListener(ExecutionListener listener) {
+        listeners.add(listener);
         return this;
     }
 
@@ -52,7 +71,7 @@ public class RecipeExecutorBuilder {
             try {
                 return buildRemote(testServerEndpoint);
             } catch (Exception e) {
-                LOG.error("Failed to build remote RecipeExecutor for",e);
+                LOG.error("Failed to build remote RecipeExecutor for", e);
             }
         }
 
@@ -62,7 +81,7 @@ public class RecipeExecutorBuilder {
             try {
                 return buildRemote(endpoint);
             } catch (Exception e) {
-                LOG.error("Failed to build remote RecipeExecutor",e);
+                LOG.error("Failed to build remote RecipeExecutor", e);
             }
         }
 
@@ -73,6 +92,21 @@ public class RecipeExecutorBuilder {
         for (RecipeFilter filter : filters) {
             executor.addRecipeFilter(filter);
         }
+        for (ExecutionListener listener : listeners) {
+            executor.addExecutionListener(listener);
+        }
+
+        Map<String, String> env = System.getenv();
+        String recipeLogFolder = env.getOrDefault(RECIPE_LOG_FOLDER_PROPERTY, System.getProperty(RECIPE_LOG_FOLDER_PROPERTY));
+        if (recipeLogFolder != null) {
+            executor.addRecipeFilter(new RecipeLogger(recipeLogFolder));
+        }
+
+        String executionLogFolder = env.getOrDefault(EXECUTION_LOG_FOLDER_PROPERTY, System.getProperty(EXECUTION_LOG_FOLDER_PROPERTY));
+        if (executionLogFolder != null) {
+            executor.addExecutionListener(new ExecutionLogger(executionLogFolder));
+        }
+
         return executor;
     }
 
@@ -98,6 +132,20 @@ public class RecipeExecutorBuilder {
     public RecipeExecutorBuilder withPassword(String testServerPassword) {
         this.testServerPassword = testServerPassword;
         return this;
+    }
+
+    /**
+     * @param recipeLogFolder folder to log recipes to before execution
+     */
+    public RecipeExecutorBuilder withRecipeLog(String recipeLogFolder) {
+        return withRecipeFilter(new RecipeLogger(recipeLogFolder));
+    }
+
+    /**
+     * @param executionLogFolder folder to log executions to after execution
+     */
+    public RecipeExecutorBuilder withExecutionLog(String executionLogFolder) {
+        return withExecutionListener(new ExecutionLogger(executionLogFolder));
     }
 
     /**
