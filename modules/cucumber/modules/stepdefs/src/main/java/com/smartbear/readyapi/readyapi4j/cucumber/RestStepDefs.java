@@ -53,43 +53,43 @@ public class RestStepDefs {
     }
 
     @Given("^the oAuth2 token (.*)$")
-    public void theOauth2Token(String token) throws Throwable {
+    public void theOauth2Token(String token) {
         this.token = token;
     }
 
     @Given("^the API running at (.*)$")
-    public void theAPIRunningAt(String endpoint) throws Throwable {
+    public void theAPIRunningAt(String endpoint) {
         this.endpoint = endpoint;
     }
 
     @When("^a (.*) request to ([^ ]*) is made$")
-    public void aRequestToPathIsMade(String method, String path) throws Throwable {
+    public void aRequestToPathIsMade(String method, String path) {
         this.method = method;
         this.path = path;
     }
 
     @When("^a (.*) request is made$")
-    public void aRequestIsMade(String method) throws Throwable {
+    public void aRequestIsMade(String method) {
         this.method = method;
     }
 
     @Given("^the request body is$")
-    public void theRequestBodyIs(String requestBody) throws Throwable {
+    public void theRequestBodyIs(String requestBody) {
         this.requestBody = requestBody;
     }
 
     @Then("^a status code of (\\d+) is returned$")
-    public void aStatusCodeIsReturned(int statusCode) throws Throwable {
+    public void aStatusCodeIsReturned(int statusCode) {
         aResponseIsReturnedWithin(statusCode, 0);
     }
 
     @Then("^a (\\d+) response is returned$")
-    public void aResponseIsReturned(int statusCode) throws Throwable {
+    public void aResponseIsReturned(int statusCode) {
         aResponseIsReturnedWithin(statusCode, 0);
     }
 
     @Then("^a (\\d+) response is returned within (\\d+)ms$")
-    public void aResponseIsReturnedWithin(int statusCode, int timeout) throws Throwable {
+    public void aResponseIsReturnedWithin(int statusCode, int timeout) {
 
         if( timeout > 0 ) {
             assertions.add(DefaultResponseSLAAssertionBuilder.create().maxResponseTime(String.valueOf(timeout)));
@@ -100,17 +100,17 @@ public class RestStepDefs {
     }
 
     @Then("^the response body contains$")
-    public void theResponseBodyContains(String responseBody) throws Throwable {
+    public void theResponseBodyContains(String responseBody) {
         addAssertion( Assertions.contains( responseBody ).build());
     }
 
     @Then("^the response body matches$")
-    public void theResponseBodyMatches(String responseBodyRegEx) throws Throwable {
+    public void theResponseBodyMatches(String responseBodyRegEx) {
         addAssertion( Assertions.matches( responseBodyRegEx ).build());
     }
 
     @Given("^the (.*) parameter is (.*)$")
-    public void theParameterIs(String name, String value) throws Throwable {
+    public void theParameterIs(String name, String value) {
 
         ParameterBuilder parameterBuilder = (endpoint+path).contains("{" + name + "}") ?
             ParameterBuilder.path(name,value) :
@@ -119,32 +119,32 @@ public class RestStepDefs {
     }
 
     @Given("^the (.*) header is (.*)$")
-    public void theHeaderIs(String name, String value) throws Throwable {
+    public void theHeaderIs(String name, String value) {
         parameters.add( ParameterBuilder.header(name,value).build());
     }
 
     @Given("^the type is (.*)$")
-    public void theTypeIs(String type) throws Throwable {
+    public void theTypeIs(String type) {
         this.mediaType = type;
     }
 
     @Given("^the request expects (.*)")
-    public void theRequestExpects(String format) throws Throwable {
+    public void theRequestExpects(String format) {
         theHeaderIs("Accept", ContentUtils.expandContentType( format ));
     }
 
     @Then("^the response type is (.*)$")
-    public void theResponseTypeIs(String format) throws Throwable {
+    public void theResponseTypeIs(String format) {
         addAssertion( Assertions.contentType( format ).build());
     }
 
     @Then("^the response contains a (.*) header$")
-    public void theResponseContainsHeader(String header) throws Throwable {
+    public void theResponseContainsHeader(String header) {
         addAssertion( Assertions.headerExists( header ).build());
     }
 
     @Then("^the response (.*) header is (.*)$")
-    public void theResponseHeaderIs(String header, String value) throws Throwable {
+    public void theResponseHeaderIs(String header, String value) {
         addAssertion( Assertions.headerValue( header, value ).build());
     }
 

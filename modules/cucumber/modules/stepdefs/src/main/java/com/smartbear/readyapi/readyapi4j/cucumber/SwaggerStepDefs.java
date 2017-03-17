@@ -40,7 +40,7 @@ public class SwaggerStepDefs {
     }
 
     @Given("^the Swagger definition at (.*)$")
-    public void theSwaggerDefinitionAt(String swaggerUrl) throws Throwable {
+    public void theSwaggerDefinitionAt(String swaggerUrl) {
 
         swagger = swaggerCache.getSwagger(swaggerUrl);
 
@@ -55,11 +55,11 @@ public class SwaggerStepDefs {
     @When("^a request to ([^ ]*) is made$")
     public void aRequestToOperationIsMade(String operationId) throws Throwable {
         if (swagger == null) {
-            throw new Exception("Missing Swagger definition");
+            throw new CucumberExecutionException("Missing Swagger definition");
         }
 
         if (!findSwaggerOperation(operationId)) {
-            throw new Exception("Could not find operation [" + operationId + "] in Swagger definition");
+            throw new CucumberExecutionException("Could not find operation [" + operationId + "] in Swagger definition");
         }
     }
 
@@ -82,9 +82,9 @@ public class SwaggerStepDefs {
     }
 
     @Then("^the response is (.*)$")
-    public void theResponseIs(String responseDescription) throws Throwable {
+    public void theResponseIs(String responseDescription) {
         if (swaggerOperation == null) {
-            throw new Exception("missing swagger operation for request");
+            throw new CucumberExecutionException("missing swagger operation for request");
         }
 
         for (String responseCode : swaggerOperation.getResponses().keySet()) {
@@ -96,7 +96,7 @@ public class SwaggerStepDefs {
     }
 
     @Given("^([^ ]*) is (.*)$")
-    public void parameterIs(String name, String value) throws Throwable {
+    public void parameterIs(String name, String value) {
 
         if (swaggerOperation != null) {
             for (io.swagger.models.parameters.Parameter parameter : swaggerOperation.getParameters()) {
