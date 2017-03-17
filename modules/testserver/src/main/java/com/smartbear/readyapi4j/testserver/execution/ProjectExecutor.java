@@ -96,13 +96,13 @@ public class ProjectExecutor extends AbstractTestServerExecutor {
      * @throws ApiException if an error occurs executing the project
      */
 
-    public Execution executeProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
+    public Execution executeProject(ProjectExecutionRequest projectExecutionRequest) {
         Execution execution = doExecuteProject(projectExecutionRequest, false);
         notifyExecutionFinished(execution);
         return execution;
     }
 
-    private TestServerExecution doExecuteProjectFromRepository(RepositoryProjectExecutionRequest executionRequest, boolean async) throws ApiException {
+    private TestServerExecution doExecuteProjectFromRepository(RepositoryProjectExecutionRequest executionRequest, boolean async) {
         try {
             TestServerExecution execution = testServerClient.postRepositoryProject(executionRequest, async);
             cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), null);
