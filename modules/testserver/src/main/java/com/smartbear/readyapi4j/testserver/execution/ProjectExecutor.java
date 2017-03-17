@@ -26,7 +26,7 @@ public class ProjectExecutor extends AbstractTestServerExecutor {
 
     public Execution executeRepositoryProject(RepositoryProjectExecutionRequest executionRequest) {
         Execution execution = doExecuteProjectFromRepository(executionRequest, false);
-        notifyExecutionFinished(execution.getCurrentReport());
+        notifyExecutionFinished(execution);
         return execution;
     }
 
@@ -98,7 +98,7 @@ public class ProjectExecutor extends AbstractTestServerExecutor {
 
     public Execution executeProject(ProjectExecutionRequest projectExecutionRequest) throws ApiException {
         Execution execution = doExecuteProject(projectExecutionRequest, false);
-        notifyExecutionFinished(execution.getCurrentReport());
+        notifyExecutionFinished(execution);
         return execution;
     }
 
