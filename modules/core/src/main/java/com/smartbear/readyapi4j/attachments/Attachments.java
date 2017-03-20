@@ -1,6 +1,6 @@
 package com.smartbear.readyapi4j.attachments;
 
-import com.sun.jersey.core.util.Base64;
+import com.smartbear.readyapi4j.execution.RecipeExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.nio.file.Files;
+import java.util.Base64;
 
 /**
  * Utility class for adding attachments to a request
@@ -19,16 +20,16 @@ public class Attachments {
     private static Logger logger = LoggerFactory.getLogger(Attachments.class);
 
     public static RequestAttachmentBuilder file(File file, String contentType) {
-        RequestAttachmentBuilder builder = null;
+        RequestAttachmentBuilder builder;
         try {
             builder = RequestAttachmentBuilder
                     .getInstance()
                     .withName(file.getName())
-                    .withContent(Base64.encode(Files.readAllBytes(file.toPath())))
+                    .withContent(Base64.getEncoder().encode(Files.readAllBytes(file.toPath())))
                     .withContentId(file.getName())
                     .withContentType(contentType);
         } catch (IOException ex) {
-            logger.error("Could not add file attachment: " + file.getName() + " due to: " + ex.getMessage());
+            throw new RecipeExecutionException("Could not add file attachment: " + file.getName(), ex);
         }
         return builder;
     }
@@ -55,8 +56,7 @@ public class Attachments {
                 throw new IOException("Could not read inputStream");
             }
         } catch (IOException | NullPointerException e) {
-            logger.error("Could not add stream attachment since " + e.getMessage());
-            return null;
+            throw new RecipeExecutionException("Could not add stream attachment", e);
         }
     }
 
@@ -65,7 +65,7 @@ public class Attachments {
             return RequestAttachmentBuilder
                     .getInstance()
                     .withContentType(contentType)
-                    .withContent(Base64.encode(bytes));
+                    .withContent(Base64.getEncoder().encode(bytes));
         } else {
             logger.error("Could not add byte array attachment since a required field was not set");
             return null;
@@ -76,7 +76,7 @@ public class Attachments {
         if (content != null && contentType != null) {
             return RequestAttachmentBuilder
                     .getInstance()
-                    .withContent(Base64.encode(content.getBytes()))
+                    .withContent(Base64.getEncoder().encode(content.getBytes()))
                     .withContentType(contentType);
         } else {
             logger.error("Could not add string attachment since a required field was not set");

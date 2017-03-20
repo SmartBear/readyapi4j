@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class HarEntryBuilder {
 
@@ -37,21 +38,20 @@ public class HarEntryBuilder {
                 .method(messageExchange.getProperty("Method"))
                 .url(messageExchange.getEndpoint());
 
-        try {
-            List<String> statusHeader = messageExchange.getResponseHeaders().get("#status#");
-            String[] values = statusHeader.get(0).split(" ");
-            if (values.length >= 2) {
-                harRequest.httpVersion(values[0]);
-            }
-        } catch (Exception ignore) {
-
-        }
-
-
+        getStatusValue(messageExchange, harRequest).ifPresent(harRequest::httpVersion);
         if (shouldCreatePostData(messageExchange)) {
             harRequest.postData(createPostData(messageExchange));
         }
         return harRequest;
+    }
+
+    private Optional<String> getStatusValue(MessageExchange messageExchange, HarRequest harRequest) {
+        List<String> statusHeader = messageExchange.getResponseHeaders().get("#status#");
+        if (statusHeader != null && !statusHeader.isEmpty()) {
+            String[] values = statusHeader.get(0).split(" ");
+            return values.length >= 2 ? Optional.of(values[0]) : Optional.empty();
+        }
+        return Optional.empty();
     }
 
     private boolean shouldCreatePostData(MessageExchange messageExchange) {
@@ -81,7 +81,7 @@ public class HarEntryBuilder {
                 .headers(createHarHeaders(responseHeaders));
 
         List<String> location = responseHeaders.get("Location");
-        String redirectURL = location != null && location.size() > 0 ? location.get(0) : "";
+        String redirectURL = location != null && !location.isEmpty() ? location.get(0) : "";
         harResponse.redirectURL(redirectURL);
 
         try {

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class ContentUtils {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ContentUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ContentUtils.class);
 
     /**
      * Serializes the specified content object to a string with the specified mediaType,
@@ -36,13 +36,13 @@ public class ContentUtils {
         }
 
         String result = null;
-        mediaType = mediaType.toLowerCase();
+        String mediaTypeLowerCase= mediaType.toLowerCase();
         try {
-            if (mediaType.endsWith("json")) {
+            if (mediaTypeLowerCase.endsWith("json")) {
                 result = Json.mapper().writeValueAsString(content);
-            } else if (mediaType.endsWith("yaml")) {
+            } else if (mediaTypeLowerCase.endsWith("yaml")) {
                 result = Yaml.mapper().writeValueAsString(content);
-            } else if (mediaType.endsWith("xml")) {
+            } else if (mediaTypeLowerCase.endsWith("xml")) {
                 result = new XmlMapper().writeValueAsString(content);
             }
         } catch (JsonProcessingException e) {
@@ -70,5 +70,8 @@ public class ContentUtils {
         }
 
         return format;
+    }
+
+    private ContentUtils() {
     }
 }
