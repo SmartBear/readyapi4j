@@ -58,6 +58,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.smartbear.readyapi.client.model.TestStepResultReport.AssertionStatusEnum.FAILED;
 import static com.smartbear.readyapi4j.testserver.execution.ProjectExecutionRequest.Builder.forProjectFile;
 
 @Mojo(name = "run")
@@ -190,9 +191,7 @@ public class RunMojo
         if (shouldRunProjects() && xmlProjectFiles != null) {
             for (String file : xmlProjectFiles) {
                 String fileName = file.toLowerCase();
-
                 File projectFile = new File(xmlProjectDirectory, file);
-
                 if (fileName.endsWith(".xml")) {
                     result.incrementExecution();
                     response = runXmlProject(projectFile);
@@ -200,7 +199,6 @@ public class RunMojo
                     getLog().warn("Unexpected filename: " + fileName);
                     continue;
                 }
-
                 try {
                     handleResponse(response, report, file);
                 } catch (MojoFailureException exception) {
@@ -218,9 +216,7 @@ public class RunMojo
         if (shouldRunRecipes() && recipeFiles != null) {
             for (String file : recipeFiles) {
                 String fileName = file.toLowerCase();
-
                 File recipeFile = new File(recipeDirectory, file);
-
                 if (fileName.endsWith(".json")) {
                     result.incrementExecution();
                     response = runJsonRecipe(recipeFile);
@@ -228,7 +224,6 @@ public class RunMojo
                     getLog().warn("Unexpected filename: " + fileName);
                     continue;
                 }
-
                 try {
                     handleResponse(response, report, file);
                 } catch (MojoFailureException exception) {
@@ -315,14 +310,14 @@ public class RunMojo
         List<String> messages = new ArrayList<>();
 
         result.getTestSuiteResultReports().stream()
-                .map(TestSuiteResultReport::getTestCaseResultReports)
-                .flatMap(Collection::stream)
-                .map(TestCaseResultReport::getTestStepResultReports)
-                .flatMap(Collection::stream)
-                .filter(testStepResult -> testStepResult.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED)
-                .map(TestStepResultReport::getMessages)
-                .flatMap(Collection::stream)
-                .forEach(message -> {
+                .map(TestSuiteResultReport::getTestCaseResultReports) // creates List<List<TestCaseResultReport>>
+                .flatMap(Collection::stream) //converts List<List<TestCaseResultReport>> to List<TestCaseResultReport>
+                .map(TestCaseResultReport::getTestStepResultReports) // List<List<TestStepResultReport>>
+                .flatMap(Collection::stream) // flattens List<List<TestStepResultReport>> to List<TestStepResultReport>
+                .filter(testStepResult -> testStepResult.getAssertionStatus() == FAILED) //keep only failed tests
+                .map(TestStepResultReport::getMessages) // creates List<List<String>>
+                .flatMap(Collection::stream) // flattens List<List<String>> to List<String>
+                .forEach(message -> { //process each message from List<String>
                     messages.add(message);
                     getLog().error("- " + message);
                 });

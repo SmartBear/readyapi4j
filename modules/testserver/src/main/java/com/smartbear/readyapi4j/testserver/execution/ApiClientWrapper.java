@@ -129,18 +129,18 @@ public class ApiClientWrapper extends ApiClient {
     }
 
     private String createQueryString(List<Pair> queryParams) {
-        StringBuilder b = new StringBuilder("?");
+        StringBuilder builder = new StringBuilder("?");
         if (queryParams != null) {
             for (Pair queryParam : queryParams) {
                 if (!queryParam.getName().isEmpty()) {
-                    b.append(escapeString(queryParam.getName()));
-                    b.append("=");
-                    b.append(escapeString(queryParam.getValue()));
-                    b.append("&");
+                    builder.append(escapeString(queryParam.getName()))
+                            .append("=")
+                            .append(escapeString(queryParam.getValue()))
+                            .append("&");
                 }
             }
         }
-        return b.substring(0, b.length() - 1);
+        return builder.substring(0, builder.length() - 1);
     }
 
     private String getResponseBody(ClientResponse response) {
