@@ -19,11 +19,11 @@ import com.sun.jersey.multipart.file.FileDataBodyPart;
 import io.swagger.client.ApiClient;
 import io.swagger.client.Pair;
 import io.swagger.client.auth.Authentication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.core.MediaType;
@@ -44,82 +44,68 @@ import java.util.Map;
  */
 public class ApiClientWrapper extends ApiClient {
 
+    private static final Logger logger = LoggerFactory.getLogger(ApiClientWrapper.class);
+
     private Client client;
 
     public <T> T invokeAPI(String path, String method, List<Pair> queryParams, Object body, Map<String, File> formParams, String accept, String contentType, String[] authNames, GenericType<T> returnType) throws ApiException {
         Map<String, String> headerParams = new HashMap<>();
-        updateParamsForAuth(authNames, queryParams, headerParams);
+        updateAuthParams(authNames, queryParams, headerParams);
 
-        Client client = getClient();
+        Client client = createClient();
         if (client == null) {
             throw new IllegalStateException("Could not create client instance");
         }
 
-        StringBuilder b = new StringBuilder();
-        b.append("?");
-        if (queryParams != null) {
-            for (Pair queryParam : queryParams) {
-                if (!queryParam.getName().isEmpty()) {
-                    b.append(escapeString(queryParam.getName()));
-                    b.append("=");
-                    b.append(escapeString(queryParam.getValue()));
-                    b.append("&");
-                }
-            }
-        }
-
-        String querystring = b.substring(0, b.length() - 1);
+        String queryString = createQueryString(queryParams);
 
         WebResource.Builder builder;
         if (accept == null) {
-            builder = client.resource(getBasePath() + path + querystring).getRequestBuilder();
+            builder = client.resource(getBasePath() + path + queryString).getRequestBuilder();
         } else {
-            builder = client.resource(getBasePath() + path + querystring).accept(accept);
+            builder = client.resource(getBasePath() + path + queryString).accept(accept);
         }
 
         for (String key : headerParams.keySet()) {
             builder = builder.header(key, headerParams.get(key));
         }
 
-        String encodedFormParams = null;
+        Object requestBody = body;
         if (contentType.startsWith("multipart/form-data")) {
-            FormDataMultiPart mp = new FormDataMultiPart();
-            for (Map.Entry<String, File> param : formParams.entrySet()) {
-                File file = param.getValue();
-                mp.bodyPart(new FileDataBodyPart(param.getKey(), file, MediaType.APPLICATION_OCTET_STREAM_TYPE));
+            try (FormDataMultiPart mp = new FormDataMultiPart()) {
+                for (Map.Entry<String, File> param : formParams.entrySet()) {
+                    File file = param.getValue();
+                    mp.bodyPart(new FileDataBodyPart(param.getKey(), file, MediaType.APPLICATION_OCTET_STREAM_TYPE));
+                }
+                requestBody = mp;
+            } catch (Exception e) {
+                throw new ApiException(e);
             }
-            body = mp;
         }
 
-        ClientResponse response = null;
+        ClientResponse response;
 
         if ("GET".equals(method)) {
-            response = (ClientResponse) builder.get(ClientResponse.class);
+            response = builder.get(ClientResponse.class);
         } else if ("POST".equals(method)) {
-            if (encodedFormParams != null) {
-                response = builder.type(contentType).post(ClientResponse.class, encodedFormParams);
-            } else if (body == null) {
+            if (requestBody == null) {
                 response = builder.post(ClientResponse.class, null);
-            } else if (body instanceof FormDataMultiPart) {
-                response = builder.type(contentType).post(ClientResponse.class, body);
+            } else if (requestBody instanceof FormDataMultiPart) {
+                response = builder.type(contentType).post(ClientResponse.class, requestBody);
             } else {
-                response = builder.type(contentType).post(ClientResponse.class, serialize(body, contentType));
+                response = builder.type(contentType).post(ClientResponse.class, serialize(requestBody, contentType));
             }
         } else if ("PUT".equals(method)) {
-            if (encodedFormParams != null) {
-                response = builder.type(contentType).put(ClientResponse.class, encodedFormParams);
-            } else if (body == null) {
-                response = builder.put(ClientResponse.class, serialize(body, contentType));
+            if (requestBody == null) {
+                response = builder.put(ClientResponse.class, serialize(requestBody, contentType));
             } else {
-                response = builder.type(contentType).put(ClientResponse.class, serialize(body, contentType));
+                response = builder.type(contentType).put(ClientResponse.class, serialize(requestBody, contentType));
             }
         } else if ("DELETE".equals(method)) {
-            if (encodedFormParams != null) {
-                response = builder.type(contentType).delete(ClientResponse.class, encodedFormParams);
-            } else if (body == null) {
+            if (requestBody == null) {
                 response = builder.delete(ClientResponse.class);
             } else {
-                response = builder.type(contentType).delete(ClientResponse.class, serialize(body, contentType));
+                response = builder.type(contentType).delete(ClientResponse.class, serialize(requestBody, contentType));
             }
         } else {
             throw new ApiException(500, "unknown method type " + method);
@@ -135,34 +121,46 @@ public class ApiClientWrapper extends ApiClient {
             }
         } else if (response.getStatusInfo().getStatusCode() == 429) {
             throw new UsageLimitException(response.getStatusInfo().getStatusCode(), getResponseBody(response),
-                response.getHeaders());
+                    response.getHeaders());
         } else {
             throw new ApiException(response.getStatusInfo().getStatusCode(), getResponseBody(response),
-                response.getHeaders());
+                    response.getHeaders());
         }
+    }
+
+    private String createQueryString(List<Pair> queryParams) {
+        StringBuilder builder = new StringBuilder("?");
+        if (queryParams != null) {
+            for (Pair queryParam : queryParams) {
+                if (!queryParam.getName().isEmpty()) {
+                    builder.append(escapeString(queryParam.getName()))
+                            .append("=")
+                            .append(escapeString(queryParam.getValue()))
+                            .append("&");
+                }
+            }
+        }
+        return builder.substring(0, builder.length() - 1);
     }
 
     private String getResponseBody(ClientResponse response) {
-        String respBody = null;
         if (response.hasEntity()) {
             try {
-                respBody = String.valueOf(response.getEntity(String.class));
+                return response.getEntity(String.class);
             } catch (RuntimeException e) {
-                // e.printStackTrace();
+                logger.error("Failed to read text from response.", e);
             }
         }
-        return respBody;
+        return null;
     }
 
-    private Client getClient() {
+    private Client createClient() {
         if (this.client == null) {
             try {
                 ClientConfig clientConfig = getClientConfigWithoutCertificateValidation();
                 this.client = Client.create(clientConfig);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (KeyManagementException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                throw new IllegalStateException("Couldn't create instance of Client.", e);
             }
         }
         return this.client;
@@ -183,6 +181,7 @@ public class ApiClientWrapper extends ApiClient {
         }
     }
 
+    @Override
     public ObjectMapper getObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -191,7 +190,7 @@ public class ApiClientWrapper extends ApiClient {
         return mapper;
     }
 
-    private void updateParamsForAuth(String[] authNames, List<Pair> queryParams, Map<String, String> headerParams) {
+    private void updateAuthParams(String[] authNames, List<Pair> queryParams, Map<String, String> headerParams) {
         for (String authName : authNames) {
             Authentication auth = getAuthentications().get(authName);
             if (auth == null) {
@@ -201,7 +200,7 @@ public class ApiClientWrapper extends ApiClient {
         }
     }
 
-    public <T> T deserialize(ClientResponse response, GenericType<T> returnType) throws ApiException {
+    private <T> T deserialize(ClientResponse response, GenericType<T> returnType) throws ApiException {
         String contentType = null;
         List<String> contentTypes = response.getHeaders().get("Content-Type");
         if (contentTypes != null && !contentTypes.isEmpty()) {
@@ -229,6 +228,7 @@ public class ApiClientWrapper extends ApiClient {
         try {
             return mapper.readValue(body, javaType);
         } catch (IOException e) {
+            logger.error("Failed to deserialize response body.", e);
             if (returnType.getType().equals(String.class)) {
                 return (T) body;
             } else {
@@ -241,22 +241,24 @@ public class ApiClientWrapper extends ApiClient {
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
         TrustManager[] certs = new TrustManager[]{
-            new X509TrustManager() {
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
+                new X509TrustManager() {
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[0];
+                    }
 
-                @Override
-                public void checkServerTrusted(X509Certificate[] chain, String authType)
-                    throws CertificateException {
-                }
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] chain, String authType)
+                            throws CertificateException {
+                        //trust everything
+                    }
 
-                @Override
-                public void checkClientTrusted(X509Certificate[] chain, String authType)
-                    throws CertificateException {
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] chain, String authType)
+                            throws CertificateException {
+                        //trust everything
+                    }
                 }
-            }
         };
         sslContext.init(null, certs, new SecureRandom());
 
@@ -264,13 +266,7 @@ public class ApiClientWrapper extends ApiClient {
 
         ClientConfig config = new DefaultClientConfig();
         config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
-            new HTTPSProperties(new HostnameVerifier() {
-
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            }, sslContext));
+                new HTTPSProperties((hostname, session) -> true, sslContext));
 
         return config;
     }

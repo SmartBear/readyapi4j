@@ -52,11 +52,13 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.smartbear.readyapi.client.model.TestStepResultReport.AssertionStatusEnum.FAILED;
 import static com.smartbear.readyapi4j.testserver.execution.ProjectExecutionRequest.Builder.forProjectFile;
 
 @Mojo(name = "run")
@@ -152,83 +154,85 @@ public class RunMojo
 
             JUnitReport report = async ? null : new JUnitReport();
 
-            int recipeCount = 0;
-            int projectCount = 0;
-            int failCount = 0;
+            Result recipeExecutionResult = runRecipes(recipeFiles, report);
+            Result projectExecutionResult = runProjects(xmlProjectFiles, report);
 
-            ProjectResultReport response;
-            //Run recipes
-            if (shouldRunRecipes() && recipeFiles != null) {
-                for (String file : recipeFiles) {
-                    String fileName = file.toLowerCase();
 
-                    File recipeFile = new File(recipeDirectory, file);
-
-                    if (fileName.endsWith(".json")) {
-                        recipeCount++;
-                        response = runJsonRecipe(recipeFile);
-                    } else {
-                        getLog().warn("Unexpected filename: " + fileName);
-                        continue;
-                    }
-
-                    try {
-                        handleResponse(response, report, file);
-                    } catch (MojoFailureException exception) {
-                        failCount++;
-                    }
-                }
-            }
-            //Run XML projects
-            if (shouldRunProjects() && xmlProjectFiles != null) {
-                for (String file : xmlProjectFiles) {
-                    String fileName = file.toLowerCase();
-
-                    File projectFile = new File(xmlProjectDirectory, file);
-
-                    if (fileName.endsWith(".xml")) {
-                        projectCount++;
-                        response = runXmlProject(projectFile);
-                    } else {
-                        getLog().warn("Unexpected filename: " + fileName);
-                        continue;
-                    }
-
-                    try {
-                        handleResponse(response, report, file);
-                    } catch (MojoFailureException exception) {
-                        failCount++;
-                    }
-                }
-            }
             getLog().info("Ready! API TestServer Maven Plugin");
             getLog().info("--------------------------------------");
-            getLog().info("Recipes run: " + recipeCount);
-            getLog().info("Projects run: " + projectCount);
-            getLog().info("Failures: " + failCount);
+            getLog().info("Recipes run: " + recipeExecutionResult.executionCount);
+            getLog().info("Projects run: " + projectExecutionResult.executionCount);
+            int totalFailures = recipeExecutionResult.failureCount + projectExecutionResult.failureCount;
+            getLog().info("Failures: " + totalFailures);
 
             if (report != null) {
                 report.setTestSuiteName(mavenProject.getName());
-                report.setNoofFailuresInTestSuite(failCount);
+                report.setNoofFailuresInTestSuite(totalFailures);
 
-                if (!reportTarget.exists()) {
-                    if (!reportTarget.mkdirs()) {
-                        throw new MojoExecutionException("Failed to create report directory: " + reportTarget);
-                    }
+                if (!reportTarget.exists() && !reportTarget.mkdirs()) {
+                    throw new MojoExecutionException("Failed to create report directory: " + reportTarget);
                 }
-
                 report.save(new File(reportTarget, "recipe-report.xml"));
-
-                if (failCount > 0 && failOnFailures) {
-                    throw new MojoFailureException(failCount + " failures during test execution");
-                }
             }
 
+            if (totalFailures > 0 && failOnFailures) {
+                throw new MojoFailureException(totalFailures + " failures during test execution");
+            }
         } catch (MojoFailureException e) {
             throw e;
         } catch (Exception e) {
             throw new MojoExecutionException("Error running recipe", e);
         }
+    }
+
+    private Result runProjects(List<String> xmlProjectFiles, JUnitReport report) throws MojoFailureException, IOException, MavenFilteringException {
+        Result result = new Result();
+        ProjectResultReport response;
+        if (shouldRunProjects() && xmlProjectFiles != null) {
+            for (String file : xmlProjectFiles) {
+                String fileName = file.toLowerCase();
+                File projectFile = new File(xmlProjectDirectory, file);
+                if (fileName.endsWith(".xml")) {
+                    result.incrementExecution();
+                    response = runXmlProject(projectFile);
+                } else {
+                    getLog().warn("Unexpected filename: " + fileName);
+                    continue;
+                }
+                try {
+                    handleResponse(response, report, file);
+                } catch (MojoFailureException exception) {
+                    getLog().error(exception);
+                    result.incrementFailure();
+                }
+            }
+        }
+        return result;
+    }
+
+    private Result runRecipes(List<String> recipeFiles, JUnitReport report) throws MojoFailureException, IOException, MavenFilteringException {
+        Result result = new Result();
+        ProjectResultReport response;
+        if (shouldRunRecipes() && recipeFiles != null) {
+            for (String file : recipeFiles) {
+                String fileName = file.toLowerCase();
+                File recipeFile = new File(recipeDirectory, file);
+                if (fileName.endsWith(".json")) {
+                    result.incrementExecution();
+                    response = runJsonRecipe(recipeFile);
+                } else {
+                    getLog().warn("Unexpected filename: " + fileName);
+                    continue;
+                }
+                try {
+                    handleResponse(response, report, file);
+                } catch (MojoFailureException exception) {
+                    getLog().error(exception);
+                    result.incrementFailure();
+                }
+            }
+        }
+        return result;
     }
 
     private boolean shouldRunProjects() {
@@ -305,21 +309,18 @@ public class RunMojo
 
         List<String> messages = new ArrayList<>();
 
-        for (TestSuiteResultReport testSuiteResultReport : result.getTestSuiteResultReports()) {
-            for (TestCaseResultReport testCaseResultReport : testSuiteResultReport.getTestCaseResultReports()) {
-                for (TestStepResultReport stepResultReport : testCaseResultReport.getTestStepResultReports()) {
-                    if (stepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
-                        getLog().error("Failed " + testSuiteResultReport.getTestSuiteName() + " / " +
-                                testCaseResultReport.getTestCaseName() + " / " + stepResultReport.getTestStepName());
-                        for (String message : stepResultReport.getMessages()) {
-                            messages.add(message);
-                            getLog().error("- " + message);
-                        }
-                    }
-                }
-            }
-        }
-
+        result.getTestSuiteResultReports().stream()
+                .map(TestSuiteResultReport::getTestCaseResultReports) // creates List<List<TestCaseResultReport>>
+                .flatMap(Collection::stream) //converts List<List<TestCaseResultReport>> to List<TestCaseResultReport>
+                .map(TestCaseResultReport::getTestStepResultReports) // List<List<TestStepResultReport>>
+                .flatMap(Collection::stream) // flattens List<List<TestStepResultReport>> to List<TestStepResultReport>
+                .filter(testStepResult -> testStepResult.getAssertionStatus() == FAILED) //keep only failed tests
+                .map(TestStepResultReport::getMessages) // creates List<List<String>>
+                .flatMap(Collection::stream) // flattens List<List<String>> to List<String>
+                .forEach(message -> { //process each message from List<String>
+                    messages.add(message);
+                    getLog().error("- " + message);
+                });
         return Arrays.toString(messages.toArray());
     }
 
@@ -396,5 +397,18 @@ public class RunMojo
         resourcesFiltering.filterResources(resourcesExecution);
 
         return new File(targetDirectory, filename);
+    }
+
+    private static class Result {
+        private int executionCount;
+        private int failureCount;
+
+        void incrementExecution() {
+            executionCount++;
+        }
+
+        void incrementFailure() {
+            failureCount++;
+        }
     }
 }

@@ -17,6 +17,7 @@ import com.smartbear.readyapi.client.model.TestCaseResultReport;
 import com.smartbear.readyapi.client.model.TestStepResultReport;
 import com.smartbear.readyapi.client.model.TestSuiteResultReport;
 import com.smartbear.readyapi4j.execution.Execution;
+import com.smartbear.readyapi4j.execution.RecipeExecutionException;
 import com.smartbear.readyapi4j.result.AbstractRecipeExecutionResult;
 import com.smartbear.readyapi4j.result.AbstractTestStepResult;
 import com.smartbear.readyapi4j.result.RecipeExecutionResult;
@@ -34,7 +35,7 @@ public class SoapUIRecipeExecution implements Execution {
     private final WsdlProjectRunner projectRunner;
     private ProjectResultReport finalReport;
 
-    public SoapUIRecipeExecution(String executionId, WsdlProjectRunner projectRunner) {
+    SoapUIRecipeExecution(String executionId, WsdlProjectRunner projectRunner) {
         this.executionId = executionId;
         this.projectRunner = projectRunner;
     }
@@ -146,7 +147,7 @@ public class SoapUIRecipeExecution implements Execution {
             case CANCELED:
                 return TestStepResultReport.AssertionStatusEnum.CANCELED;
             default:
-                throw new Error("Unexpected Test step status: " + status);
+                throw new RecipeExecutionException("Unexpected Test step status: " + status);
         }
     }
 
@@ -165,12 +166,12 @@ public class SoapUIRecipeExecution implements Execution {
             case WARNING:
                 return ProjectResultReport.StatusEnum.WARNING;
             default:
-                throw new Error("Unexpected Test Runner status: " + status);
+                throw new RecipeExecutionException("Unexpected Test Runner status: " + status);
         }
     }
 
     public static class SoapUIExecutionResult extends AbstractRecipeExecutionResult {
-        public SoapUIExecutionResult(ProjectResultReport currentReport, SoapUIRecipeExecution execution) {
+        SoapUIExecutionResult(ProjectResultReport currentReport, SoapUIRecipeExecution execution) {
             super(currentReport, e -> new SoapUITestStepResult(e, execution));
         }
     }
@@ -178,7 +179,7 @@ public class SoapUIRecipeExecution implements Execution {
     public static class SoapUITestStepResult extends AbstractTestStepResult {
         private final SoapUIRecipeExecution execution;
 
-        public SoapUITestStepResult(TestStepResultReport testStepResultReport, SoapUIRecipeExecution execution) {
+        SoapUITestStepResult(TestStepResultReport testStepResultReport, SoapUIRecipeExecution execution) {
             super(testStepResultReport);
             this.execution = execution;
         }

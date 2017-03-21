@@ -36,17 +36,19 @@ import java.util.Set;
  */
 
 public class JUnitReport {
-    TestsuiteDocument testsuiteDoc;
-    int noofTestCases, noofFailures, noofErrors;
-    double totalTime;
-    StringBuffer systemOut;
-    StringBuffer systemErr;
+    private TestsuiteDocument testsuiteDoc;
+    private int noofTestCases;
+    private int noofFailures;
+    private int noofErrors;
+    private double totalTime;
+    private StringBuilder systemOut;
+    private StringBuilder systemErr;
 
-    boolean includeTestProperties;
+    private boolean includeTestProperties;
 
     public JUnitReport() {
-        systemOut = new StringBuffer();
-        systemErr = new StringBuffer();
+        systemOut = new StringBuilder();
+        systemErr = new StringBuilder();
 
         testsuiteDoc = TestsuiteDocument.Factory.newInstance();
         Testsuite testsuite = testsuiteDoc.addNewTestsuite();
@@ -59,7 +61,7 @@ public class JUnitReport {
     }
 
     public void setTotalTime(double time) {
-        testsuiteDoc.getTestsuite().setTime(Double.toString(Math.round(time * 1000) / 1000));
+        testsuiteDoc.getTestsuite().setTime(Double.toString(Math.round(time * 1000) / 1000d));
     }
 
     public void setTestSuiteName(String name) {
@@ -94,7 +96,7 @@ public class JUnitReport {
         testsuiteDoc.getTestsuite().setSystemErr(systemerr);
     }
 
-    public Testcase addTestCase(String name, double time, HashMap<String, String> testProperties) {
+    public Testcase addTestCase(String name, double time, Map<String, String> testProperties) {
         Testcase testcase = testsuiteDoc.getTestsuite().addNewTestcase();
         testcase.setName(name);
         testcase.setTime(String.valueOf(time / 1000));
@@ -106,15 +108,16 @@ public class JUnitReport {
         return testcase;
     }
 
-    private void setTestProperties(HashMap<String, String> testProperties, Testcase testcase) {
-        if(!this.includeTestProperties)
+    private void setTestProperties(Map<String, String> testProperties, Testcase testcase) {
+        if (!this.includeTestProperties) {
             return;
+        }
 
         Properties properties = testcase.addNewProperties();
         setProperties(properties, testProperties);
     }
 
-    public Testcase addTestCaseWithFailure(String name, double time, String failure, String stacktrace, HashMap<String, String> testProperties) {
+    public Testcase addTestCaseWithFailure(String name, double time, String failure, String stacktrace, Map<String, String> testProperties) {
         Testcase testcase = testsuiteDoc.getTestsuite().addNewTestcase();
         testcase.setName(name);
         testcase.setTime(String.valueOf(time / 1000));
@@ -131,7 +134,7 @@ public class JUnitReport {
         return testcase;
     }
 
-    public Testcase addTestCaseWithError(String name, double time, String error, String stacktrace, HashMap<String, String> testProperties) {
+    public Testcase addTestCaseWithError(String name, double time, String error, String stacktrace, Map<String, String> testProperties) {
         Testcase testcase = testsuiteDoc.getTestsuite().addNewTestcase();
         testcase.setName(name);
         testcase.setTime(String.valueOf(time / 1000));
@@ -159,7 +162,7 @@ public class JUnitReport {
         }
     }
 
-    private void setProperties(Properties properties, HashMap<String, String> propertiesToSet) {
+    private void setProperties(Properties properties, Map<String, String> propertiesToSet) {
         for (Map.Entry<String, String> stringStringEntry : propertiesToSet.entrySet()) {
             Property prop = properties.addNewProperty();
             prop.setName(stringStringEntry.getKey());
