@@ -1,9 +1,6 @@
 package com.smartbear.readyapi4j;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.smartbear.readyapi.client.model.DataSourceTestStep;
 import com.smartbear.readyapi.client.model.DelayTestStep;
@@ -20,7 +17,7 @@ import com.smartbear.readyapi.client.model.SoapRequestTestStep;
  * Jackson type resolver for parsing teststeps in JSON recipes into correct TestStep types
  */
 
-class TestStepTypeResolver implements TypeIdResolver {
+class TestStepTypeResolver extends AbstractTypeIdResolver {
     private static final String REST_REQUEST_TYPE = "REST Request";
     private static final String SOAP_REQUEST_TYPE = "SOAP Request";
     private static final String DATA_SOURCE_TYPE = "DataSource";
@@ -31,34 +28,9 @@ class TestStepTypeResolver implements TypeIdResolver {
     private static final String PROPERTIES_TYPE = "Properties";
     private static final String SOAP_MOCK_RESPONSE_TYPE = "SOAPMockResponse";
 
-    private JavaType baseType;
-
     @Override
-    public void init(JavaType javaType) {
-        baseType = javaType;
-    }
-
-    @Override
-    public String idFromValue(Object object) {
-        return idFromValueAndType(object, object.getClass());
-    }
-
-    @Override
-    public String idFromValueAndType(Object object, Class<?> clazz) {
-        try {
-            return (String) clazz.getField("type").get(object);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @Override
-    public String idFromBaseType() {
-        return idFromValueAndType(null, baseType.getRawClass());
-    }
-
-    private JavaType typeFromId(String type) {
-        switch (type) {
+    JavaType typeFromId(String typeId) {
+        switch (typeId) {
             case DATA_SOURCE_TYPE:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, DataSourceTestStep.class);
             case REST_REQUEST_TYPE:
@@ -80,21 +52,6 @@ class TestStepTypeResolver implements TypeIdResolver {
             default:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, PluginTestStep.class);
         }
-    }
-
-    @Override
-    public JavaType typeFromId(DatabindContext databindContext, String type) {
-        return typeFromId(type);
-    }
-
-    @Override
-    public String getDescForKnownTypeIds() {
-        return null;
-    }
-
-    @Override
-    public JsonTypeInfo.Id getMechanism() {
-        return JsonTypeInfo.Id.CUSTOM;
     }
 }
 
