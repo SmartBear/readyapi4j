@@ -24,8 +24,8 @@ import com.smartbear.readyapi.client.model.XQueryContainsAssertion;
 
 class AssertionTypeResolver extends AbstractTypeIdResolver {
     @Override
-    JavaType typeFromId(String type) {
-        switch (type) {
+    JavaType typeFromId(String typeId) {
+        switch (typeId) {
             case AssertionNames.VALID_HTTP_STATUS_CODES:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, ValidHttpStatusCodesAssertion.class);
             case AssertionNames.INVALID_HTTP_STATUS_CODES:

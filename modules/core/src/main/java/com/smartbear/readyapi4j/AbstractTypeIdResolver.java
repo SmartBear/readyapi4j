@@ -32,11 +32,11 @@ public abstract class AbstractTypeIdResolver implements TypeIdResolver {
         return idFromValueAndType(null, baseType.getRawClass());
     }
 
-    abstract JavaType typeFromId(String type);
+    abstract JavaType typeFromId(String typeId);
 
     @Override
-    public JavaType typeFromId(DatabindContext databindContext, String type) {
-        return typeFromId(type);
+    public JavaType typeFromId(DatabindContext databindContext, String typeId) {
+        return typeFromId(typeId);
     }
 
     @Override

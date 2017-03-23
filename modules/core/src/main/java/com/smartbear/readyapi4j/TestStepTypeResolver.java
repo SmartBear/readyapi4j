@@ -29,8 +29,8 @@ class TestStepTypeResolver extends AbstractTypeIdResolver {
     private static final String SOAP_MOCK_RESPONSE_TYPE = "SOAPMockResponse";
 
     @Override
-    JavaType typeFromId(String type) {
-        switch (type) {
+    JavaType typeFromId(String typeId) {
+        switch (typeId) {
             case DATA_SOURCE_TYPE:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, DataSourceTestStep.class);
             case REST_REQUEST_TYPE:
