@@ -45,6 +45,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
     private static final Logger logger = LoggerFactory.getLogger(CodegenBasedTestServerApi.class);
     private static final String SWAGGER_RESOURCE_PATH = ServerDefaults.SERVICE_BASE_PATH + "/executions/swagger";
+    private static final String APPLICATION_JSON = "application/json";
 
     private ApiClientWrapper apiClient;
 
@@ -55,8 +56,6 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     public CodegenBasedTestServerApi(ApiClientWrapper apiClientWrapper) {
         apiClient = apiClientWrapper;
     }
-
-    private static final String APPLICATION_JSON = "application/json";
 
     /**
      * Execute submitted test recipe
@@ -146,8 +145,8 @@ public class CodegenBasedTestServerApi implements TestServerApi {
                 formParams.put(certificateFile.getName(), certificateFile);
             } else {
                 logger.warn("Client certificate file not found, file path: " + clientCertFileName +
-                    ". The TestServer execution will fail unless file exists on TestServer and " +
-                    "the file path has been added to allowed file paths.");
+                        ". The TestServer execution will fail unless file exists on TestServer and " +
+                        "the file path has been added to allowed file paths.");
             }
         }
     }
@@ -395,7 +394,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
     private File writeCustomPropertiesToFile(Collection<CustomProperties> values) throws ApiException {
         try {
-            String content = (String) getApiClient().serialize(values, "application/json");
+            String content = (String) getApiClient().serialize(values, APPLICATION_JSON);
             File tempFile = File.createTempFile("custom-properties", ".json");
             Files.write(tempFile.toPath(), content.getBytes(UTF_8));
             tempFile.deleteOnExit();
@@ -416,7 +415,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         }
 
         return invokeAPI(ServerDefaults.SERVICE_BASE_PATH + "/executions/project", POST.name(), request.getCustomPropertiesMap().values(),
-                "application/json", queryParams, null);
+                APPLICATION_JSON, queryParams, null);
     }
 
     private List<Pair> buildQueryParameters(boolean async, String testCaseName, String testSuiteName, String environment) {

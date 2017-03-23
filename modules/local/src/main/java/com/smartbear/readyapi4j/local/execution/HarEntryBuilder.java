@@ -38,14 +38,14 @@ public class HarEntryBuilder {
                 .method(messageExchange.getProperty("Method"))
                 .url(messageExchange.getEndpoint());
 
-        getStatusValue(messageExchange, harRequest).ifPresent(harRequest::httpVersion);
+        getStatusValue(messageExchange).ifPresent(harRequest::httpVersion);
         if (shouldCreatePostData(messageExchange)) {
             harRequest.postData(createPostData(messageExchange));
         }
         return harRequest;
     }
 
-    private Optional<String> getStatusValue(MessageExchange messageExchange, HarRequest harRequest) {
+    private Optional<String> getStatusValue(MessageExchange messageExchange) {
         List<String> statusHeader = messageExchange.getResponseHeaders().get("#status#");
         if (statusHeader != null && !statusHeader.isEmpty()) {
             String[] values = statusHeader.get(0).split(" ");
@@ -80,8 +80,8 @@ public class HarEntryBuilder {
                 .headersSize(-1L)
                 .headers(createHarHeaders(responseHeaders));
 
-        List<String> location = responseHeaders.get("Location");
-        String redirectURL = location != null && !location.isEmpty() ? location.get(0) : "";
+        List<String> locationValues = responseHeaders != null ? responseHeaders.get("Location") : null;
+        String redirectURL = locationValues != null && !locationValues.isEmpty() ? locationValues.get(0) : "";
         harResponse.redirectURL(redirectURL);
 
         try {
@@ -103,9 +103,7 @@ public class HarEntryBuilder {
         HarPostData harPostData = new HarPostData()
                 .mimeType(request != null ? request.getEncoding() : "");
 
-        return harPostData
-                .text(messageExchange.getRequestContent())
-                ;
+        return harPostData.text(messageExchange.getRequestContent());
     }
 
     private List<HarHeader> createHarHeaders(StringToStringsMap headersMap) {

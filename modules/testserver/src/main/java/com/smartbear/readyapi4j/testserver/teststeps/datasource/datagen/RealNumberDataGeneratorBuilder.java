@@ -46,7 +46,7 @@ public class RealNumberDataGeneratorBuilder extends AbstractDataGeneratorBuilder
      * @return RealNumberDataGeneratorBuilder
      */
     public RealNumberDataGeneratorBuilder incrementBy(double incrementBy) {
-        realNumberDataGenerator.setIncrementBy(new BigDecimal(incrementBy));
+        realNumberDataGenerator.setIncrementBy(BigDecimal.valueOf(incrementBy));
         return this;
     }
 

@@ -52,7 +52,7 @@ public class ApiClientWrapper extends ApiClient {
         Map<String, String> headerParams = new HashMap<>();
         updateAuthParams(authNames, queryParams, headerParams);
 
-        Client client = createClient();
+        createClientIfNull();
         if (client == null) {
             throw new IllegalStateException("Could not create client instance");
         }
@@ -66,8 +66,8 @@ public class ApiClientWrapper extends ApiClient {
             builder = client.resource(getBasePath() + path + queryString).accept(accept);
         }
 
-        for (String key : headerParams.keySet()) {
-            builder = builder.header(key, headerParams.get(key));
+        for (Map.Entry<String, String> headerParam : headerParams.entrySet()) {
+            builder = builder.header(headerParam.getKey(), headerParam.getValue());
         }
 
         Object requestBody = body;
@@ -154,7 +154,7 @@ public class ApiClientWrapper extends ApiClient {
         return null;
     }
 
-    private Client createClient() {
+    private void createClientIfNull() {
         if (this.client == null) {
             try {
                 ClientConfig clientConfig = getClientConfigWithoutCertificateValidation();
@@ -163,7 +163,6 @@ public class ApiClientWrapper extends ApiClient {
                 throw new IllegalStateException("Couldn't create instance of Client.", e);
             }
         }
-        return this.client;
     }
 
     public Object serialize(Object obj, String contentType) throws ApiException {

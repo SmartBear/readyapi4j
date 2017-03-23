@@ -73,7 +73,7 @@ public class RealNumberDataGenDataSourceTest {
         RealNumberDataGenerator dataGenerator = (RealNumberDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Real"));
         assertThat(dataGenerator.getGenerationMode(), is(RealNumberDataGenerator.GenerationModeEnum.SEQUENTIAL));
-        assertThat(dataGenerator.getIncrementBy(), is(new BigDecimal(1.3)));
+        assertThat(dataGenerator.getIncrementBy(), is(BigDecimal.valueOf(1.3)));
     }
 
     private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {
