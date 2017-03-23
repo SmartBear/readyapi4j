@@ -30,7 +30,7 @@ class RestRequestDslTest {
         TestRecipe recipe = recipe {
             name recipeName
         }
-        assert recipe.testCase.name == recipeName
+        assert recipe.name == recipeName
     }
 
     @Test

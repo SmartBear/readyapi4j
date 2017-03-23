@@ -27,6 +27,10 @@ public class TestRecipe {
         return testCase;
     }
 
+    public String getName() {
+        return testCase.getName();
+    }
+
     public ExtractorData getExtractorData() {
         return extractorData;
     }
