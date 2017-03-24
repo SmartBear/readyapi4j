@@ -82,6 +82,17 @@ public class TestRecipeBuilder {
         return newTestRecipe(builders).buildTestRecipe();
     }
 
+    /**
+     * Builds a recipe for the specified TestStep builders
+     *
+     * @param name the name of the recipe
+     * @param builders the TestStep builders
+     * @return the resulting TestRecipe
+     */
+    public static TestRecipe buildRecipe(String name, TestStepBuilder... builders) {
+        return newTestRecipe(builders).named( name).buildTestRecipe();
+    }
+
     private static ObjectMapper getObjectMapper() {
         if (objectMapper == null) {
             objectMapper = new ObjectMapper();

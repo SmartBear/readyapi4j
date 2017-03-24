@@ -10,7 +10,6 @@ import java.util.Optional;
  */
 
 public interface RecipeExecutionResult {
-
     /**
      * @return the time it took to execute this execution
      */

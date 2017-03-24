@@ -2,11 +2,14 @@ package com.smartbear.readyapi4j.support;
 
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.RecipeFilter;
+import io.swagger.util.Json;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * RecipeFilter that writes all recipes as files to the specified folder
@@ -40,12 +43,44 @@ public class RecipeLogger implements RecipeFilter {
                 directory.mkdirs();
             }
 
-            File file = File.createTempFile(prefix, "." + extension, directory);
+            File file;
+            String name = testRecipe.getName();
+            if(StringUtils.isNotBlank(name)){
+                file = new File( directory, createFileName( name, '_') + "." + extension );
+            }
+            else {
+                file = File.createTempFile(prefix, "." + extension, directory);
+            }
             try ( FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-                fileOutputStream.write(testRecipe.toString().getBytes());
+                fileOutputStream.write(prettyPrintRecipe(testRecipe).getBytes());
             }
         } catch (Exception e) {
             LOG.error("Failed to write recipe to file", e);
         }
+    }
+
+    private String prettyPrintRecipe(TestRecipe testRecipe) {
+        try {
+            return Json.pretty( Json.mapper().readTree(testRecipe.toString()));
+        } catch (IOException e) {
+            return testRecipe.toString();
+        }
+    }
+
+    public static String createFileName(String str, char whitespaceChar) {
+        StringBuilder result = new StringBuilder();
+
+        for(int c = 0; c < str.length(); ++c) {
+            char ch = str.charAt(c);
+            if(Character.isWhitespace(ch) && whitespaceChar != 0) {
+                result.append(whitespaceChar);
+            } else if(Character.isLetterOrDigit(ch)) {
+                result.append(ch);
+            } else if(ch == whitespaceChar) {
+                result.append(ch);
+            }
+        }
+
+        return result.toString();
     }
 }

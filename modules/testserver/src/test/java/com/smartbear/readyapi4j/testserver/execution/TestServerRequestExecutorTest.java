@@ -50,7 +50,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
         String executionID = "the_id";
         ProjectResultReport startReport = ExecutionTestHelper.makeRunningReport(executionID);
         ProjectResultReport endReport = ExecutionTestHelper.makeFinishedReport(executionID);
-        when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(startReport);
+        when(apiWrapper.postTestRecipe(eq(recipeToSubmit), eq(true), any(HttpBasicAuth.class))).thenReturn(startReport);
         when(apiWrapper.getExecutionStatus(eq(executionID), any(HttpBasicAuth.class))).thenReturn(endReport);
 
         Execution execution = recipeExecutor.submitRecipe(recipeToSubmit);
@@ -66,7 +66,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
         String executionID = "the_id";
         ProjectResultReport startReport = ExecutionTestHelper.makeRunningReport(executionID);
         ProjectResultReport endReport = ExecutionTestHelper.makeFinishedReport(executionID);
-        when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(startReport);
+        when(apiWrapper.postTestRecipe(eq(recipeToSubmit), eq(true), any(HttpBasicAuth.class))).thenReturn(startReport);
         when(apiWrapper.getExecutionStatus(eq(executionID), any(HttpBasicAuth.class))).thenReturn(endReport);
         ExecutionListener executionListener = mock(ExecutionListener.class);
 
@@ -90,7 +90,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
     @Test
     public void executesRecipeSynchronously() throws Exception {
         ProjectResultReport report = ExecutionTestHelper.makeFinishedReport("execution_ID");
-        when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
+        when(apiWrapper.postTestRecipe(eq(recipeToSubmit), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
 
         Execution execution = recipeExecutor.executeRecipe(recipeToSubmit);
         assertThat(execution.getCurrentReport(), is(report));
@@ -99,7 +99,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
     @Test
     public void notifiesListenerSynchronousExecutionLifecycleEvents() throws Exception {
         ProjectResultReport report = ExecutionTestHelper.makeFinishedReport("execution_ID");
-        when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
+        when(apiWrapper.postTestRecipe(eq(recipeToSubmit), eq(false), any(HttpBasicAuth.class))).thenReturn(report);
         ExecutionListener executionListener = mock(ExecutionListener.class);
 
         recipeExecutor.addExecutionListener(executionListener);
@@ -124,7 +124,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
     @Test
     public void cancelsExecutions() throws Exception {
         ProjectResultReport runningReport = ExecutionTestHelper.makeRunningReport("execution_ID");
-        when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(runningReport);
+        when(apiWrapper.postTestRecipe(eq(recipeToSubmit), eq(true), any(HttpBasicAuth.class))).thenReturn(runningReport);
         ProjectResultReport cancelledReport = ExecutionTestHelper.makeCancelledReport("execution_ID");
         when(apiWrapper.cancelExecution(eq(cancelledReport.getExecutionID()), any(HttpBasicAuth.class))).thenReturn(cancelledReport);
         when(apiWrapper.getExecutionStatus(eq(cancelledReport.getExecutionID()), any(HttpBasicAuth.class))).thenReturn(cancelledReport);
@@ -143,7 +143,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
                 .buildTestRecipe();
 
         ProjectResultReport pendingReport = ExecutionTestHelper.makePendingReportWithUnresolvedFiles("executionId", CLIENT_CERTIFICATE_FILE_NAME);
-        when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
+        when(apiWrapper.postTestRecipe(eq(testRecipe), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
 
         recipeExecutor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find client certificate file: " + CLIENT_CERTIFICATE_FILE_NAME));
         try {
@@ -163,7 +163,7 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
                 .buildTestRecipe();
 
         ProjectResultReport pendingReport = ExecutionTestHelper.makePendingReportWithUnresolvedFiles("executionId", "clientCertificate.jks");
-        when(apiWrapper.postTestRecipe(eq(testRecipe.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
+        when(apiWrapper.postTestRecipe(eq(testRecipe), eq(true), any(HttpBasicAuth.class))).thenReturn(pendingReport);
 
         recipeExecutor.addExecutionListener(createExecutionListenerWithExpectedErrorMessage("Couldn't find test step client certificate file: clientCertificate.jks"));
 
@@ -174,7 +174,6 @@ public class TestServerRequestExecutorTest extends ProjectExecutionTestBase {
             e.printStackTrace();
         }
     }
-
 
     private ExecutionListener createExecutionListenerWithExpectedErrorMessage(final String expectedErrorMessage) {
         return new ExecutionListener() {
