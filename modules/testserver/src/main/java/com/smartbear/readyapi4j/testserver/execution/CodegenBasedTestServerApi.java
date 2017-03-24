@@ -12,6 +12,7 @@ import com.smartbear.readyapi.client.model.ProjectResultReports;
 import com.smartbear.readyapi.client.model.RequestTestStepBase;
 import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi.client.model.TestStep;
+import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
 import com.sun.jersey.api.client.GenericType;
 import io.swagger.client.Pair;
@@ -60,7 +61,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     /**
      * Execute submitted test recipe
      *
-     * @param testCase test case to run
+     * @param testRecipe test recipe to run
      * @param async    if true server will return executionID immediately without waiting for execution to complete.
      *                 If false, it will wait for the execution to finish before it returns executionId and execution results.
      *                 Default is true;
@@ -68,12 +69,12 @@ public class CodegenBasedTestServerApi implements TestServerApi {
      * @return ProjectResultReport execution result
      */
     @Override
-    public ProjectResultReport postTestRecipe(TestCase testCase, boolean async, HttpBasicAuth auth) throws ApiException {
+    public ProjectResultReport postTestRecipe(TestRecipe testRecipe, boolean async, HttpBasicAuth auth) throws ApiException {
         // verify the required parameter 'testCase' is set
-        if (testCase == null) {
-            throw new ApiException(400, "Missing the required parameter 'testCase' when calling postTestCase");
+        if (testRecipe == null) {
+            throw new ApiException(400, "Missing the required parameter 'testRecipe' when calling postTestRecipe");
         }
-        verifyDataSourceFilesExist(testCase);
+        verifyDataSourceFilesExist(testRecipe.getTestCase());
         setAuthentication(auth);
 
         // create path and map variables
@@ -85,8 +86,8 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
         Map<String, File> formParams = new HashMap<>();
 
-        ProjectResultReport projectResultReport = invokeAPI(path, POST.name(), testCase, APPLICATION_JSON, queryParams, formParams);
-        return sendPendingFiles(testCase, projectResultReport, queryParams);
+        ProjectResultReport projectResultReport = invokeAPI(path, POST.name(), testRecipe.getTestCase(), APPLICATION_JSON, queryParams, formParams);
+        return sendPendingFiles(testRecipe.getTestCase(), projectResultReport, queryParams);
     }
 
     private void verifyDataSourceFilesExist(TestCase testCase) {
