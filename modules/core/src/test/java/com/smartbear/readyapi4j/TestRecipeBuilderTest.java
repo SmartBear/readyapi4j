@@ -59,6 +59,13 @@ public class TestRecipeBuilderTest {
     }
 
     @Test
+    public void buildsRecipeWithName() throws Exception {
+        String recipeName = "AuthenticationRecipe";
+        TestRecipe testRecipe = newTestRecipe().named(recipeName).buildTestRecipe();
+        assertThat(testRecipe.getName(), is(recipeName));
+    }
+
+    @Test
     public void buildRecipeWithTestCaseProperties() {
         TestRecipe recipe = newTestRecipe().withProperties(property("test", "test")).buildTestRecipe();
         assertThat(recipe.getTestCase().getProperties().size(), is(1));

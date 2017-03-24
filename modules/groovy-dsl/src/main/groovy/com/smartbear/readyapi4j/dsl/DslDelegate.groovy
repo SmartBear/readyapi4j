@@ -23,6 +23,10 @@ class DslDelegate {
         this.testRecipeBuilder = testRecipeBuilder
     }
 
+    void name(String recipeName) {
+        testRecipeBuilder.named(recipeName)
+    }
+
     void groovyScriptStep(String scriptText, String testStepName = null) {
         GroovyScriptTestStepBuilder scriptTestStepBuilder = TestSteps.groovyScriptStep(scriptText)
         scriptTestStepBuilder.named(testStepName)
@@ -72,6 +76,7 @@ class DslDelegate {
     void pluginProvidedStep(@DelegatesTo(PluginTestStepDelegate) Closure pluginTestStepDefinition) {
         PluginTestStepDelegate delegate = new PluginTestStepDelegate()
         pluginTestStepDefinition.delegate = delegate
+        pluginTestStepDefinition.resolveStrategy = Closure.DELEGATE_FIRST
         pluginTestStepDefinition.call()
 
         PluginTestStepBuilder pluginTestStepBuilder = TestSteps.pluginTestStep(delegate.type)
@@ -90,6 +95,7 @@ class DslDelegate {
 
         SoapRequestDelegate delegate = new SoapRequestDelegate(soapRequestStepBuilder)
         soapRequestDefinition.delegate = delegate
+        soapRequestDefinition.resolveStrategy = Closure.DELEGATE_FIRST
         soapRequestDefinition.call()
         testRecipeBuilder.addStep(soapRequestStepBuilder)
     }
@@ -99,6 +105,7 @@ class DslDelegate {
 
         SoapMockResponseDelegate delegate = new SoapMockResponseDelegate(builder)
         soapMockResponseDefinition.delegate = delegate
+        soapMockResponseDefinition.resolveStrategy = Closure.DELEGATE_FIRST
         soapMockResponseDefinition.call()
 
         testRecipeBuilder.addStep(builder)
@@ -107,6 +114,7 @@ class DslDelegate {
     void jdbcRequest(@DelegatesTo(JdbcRequestDelegate) Closure jdbcRequestDefinition) {
         JdbcRequestDelegate delegate = new JdbcRequestDelegate()
         jdbcRequestDefinition.delegate = delegate
+        jdbcRequestDefinition.resolveStrategy = Closure.DELEGATE_FIRST
         jdbcRequestDefinition.call()
 
         JdbcRequestTestStepBuilder builder = new JdbcRequestTestStepBuilder(delegate.driver, delegate.connectionString,
@@ -124,6 +132,7 @@ class DslDelegate {
         if (configuration) {
             RestRequestDelegate delegate = new RestRequestDelegate(requestBuilder)
             configuration.delegate = delegate
+            configuration.resolveStrategy = Closure.DELEGATE_FIRST
             configuration.call()
         }
         testRecipeBuilder.addStep(requestBuilder)

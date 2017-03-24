@@ -25,6 +25,15 @@ class RestRequestDslTest {
     public static final String URI = "/uri_to_get"
 
     @Test
+    void buildsRecipeWithName() throws Exception {
+        String recipeName = 'DemoRecipe'
+        TestRecipe recipe = recipe {
+            name recipeName
+        }
+        assert recipe.name == recipeName
+    }
+
+    @Test
     void buildsRecipeWithGET() throws Exception {
         TestRecipe recipe = recipe {
             get URI
