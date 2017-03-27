@@ -81,6 +81,11 @@ public class ExecutionLogger implements ExecutionListener {
                 name = "TestSuite " + testSuiteResultReports.get(0).getTestSuiteName();
             }
         }
+
+        if (execution.getCurrentStatus() == ProjectResultReport.StatusEnum.FAILED) {
+            name += "-" + execution.getCurrentStatus().name();
+        }
+
         return name;
     }
 
