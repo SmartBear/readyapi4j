@@ -68,19 +68,6 @@ public class RecipeLogger implements RecipeFilter {
     }
 
     public static String createFileName(String str, char whitespaceChar) {
-        StringBuilder result = new StringBuilder();
-
-        for(int c = 0; c < str.length(); ++c) {
-            char ch = str.charAt(c);
-            if(Character.isWhitespace(ch) && whitespaceChar != 0) {
-                result.append(whitespaceChar);
-            } else if(Character.isLetterOrDigit(ch)) {
-                result.append(ch);
-            } else if(ch == whitespaceChar) {
-                result.append(ch);
-            }
-        }
-
-        return result.toString();
+        return str.replaceAll("\\s", String.valueOf(whitespaceChar));
     }
 }

@@ -26,7 +26,7 @@ public class ExecutionLogger implements ExecutionListener {
 
     private final static Logger LOG = LoggerFactory.getLogger(ExecutionLogger.class);
 
-    public static final String DEFAULT_EXTENSION = "json";
+    public static final String DEFAULT_EXTENSION = "har";
 
     private final String targetFolder;
     private final String extension;
@@ -54,7 +54,7 @@ public class ExecutionLogger implements ExecutionListener {
             }
 
             File file;
-            String name = getExecutionName(execution);
+            String name = createExecutionName(execution);
 
             if(StringUtils.isNotBlank(name)){
                 file = new File( directory, createFileName( name, '_') + "." + extension );
@@ -71,7 +71,7 @@ public class ExecutionLogger implements ExecutionListener {
         }
     }
 
-    private String getExecutionName(Execution execution) {
+    private String createExecutionName(Execution execution) {
         ProjectResultReport currentReport = execution.getCurrentReport();
         String name = currentReport.getProjectName();
         List<TestSuiteResultReport> testSuiteResultReports = currentReport.getTestSuiteResultReports();
