@@ -33,7 +33,24 @@ public class RecipeExecutionFacade {
 
     public static RecipeExecutionResult executeRecipe(TestStepBuilder... testStepBuilders) {
         TestRecipe recipe = TestRecipeBuilder.newTestRecipe(testStepBuilders).buildTestRecipe();
+        return execute(recipe);
+    }
 
+    /**
+     * Builds and executes a TestRecipe from the specified TestStepBuilders using either a local or remote
+     * executor as configured. The recipe is always executed synchronously.
+     *
+     * @param name the name of the recipe
+     * @param testStepBuilders the builds for the TestSteps to execute
+     * @return the result for executed recipe
+     */
+
+    public static RecipeExecutionResult executeRecipe(String name, TestStepBuilder... testStepBuilders) {
+        TestRecipe recipe = TestRecipeBuilder.newTestRecipe(testStepBuilders).named(name).buildTestRecipe();
+        return execute(recipe);
+    }
+
+    private synchronized static RecipeExecutionResult execute(TestRecipe recipe) {
         if (executor == null) {
             executor = RecipeExecutorBuilder.buildDefault();
         }

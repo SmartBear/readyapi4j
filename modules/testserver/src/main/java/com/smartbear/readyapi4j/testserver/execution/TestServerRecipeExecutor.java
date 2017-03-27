@@ -1,6 +1,5 @@
 package com.smartbear.readyapi4j.testserver.execution;
 
-import com.smartbear.readyapi.client.model.TestCase;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.execution.ExecutionMode;
@@ -47,7 +46,7 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
             recipeFilter.filterRecipe(recipe);
         }
 
-        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), recipe.getExtractorData(), true);
+        TestServerExecution execution = doExecuteTestCase(recipe, recipe.getExtractorData(), true);
         notifyExecutionStarted(execution);
         return execution;
     }
@@ -58,17 +57,17 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
             recipeFilter.filterRecipe(recipe);
         }
 
-        TestServerExecution execution = doExecuteTestCase(recipe.getTestCase(), recipe.getExtractorData(), false);
+        TestServerExecution execution = doExecuteTestCase(recipe, recipe.getExtractorData(), false);
         notifyExecutionFinished(execution);
         return execution;
     }
 
-    private TestServerExecution doExecuteTestCase(TestCase testCase, ExtractorData optionalExtractorData, boolean async)  {
+    private TestServerExecution doExecuteTestCase(TestRecipe testRecipe, ExtractorData optionalExtractorData, boolean async)  {
         try {
             Optional<ExtractorData> extractorDataOptional = Optional.ofNullable(optionalExtractorData);
             extractorDataOptional.ifPresent(extractorData -> extractorDataList.add(extractorData));
-            TestServerExecution execution = testServerClient.postTestRecipe(testCase, async);
-            cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), testCase);
+            TestServerExecution execution = testServerClient.postTestRecipe(testRecipe, async);
+            cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), testRecipe.getTestCase());
             return execution;
         } catch (ApiException e) {
             notifyErrorOccurred(e);

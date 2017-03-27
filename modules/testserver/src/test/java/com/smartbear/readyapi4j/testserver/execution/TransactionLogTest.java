@@ -36,7 +36,7 @@ public class TransactionLogTest extends ProjectExecutionTestBase {
         String executionID = "the_id";
         ProjectResultReport startReport = ExecutionTestHelper.makeRunningReport(executionID);
         ProjectResultReport endReport = ExecutionTestHelper.makeFinishedReport(executionID);
-        when(apiWrapper.postTestRecipe(eq(recipeToSubmit.getTestCase()), eq(true), any(HttpBasicAuth.class))).thenReturn(startReport);
+        when(apiWrapper.postTestRecipe(eq(recipeToSubmit), eq(true), any(HttpBasicAuth.class))).thenReturn(startReport);
         when(apiWrapper.getExecutionStatus(eq(executionID), any(HttpBasicAuth.class))).thenReturn(endReport);
 
         HarLogRoot harLog = Json.mapper().readValue(new FileInputStream("src/test/resources/har-log.json"), HarLogRoot.class);

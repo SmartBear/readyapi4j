@@ -3,7 +3,7 @@ package com.smartbear.readyapi4j.testserver.execution;
 import com.smartbear.readyapi.client.model.HarLogRoot;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
 import com.smartbear.readyapi.client.model.ProjectResultReports;
-import com.smartbear.readyapi.client.model.TestCase;
+import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.Execution;
 import io.swagger.client.auth.HttpBasicAuth;
 
@@ -148,8 +148,8 @@ public class TestServerClient {
         return baseUrl;
     }
 
-    TestServerExecution postTestRecipe(TestCase testCase, boolean async) {
-        ProjectResultReport projectResultReport = apiStub.postTestRecipe(testCase, async, authentication);
+    TestServerExecution postTestRecipe(TestRecipe testRecipe, boolean async) {
+        ProjectResultReport projectResultReport = apiStub.postTestRecipe(testRecipe, async, authentication);
         return new TestServerExecution(apiStub, authentication, projectResultReport);
     }
 
