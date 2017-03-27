@@ -65,7 +65,7 @@ public class ExecutionLogger implements ExecutionListener {
         result.put( "status", testStepResult.getAssertionStatus());
 
         if( testStepResult.getMessages() != null && !testStepResult.getMessages().isEmpty()){
-            result.put( "messsages", testStepResult.getMessages());
+            result.put( "messages", testStepResult.getMessages());
         }
         if( testStepResult.getHarEntry() != null ) {
             result.put("harEntry", testStepResult.getHarEntry());
