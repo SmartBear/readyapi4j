@@ -48,23 +48,22 @@ public class ExecutionLogger implements ExecutionListener {
                 directory.mkdirs();
             }
 
-            List<Map<Object,Object>> entries = Lists.newArrayList();
-            for(TestStepResult result : execution.getExecutionResult().getTestStepResults()){
-                entries.add( getLogDataForResult(result));
+            List<Map<Object, Object>> entries = Lists.newArrayList();
+            for (TestStepResult result : execution.getExecutionResult().getTestStepResults()) {
+                entries.add(getLogDataForResult(result));
             }
 
             File file;
             String name = createExecutionName(execution);
 
-            if(StringUtils.isNotBlank(name)){
-                file = new File( directory, createFileName( name, '_') + "." + extension );
-            }
-            else {
-                file = File.createTempFile( "execution-" + execution.getId(), "." + extension, directory);
+            if (StringUtils.isNotBlank(name)) {
+                file = new File(directory, createFileName(name, '_') + "." + extension);
+            } else {
+                file = File.createTempFile("execution-" + execution.getId(), "." + extension, directory);
             }
 
-            try ( FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-                fileOutputStream.write( Json.pretty(entries).getBytes());
+            try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                fileOutputStream.write(Json.pretty(entries).getBytes());
             }
         } catch (Exception e) {
             LOG.error("Failed to write response logs to file", e);
@@ -75,28 +74,27 @@ public class ExecutionLogger implements ExecutionListener {
         ProjectResultReport currentReport = execution.getCurrentReport();
         String name = currentReport.getProjectName();
         List<TestSuiteResultReport> testSuiteResultReports = currentReport.getTestSuiteResultReports();
-        if( testSuiteResultReports.size() == 1 ) {
-            if( testSuiteResultReports.get(0).getTestCaseResultReports().size()==1) {
+        if (testSuiteResultReports.size() == 1) {
+            if (testSuiteResultReports.get(0).getTestCaseResultReports().size() == 1) {
                 name = "TestCase " + testSuiteResultReports.get(0).getTestCaseResultReports().get(0).getTestCaseName();
-            }
-            else {
-               name = "TestSuite " + testSuiteResultReports.get(0).getTestSuiteName();
+            } else {
+                name = "TestSuite " + testSuiteResultReports.get(0).getTestSuiteName();
             }
         }
         return name;
     }
 
-    private Map<Object,Object> getLogDataForResult(TestStepResult testStepResult) {
-        Map<Object,Object> result = Maps.newConcurrentMap();
+    private Map<Object, Object> getLogDataForResult(TestStepResult testStepResult) {
+        Map<Object, Object> result = Maps.newConcurrentMap();
 
-        result.put( "testStep", testStepResult.getTestStepName());
-        result.put( "timeTaken", testStepResult.getTimeTaken() );
-        result.put( "status", testStepResult.getAssertionStatus());
+        result.put("testStep", testStepResult.getTestStepName());
+        result.put("timeTaken", testStepResult.getTimeTaken());
+        result.put("status", testStepResult.getAssertionStatus());
 
-        if( testStepResult.getMessages() != null && !testStepResult.getMessages().isEmpty()){
-            result.put( "messsages", testStepResult.getMessages());
+        if (testStepResult.getMessages() != null && !testStepResult.getMessages().isEmpty()) {
+            result.put("messsages", testStepResult.getMessages());
         }
-        if( testStepResult.getHarEntry() != null ) {
+        if (testStepResult.getHarEntry() != null) {
             result.put("harEntry", testStepResult.getHarEntry());
         }
 

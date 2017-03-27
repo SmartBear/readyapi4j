@@ -45,13 +45,12 @@ public class RecipeLogger implements RecipeFilter {
 
             File file;
             String name = testRecipe.getName();
-            if(StringUtils.isNotBlank(name)){
-                file = new File( directory, createFileName( name, '_') + "." + extension );
-            }
-            else {
+            if (StringUtils.isNotBlank(name)) {
+                file = new File(directory, createFileName(name, '_') + "." + extension);
+            } else {
                 file = File.createTempFile(prefix, "." + extension, directory);
             }
-            try ( FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
                 fileOutputStream.write(prettyPrintRecipe(testRecipe).getBytes());
             }
         } catch (Exception e) {
@@ -61,7 +60,7 @@ public class RecipeLogger implements RecipeFilter {
 
     private String prettyPrintRecipe(TestRecipe testRecipe) {
         try {
-            return Json.pretty( Json.mapper().readTree(testRecipe.toString()));
+            return Json.pretty(Json.mapper().readTree(testRecipe.toString()));
         } catch (IOException e) {
             return testRecipe.toString();
         }
