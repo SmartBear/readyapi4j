@@ -55,6 +55,13 @@
         </license>
     </licenses>
 
+    <repositories>
+        <repository>
+            <id>smartbear.public</id>
+            <url>http://smartbearsoftware.com/repository/maven2/</url>
+        </repository>
+    </repositories>
+
     <properties>
         <jersey-version>1.19</jersey-version>
         <jodatime-version>2.3</jodatime-version>
