@@ -30,10 +30,9 @@ public class RecipeExecutionFacade {
      * @param testStepBuilders the builds for the TestSteps to execute
      * @return the result for executed recipe
      */
-
     public static RecipeExecutionResult executeRecipe(TestStepBuilder... testStepBuilders) {
         TestRecipe recipe = TestRecipeBuilder.newTestRecipe(testStepBuilders).buildTestRecipe();
-        return execute(recipe);
+        return executeRecipe(recipe);
     }
 
     /**
@@ -44,15 +43,22 @@ public class RecipeExecutionFacade {
      * @param testStepBuilders the builds for the TestSteps to execute
      * @return the result for executed recipe
      */
-
     public static RecipeExecutionResult executeRecipe(String name, TestStepBuilder... testStepBuilders) {
         TestRecipe recipe = TestRecipeBuilder.newTestRecipe(testStepBuilders).named(name).buildTestRecipe();
-        return execute(recipe);
+        return executeRecipe(recipe);
     }
 
-    private synchronized static RecipeExecutionResult execute(TestRecipe recipe) {
-        if (executor == null) {
-            executor = RecipeExecutorBuilder.buildDefault();
+    /**
+     * Executes the specified TestRecipe and returns the result
+     *
+     * @param recipe the recipe to execute
+     * @return the excution result
+     */
+    public static RecipeExecutionResult executeRecipe(TestRecipe recipe) {
+        synchronized (Object.class) {
+            if (executor == null) {
+                executor = RecipeExecutorBuilder.buildDefault();
+            }
         }
 
         Execution execution = executor.executeRecipe(recipe);
