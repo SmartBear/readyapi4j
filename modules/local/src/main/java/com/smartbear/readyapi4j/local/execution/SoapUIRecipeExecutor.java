@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.smartbear.ready.recipe.JsonRecipeParser;
 import com.smartbear.ready.recipe.teststeps.TestCaseStruct;
 import com.smartbear.readyapi.client.model.ProjectResultReport;
+import com.smartbear.readyapi.client.model.TestStep;
 import com.smartbear.readyapi4j.ExecutionListener;
 import com.smartbear.readyapi4j.TestRecipe;
 import com.smartbear.readyapi4j.execution.DataExtractors;
@@ -20,6 +21,8 @@ import com.smartbear.readyapi4j.execution.ExecutionMode;
 import com.smartbear.readyapi4j.execution.RecipeExecutionException;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
 import com.smartbear.readyapi4j.execution.RecipeFilter;
+import com.smartbear.readyapi4j.execution.UnsupportedTestStepException;
+import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Class that can execute a Test recipe locally, using the SoapUI core classes.
@@ -87,6 +91,14 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     }
 
     private Execution postRecipe(TestRecipe testRecipe, boolean async) {
+        List<TestStep> proTestSteps = testRecipe.getTestCase().getTestSteps()
+                .stream()
+                .filter(testStep -> testStep.getType().equals(TestStepTypes.DATA_SOURCE.getName()))
+                .collect(Collectors.toList());
+        if (!proTestSteps.isEmpty()) {
+            throw new UnsupportedTestStepException("DataSource test step is supported only with Server execution mode.");
+        }
+
         String executionId = UUID.randomUUID().toString();
         try {
             String jsonText = getObjectMapper().writeValueAsString(testRecipe.getTestCase());
@@ -98,7 +110,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
             SoapUIRecipeExecution execution = new SoapUIRecipeExecution(executionId, projectRunner);
 
             if (async) {
-                prepareAsyncExecution(testRecipe, execution, projectRunner );
+                prepareAsyncExecution(testRecipe, execution, projectRunner);
             }
 
             executionsMap.put(executionId, execution);
@@ -122,7 +134,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
         return objectMapper;
     }
 
-    private void prepareAsyncExecution(TestRecipe testRecipe, SoapUIRecipeExecution execution, WsdlProjectRunner projectRunner ) {
+    private void prepareAsyncExecution(TestRecipe testRecipe, SoapUIRecipeExecution execution, WsdlProjectRunner projectRunner) {
         WsdlProject project = execution.getProject();
         project.addProjectRunListener(new ProjectRunListenerAdapter() {
             @Override
@@ -159,7 +171,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
 
     private void notifyExecutionFinished(TestRecipe testRecipe, Execution execution) {
         ProjectResultReport projectResultReport = execution.getCurrentReport();
-        if( testRecipe.getExtractorData() != null ) {
+        if (testRecipe.getExtractorData() != null) {
             DataExtractors.runDataExtractors(projectResultReport, Arrays.asList(testRecipe.getExtractorData()));
         }
 
