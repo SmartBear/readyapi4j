@@ -64,7 +64,20 @@ testserver.password=demoPassword
 as either system/env properties to our execution and then rerun the above test - those tests will be executed by the 
 specified TestServer instance available at http://testserver.readyapi.io.
 
+## Logging of Recipes and HTTP transactions
+
+Usage of the facade as in the above examples also enables logging of both generated recipes and HTTP transaction logs 
+of executed tests (in HAR file format). Adding the following two properties:
+
+```
+readyapi4j.log.executions.folder=target/logs/executions
+readyapi4j.log.recipes.folder=target/logs/recipes
+```
+
+will automatically result in the corresponding artifacts being written to the corresponding folders.
+
 ## Groovy DSL for creating and executing API tests
+
 ReadyApi4J provides a Groovy DSL to create and execute API tests locally or on TestServer. 
 The following steps explain how to use this DSL in a JUnit test.
 
