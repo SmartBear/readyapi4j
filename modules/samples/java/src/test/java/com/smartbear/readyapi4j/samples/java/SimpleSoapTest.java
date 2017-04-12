@@ -13,7 +13,6 @@ public class SimpleSoapTest extends ApiTestBase {
 
     @Test
     public void simpleSoapTest() throws Exception {
-
         RecipeExecutionResult result = executeRecipe(
             soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
             .forBinding("GlobalWeatherSoap12")

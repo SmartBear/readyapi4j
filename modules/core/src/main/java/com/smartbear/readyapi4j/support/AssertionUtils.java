@@ -28,7 +28,7 @@ public class AssertionUtils {
             logExecution(execution.getExecutionResult());
         }
 
-        assertEquals(Arrays.toString(execution.getErrorMessages().toArray()),
+        assertEquals("Execution failed: " + Arrays.toString(execution.getErrorMessages().toArray()),
             ProjectResultReport.StatusEnum.FINISHED, execution.getCurrentStatus());
     }
 
@@ -39,7 +39,7 @@ public class AssertionUtils {
             logExecution(execution);
         }
 
-        assertEquals(Arrays.toString(execution.getErrorMessages().toArray()),
+        assertEquals("Execution failed: " + Arrays.toString(execution.getErrorMessages().toArray()),
             ProjectResultReport.StatusEnum.FINISHED, execution.getStatus());
     }
 

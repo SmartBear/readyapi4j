@@ -55,7 +55,7 @@ public class RecipeExecutionFacade {
      * @return the excution result
      */
     public static RecipeExecutionResult executeRecipe(TestRecipe recipe) {
-        synchronized (Object.class) {
+        synchronized (RecipeExecutionFacade.class) {
             if (executor == null) {
                 executor = RecipeExecutorBuilder.buildDefault();
             }
