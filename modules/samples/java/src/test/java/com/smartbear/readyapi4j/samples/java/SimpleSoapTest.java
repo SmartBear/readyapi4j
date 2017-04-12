@@ -15,11 +15,11 @@ public class SimpleSoapTest extends ApiTestBase {
     public void simpleSoapTest() throws Exception {
         RecipeExecutionResult result = executeRecipe(
             soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
-            .forBinding("GlobalWeatherSoap12")
-            .forOperation("GetWeather")
-            .withParameter("CountryName", "Sweden")
-            .withPathParameter("//*:CityName", "Stockholm")
-            .assertSoapOkResponse()
+                .forBinding("GlobalWeatherSoap12")
+                .forOperation("GetWeather")
+                .withParameter("CountryName", "Sweden")
+                .withPathParameter("//*:CityName", "Stockholm")
+                .assertSoapOkResponse()
                 .assertSchemaCompliance()
         );
 
