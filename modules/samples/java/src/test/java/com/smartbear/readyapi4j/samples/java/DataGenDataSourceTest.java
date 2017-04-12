@@ -1,9 +1,10 @@
 package com.smartbear.readyapi4j.samples.java;
 
-import com.smartbear.readyapi4j.TestRecipe;
+import com.smartbear.readyapi4j.result.RecipeExecutionResult;
 import org.junit.Test;
 
-import static com.smartbear.readyapi4j.TestRecipeBuilder.newTestRecipe;
+import static com.smartbear.readyapi4j.facade.execution.RecipeExecutionFacade.executeRecipe;
+import static com.smartbear.readyapi4j.support.AssertionUtils.assertExecutionResult;
 import static com.smartbear.readyapi4j.testserver.teststeps.ServerTestSteps.dataGenDataSource;
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.cityTypeProperty;
 import static com.smartbear.readyapi4j.testserver.teststeps.datasource.datagen.DataGenerators.mac48ComputerAddressTypeProperty;
@@ -14,8 +15,8 @@ public class DataGenDataSourceTest extends ApiTestBase {
 
     @Test
     public void createRecipeForAllDataGenerators() throws Exception {
-        TestRecipe recipe = newTestRecipe()
-            .addStep(dataGenDataSource()
+        RecipeExecutionResult result = executeRecipe(
+            dataGenDataSource()
                 .withNumberOfRows(10)
                 .withProperties(
                     cityTypeProperty("cityProperty")
@@ -29,11 +30,8 @@ public class DataGenDataSourceTest extends ApiTestBase {
                     .addQueryParameter("a", "${DataSourceStep#cityProperty}")
                     .addQueryParameter("b", "${DataSourceStep#computerAddressProperty}")
                     .addQueryParameter("c", "${DataSourceStep#integerProperty}"))
-            )
-            .buildTestRecipe();
+        );
 
-        recipe.getTestCase().discardOkResults(false);
-
-        executeAndAssert(recipe);
+        assertExecutionResult(result);
     }
 }

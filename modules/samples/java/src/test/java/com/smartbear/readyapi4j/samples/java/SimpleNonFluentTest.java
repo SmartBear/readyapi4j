@@ -13,6 +13,9 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+import static com.smartbear.readyapi4j.facade.execution.RecipeExecutionFacade.executeRecipe;
+import static com.smartbear.readyapi4j.support.AssertionUtils.assertExecutionResult;
+
 /**
  * same tests as in SimpleTest but without using the fluent interfaces
  */
@@ -45,7 +48,7 @@ public class SimpleNonFluentTest extends ApiTestBase {
         testCase.setTestSteps(Arrays.<TestStep>asList(restTestRequestStep));
 
         TestRecipe recipe = new TestRecipe(testCase);
-        executeAndAssert(recipe);
+        assertExecutionResult(executeRecipe(recipe));
     }
 
     @Test
@@ -67,6 +70,6 @@ public class SimpleNonFluentTest extends ApiTestBase {
         testCase.setTestSteps(Arrays.<TestStep>asList(restTestRequestStep));
 
         TestRecipe recipe = new TestRecipe(testCase);
-        executeAndAssert(recipe);
+        assertExecutionResult(executeRecipe(recipe));
     }
 }
