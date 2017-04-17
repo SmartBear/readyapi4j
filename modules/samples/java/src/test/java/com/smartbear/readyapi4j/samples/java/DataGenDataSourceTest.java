@@ -16,7 +16,7 @@ public class DataGenDataSourceTest extends ApiTestBase {
 
     @Test
     public void createRecipeForAllDataGenerators() throws Exception {
-        RecipeExecutionResult result = executeRecipe(
+        RecipeExecutionResult result = executeRecipe("DataGenerator Test",
             dataGenDataSource()
                 .withNumberOfRows(10)
                 .withProperties(

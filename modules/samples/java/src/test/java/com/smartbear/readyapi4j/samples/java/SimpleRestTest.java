@@ -13,7 +13,7 @@ public class SimpleRestTest extends ApiTestBase {
 
     @Test
     public void simpleCountTest() throws Exception {
-        RecipeExecutionResult result = executeRecipe(
+        RecipeExecutionResult result = executeRecipe("Simple Count Test",
             GET("https://api.swaggerhub.com/specs")
                 .withParameters(
                     query("specType", "API"),
@@ -28,8 +28,8 @@ public class SimpleRestTest extends ApiTestBase {
     }
 
     @Test
-    public void simpleTest() throws Exception {
-        RecipeExecutionResult result = executeRecipe(
+    public void simpleRedirectTest() throws Exception {
+        RecipeExecutionResult result = executeRecipe("Simple Redirect Test",
             GET("https://api.swaggerhub.com/apis")
                 .assertValidStatusCodes(303)
         );

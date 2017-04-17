@@ -45,6 +45,7 @@ public class SimpleNonFluentTest extends ApiTestBase {
 
         TestCase testCase = new TestCase();
         testCase.setFailTestCaseOnError(true);
+        testCase.setName("NonFluent Count Test");
         testCase.setTestSteps(Arrays.<TestStep>asList(restTestRequestStep));
 
         TestRecipe recipe = new TestRecipe(testCase);
@@ -67,6 +68,7 @@ public class SimpleNonFluentTest extends ApiTestBase {
 
         TestCase testCase = new TestCase();
         testCase.setFailTestCaseOnError(true);
+        testCase.setName("NonFluent Redirection Test");
         testCase.setTestSteps(Arrays.<TestStep>asList(restTestRequestStep));
 
         TestRecipe recipe = new TestRecipe(testCase);

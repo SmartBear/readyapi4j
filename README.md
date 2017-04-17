@@ -172,8 +172,7 @@ assert execution.errorMessages.empty
 Tutorial in the Ready! API TestServer documentation: 
 [Creating Code-Based Recipes: Tutorial](http://readyapi.smartbear.com/testserver/tutorials/code_based/start)
 
-The [TestServer Samples Project](https://github.com/SmartBear/ready-api-testserver-samples) here on GitHub contains a 
-number of JUnit and CucumberJVM samples using this library.
+The [samples submodule](modules/samples) here on GitHub contains a number of samples for Java, Groovy and Maven.
 
 ## Learn More about TestServer
 
