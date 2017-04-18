@@ -26,7 +26,7 @@ public class SimpleNonFluentTest extends ApiTestBase {
     public void simpleCountTest() throws Exception {
 
         RestTestRequestStep restTestRequestStep = new RestTestRequestStep();
-        restTestRequestStep.setURI("https://api.swaggerhub.com/apis");
+        restTestRequestStep.setURI("https://api.swaggerhub.com/specs");
         restTestRequestStep.setMethod("GET");
         restTestRequestStep.setType(TestStepTypes.REST_REQUEST.getName());
 
@@ -45,6 +45,7 @@ public class SimpleNonFluentTest extends ApiTestBase {
 
         TestCase testCase = new TestCase();
         testCase.setFailTestCaseOnError(true);
+        testCase.setName("NonFluent Count Test");
         testCase.setTestSteps(Arrays.<TestStep>asList(restTestRequestStep));
 
         TestRecipe recipe = new TestRecipe(testCase);
@@ -60,13 +61,14 @@ public class SimpleNonFluentTest extends ApiTestBase {
         restTestRequestStep.setType(TestStepTypes.REST_REQUEST.getName());
 
         ValidHttpStatusCodesAssertion assertion = new ValidHttpStatusCodesAssertion();
-        assertion.setValidStatusCodes(Arrays.asList("200"));
+        assertion.setValidStatusCodes(Arrays.asList("303"));
         assertion.setType("Valid HTTP Status Codes");
 
         restTestRequestStep.setAssertions(Arrays.<Assertion>asList(assertion));
 
         TestCase testCase = new TestCase();
         testCase.setFailTestCaseOnError(true);
+        testCase.setName("NonFluent Redirection Test");
         testCase.setTestSteps(Arrays.<TestStep>asList(restTestRequestStep));
 
         TestRecipe recipe = new TestRecipe(testCase);

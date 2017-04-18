@@ -1,14 +1,10 @@
-# ReadyApi4J - a Java library for API tests
+# ReadyApi4J - a Java library for API testing
 
-The ReadyApi4J library lets Java developers use the API testing functionality in SoapUI from Java code. In spite of its somewhat unfortunate name, which is there for historical reasons, SoapUI supports many protocols in addition to SOAP, notably REST, JDBC and JMS.
+The ReadyApi4J library lets Java developers use the API testing functionality in SoapUI from Java code. 
+In spite of its somewhat unfortunate name, which is there for historical reasons, SoapUI supports many protocols in 
+addition to SOAP, notably REST, JDBC and JMS.
 
-ReadyApi4J builds *test recipes*, which describe API tests to be executed.
-
-Under the hood ReadyApi4J uses a JSON format, but there's no need to learn it, because you typically create and run test recipes using a fluent Java API or the Groovy DSL. Nor do you need to install SoapUI or any other software to be able to execute recipes.
-
-## Running local SoapUI tests on your machine
-
-The support for local SoapUI tests is ready to use but is not released yet. Therefore, until the upcoming 2.0.0 release, there are no public artefacts uploaded to the Maven repos. However if you build ReadyApi4J locally, with Maven, you can start using it in the following way.
+## Getting Started
 
 1. Add the following Maven dependency to your project:
  
@@ -20,24 +16,27 @@ The support for local SoapUI tests is ready to use but is not released yet. Ther
 	</dependency>
 	```
 
-2. Create a test recipe and execute it in Java:
+2. Create and execute a simple recipe with your favorite unit-testing framework:
 
 	```java
-	import static com.smartbear.readyapi4j.facade.execution.RecipeExecutionFacade.executeRecipe;
-	import static com.smartbear.readyapi4j.teststeps.TestSteps.GET;
-	import com.smartbear.readyapi4j.result.RecipeExecutionResult;
-		
-	TestRecipe recipe = newTestRecipe(
-		       GET("https://api.swaggerhub.com/apis") /* Add a test step (REST Request) */
-					.addQueryParameter("query", "testserver") /* Specify request parameters */
-					.assertJsonContent("$.totalCount", "1" ) /* assert the contents using JSONPath */
-				);
-	RecipeExecutionResult result = RecipeExecutionFacade.executeRecipe(recipe);
-	System.out.println("Errors: " + result.getErrorMessages());
+	    @Test
+        public void simpleCountTest() throws Exception {
+             RecipeExecutionResult result = executeRecipe(
+                 GET("https://api.swaggerhub.com/specs")
+                     .withParameters(
+                         query( "specType", "API" ),
+                         query( "query", "testserver" )
+                     )
+                     .withAssertions(
+                         json("$.totalCount", "4")
+                     )                 
+                 );
+    
+            assertExecutionResult(result);
+        }
 	```
 
-
-3. Run your code.
+3. Run your test.
 
     Here is some sample output of the method above:
     ```
@@ -46,71 +45,39 @@ The support for local SoapUI tests is ready to use but is not released yet. Ther
 
 4. Look at the unit tests to see all the functionality available, or [Dive into the javadocs](http://smartbear.github.io/readyapi4j/apidocs/) to get an overview of the Java API.
 
-## Running tests on the Ready! API TestServer
+## Running tests with TestServer
 
-To get access to the most important functionality in SoapUI's commercial sibling, Ready! API, you need to use
-[Ready! API TestServer](http://readyapi.smartbear.com/testserver/start), a standalone server that exposes a 
-REST API for running API tests. 
+To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
+need to use [Ready! API TestServer](http://readyapi.smartbear.com/testserver/start) for test execution. 
 
-TestServer receives and runs *test recipes* in the underlying JSON format. 
+TestServer is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
+in the same underlying JSON format that is also used in the test shown above. If you're using the RecipeExecutionFacade 
+(as in the example above) all you have to do is add system (or environment) variables that point the facade to a 
+running TestServer instance. For example, if we add
 
-ReadyApi4J library lets you create and run test recipes from within your Java code, without installing 
-Ready! API or any other API testing tool on your computer.
-
-### Quick Guide
-
-1. Add the following Maven dependency to your project:
- 
-	```xml
-	<dependency>
-		<groupId>com.smartbear.readyapi</groupId>
-		<artifactId>ready-api-testserver-client</artifactId>
-		<version>1.2.1</version>
-	</dependency>
-	```
-
-2. Create a test recipe in Java:
-
-	```java
-	@Test
-	public void testSwaggerHubApi() throws Exception {
-		TestRecipe recipe = newTestRecipe(
-		       GET("https://api.swaggerhub.com/apis") /* Add a test step (REST Request) */
-					.addQueryParameter("query", "testserver") /* Specify request parameters */
-					.assertJsonContent("$.totalCount", "1" ) /* assert the contents using JSONPath */
-				)
-			.buildTestRecipe(); /* Generate the recipe */
-		
-		/* Create the recipe executor for your TestServer */
-		RecipeExecutor executor = new RecipeExecutor( "<your TestServer hostname>" );
-		
-		/* User credentials for connecting to the TestServer */
-		executor.setCredentials("<your user>", "<your password>");
-		
-		/* Run the recipe */
-		Execution execution = executor.executeRecipe(recipe);
+```
+testserver.endpoint=http://testserver.readyapi.io:8080
+testserver.user=demoUser
+testserver.password=demoPassword
+```
 	
-		/* Checks the response */
-		assertEquals(Arrays.toString( execution.getErrorMessages().toArray()),
-		    ProjectResultReport.StatusEnum.FINISHED, execution.getCurrentStatus());
-	}
-	```
-	You can set up the executor in a setup method.
+as either system/env properties to our execution and then rerun the above test - those tests will be executed by the 
+specified TestServer instance available at http://testserver.readyapi.io.
 
+## Logging of Recipes and HTTP transactions
 
-3. Run your code.
+Usage of the facade as in the above examples also enables logging of both generated recipes and HTTP transaction logs 
+of executed tests (in HAR file format). Adding the following two properties:
 
-    Here is a sample output of the method above:
-    
-    ```
-    java.lang.AssertionError: [[JsonPath Match] Comparison failed for path [$.totalCount], expecting [1], actual was [0]] 
-    Expected :FINISHED
-    Actual   :FAILED
-    ```
+```
+readyapi4j.log.executions.folder=target/logs/executions
+readyapi4j.log.recipes.folder=target/logs/recipes
+```
 
-4. [Dive into the javadocs](http://smartbear.github.io/readyapi4j/apidocs/) to get an overview of the Java API
+will automatically result in the corresponding artifacts being written to the corresponding folders.
 
 ## Groovy DSL for creating and executing API tests
+
 ReadyApi4J provides a Groovy DSL to create and execute API tests locally or on TestServer. 
 The following steps explain how to use this DSL in a JUnit test.
 
@@ -140,8 +107,9 @@ The following steps explain how to use this DSL in a JUnit test.
         void testSwaggerHubApi() {
            //Executes recipe locally - this requires the additional dependency com.smartbear.readyapi:readyapi4j-local
             Execution execution = executeRecipe {
-                get 'https://api.swaggerhub.com/apis', {
+                get 'https://api.swaggerhub.com/specs', {
                     parameters {
+                        query 'specType', 'API'
                         query 'query', 'testserver'
                     }
                     asserting {
@@ -175,8 +143,9 @@ The following steps explain how to use this DSL in a JUnit test.
        @Test
        void testSwaggerHubApi() {
            Execution execution = executeRecipeOnServer '<your TestServer url, e.g. http://localhost:8080>', '<your user>', '<your password>', {
-               get 'https://api.swaggerhub.com/apis', {
+               get 'https://api.swaggerhub.com/specs', {
                    parameters {
+                       query 'specType', 'API'
                        query 'query', 'testserver'
                    }
                    asserting {
@@ -203,8 +172,7 @@ assert execution.errorMessages.empty
 Tutorial in the Ready! API TestServer documentation: 
 [Creating Code-Based Recipes: Tutorial](http://readyapi.smartbear.com/testserver/tutorials/code_based/start)
 
-The [TestServer Samples Project](https://github.com/SmartBear/ready-api-testserver-samples) here on GitHub contains a 
-number of JUnit and CucumberJVM samples using this library.
+The [samples submodule](modules/samples) here on GitHub contains a number of samples for Java, Groovy and Maven.
 
 ## Learn More about TestServer
 
