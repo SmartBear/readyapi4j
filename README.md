@@ -4,7 +4,13 @@ The ReadyApi4J library lets Java developers use the API testing functionality in
 In spite of its somewhat unfortunate name, which is there for historical reasons, SoapUI supports many protocols in 
 addition to SOAP, notably REST, JDBC and JMS.
 
-## Getting Started
+There are three ways to use this library
+
+1. From [Java](#getting-started-with-java) - together with any testing framework
+2. From [Groovy](#getting-started-with-groovy) - together with any testing framework 
+3. With [Cucumber](modules/cucumber) - with cucumber for java 
+
+## Getting Started with Java
 
 1. Add the following Maven dependency to your project:
  
@@ -45,7 +51,7 @@ addition to SOAP, notably REST, JDBC and JMS.
 
 4. Look at the unit tests to see all the functionality available, or [Dive into the javadocs](http://smartbear.github.io/readyapi4j/apidocs/) to get an overview of the Java API.
 
-## Running tests with TestServer
+### Running tests with TestServer
 
 To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
 need to use [Ready! API TestServer](http://readyapi.smartbear.com/testserver/start) for test execution. 
@@ -64,7 +70,7 @@ testserver.password=demoPassword
 as either system/env properties to our execution and then rerun the above test - those tests will be executed by the 
 specified TestServer instance available at http://testserver.readyapi.io.
 
-## Logging of Recipes and HTTP transactions
+### Logging of Recipes and HTTP transactions
 
 Usage of the facade as in the above examples also enables logging of both generated recipes and HTTP transaction logs 
 of executed tests (in HAR file format). Adding the following two properties:
@@ -76,7 +82,7 @@ readyapi4j.log.recipes.folder=target/logs/recipes
 
 will automatically result in the corresponding artifacts being written to the corresponding folders.
 
-## Groovy DSL for creating and executing API tests
+## Getting Started with Groovy 
 
 ReadyApi4J provides a Groovy DSL to create and execute API tests locally or on TestServer. 
 The following steps explain how to use this DSL in a JUnit test.
