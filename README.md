@@ -1,14 +1,11 @@
 # ReadyApi4J - a Java library for API testing
 
-The ReadyApi4J library lets Java developers use the API testing functionality in SoapUI from Java code. 
-In spite of its somewhat unfortunate name, which is there for historical reasons, SoapUI supports many protocols in 
-addition to SOAP, notably REST, JDBC and JMS.
+The ReadyApi4J library lets you test APIs through Java, Groovy or Cucumber. The library has extensive support for REST, SOAP, JDBC and JMS protocols. Under the hood the library uses the test-execution engine of [SoapUI](http://www.soapui.org).
 
-There are three ways to use this library
-
-1. From [Java](#getting-started-with-java) - together with any testing framework
-2. From [Groovy](#getting-started-with-groovy) - together with any testing framework 
-3. With [Cucumber](modules/cucumber) - with cucumber for java 
+Read on to get started
+* [with Java](#getting-started-with-java) - together with any testing framework
+* [with Groovy](#getting-started-with-groovy) - together with any testing framework 
+* [with Cucumber](modules/cucumber) - with cucumber for java 
 
 ## Getting Started with Java
 
