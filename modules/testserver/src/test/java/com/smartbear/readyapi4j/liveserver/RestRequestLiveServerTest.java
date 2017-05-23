@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
 public class RestRequestLiveServerTest {
     private static Logger logger = LoggerFactory.getLogger(RestRequestLiveServerTest.class);
     private static final String ENDPOINT = "http://api.swaggerhub.com";
-    private static final String ENDPOINT_WITH_PATH = ENDPOINT + "/apis";
+    private static final String ENDPOINT_WITH_PATH = ENDPOINT + "/specs?specType=API";
     private static final String ENDPOINT_NAME = "Default listing";
     private static final String ENDPOINT_DESCRIPTION = "Default registry listing";
     private static final String TESTSERVER_URL = "http://testserver.readyapi.io:8080";
