@@ -8,13 +8,6 @@ Feature: Petstore API
     And the Accepts header is application/json
     Then a 200 response is returned within 2000ms
 
-  Scenario: Find pet by tags
-    Given the API running at http://petstore.swagger.io/v2
-    When a GET request to /pet/findByTags is made
-    And the tags parameter is test
-    And the request expects json
-    Then a 200 response is returned within 2000ms
-
   Scenario: Create pet with parameters
     Given the API running at http://petstore.swagger.io/v2
     When a POST request to /pet is made

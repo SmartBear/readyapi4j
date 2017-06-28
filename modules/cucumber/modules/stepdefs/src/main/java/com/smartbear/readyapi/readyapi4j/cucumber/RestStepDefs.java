@@ -91,7 +91,7 @@ public class RestStepDefs {
     @Then("^a (\\d+) response is returned within (\\d+)ms$")
     public void aResponseIsReturnedWithin(int statusCode, int timeout) {
 
-        if( timeout > 0 ) {
+        if (timeout > 0) {
             assertions.add(DefaultResponseSLAAssertionBuilder.create().maxResponseTime(String.valueOf(timeout)));
         }
 
@@ -101,26 +101,26 @@ public class RestStepDefs {
 
     @Then("^the response body contains$")
     public void theResponseBodyContains(String responseBody) {
-        addAssertion( Assertions.contains( responseBody ).build());
+        addAssertion(Assertions.contains(responseBody).build());
     }
 
     @Then("^the response body matches$")
     public void theResponseBodyMatches(String responseBodyRegEx) {
-        addAssertion( Assertions.matches( responseBodyRegEx ).build());
+        addAssertion(Assertions.matches(responseBodyRegEx).build());
     }
 
     @Given("^the (.*) parameter is (.*)$")
     public void theParameterIs(String name, String value) {
 
-        ParameterBuilder parameterBuilder = (endpoint+path).contains("{" + name + "}") ?
-            ParameterBuilder.path(name,value) :
-            ParameterBuilder.query(name,value) ;
-        parameters.add( parameterBuilder.build() );
+        ParameterBuilder parameterBuilder = (endpoint + path).contains("{" + name + "}") ?
+                ParameterBuilder.path(name, value) :
+                ParameterBuilder.query(name, value);
+        parameters.add(parameterBuilder.build());
     }
 
     @Given("^the (.*) header is (.*)$")
     public void theHeaderIs(String name, String value) {
-        parameters.add( ParameterBuilder.header(name,value).build());
+        parameters.add(ParameterBuilder.header(name, value).build());
     }
 
     @Given("^the type is (.*)$")
@@ -130,22 +130,22 @@ public class RestStepDefs {
 
     @Given("^the request expects (.*)")
     public void theRequestExpects(String format) {
-        theHeaderIs("Accept", ContentUtils.expandContentType( format ));
+        theHeaderIs("Accept", ContentUtils.expandContentType(format));
     }
 
     @Then("^the response type is (.*)$")
     public void theResponseTypeIs(String format) {
-        addAssertion( Assertions.contentType( format ).build());
+        addAssertion(Assertions.contentType(format).build());
     }
 
     @Then("^the response contains a (.*) header$")
     public void theResponseContainsHeader(String header) {
-        addAssertion( Assertions.headerExists( header ).build());
+        addAssertion(Assertions.headerExists(header).build());
     }
 
     @Then("^the response (.*) header is (.*)$")
     public void theResponseHeaderIs(String header, String value) {
-        addAssertion( Assertions.headerValue( header, value ).build());
+        addAssertion(Assertions.headerValue(header, value).build());
     }
 
     @Then("^the response body contains (.*)$")
@@ -156,13 +156,13 @@ public class RestStepDefs {
     public RestTestRequestStep pushRestRequest() {
 
         testStep = new RestTestRequestStep();
-        testStep.setURI(endpoint);
+        testStep.setURI(endpoint + path);
         testStep.setMethod(method);
         testStep.setType(TestStepTypes.REST_REQUEST.getName());
 
         if (requestBody != null) {
             testStep.setRequestBody(requestBody);
-            testStep.setMediaType( mediaType == null ? "application/json" : mediaType);
+            testStep.setMediaType(mediaType == null ? "application/json" : mediaType);
         }
 
         if (token != null) {
@@ -174,35 +174,34 @@ public class RestStepDefs {
 
         if (!bodyValues.isEmpty()) {
             testStep.setMediaType("application/json");
-            testStep.setRequestBody(ContentUtils.serializeContent(bodyValues,"application/json"));
+            testStep.setRequestBody(ContentUtils.serializeContent(bodyValues, "application/json"));
         }
 
-        if( !assertions.isEmpty() ) {
+        if (!assertions.isEmpty()) {
             testStep.getAssertions().addAll(assertions);
         }
 
-        if( !parameters.isEmpty() ){
+        if (!parameters.isEmpty()) {
             testStep.getParameters().addAll(parameters);
         }
 
-        builder.addTestStep( testStep );
+        builder.addTestStep(testStep);
         return testStep;
     }
 
-    public void addBodyValue( String name, String value ){
-        bodyValues.put( name, value );
+    public void addBodyValue(String name, String value) {
+        bodyValues.put(name, value);
     }
 
-    public void addParameter( RestParameter parameter ){
-        parameters.add( parameter );
+    public void addParameter(RestParameter parameter) {
+        parameters.add(parameter);
     }
 
-    public void addAssertion( Assertion assertion ){
-        if( testStep == null ) {
+    public void addAssertion(Assertion assertion) {
+        if (testStep == null) {
             assertions.add(assertion);
-        }
-        else {
-            testStep.getAssertions().add( assertion );
+        } else {
+            testStep.getAssertions().add(assertion);
         }
     }
 
