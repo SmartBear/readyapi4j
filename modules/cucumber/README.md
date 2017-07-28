@@ -45,7 +45,7 @@ dependency to your pom:
 <dependency>
     <groupId>io.swagger.assert</groupId>
     <artifactId>assert4j-cucumber-stepdefs</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -70,7 +70,7 @@ can use the testserver-cucumber-runner jar file which includes all required libr
 runtime. Run tests with:
 
 ```
-java -jar assert4j-cucumber-runner-2.0.0-SNAPSHOT.jar <path to feature-files>
+java -jar assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-files>
 ```
 
 Internally this will call the regular cucumber.api.cli.Main class with an added -g argument to the

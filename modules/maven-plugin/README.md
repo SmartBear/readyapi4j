@@ -7,7 +7,7 @@ configure it to run in whatever build phase you might find relevant, for example
 <plugin>
     <groupId>io.swagger.assert</groupId>
     <artifactId>assert4j-maven-plugin</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <configuration>
         <username>defaultUser</username>
         <password>defaultPassword</password>

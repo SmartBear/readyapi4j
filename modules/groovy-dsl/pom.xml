@@ -6,7 +6,7 @@
     <parent>
         <artifactId>assert4j</artifactId>
         <groupId>io.swagger.assert</groupId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
     <artifactId>assert4j-groovy-dsl</artifactId>

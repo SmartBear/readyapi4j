@@ -15,7 +15,7 @@ Read on to get started
 	<dependency>
 		<groupId>io.swagger.assert</groupId>
 		<artifactId>assert4j-facade</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	```
 
@@ -90,7 +90,7 @@ The following steps explain how to use this DSL in a JUnit test.
 	<dependency>
 		<groupId>io.swagger.assert</groupId>
 		<artifactId>assert4j-groovy-dsl</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	```
 
