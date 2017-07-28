@@ -5,4 +5,4 @@ This module builds a single jar that contains everything needed to run Cucumber 
 ### Docker image
 
 The docker maven profile builds a Docker image containing this jar available at 
-https://hub.docker.com/r/smartbear/readyapi4j-cucumber
+https://hub.docker.com/r/smartbear/assert4j-cucumber

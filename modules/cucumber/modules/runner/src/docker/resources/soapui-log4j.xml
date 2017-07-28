@@ -28,7 +28,7 @@
     <!-- Loggers         -->
     <!-- =============== -->
 
-    <logger name="com.smartbear.readyapi.readyapi4j.cucumber">
+    <logger name="io.swagger.assert4j.cucumber">
         <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
     </logger>

@@ -1,6 +1,6 @@
-# ReadyApi4J - a Java library for API testing
+# Swagger Assert4J - a Java library for API testing
 
-The ReadyApi4J library lets you test APIs through Java, Groovy or Cucumber. The library has extensive support for REST, SOAP, JDBC and JMS protocols. Under the hood the library uses the test-execution engine of [SoapUI](http://www.soapui.org).
+The Assert4J library lets you test APIs through Java, Groovy or Cucumber. The library has extensive support for REST, SOAP, JDBC and JMS protocols. Under the hood the library uses the test-execution engine of [SoapUI](http://www.soapui.org).
 
 Read on to get started
 * [with Java](#getting-started-with-java) - together with any testing framework
@@ -13,8 +13,8 @@ Read on to get started
  
 	```xml
 	<dependency>
-		<groupId>com.smartbear.readyapi</groupId>
-		<artifactId>readyapi4j-facade</artifactId>
+		<groupId>io.swagger.assert</groupId>
+		<artifactId>assert4j-facade</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</dependency>
 	```
@@ -46,7 +46,7 @@ Read on to get started
     Errors: [[JsonPath Match] Comparison failed for path [$.totalCount], expecting [1], actual was [0]] 
     ```
 
-4. Look at the unit tests to see all the functionality available, or [Dive into the javadocs](http://smartbear.github.io/readyapi4j/apidocs/) to get an overview of the Java API.
+4. Look at the unit tests to see all the functionality available, or [Dive into the javadocs](http://smartbear.github.io/swagger-assert4j/apidocs/) to get an overview of the Java API.
 
 ### Running tests with TestServer
 
@@ -73,23 +73,23 @@ Usage of the facade as in the above examples also enables logging of both genera
 of executed tests (in HAR file format). Adding the following two properties:
 
 ```
-readyapi4j.log.executions.folder=target/logs/executions
-readyapi4j.log.recipes.folder=target/logs/recipes
+assert4j.log.executions.folder=target/logs/executions
+assert4j.log.recipes.folder=target/logs/recipes
 ```
 
 will automatically result in the corresponding artifacts being written to the corresponding folders.
 
 ## Getting Started with Groovy 
 
-ReadyApi4J provides a Groovy DSL to create and execute API tests locally or on TestServer. 
+Assert4J provides a Groovy DSL to create and execute API tests locally or on TestServer. 
 The following steps explain how to use this DSL in a JUnit test.
 
 1. Add the following Maven dependency to your project:
  
 	```xml
 	<dependency>
-		<groupId>com.smartbear.readyapi</groupId>
-		<artifactId>readyapi4j-groovy-dsl</artifactId>
+		<groupId>io.swagger.assert</groupId>
+		<artifactId>assert4j-groovy-dsl</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</dependency>
 	```
@@ -97,18 +97,18 @@ The following steps explain how to use this DSL in a JUnit test.
 2. Create a JUnit test with a test recipe in Groovy:
 
   The example below shows how to create and execute a recipe with one single step locally, using the SoapUI OS engine. 
-  This requires the additional dependency on com.smartbear.readyapi:readyapi4j-local, but there is no need to install SoapUI. 
+  This requires the additional dependency on io.swagger.assert:assert4j-local, but there is no need to install SoapUI. 
    ```groovy
-   import com.smartbear.readyapi4j.execution.Execution
+   import io.swagger.assert4j.execution.Execution
    import org.junit.Test
    
-   import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
+   import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
 
     class DslTestDemo {
     
         @Test
         void testSwaggerHubApi() {
-           //Executes recipe locally - this requires the additional dependency com.smartbear.readyapi:readyapi4j-local
+           //Executes recipe locally - this requires the additional dependency io.swagger.assert:assert4j-local
             Execution execution = executeRecipe {
                 get 'https://api.swaggerhub.com/specs', {
                     parameters {
@@ -132,15 +132,15 @@ The following steps explain how to use this DSL in a JUnit test.
           |         |             |
           |         |             false
           |         [[JsonPath Count] Comparison failed for path [$.totalCount], expecting [0], actual was [1]]
-          com.smartbear.readyapi4j.local.execution.SoapUIRecipeExecution@f810c18
+          io.swagger.assert4j.local.execution.SoapUIRecipeExecution@f810c18
    ```
    
    Similarly, you can execute the recipe on TestServer with the following:
    ```groovy
-   import com.smartbear.readyapi4j.execution.Execution
+   import io.swagger.assert4j.execution.Execution
    import org.junit.Test
    
-   import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipeOnServer
+   import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipeOnServer
    
    class DslTestDemo {
        @Test
@@ -168,7 +168,7 @@ assert execution.errorMessages.empty
        |         |             |
        |         |             false
        |         [TestStepName: GET request 1, messages: [JsonPath Count] Comparison failed. Path: [$.totalCount]; Expected value: [0]; Actual value: [1].]
-       com.smartbear.readyapi4j.testserver.execution.TestServerExecution@dfddc9a
+       io.swagger.assert4j.testserver.execution.TestServerExecution@dfddc9a
 ```
 ## More samples / tutorials
 

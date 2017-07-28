@@ -4,7 +4,7 @@
 #
 
 # find jar to run
-JAR=$(find -name "*readyapi4j-cucumber*.jar" -type f)
+JAR=$(find -name "*assert4j-cucumber*.jar" -type f)
 
 # extract additional JVM options from ENV vars
 OPTS=()

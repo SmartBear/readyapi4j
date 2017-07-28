@@ -6,7 +6,7 @@
             <useProjectArtifact>true</useProjectArtifact>
             <fileMode>444</fileMode>
             <includes>
-                <include>com.smartbear.readyapi:readyapi4j-cucumber-runner</include>
+                <include>io.swagger.assert:assert4j-cucumber-runner</include>
             </includes>
             <outputDirectory>.</outputDirectory>
         </dependencySet>
