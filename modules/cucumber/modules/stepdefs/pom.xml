@@ -8,7 +8,7 @@
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>assert4j-cucumber-stepdefs</artifactId>
+    <artifactId>swagger-assert4j-cucumber-stepdefs</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>

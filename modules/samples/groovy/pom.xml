@@ -10,7 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>assert4j-groovy-samples</artifactId>
+    <artifactId>swagger-assert4j-groovy-samples</artifactId>
     <dependencies>
         <dependency>
             <groupId>io.swagger.assert</groupId>

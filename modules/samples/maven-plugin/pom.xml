@@ -10,7 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>assert4j-maven-plugin-samples</artifactId>
+    <artifactId>swagger-assert4j-maven-plugin-samples</artifactId>
 
     <properties>
         <testserver.user>demoUser</testserver.user>
