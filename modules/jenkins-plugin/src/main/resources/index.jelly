@@ -1,0 +1,7 @@
+<?jelly escape-by-default='true'?>
+<!--
+  This view is used to render the installed plugins page.
+-->
+<div>
+  The ReadyApi TestServer plugin can be used to run tests on a ReadyApi TestServer.
+</div>

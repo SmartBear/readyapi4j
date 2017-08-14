@@ -16,6 +16,7 @@
         <module>modules/samples</module>
         <module>modules/cucumber</module>
         <module>modules/maven-plugin-tester</module>
+        <module>modules/jenkins-plugin</module>
     </modules>
     <packaging>pom</packaging>
     <name>Swagger Assert4J</name>
