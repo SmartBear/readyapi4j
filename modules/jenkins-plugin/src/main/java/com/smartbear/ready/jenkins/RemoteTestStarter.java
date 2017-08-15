@@ -10,13 +10,16 @@ import hudson.model.BuildListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
-import io.swagger.assert4j.ExecutionListener;
+import hudson.util.ListBoxModel;
+import io.swagger.assert4j.TestRecipe;
+import io.swagger.assert4j.TestRecipeBuilder;
 import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.execution.Execution;
+import io.swagger.assert4j.execution.RecipeExecutor;
 import io.swagger.assert4j.testserver.execution.ProjectExecutionRequest;
 import io.swagger.assert4j.testserver.execution.ProjectExecutor;
+import io.swagger.assert4j.testserver.execution.RepositoryProjectExecutionRequest;
 import io.swagger.assert4j.testserver.execution.TestServerClient;
-import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -45,12 +48,27 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @SuppressWarnings("unused")
 public class RemoteTestStarter extends Builder {
 
+    enum TestType {
+        LOCAL("Local project (XML/composite)"),
+        LOCAL_RECIPE("Test Recipe"),
+        REPOSITORY("Repository Project");
+
+        private String displayName;
+
+        TestType(String displayName) {
+            this.displayName = displayName;
+        }
+
+    }
+
     private final String pathToProjectFile;
     private final String testCaseName;
     private final String testSuiteName;
+    private final TestType testType;
     private final String serverUrl;
     private final String userName;
     private final String password;
+    private final String repositoryName;
     private final String environment;
     private final String hostAndPort;
     private final String tags;
@@ -60,21 +78,24 @@ public class RemoteTestStarter extends Builder {
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
     public RemoteTestStarter(String pathToProjectFile,
+                             String testType,
                              String serverUrl,
                              String userName,
                              String password,
                              String testCaseName,
                              String testSuiteName,
-                             String environment,
+                             String repositoryName, String environment,
                              String hostAndPort, String tags,
                              String projectFilePassword,
                              String projectProperties) {
         this.pathToProjectFile = pathToProjectFile;
+        this.testType = testTypeForString(testType);
         this.serverUrl = serverUrl;
         this.userName = userName;
         this.password = password;
         this.testCaseName = testCaseName;
         this.testSuiteName = testSuiteName;
+        this.repositoryName = repositoryName;
         this.environment = environment;
         this.hostAndPort = hostAndPort;
         this.tags = tags;
@@ -82,30 +103,18 @@ public class RemoteTestStarter extends Builder {
         this.projectProperties = projectProperties;
     }
 
+    private TestType testTypeForString(String typeString) {
+        return Arrays.stream(TestType.values()).filter(type -> type.name().equals(typeString))
+                .findFirst()
+                .orElse(TestType.LOCAL);
+    }
+
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws AbortException {
         try {
             TestServerClient client = TestServerClient.fromUrl(serverUrl).withCredentials(userName, password);
-            ProjectExecutor executor = client.createProjectExecutor();
-            executor.addExecutionListener(new ExecutionListener() {
-                public void executionFinished(Execution execution) {
-                    execution.getCurrentReport();
-                }
-            });
-            File projectFile = getProjectFile(build.getWorkspace());
-            Map<String,String> projectProperties = getProjectProperties();
-            Set<String> tags = isBlank(this.tags) ? Collections.emptySet() : new HashSet<>(Arrays.asList(this.tags.split(",")));
-            ProjectExecutionRequest.Builder executionRequest = ProjectExecutionRequest.Builder.forProjectFile(projectFile)
-                    .forTestSuite(testSuiteName)
-                    .forTestCase(testCaseName)
-                    .forEnvironment(environment)
-                    .forTags(tags)
-                    .withProjectPassword(projectFilePassword)
-                    .withEndpoint(hostAndPort);
-            if (!projectProperties.isEmpty()) {
-                executionRequest.withCustomProperties(null, projectProperties);
-            }
-            Execution execution = executor.executeProject(executionRequest.build());
+            Execution execution = runTests(build, client);
+
             if (execution.getCurrentStatus() == ProjectResultReport.StatusEnum.PENDING) {
                 throw new AbortException("The project " + pathToProjectFile + " has unsatisfied dependencies");
             }
@@ -113,6 +122,68 @@ public class RemoteTestStarter extends Builder {
             throw new AbortException("Couldn't start tests from project " + pathToProjectFile + " on server " + serverUrl);
         }
         return true;
+    }
+
+    private Execution runTests(AbstractBuild build, TestServerClient client) throws AbortException {
+        switch (testType) {
+            case LOCAL_RECIPE:
+                return executeRecipe(build, client);
+            case REPOSITORY:
+                return executeRepositoryProject(build, client);
+            default:
+                return executeXmlProject(build, client);
+        }
+    }
+
+    private Execution executeRecipe(AbstractBuild build, TestServerClient client) throws AbortException {
+        RecipeExecutor recipeExecutor = client.createRecipeExecutor();
+        File recipeFile = getProjectFile(build.getWorkspace());
+        if (recipeFile == null || !recipeFile.exists()) {
+            throw new AbortException("Recipe file " + pathToProjectFile + " does not exist.");
+        }
+        TestRecipe recipeToExecute;
+        try {
+            recipeToExecute = TestRecipeBuilder.createFrom(FileUtils.readFileToString(recipeFile));
+        } catch (IOException e) {
+            throw new AbortException("Could not read or parse recipe file " + pathToProjectFile);
+        }
+        return recipeExecutor.executeRecipe(recipeToExecute);
+    }
+
+    private Execution executeXmlProject(AbstractBuild build, TestServerClient client) {
+        ProjectExecutor executor = client.createProjectExecutor();
+        File projectFile = getProjectFile(build.getWorkspace());
+        Map<String, String> projectProperties = getProjectProperties();
+        Set<String> tags = isBlank(this.tags) ? Collections.emptySet() : new HashSet<>(Arrays.asList(this.tags.split(",")));
+        ProjectExecutionRequest.Builder executionRequest = ProjectExecutionRequest.Builder.forProjectFile(projectFile)
+                .forTestSuite(testSuiteName)
+                .forTestCase(testCaseName)
+                .forEnvironment(environment)
+                .forTags(tags)
+                .withProjectPassword(projectFilePassword)
+                .withEndpoint(hostAndPort);
+        if (!projectProperties.isEmpty()) {
+            executionRequest.withCustomProperties(null, projectProperties);
+        }
+        return executor.executeProject(executionRequest.build());
+    }
+
+    private Execution executeRepositoryProject(AbstractBuild build, TestServerClient client) {
+        ProjectExecutor executor = client.createProjectExecutor();
+        Map<String, String> projectProperties = getProjectProperties();
+        Set<String> tags = isBlank(this.tags) ? Collections.emptySet() : new HashSet<>(Arrays.asList(this.tags.split(",")));
+        RepositoryProjectExecutionRequest.Builder executionRequest = RepositoryProjectExecutionRequest.Builder.forProject(pathToProjectFile)
+                .fromRepository(repositoryName)
+                .forTestSuite(testSuiteName)
+                .forTestCase(testCaseName)
+                .forEnvironment(environment)
+                .forTags(tags)
+                .withProjectPassword(projectFilePassword)
+                .withEndpoint(hostAndPort);
+        if (!projectProperties.isEmpty()) {
+            executionRequest.withCustomProperties(null, projectProperties);
+        }
+        return executor.executeRepositoryProject(executionRequest.build());
     }
 
     public String getPathToProjectFile() {
@@ -155,11 +226,15 @@ public class RemoteTestStarter extends Builder {
         return projectFilePassword;
     }
 
+    public String getTestType() {
+        return testType.toString();
+    }
+
     private Map<String, String> getProjectProperties() {
         if (isBlank(projectProperties)) {
             return Collections.emptyMap();
         } else {
-            Map<String,String> returnValue = new HashMap<>();
+            Map<String, String> returnValue = new HashMap<>();
             Properties properties = new Properties();
             try {
                 properties.load(new StringReader(projectProperties));
@@ -176,7 +251,7 @@ public class RemoteTestStarter extends Builder {
 
     private boolean seemsToBeJson(String projectProperties) {
         String trimmed = projectProperties.trim();
-        return trimmed.startsWith("{")  && trimmed.endsWith("}");
+        return trimmed.startsWith("{") && trimmed.endsWith("}");
     }
 
     private File getProjectFile(FilePath workspace) {
@@ -270,7 +345,7 @@ public class RemoteTestStarter extends Builder {
         }
 
         public FormValidation doTestServerConnection(@QueryParameter String serverUrl, @QueryParameter String userName,
-                                                   @QueryParameter String password)
+                                                     @QueryParameter String password)
                 throws IOException, ServletException {
             try {
                 TestServerClient client = TestServerClient.fromUrl(serverUrl).withCredentials(userName, password);
@@ -308,14 +383,6 @@ public class RemoteTestStarter extends Builder {
             return super.configure(req, formData);
         }
 
-        private String getOptionalFormValue(JSONObject formData, String pathToProjectFile) {
-            try {
-                return formData.getString(pathToProjectFile);
-            } catch (JSONException e) {
-                return null;
-            }
-        }
-
         public String getServerUrl() {
             return serverUrl;
         }
@@ -326,6 +393,14 @@ public class RemoteTestStarter extends Builder {
 
         public String getPassword() {
             return password;
+        }
+
+        public ListBoxModel doFillTestTypeItems() {
+            ListBoxModel items = new ListBoxModel();
+            for (TestType type : TestType.values()) {
+                items.add(type.displayName, type.name());
+            }
+            return items;
         }
 
     }

@@ -1,23 +1,34 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+    <f:entry title="Test type" field="testType">
+        <f:select/>
+    </f:entry>
     <f:entry title="Path to project file" field="pathToProjectFile"
-             description="Specify the path or URL to your ReadyAPI (or SoapUI) project file with the test you want to run.">
+             description="Specify the path or URL to your test file or directory, or the name of your Repository project">
         <f:textbox/>
     </f:entry>
-    <f:entry title="Test suite name" field="testSuiteName"
-             description="The test suite to run from the project.">
-        <f:textbox/>
-    </f:entry>
-    <f:entry title="Test case name" field="testCaseName"
-             description="The test case to run from the project.">
-        <f:textbox/>
-    </f:entry>
-    <f:entry title="Active environment" field="environment"
-             description="The environment to use when running the project.">
-        <f:textbox/>
-    </f:entry>
+    <f:section title="XML project options">
+        <f:description>These fields are only applicable for XML/Composite projects</f:description>
+        <f:entry title="Test suite name" field="testSuiteName"
+                 description="The test suite to run from the project.">
+            <f:textbox/>
+        </f:entry>
+        <f:entry title="Test case name" field="testCaseName"
+                 description="The test case to run from the project.">
+            <f:textbox/>
+        </f:entry>
+        <f:entry title="Active environment" field="environment"
+                 description="The environment to use when running the project.">
+            <f:textbox/>
+        </f:entry>
+        <f:entry title="Remote repository" field="repositoryName"
+                 description="Repository on the TestServer where the project is stored.">
+            <f:textbox/>
+        </f:entry>
+    </f:section>
     <f:section title="Connection Options">
-        <f:description>Only edit these fields if you want to override the default connection settings of the plugin.</f:description>
+        <f:description>Only edit these fields if you want to override the default connection settings of the plugin.
+        </f:description>
         <f:entry title="Server URL" field="serverUrl"
                  description="The URL to the root of the TestServer, e.g. https://our.testserver.instance:8443/v1.">
             <f:textbox default="${descriptor.serverUrl}"/>
@@ -32,26 +43,30 @@
         </f:entry>
         <f:validateButton
                 title="${%Test Connection}" progress="${%Testing...}"
-                method="testServerConnection" with="serverUrl,userName,password" />
+                method="testServerConnection" with="serverUrl,userName,password"/>
     </f:section>
     <f:advanced>
         <f:section title="Advanced Test Options">
-            <f:entry title="Project file password" field="projectFilePassword"
-                     description="The password used to decrypt the project file (leave empty if it is not encrypted).">
-                <f:password/>
-            </f:entry>
-            <f:entry title="Endpoint" field="hostAndPort"
-                     description="A string in the format host:port, which will replace the host and port in all HTTP requests sent by the test.">
-                <f:textbox/>
-            </f:entry>
-            <f:entry title="Tags" field="tags"
-                     description="A comma separated list of tags to filter test cases by.">
-                <f:textbox/>
-            </f:entry>
             <f:entry title="Project Properties" field="projectProperties"
                      description="One per line in the form name=value">
                 <f:textarea name="projectProperties"/>
             </f:entry>
+            <f:section title="XML project options">
+                <f:description>These fields are only applicable for XML/Composite projects</f:description>
+                <f:entry title="Project file password" field="projectFilePassword"
+                         description="The password used to decrypt the project file (leave empty if it is not encrypted).">
+                    <f:password/>
+                </f:entry>
+                <f:entry title="Endpoint" field="hostAndPort"
+                         description="A string in the format host:port, which will replace the host and port in all HTTP requests sent by the test.">
+                    <f:textbox/>
+                </f:entry>
+                <f:entry title="Tags" field="tags"
+                         description="A comma separated list of tags to filter test cases by.">
+                    <f:textbox/>
+                </f:entry>
+            </f:section>
+
         </f:section>
     </f:advanced>
 
