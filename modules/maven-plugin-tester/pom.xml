@@ -23,7 +23,7 @@
         <plugins>
             <plugin>
                 <groupId>io.swagger.assert</groupId>
-                <artifactId>assert4j-maven-plugin</artifactId>
+                <artifactId>swagger-assert4j-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <executions>
                     <execution>

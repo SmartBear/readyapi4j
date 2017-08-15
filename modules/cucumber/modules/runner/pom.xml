@@ -74,8 +74,8 @@
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <alias>assert4j-cucumber</alias>
-                                    <name>smartbear/assert4j-cucumber:latest</name>
+                                    <alias>swagger-assert4j-cucumber</alias>
+                                    <name>smartbear/swagger-assert4j-cucumber:latest</name>
                                     <build>
                                         <from>java:8-jre</from>
                                         <maintainer>ole.lensmar@smartbear.com</maintainer>
