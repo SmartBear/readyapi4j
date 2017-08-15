@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-core</artifactId>
+            <artifactId>swagger-assert4j-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

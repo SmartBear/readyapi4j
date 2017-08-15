@@ -14,11 +14,11 @@
     <dependencies>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-groovy-dsl</artifactId>
+            <artifactId>swagger-assert4j-groovy-dsl</artifactId>
         </dependency>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-facade</artifactId>
+            <artifactId>swagger-assert4j-facade</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

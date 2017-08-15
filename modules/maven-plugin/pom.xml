@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-facade</artifactId>
+            <artifactId>swagger-assert4j-facade</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

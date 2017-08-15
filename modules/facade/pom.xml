@@ -14,17 +14,17 @@
     <dependencies>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-core</artifactId>
+            <artifactId>swagger-assert4j-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-local</artifactId>
+            <artifactId>swagger-assert4j-local</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-testserver</artifactId>
+            <artifactId>swagger-assert4j-testserver</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

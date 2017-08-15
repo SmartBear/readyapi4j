@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-cucumber-stepdefs</artifactId>
+            <artifactId>swagger-assert4j-cucumber-stepdefs</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

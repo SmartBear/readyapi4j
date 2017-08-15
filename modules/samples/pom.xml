@@ -60,19 +60,19 @@
         <dependencies>
             <dependency>
                 <groupId>io.swagger.assert</groupId>
-                <artifactId>ready-api-testserver-client</artifactId>
-                <version>1.2.2-SNAPSHOT</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger.assert</groupId>
-                <artifactId>assert4j-groovy-dsl</artifactId>
+                <artifactId>swagger-assert4j-testserver</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>io.swagger.assert</groupId>
-                <artifactId>assert4j-facade</artifactId>
+                <artifactId>swagger-assert4j-groovy-dsl</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.assert</groupId>
+                <artifactId>swagger-assert4j-facade</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>
