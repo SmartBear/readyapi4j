@@ -360,8 +360,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
         setAuthentication(auth);
 
-        List<Pair> queryParams = buildQueryParameters(async, executionRequest.getTestCaseName(),
-                executionRequest.getTestSuiteName(), executionRequest.getEnvironment());
+        List<Pair> queryParams = buildQueryParameters(executionRequest, async);
 
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions";
         String type = "application/xml";
@@ -408,8 +407,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     @Override
     public ProjectResultReport postRepositoryProject(RepositoryProjectExecutionRequest request, boolean async, HttpBasicAuth auth) throws ApiException {
         setAuthentication(auth);
-        List<Pair> queryParams = buildQueryParameters(async, request.getTestCaseName(), request.getTestSuiteName(),
-                request.getEnvironment());
+        List<Pair> queryParams = buildQueryParameters(request, async);
         queryParams.add(new Pair("projectFileName", request.getProjectFileName()));
         if (request.getRepositoryName() != null) {
             queryParams.add(new Pair("repositoryName", request.getRepositoryName()));
@@ -419,17 +417,26 @@ public class CodegenBasedTestServerApi implements TestServerApi {
                 APPLICATION_JSON, queryParams, null);
     }
 
-    private List<Pair> buildQueryParameters(boolean async, String testCaseName, String testSuiteName, String environment) {
+    private List<Pair> buildQueryParameters(ProjectExecutionRequestBase executionRequest, boolean async) {
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(async)));
-        if (testCaseName != null) {
-            queryParams.add(new Pair("testCaseName", testCaseName));
+        if (executionRequest.getTestCaseName() != null) {
+            queryParams.add(new Pair("testCaseName", executionRequest.getTestCaseName()));
         }
-        if (testSuiteName != null) {
-            queryParams.add(new Pair("testSuiteName", testSuiteName));
+        if (executionRequest.getTestSuiteName() != null) {
+            queryParams.add(new Pair("testSuiteName", executionRequest.getTestSuiteName()));
         }
-        if (environment != null) {
-            queryParams.add(new Pair("environment", environment));
+        if (executionRequest.getEnvironment() != null) {
+            queryParams.add(new Pair("environment", executionRequest.getEnvironment()));
+        }
+        if (executionRequest.getEndpoint() != null) {
+            queryParams.add(new Pair("hostAndPort", executionRequest.getEndpoint()));
+        }
+        if (executionRequest.getProjectPassword() != null) {
+            queryParams.add(new Pair("projectPassword", executionRequest.getProjectPassword()));
+        }
+        if (!executionRequest.getTags().isEmpty()) {
+            queryParams.add(new Pair("tags", String.join(",", executionRequest.getTags())));
         }
         return queryParams;
     }

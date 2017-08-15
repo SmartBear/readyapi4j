@@ -1,7 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
     <f:entry title="Path to project file" field="pathToProjectFile"
-             description="Specify the path or URL to your Ready-API (or SoapUI) project file with the test you want to run.">
+             description="Specify the path or URL to your ReadyAPI (or SoapUI) project file with the test you want to run.">
         <f:textbox/>
     </f:entry>
     <f:entry title="Test suite name" field="testSuiteName"
@@ -10,6 +10,10 @@
     </f:entry>
     <f:entry title="Test case name" field="testCaseName"
              description="The test case to run from the project.">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="Active environment" field="environment"
+             description="The environment to use when running the project.">
         <f:textbox/>
     </f:entry>
     <f:section title="Connection Options">
@@ -40,11 +44,10 @@
                      description="A string in the format host:port, which will replace the host and port in all HTTP requests sent by the test.">
                 <f:textbox/>
             </f:entry>
-            <f:entry title="Active environment" field="environment"
-                     description="The environment to use when running the project.">
+            <f:entry title="Tags" field="tags"
+                     description="A comma separated list of tags to filter test cases by.">
                 <f:textbox/>
             </f:entry>
-
             <f:entry title="Project Properties" field="projectProperties"
                      description="One per line in the form name=value">
                 <f:textarea name="projectProperties"/>

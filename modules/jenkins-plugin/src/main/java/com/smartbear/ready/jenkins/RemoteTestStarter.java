@@ -30,11 +30,14 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -91,13 +94,18 @@ public class RemoteTestStarter extends Builder {
             });
             File projectFile = getProjectFile(build.getWorkspace());
             Map<String,String> projectProperties = getProjectProperties();
-            ProjectExecutionRequest executionRequest = ProjectExecutionRequest.Builder.forProjectFile(projectFile)
+            Set<String> tags = isBlank(this.tags) ? Collections.emptySet() : new HashSet<>(Arrays.asList(this.tags.split(",")));
+            ProjectExecutionRequest.Builder executionRequest = ProjectExecutionRequest.Builder.forProjectFile(projectFile)
                     .forTestSuite(testSuiteName)
                     .forTestCase(testCaseName)
                     .forEnvironment(environment)
-                    .withCustomProperties(null, projectProperties)
-                    .build();
-            Execution execution = executor.executeProject(executionRequest);
+                    .forTags(tags)
+                    .withProjectPassword(projectFilePassword)
+                    .withEndpoint(hostAndPort);
+            if (!projectProperties.isEmpty()) {
+                executionRequest.withCustomProperties(null, projectProperties);
+            }
+            Execution execution = executor.executeProject(executionRequest.build());
             if (execution.getCurrentStatus() == ProjectResultReport.StatusEnum.PENDING) {
                 throw new AbortException("The project " + pathToProjectFile + " has unsatisfied dependencies");
             }
