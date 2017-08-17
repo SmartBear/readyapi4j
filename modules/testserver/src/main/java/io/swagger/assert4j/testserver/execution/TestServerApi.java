@@ -8,6 +8,7 @@ import io.swagger.client.auth.HttpBasicAuth;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 
 /**
  * Defines an API stub that can communicate with the Ready! API Server.
@@ -68,4 +69,6 @@ public interface TestServerApi {
     ProjectResultReport postTestRecipe(TestRecipe testRecipe, boolean async, HttpBasicAuth auth) throws ApiException;
 
     void setConnectTimeout(int connectionTimeout);
+
+    ProjectResultReport addFiles(String executionID, Collection<File> filesToAdd, boolean async) throws io.swagger.client.ApiException;
 }

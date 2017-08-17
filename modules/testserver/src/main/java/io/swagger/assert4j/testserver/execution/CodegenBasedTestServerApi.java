@@ -29,14 +29,17 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import static io.swagger.assert4j.teststeps.TestSteps.HttpMethod.POST;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * TestServerApi implementation that uses a SwaggerCodegen based implementation
@@ -47,6 +50,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     private static final Logger logger = LoggerFactory.getLogger(CodegenBasedTestServerApi.class);
     private static final String SWAGGER_RESOURCE_PATH = ServerDefaults.SERVICE_BASE_PATH + "/executions/swagger";
     private static final String APPLICATION_JSON = "application/json";
+    private static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
     private ApiClientWrapper apiClient;
 
@@ -107,6 +111,15 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     @Override
     public void setConnectTimeout(int connectionTimeout) {
         apiClient.setConnectTimeout(connectionTimeout);
+    }
+
+    @Override
+    public ProjectResultReport addFiles(String executionID, Collection<File> filesToAdd, boolean async) throws io.swagger.client.ApiException {
+        List<Pair> queryParameters = Collections.singletonList(new Pair("async", String.valueOf(async)));
+        Map<String, File> files = filesToAdd.stream().collect(toMap(File::getName, Function.identity()));
+        String path = ServerDefaults.SERVICE_BASE_PATH + "/executions/" + executionID + "/files";
+        return apiClient.invokeAPI(path, "POST", queryParameters,
+                null, files, APPLICATION_JSON, MULTIPART_FORM_DATA, new String[0], null);
     }
 
     @Override
