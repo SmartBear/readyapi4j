@@ -41,14 +41,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -125,50 +126,51 @@ public class RemoteTestStarter extends Builder {
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws AbortException {
         try {
-            TestServerClient client = TestServerClient.fromUrl(serverUrl).withCredentials(userName, password);
-            TestServerExecution execution = runTests(build, client);
-
-            if (execution.getCurrentStatus() == ProjectResultReport.StatusEnum.PENDING) {
-                List<UnresolvedFile> unresolvedFiles = execution.getCurrentReport().getUnresolvedFiles();
-                Set<String> extraFileNames = buildStringSet(extraFiles);
-                List<File> extraFiles = findAllFiles(extraFileNames, build.getWorkspace());
-                List<File> filesToAttach = new ArrayList<>();
-                for (UnresolvedFile unresolvedFile : unresolvedFiles) {
-                    String fileName = unresolvedFile.getFileName();
-                    extraFiles.stream().filter( file -> file.getName().equals(fileName))
-                            .findFirst()
-                            .ifPresent(filesToAttach::add);
-                }
-                if (filesToAttach.size() == unresolvedFiles.size()) {
-                    execution = client.addFiles(execution, filesToAttach, false);
-                } else {
-                    Set<String> unresolvedFileNames = new HashSet<>(unresolvedFiles.stream().map(UnresolvedFile::getFileName).collect(toSet()));
-                    unresolvedFileNames.removeAll(filesToAttach.stream().map(File::getName).collect(Collectors.toList()));
-                    throw new AbortException("The project " + pathToProjectFile + " has unsatisfied file dependencies");
-                }
-            }
-            log.info("Project result report received from TestServer: {}", execution.getCurrentReport());
-            if (execution.getCurrentReport().getStatus() == ProjectResultReport.StatusEnum.FAILED) {
-                build.setResult(Result.FAILURE);
-            } else {
-                build.setResult(Result.SUCCESS);
-            }
+            List<TestServerExecution> execution = testType == TestType.REPOSITORY ? runRepositoryTests(build) :
+                    runTestFiles(build);
+            log.info("Finished TestServer execution - {} projects executed", execution.size());
         } catch (IOException e) {
-            throw new AbortException("Couldn't start tests from project " + pathToProjectFile + " on server " + serverUrl);
+            log.error("TestServer API call failed", e);
+            throw new AbortException("Could not start tests from project " + pathToProjectFile + " on server " + serverUrl);
         } catch (ApiException e) {
+            log.error("TestServer API call failed when adding files", e);
             throw new AbortException("Failed to attached dependent files to the project " + pathToProjectFile);
         } catch (Exception e) {
-            throw new AbortException("Unexepected error when running " + pathToProjectFile);
+            String message = "Unexpected error when running " + pathToProjectFile;
+            log.error(message, e);
+            throw new AbortException(message + ": " + e.getMessage());
         }
         return true;
+    }
+
+    private List<TestServerExecution> runRepositoryTests(AbstractBuild build) throws IOException, ApiException {
+        TestServerClient client = makeTestServerClient();
+        TestServerExecution repositoryExecution = executeRepositoryProject(build, client);
+        String repositoryProjectPath = repositoryName + "/" + pathToProjectFile;
+        repositoryExecution = addFilesIfExecutionIsPending(build, client, repositoryProjectPath, repositoryExecution);
+        return Collections.singletonList(repositoryExecution);
+    }
+
+    private Collection<File> getFilesToRun(File targetFile) throws AbortException {
+        if (targetFile.isDirectory()) {
+            String extension = testType == TestType.LOCAL_RECIPE ? ".json" : ".xml";
+            File[] filesInDirectory = targetFile.listFiles((dir, name) -> name.endsWith(extension));
+            if (filesInDirectory == null) {
+                throw new AbortException("No project files or recipes found in path " + pathToProjectFile);
+            } else {
+                return Arrays.asList(filesInDirectory);
+            }
+        } else {
+            return Collections.singletonList(targetFile);
+        }
     }
 
     private List<File> findAllFiles(Set<String> extraFileNames, FilePath workspace) {
         List<File> returnValue = new ArrayList<>();
         for (String fileName : extraFileNames) {
-            String filePath = getAbsolutePath(fileName, workspace);
-            if (filePath != null) {
-                File file = new File(filePath);
+            Optional<File> extraFile = findFile(fileName, workspace);
+            if (extraFile.isPresent()) {
+                File file = extraFile.get();
                 if (file.isDirectory()) {
                     File[] filesInDirectory = file.listFiles();
                     if (filesInDirectory != null) {
@@ -178,6 +180,8 @@ public class RemoteTestStarter extends Builder {
                 } else if (file.exists()) {
                     returnValue.add(file);
                 }
+            } else {
+                log.info("Specified extra file not found: {}", fileName);
             }
         }
         return returnValue;
@@ -188,20 +192,69 @@ public class RemoteTestStarter extends Builder {
                 new HashSet<>(Arrays.asList(commaSeparatedStrings.split(",")));
     }
 
-    private TestServerExecution runTests(AbstractBuild build, TestServerClient client) throws AbortException {
-        switch (testType) {
-            case LOCAL_RECIPE:
-                return executeRecipe(build, client);
-            case REPOSITORY:
-                return executeRepositoryProject(build, client);
-            default:
-                return executeXmlProject(build, client);
+    private List<TestServerExecution> runTestFiles(AbstractBuild build) throws AbortException, ApiException, MalformedURLException {
+        TestServerClient client = makeTestServerClient();
+        boolean wildcard = pathToProjectFile.matches(".+(\\\\|/)\\*");
+        String realPath = wildcard ? pathToProjectFile.substring(0, pathToProjectFile.length() - 2) :
+                pathToProjectFile;
+        Optional<File> targetFile = findFile(realPath, build.getWorkspace());
+        if (!targetFile.isPresent()) {
+            throw new AbortException("Cannot load test files. File not found: " + realPath);
         }
+        Collection<File> projectFiles = wildcard ? getFilesToRun(targetFile.get()) :
+                Collections.singletonList(new File(realPath));
+        List<TestServerExecution> executions = new ArrayList<>();
+        for (File projectFile : projectFiles) {
+            TestServerExecution execution;
+            if (testType == TestType.LOCAL_RECIPE) {
+                if (projectFile.isDirectory()) {
+                    throw new AbortException("Cannot run directory " + realPath + " as a recipe");
+                }
+                execution = executeRecipe(build, client, projectFile);
+            } else {
+                execution = executeXmlProject(build, client, projectFile);
+            }
+            execution = addFilesIfExecutionIsPending(build, client, realPath, execution);
+            log.info("Project result report received from TestServer: {}", execution.getCurrentReport());
+            if (execution.getCurrentReport().getStatus() == ProjectResultReport.StatusEnum.FAILED) {
+                build.setResult(Result.FAILURE);
+            }
+        }
+        return executions;
     }
 
-    private TestServerExecution executeRecipe(AbstractBuild build, TestServerClient client) throws AbortException {
+    private TestServerExecution addFilesIfExecutionIsPending(AbstractBuild build, TestServerClient client, String realPath, TestServerExecution execution) throws ApiException, AbortException {
+        if (execution.getCurrentStatus() != ProjectResultReport.StatusEnum.PENDING) {
+            return execution;
+        }
+        List<UnresolvedFile> unresolvedFiles = execution.getCurrentReport().getUnresolvedFiles();
+        Set<String> extraFileNames = buildStringSet(extraFiles);
+        List<File> extraFiles = findAllFiles(extraFileNames, build.getWorkspace());
+        List<File> filesToAttach = new ArrayList<>();
+        for (UnresolvedFile unresolvedFile : unresolvedFiles) {
+            String fileName = unresolvedFile.getFileName();
+            extraFiles.stream().filter(file -> file.getName().equals(fileName))
+                    .findFirst()
+                    .ifPresent(filesToAttach::add);
+        }
+        if (filesToAttach.size() == unresolvedFiles.size()) {
+            execution = client.addFiles(execution, filesToAttach, false);
+        } else {
+            Set<String> unresolvedFileNames = new HashSet<>(unresolvedFiles.stream().map(UnresolvedFile::getFileName).collect(toSet()));
+            Set<String> attachmentFileNames = filesToAttach.stream().map(File::getName).collect(toSet());
+            unresolvedFileNames.removeAll(attachmentFileNames);
+            throw new AbortException("Tests aborted because the project " + realPath +
+                    " has the following unsatisfied file dependencies: " + unresolvedFileNames);
+        }
+        return execution;
+    }
+
+    private TestServerClient makeTestServerClient() throws MalformedURLException {
+        return TestServerClient.fromUrl(serverUrl).withCredentials(userName, password);
+    }
+
+    private TestServerExecution executeRecipe(AbstractBuild build, TestServerClient client, File recipeFile) throws AbortException {
         TestServerRecipeExecutor recipeExecutor = client.createRecipeExecutor();
-        File recipeFile = getProjectFile(build.getWorkspace());
         if (recipeFile == null || !recipeFile.exists()) {
             throw new AbortException("Recipe file " + pathToProjectFile + " does not exist.");
         }
@@ -214,9 +267,8 @@ public class RemoteTestStarter extends Builder {
         return recipeExecutor.executeRecipe(recipeToExecute);
     }
 
-    private TestServerExecution executeXmlProject(AbstractBuild build, TestServerClient client) {
+    private TestServerExecution executeXmlProject(AbstractBuild build, TestServerClient client, File projectFile) {
         ProjectExecutor executor = client.createProjectExecutor();
-        File projectFile = getProjectFile(build.getWorkspace());
         Map<String, String> projectProperties = getProjectProperties();
         ProjectExecutionRequest.Builder executionRequest = ProjectExecutionRequest.Builder.forProjectFile(projectFile)
                 .forTestSuite(testSuiteName)
@@ -228,7 +280,7 @@ public class RemoteTestStarter extends Builder {
         if (!projectProperties.isEmpty()) {
             executionRequest.withCustomProperties(null, projectProperties);
         }
-        return (TestServerExecution)executor.executeProject(executionRequest.build());
+        return (TestServerExecution) executor.executeProject(executionRequest.build());
     }
 
     private TestServerExecution executeRepositoryProject(AbstractBuild build, TestServerClient client) {
@@ -321,39 +373,33 @@ public class RemoteTestStarter extends Builder {
         return trimmed.startsWith("{") && trimmed.endsWith("}");
     }
 
-    private File getProjectFile(FilePath workspace) {
-        String absolutePath = getAbsolutePath(pathToProjectFile, workspace);
-        if (absolutePath == null) {
-            try {
-                URL projectFileUrl = new URL(pathToProjectFile);
-                File projectFile = File.createTempFile("project", ".xml");
-                projectFile.deleteOnExit();
-                FileUtils.copyURLToFile(projectFileUrl, projectFile);
-                return projectFile;
-            } catch (IOException e) {
-                return null;
-            }
-        }
-        return new File(absolutePath);
-    }
-
-    private String getAbsolutePath(String path, FilePath workspace) {
+    private Optional<File> findFile(String path, FilePath workspace) {
         if (StringUtils.isBlank(path)) {
-            return null;
+            return Optional.empty();
         }
         File file = new File(path);
         if (file.exists()) {
-            return file.getAbsolutePath();
+            return Optional.of(file);
+        } else {
+            try {
+                file = new File(new File(workspace.toURI()), path);
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (file.exists()) {
+                return Optional.of(file);
+            } else {
+                try {
+                    URL projectFileUrl = new URL(pathToProjectFile);
+                    File projectFile = File.createTempFile("project", ".xml");
+                    projectFile.deleteOnExit();
+                    FileUtils.copyURLToFile(projectFileUrl, projectFile);
+                    return Optional.of(projectFile);
+                } catch (IOException e) {
+                    return Optional.empty();
+                }
+            }
         }
-        try {
-            file = new File(new File(workspace.toURI()), path);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (file.exists()) {
-            return file.getAbsolutePath();
-        }
-        return null;
     }
 
     // Overridden for better type safety.
