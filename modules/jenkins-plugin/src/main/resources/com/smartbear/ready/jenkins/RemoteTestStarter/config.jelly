@@ -47,6 +47,10 @@
     </f:section>
     <f:advanced>
         <f:section title="Advanced Test Options">
+            <f:entry title="Extra files" field="extraFiles"
+                     description="A path, or a comma-separated list of paths, to file(s) that should be uploaded along with the project or recipe.">
+                <f:textbox/>
+            </f:entry>
             <f:entry title="Project Properties" field="projectProperties"
                      description="One per line in the form name=value">
                 <f:textarea name="projectProperties"/>

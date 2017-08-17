@@ -219,4 +219,9 @@ public class TestServerClient {
         return executions;
     }
 
+    public TestServerExecution addFiles(TestServerExecution execution, List<File> files, boolean async) throws io.swagger.client.ApiException {
+        ProjectResultReport result = apiStub.addFiles(execution.getId(), files, async);
+        return new TestServerExecution(apiStub, authentication, result);
+    }
+
 }
