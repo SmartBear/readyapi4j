@@ -124,7 +124,8 @@ public class RunMojo extends AbstractMojo {
     public void execute()
             throws MojoExecutionException, MojoFailureException {
         try {
-            if (mavenSession.getSystemProperties().getProperty("skipApiTests") != null) {
+            if (propertySetAndNotFalse("skipApiTests") || propertySetAndNotFalse("skipTests") ||
+                    "true".equals(getProperty("maven.test.skip"))) {
                 return;
             }
 
@@ -184,6 +185,19 @@ public class RunMojo extends AbstractMojo {
         } catch (Exception e) {
             throw new MojoExecutionException("Error running recipe", e);
         }
+    }
+
+    private boolean propertySetAndNotFalse(String skipApiTests) {
+        String property = getProperty(skipApiTests);
+        return property != null && !property.equals("false");
+    }
+
+    private String getProperty(String propertyName) {
+        String property = mavenSession.getUserProperties().getProperty(propertyName);
+        if (property == null) {
+            property = mavenSession.getCurrentProject().getProperties().getProperty(propertyName);
+        }
+        return property;
     }
 
     private Result runProjects(List<String> xmlProjectFiles, JUnitReport report) throws MojoFailureException, IOException, MavenFilteringException {

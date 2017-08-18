@@ -55,4 +55,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>int-tests</id>
+            <properties>
+                <skipApiTests>false</skipApiTests>
+            </properties>
+        </profile>
+    </profiles>
 </project>
