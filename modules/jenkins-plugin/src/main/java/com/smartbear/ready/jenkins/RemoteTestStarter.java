@@ -2,7 +2,6 @@ package com.smartbear.ready.jenkins;
 
 import hudson.AbortException;
 import hudson.Extension;
-import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -88,7 +87,8 @@ public class RemoteTestStarter extends Builder {
     private final String projectFilePassword;
     private final String projectProperties;
     private final String extraFiles;
-    private final String reportDirectory;
+    private final String reportFile;
+    private File workspace;
 
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
@@ -102,7 +102,7 @@ public class RemoteTestStarter extends Builder {
                              String repositoryName, String environment,
                              String hostAndPort, String tags,
                              String projectFilePassword,
-                             String projectProperties, String extraFiles, String reportDirectory) {
+                             String projectProperties, String extraFiles, String reportFile) {
         this.pathToProjectFile = pathToProjectFile;
         this.testType = testTypeForString(testType);
         this.serverUrl = serverUrl;
@@ -117,7 +117,7 @@ public class RemoteTestStarter extends Builder {
         this.projectFilePassword = projectFilePassword;
         this.projectProperties = projectProperties;
         this.extraFiles = extraFiles;
-        this.reportDirectory = reportDirectory;
+        this.reportFile = reportFile;
     }
 
     private TestType testTypeForString(String typeString) {
@@ -129,7 +129,12 @@ public class RemoteTestStarter extends Builder {
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws AbortException {
         try {
-            List<TestServerExecution> execution = testType == TestType.REPOSITORY ? runRepositoryTests(build) :
+            workspace = new File(build.getWorkspace().toURI());
+        } catch (Exception e) {
+            throw new AbortException("Could not read path to workspace");
+        }
+        try {
+            List<TestServerExecution> execution = testType == TestType.REPOSITORY ? runRepositoryTests() :
                     runTestFiles(build);
             log.info("Finished TestServer execution - {} projects executed", execution.size());
         } catch (IOException e) {
@@ -146,11 +151,11 @@ public class RemoteTestStarter extends Builder {
         return true;
     }
 
-    private List<TestServerExecution> runRepositoryTests(AbstractBuild build) throws IOException, ApiException {
+    private List<TestServerExecution> runRepositoryTests() throws IOException, ApiException {
         TestServerClient client = makeTestServerClient();
-        TestServerExecution repositoryExecution = executeRepositoryProject(build, client);
+        TestServerExecution repositoryExecution = executeRepositoryProject(client);
         String repositoryProjectPath = repositoryName + "/" + pathToProjectFile;
-        repositoryExecution = addFilesIfExecutionIsPending(build, client, repositoryProjectPath, repositoryExecution);
+        repositoryExecution = addFilesIfExecutionIsPending(client, repositoryProjectPath, repositoryExecution);
         return Collections.singletonList(repositoryExecution);
     }
 
@@ -168,17 +173,17 @@ public class RemoteTestStarter extends Builder {
         }
     }
 
-    private List<File> findAllFiles(Set<String> extraFileNames, FilePath workspace) {
+    private List<File> findAllFiles(Set<String> extraFileNames) {
         List<File> returnValue = new ArrayList<>();
         for (String fileName : extraFileNames) {
-            Optional<File> extraFile = findFile(fileName, workspace);
+            Optional<File> extraFile = findFile(fileName);
             if (extraFile.isPresent()) {
                 File file = extraFile.get();
                 if (file.isDirectory()) {
                     File[] filesInDirectory = file.listFiles();
                     if (filesInDirectory != null) {
                         Set<String> filePaths = Arrays.stream(filesInDirectory).map(File::getAbsolutePath).collect(toSet());
-                        returnValue.addAll(findAllFiles(filePaths, workspace));
+                        returnValue.addAll(findAllFiles(filePaths));
                     }
                 } else if (file.exists()) {
                     returnValue.add(file);
@@ -196,12 +201,12 @@ public class RemoteTestStarter extends Builder {
     }
 
     private List<TestServerExecution> runTestFiles(AbstractBuild build) throws AbortException, ApiException, MalformedURLException {
-        JUnitReport report = reportDirectoryExists(build.getWorkspace()) ? new JUnitReport(getProjectProperties()) : null;
+        JUnitReport report = isNotBlank(reportFile) ? new JUnitReport(getProjectProperties()) : null;
         TestServerClient client = makeTestServerClient();
         boolean wildcard = pathToProjectFile.matches(".+(\\\\|/)\\*");
         String realPath = wildcard ? pathToProjectFile.substring(0, pathToProjectFile.length() - 2) :
                 pathToProjectFile;
-        Optional<File> targetFile = findFile(realPath, build.getWorkspace());
+        Optional<File> targetFile = findFile(realPath);
         if (!targetFile.isPresent()) {
             throw new AbortException("Cannot load test files. File not found: " + realPath);
         }
@@ -214,11 +219,11 @@ public class RemoteTestStarter extends Builder {
                 if (projectFile.isDirectory()) {
                     throw new AbortException("Cannot run directory " + realPath + " as a recipe");
                 }
-                execution = executeRecipe(build, client, projectFile);
+                execution = executeRecipe(client, projectFile);
             } else {
-                execution = executeXmlProject(build, client, projectFile);
+                execution = executeXmlProject(client, projectFile);
             }
-            execution = addFilesIfExecutionIsPending(build, client, realPath, execution);
+            execution = addFilesIfExecutionIsPending(client, realPath, execution);
             if (report != null) {
                 report.handleResponse(execution.getCurrentReport(), projectFile.getName());
             }
@@ -229,27 +234,25 @@ public class RemoteTestStarter extends Builder {
         }
         if (report != null) {
             report.finishReport();
+            File targetReportFile = new File(workspace, reportFile);
             try {
-                report.save(new File(new File(reportDirectory), "junit-report.xml"));
+                if (targetReportFile.getParentFile().isDirectory() || targetReportFile.mkdirs()) {
+                    report.save(targetReportFile);
+                }
             } catch (IOException e) {
-                System.err.println("Could not write report to report directory " + reportDirectory);
+                System.err.println("Could not write report to report file " + targetFile);
             }
         }
         return executions;
     }
 
-    private boolean reportDirectoryExists(FilePath workspace) {
-        Optional<File> file = findFile(reportDirectory, workspace);
-        return file.isPresent() && file.get().isDirectory();
-    }
-
-    private TestServerExecution addFilesIfExecutionIsPending(AbstractBuild build, TestServerClient client, String realPath, TestServerExecution execution) throws ApiException, AbortException {
+    private TestServerExecution addFilesIfExecutionIsPending(TestServerClient client, String realPath, TestServerExecution execution) throws ApiException, AbortException {
         if (execution.getCurrentStatus() != ProjectResultReport.StatusEnum.PENDING) {
             return execution;
         }
         List<UnresolvedFile> unresolvedFiles = execution.getCurrentReport().getUnresolvedFiles();
         Set<String> extraFileNames = buildStringSet(extraFiles);
-        List<File> extraFiles = findAllFiles(extraFileNames, build.getWorkspace());
+        List<File> extraFiles = findAllFiles(extraFileNames);
         List<File> filesToAttach = new ArrayList<>();
         for (UnresolvedFile unresolvedFile : unresolvedFiles) {
             String fileName = unresolvedFile.getFileName();
@@ -273,7 +276,7 @@ public class RemoteTestStarter extends Builder {
         return TestServerClient.fromUrl(serverUrl).withCredentials(userName, password);
     }
 
-    private TestServerExecution executeRecipe(AbstractBuild build, TestServerClient client, File recipeFile) throws AbortException {
+    private TestServerExecution executeRecipe(TestServerClient client, File recipeFile) throws AbortException {
         TestServerRecipeExecutor recipeExecutor = client.createRecipeExecutor();
         if (recipeFile == null || !recipeFile.exists()) {
             throw new AbortException("Recipe file " + pathToProjectFile + " does not exist.");
@@ -287,7 +290,7 @@ public class RemoteTestStarter extends Builder {
         return recipeExecutor.executeRecipe(recipeToExecute);
     }
 
-    private TestServerExecution executeXmlProject(AbstractBuild build, TestServerClient client, File projectFile) {
+    private TestServerExecution executeXmlProject(TestServerClient client, File projectFile) {
         ProjectExecutor executor = client.createProjectExecutor();
         Map<String, String> projectProperties = getProjectProperties();
         ProjectExecutionRequest.Builder executionRequest = ProjectExecutionRequest.Builder.forProjectFile(projectFile)
@@ -303,7 +306,7 @@ public class RemoteTestStarter extends Builder {
         return (TestServerExecution) executor.executeProject(executionRequest.build());
     }
 
-    private TestServerExecution executeRepositoryProject(AbstractBuild build, TestServerClient client) {
+    private TestServerExecution executeRepositoryProject(TestServerClient client) {
         ProjectExecutor executor = client.createProjectExecutor();
         Map<String, String> projectProperties = getProjectProperties();
         Set<String> tagNames = buildStringSet(tags);
@@ -369,6 +372,10 @@ public class RemoteTestStarter extends Builder {
         return extraFiles;
     }
 
+    public String getReportFile() {
+        return reportFile;
+    }
+
     private Map<String, String> getProjectProperties() {
         if (isBlank(projectProperties)) {
             return Collections.emptyMap();
@@ -393,7 +400,7 @@ public class RemoteTestStarter extends Builder {
         return trimmed.startsWith("{") && trimmed.endsWith("}");
     }
 
-    private Optional<File> findFile(String path, FilePath workspace) {
+    private Optional<File> findFile(String path) {
         if (StringUtils.isBlank(path)) {
             return Optional.empty();
         }
@@ -401,11 +408,7 @@ public class RemoteTestStarter extends Builder {
         if (file.exists()) {
             return Optional.of(file);
         } else {
-            try {
-                file = new File(new File(workspace.toURI()), path);
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
+            file = new File(workspace, path);
             if (file.exists()) {
                 return Optional.of(file);
             } else {
@@ -422,9 +425,6 @@ public class RemoteTestStarter extends Builder {
         }
     }
 
-    // Overridden for better type safety.
-    // If your plugin doesn't really define any property on Descriptor,
-    // you don't have to do this.
     @Override
     public DescriptorImpl getDescriptor() {
         return (DescriptorImpl) super.getDescriptor();
