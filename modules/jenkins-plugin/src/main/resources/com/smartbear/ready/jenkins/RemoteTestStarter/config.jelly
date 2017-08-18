@@ -69,6 +69,10 @@
                          description="A comma separated list of tags to filter test cases by.">
                     <f:textbox/>
                 </f:entry>
+                <f:entry title="Report directory" field="reportDirectory"
+                         description="The directory that the report will be written to (leave empty if you do not want a report).">
+                    <f:textbox/>
+                </f:entry>
             </f:section>
 
         </f:section>

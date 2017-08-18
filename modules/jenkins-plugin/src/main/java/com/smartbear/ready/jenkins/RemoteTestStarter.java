@@ -17,6 +17,7 @@ import io.swagger.assert4j.TestRecipeBuilder;
 import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.client.model.UnresolvedFile;
 import io.swagger.assert4j.execution.Execution;
+import io.swagger.assert4j.junitreport.JUnitReport;
 import io.swagger.assert4j.testserver.execution.ProjectExecutionRequest;
 import io.swagger.assert4j.testserver.execution.ProjectExecutor;
 import io.swagger.assert4j.testserver.execution.RepositoryProjectExecutionRequest;
@@ -87,6 +88,7 @@ public class RemoteTestStarter extends Builder {
     private final String projectFilePassword;
     private final String projectProperties;
     private final String extraFiles;
+    private final String reportDirectory;
 
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
@@ -100,7 +102,7 @@ public class RemoteTestStarter extends Builder {
                              String repositoryName, String environment,
                              String hostAndPort, String tags,
                              String projectFilePassword,
-                             String projectProperties, String extraFiles) {
+                             String projectProperties, String extraFiles, String reportDirectory) {
         this.pathToProjectFile = pathToProjectFile;
         this.testType = testTypeForString(testType);
         this.serverUrl = serverUrl;
@@ -115,6 +117,7 @@ public class RemoteTestStarter extends Builder {
         this.projectFilePassword = projectFilePassword;
         this.projectProperties = projectProperties;
         this.extraFiles = extraFiles;
+        this.reportDirectory = reportDirectory;
     }
 
     private TestType testTypeForString(String typeString) {
@@ -193,6 +196,7 @@ public class RemoteTestStarter extends Builder {
     }
 
     private List<TestServerExecution> runTestFiles(AbstractBuild build) throws AbortException, ApiException, MalformedURLException {
+        JUnitReport report = reportDirectoryExists(build.getWorkspace()) ? new JUnitReport(getProjectProperties()) : null;
         TestServerClient client = makeTestServerClient();
         boolean wildcard = pathToProjectFile.matches(".+(\\\\|/)\\*");
         String realPath = wildcard ? pathToProjectFile.substring(0, pathToProjectFile.length() - 2) :
@@ -215,12 +219,28 @@ public class RemoteTestStarter extends Builder {
                 execution = executeXmlProject(build, client, projectFile);
             }
             execution = addFilesIfExecutionIsPending(build, client, realPath, execution);
+            if (report != null) {
+                report.handleResponse(execution.getCurrentReport(), projectFile.getName());
+            }
             log.info("Project result report received from TestServer: {}", execution.getCurrentReport());
             if (execution.getCurrentReport().getStatus() == ProjectResultReport.StatusEnum.FAILED) {
                 build.setResult(Result.FAILURE);
             }
         }
+        if (report != null) {
+            report.finishReport();
+            try {
+                report.save(new File(new File(reportDirectory), "junit-report.xml"));
+            } catch (IOException e) {
+                System.err.println("Could not write report to report directory " + reportDirectory);
+            }
+        }
         return executions;
+    }
+
+    private boolean reportDirectoryExists(FilePath workspace) {
+        Optional<File> file = findFile(reportDirectory, workspace);
+        return file.isPresent() && file.get().isDirectory();
     }
 
     private TestServerExecution addFilesIfExecutionIsPending(AbstractBuild build, TestServerClient client, String realPath, TestServerExecution execution) throws ApiException, AbortException {

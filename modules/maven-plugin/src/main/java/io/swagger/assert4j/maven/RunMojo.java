@@ -26,6 +26,8 @@ import io.swagger.assert4j.TestRecipeBuilder;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.execution.RecipeExecutor;
 import io.swagger.assert4j.facade.execution.RecipeExecutorBuilder;
+import io.swagger.assert4j.junitreport.JUnitReport;
+import io.swagger.assert4j.junitreport.TestFailureException;
 import io.swagger.assert4j.testserver.execution.ProjectExecutionRequest;
 import io.swagger.assert4j.testserver.execution.ProjectExecutor;
 import io.swagger.assert4j.testserver.execution.TestServerClient;
@@ -62,8 +64,7 @@ import static io.swagger.assert4j.client.model.TestStepResultReport.AssertionSta
 import static io.swagger.assert4j.testserver.execution.ProjectExecutionRequest.Builder.forProjectFile;
 
 @Mojo(name = "run")
-public class RunMojo
-        extends AbstractMojo {
+public class RunMojo extends AbstractMojo {
     @Component
     private MavenResourcesFiltering resourcesFiltering;
 
@@ -152,7 +153,7 @@ public class RunMojo
             readRecipeProperties();
             initRecipeExecutor();
 
-            JUnitReport report = async ? null : new JUnitReport();
+            JUnitReport report = async ? null : new JUnitReport(properties, new MavenErrorLog());
 
             Result recipeExecutionResult = runRecipes(recipeFiles, report);
             Result projectExecutionResult = runProjects(xmlProjectFiles, report);
@@ -225,9 +226,12 @@ public class RunMojo
                     continue;
                 }
                 try {
-                    handleResponse(response, report, file);
-                } catch (MojoFailureException exception) {
-                    getLog().error(exception);
+                    getLog().debug("Response body:" + result.toString());
+                    if (report != null) {
+                        report.handleResponse(response, file);
+                    }
+                } catch (TestFailureException e) {
+                    getLog().error(e);
                     result.incrementFailure();
                 }
             }
@@ -409,6 +413,13 @@ public class RunMojo
 
         void incrementFailure() {
             failureCount++;
+        }
+    }
+
+    private class MavenErrorLog implements JUnitReport.ErrorLog {
+        @Override
+        public void logError(String message) {
+            getLog().error(message);
         }
     }
 }
