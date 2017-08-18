@@ -3,7 +3,7 @@
         {
             "type": "REST Request",
             "method": "GET",
-            "URI": "https://google.com",
+            "URI": "${apitest.host}/apis",
             "assertions": [
                 {
                     "type": "Valid HTTP Status Codes",
