@@ -51,6 +51,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
+import static hudson.Util.removeTrailingSlash;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -105,7 +106,7 @@ public class RemoteTestStarter extends Builder {
                              String projectProperties, String extraFiles, String reportFile) {
         this.pathToProjectFile = pathToProjectFile;
         this.testType = testTypeForString(testType);
-        this.serverUrl = serverUrl;
+        this.serverUrl = removeTrailingSlash(serverUrl) + "/v1";
         this.userName = userName;
         this.password = password;
         this.testCaseName = testCaseName;
@@ -176,7 +177,7 @@ public class RemoteTestStarter extends Builder {
     private List<File> findAllFiles(Set<String> extraFileNames) {
         List<File> returnValue = new ArrayList<>();
         for (String fileName : extraFileNames) {
-            Optional<File> extraFile = findFile(fileName);
+            Optional<File> extraFile = findOrCopyFile(fileName);
             if (extraFile.isPresent()) {
                 File file = extraFile.get();
                 if (file.isDirectory()) {
@@ -206,7 +207,7 @@ public class RemoteTestStarter extends Builder {
         boolean wildcard = pathToProjectFile.matches(".+(\\\\|/)\\*");
         String realPath = wildcard ? pathToProjectFile.substring(0, pathToProjectFile.length() - 2) :
                 pathToProjectFile;
-        Optional<File> targetFile = findFile(realPath);
+        Optional<File> targetFile = findOrCopyFile(realPath);
         if (!targetFile.isPresent()) {
             throw new AbortException("Cannot load test files. File not found: " + realPath);
         }
@@ -228,7 +229,7 @@ public class RemoteTestStarter extends Builder {
                 report.handleResponse(execution.getCurrentReport(), projectFile.getName());
             }
             log.info("Project result report received from TestServer: {}", execution.getCurrentReport());
-            if (execution.getCurrentReport().getStatus() == ProjectResultReport.StatusEnum.FAILED) {
+            if (execution.getCurrentReport().getStatus() != ProjectResultReport.StatusEnum.FINISHED) {
                 build.setResult(Result.FAILURE);
             }
         }
@@ -291,7 +292,7 @@ public class RemoteTestStarter extends Builder {
     }
 
     private TestServerExecution executeXmlProject(TestServerClient client, File projectFile) {
-        ProjectExecutor executor = client.createProjectExecutor();
+        ProjectExecutor executor = client.createProjectExecutor(ProjectExecutor.PendingResonsePolicy.ACCEPT);
         Map<String, String> projectProperties = getProjectProperties();
         ProjectExecutionRequest.Builder executionRequest = ProjectExecutionRequest.Builder.forProjectFile(projectFile)
                 .forTestSuite(testSuiteName)
@@ -307,7 +308,7 @@ public class RemoteTestStarter extends Builder {
     }
 
     private TestServerExecution executeRepositoryProject(TestServerClient client) {
-        ProjectExecutor executor = client.createProjectExecutor();
+        ProjectExecutor executor = client.createProjectExecutor(ProjectExecutor.PendingResonsePolicy.ACCEPT);
         Map<String, String> projectProperties = getProjectProperties();
         Set<String> tagNames = buildStringSet(tags);
         RepositoryProjectExecutionRequest.Builder executionRequest = RepositoryProjectExecutionRequest.Builder.forProject(pathToProjectFile)
@@ -389,7 +390,7 @@ public class RemoteTestStarter extends Builder {
                     returnValue.put(keyString, properties.getProperty(keyString));
                 }
             } catch (IOException ignore) {
-
+                // Just keeping the compiler happy; StringReader will never throw IOException
             }
             return returnValue;
         }
@@ -400,7 +401,7 @@ public class RemoteTestStarter extends Builder {
         return trimmed.startsWith("{") && trimmed.endsWith("}");
     }
 
-    private Optional<File> findFile(String path) {
+    private Optional<File> findOrCopyFile(String path) {
         if (StringUtils.isBlank(path)) {
             return Optional.empty();
         }

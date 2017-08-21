@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
     <name>Assert4J JUnit Report</name>
 
-    <description>Maven plugin for executing test recipes locally or against Ready!API TestServer</description>
+    <description>Functionality for creating a test report in the JUnit XML format</description>
 
     <dependencies>
         <dependency>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>io.swagger.assert</groupId>
             <artifactId>assert4j-core</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

@@ -30,7 +30,7 @@
         <f:description>Only edit these fields if you want to override the default connection settings of the plugin.
         </f:description>
         <f:entry title="Server URL" field="serverUrl"
-                 description="The URL to the root of the TestServer, e.g. https://our.testserver.instance:8443/v1.">
+                 description="The URL to the root of the TestServer, e.g. https://our.testserver.instance:8443.">
             <f:textbox default="${descriptor.serverUrl}"/>
         </f:entry>
         <f:entry title="Username" field="userName"

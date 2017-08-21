@@ -12,10 +12,15 @@ import java.io.File;
  */
 
 public class ProjectExecutor extends AbstractTestServerExecutor {
+
     private static final Logger logger = LoggerFactory.getLogger(ProjectExecutor.class);
 
+    ProjectExecutor(TestServerClient testServerClient, PendingResonsePolicy pendingResonsePolicy) {
+        super(testServerClient, pendingResonsePolicy);
+    }
+
     ProjectExecutor(TestServerClient testServerClient) {
-        super(testServerClient);
+        this(testServerClient, PendingResonsePolicy.REJECT);
     }
 
     public Execution submitRepositoryProject(RepositoryProjectExecutionRequest executionRequest) {
@@ -105,7 +110,7 @@ public class ProjectExecutor extends AbstractTestServerExecutor {
     private TestServerExecution doExecuteProjectFromRepository(RepositoryProjectExecutionRequest executionRequest, boolean async) {
         try {
             TestServerExecution execution = testServerClient.postRepositoryProject(executionRequest, async);
-            cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), null);
+            cancelExecutionAndThrowExceptionIfPending(execution.getCurrentReport(), null);
             return execution;
         } catch (ApiException e) {
             notifyErrorOccurred(e);
@@ -121,7 +126,7 @@ public class ProjectExecutor extends AbstractTestServerExecutor {
     private TestServerExecution doExecuteProject(ProjectExecutionRequest projectExecutionRequest, boolean async) throws ApiException {
         try {
             TestServerExecution execution = testServerClient.postProject(projectExecutionRequest, async);
-            // cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), null);
+            cancelExecutionAndThrowExceptionIfPending(execution.getCurrentReport(), null);
             return execution;
         } catch (ApiException e) {
             notifyErrorOccurred(e);

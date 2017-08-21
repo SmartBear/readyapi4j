@@ -96,6 +96,10 @@ public class TestServerClient {
         return new ProjectExecutor(this);
     }
 
+    public ProjectExecutor createProjectExecutor(ProjectExecutor.PendingResonsePolicy pendingResponsePolicy) {
+        return new ProjectExecutor(this, pendingResponsePolicy);
+    }
+
     /**
      * @return a class for validating APIs against a Swagger definition
      */
