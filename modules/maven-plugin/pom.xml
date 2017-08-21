@@ -11,9 +11,9 @@
     <artifactId>assert4j-maven-plugin</artifactId>
 
     <packaging>maven-plugin</packaging>
-    <name>ReadyAapi4J Maven Plugin</name>
+    <name>Assert4J Maven Plugin</name>
 
-    <description>Maven plugin for executing test recipes locally or against Ready!API TestServer</description>
+    <description>Maven plugin for executing test recipes locally or against ReadyAPI TestServer</description>
 
     <dependencies>
         <dependency>
