@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>assert4j</artifactId>
+        <artifactId>swagger-assert4j</artifactId>
         <groupId>io.swagger.assert</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
@@ -13,11 +13,11 @@
         <skipApiTests>true</skipApiTests>
     </properties>
 
-    <artifactId>assert4j-maven-plugin-tester</artifactId>
+    <artifactId>swagger-assert4j-maven-plugin-tester</artifactId>
     <dependencies>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-maven-plugin</artifactId>
+            <artifactId>swagger-assert4j-maven-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -26,7 +26,7 @@
         <plugins>
             <plugin>
                 <groupId>io.swagger.assert</groupId>
-                <artifactId>assert4j-maven-plugin</artifactId>
+                <artifactId>swagger-assert4j-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <executions>
                     <execution>
