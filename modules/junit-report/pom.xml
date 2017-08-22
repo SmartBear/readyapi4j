@@ -8,7 +8,7 @@
         <relativePath>../..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>assert4j-junit-report</artifactId>
+    <artifactId>swagger-assert4j-junit-report</artifactId>
 
     <packaging>jar</packaging>
     <name>Assert4J JUnit Report</name>
@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-core</artifactId>
+            <artifactId>swagger-assert4j-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

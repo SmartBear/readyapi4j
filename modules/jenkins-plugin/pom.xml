@@ -24,7 +24,7 @@
     <dependencies>
         <dependency>
             <groupId>io.swagger.assert</groupId>
-            <artifactId>assert4j-junit-report</artifactId>
+            <artifactId>swagger-assert4j-junit-report</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
