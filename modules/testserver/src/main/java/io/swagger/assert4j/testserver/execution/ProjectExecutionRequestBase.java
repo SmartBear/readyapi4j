@@ -3,13 +3,18 @@ package io.swagger.assert4j.testserver.execution;
 import io.swagger.assert4j.client.model.CustomProperties;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 class ProjectExecutionRequestBase {
     String testSuiteName;
     String testCaseName;
     String environment;
     Map<String, CustomProperties> customPropertiesMap = new HashMap<>();
+    Set<String> tags = new HashSet<>();
+    String projectPassword;
+    String endpoint;
 
     String getTestSuiteName() {
         return testSuiteName;
@@ -23,6 +28,18 @@ class ProjectExecutionRequestBase {
         return environment;
     }
 
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    public String getProjectPassword() {
+        return projectPassword;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
     Map<String, CustomProperties> getCustomPropertiesMap() {
         return customPropertiesMap;
     }
@@ -33,6 +50,15 @@ class ProjectExecutionRequestBase {
 
         AbstractProjectExecutionRequestBuilder(Request executionRequest) {
             this.projectExecutionRequest = executionRequest;
+        }
+
+        /**
+         * @param password (optional) The password used to decrypt an encrypted project.
+         * @return Builder
+         */
+        public Builder withProjectPassword(String password) {
+            projectExecutionRequest.projectPassword = password;
+            return (Builder) this;
         }
 
         /**
@@ -60,6 +86,25 @@ class ProjectExecutionRequestBase {
          */
         public Builder forEnvironment(String environmentName) {
             projectExecutionRequest.environment = environmentName;
+            return (Builder) this;
+        }
+
+        /**
+         * @param tags (optional) The tags that you want to filter test cases by.
+         * @return Builder
+         */
+        public Builder forTags(Set<String> tags) {
+            projectExecutionRequest.tags = tags;
+            return (Builder) this;
+        }
+
+        /**
+         * @param endpoint A string in the format host:port that will be used to replace the host and port in all
+         *                 HTTP requests sent by the test.
+         * @return Builder
+         */
+        public Builder withEndpoint(String endpoint) {
+            projectExecutionRequest.endpoint = endpoint;
             return (Builder) this;
         }
 

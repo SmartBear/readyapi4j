@@ -11,9 +11,9 @@
     <artifactId>swagger-assert4j-maven-plugin</artifactId>
 
     <packaging>maven-plugin</packaging>
-    <name>ReadyAapi4J Maven Plugin</name>
+    <name>Assert4J Maven Plugin</name>
 
-    <description>Maven plugin for executing test recipes locally or against Ready!API TestServer</description>
+    <description>Maven plugin for executing test recipes locally or against ReadyAPI TestServer</description>
 
     <dependencies>
         <dependency>
@@ -36,6 +36,11 @@
         <dependency>
             <groupId>io.swagger.assert</groupId>
             <artifactId>swagger-assert4j-facade</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.assert</groupId>
+            <artifactId>swagger-assert4j-junit-report</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -78,26 +83,6 @@
                         <phase>process-classes</phase>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>xmlbeans-maven-plugin</artifactId>
-                <version>2.3.3</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>xmlbeans</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <inherited>true</inherited>
-                <configuration>
-                    <javaSource>1.5</javaSource>
-                    <verbose>false</verbose>
-                    <schemaDirectory>src/main/resources</schemaDirectory>
-                </configuration>
             </plugin>
         </plugins>
     </build>

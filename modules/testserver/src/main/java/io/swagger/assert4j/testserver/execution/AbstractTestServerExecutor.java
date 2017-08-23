@@ -23,15 +23,27 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 
 abstract class AbstractTestServerExecutor {
+    public enum PendingResonsePolicy {
+        ACCEPT,
+        REJECT
+    }
     private static Logger logger = LoggerFactory.getLogger(AbstractTestServerExecutor.class);
     private static final int NUMBER_OF_RETRIES_IN_CASE_OF_ERRORS = 3;
+
+    List<ExtractorData> extractorDataList = new LinkedList<>();
+
+    private final PendingResonsePolicy pendingResonsePolicy;
     private final List<ExecutionListener> executionListeners = new CopyOnWriteArrayList<>();
-    protected List<ExtractorData> extractorDataList = new LinkedList<>();
 
     final TestServerClient testServerClient;
 
-    AbstractTestServerExecutor(TestServerClient testServerClient) {
+    AbstractTestServerExecutor(TestServerClient testServerClient, PendingResonsePolicy pendingResonsePolicy) {
         this.testServerClient = testServerClient;
+        this.pendingResonsePolicy = pendingResonsePolicy;
+    }
+
+    AbstractTestServerExecutor(TestServerClient testServerClient) {
+        this(testServerClient, PendingResonsePolicy.REJECT);
     }
 
     public void addExecutionListener(ExecutionListener listener) {
@@ -65,8 +77,8 @@ abstract class AbstractTestServerExecutor {
         }
     }
 
-    void cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(ProjectResultReport projectResultReport, TestCase testCase) {
-        if (ProjectResultReport.StatusEnum.PENDING.equals(projectResultReport.getStatus())) {
+    void cancelExecutionAndThrowExceptionIfPending(ProjectResultReport projectResultReport, TestCase testCase) {
+        if (pendingResonsePolicy == PendingResonsePolicy.REJECT && ProjectResultReport.StatusEnum.PENDING.equals(projectResultReport.getStatus())) {
             List<UnresolvedFile> unresolvedFiles = projectResultReport.getUnresolvedFiles();
             if (!unresolvedFiles.isEmpty()) {
                 testServerClient.cancelExecution(projectResultReport.getExecutionID());

@@ -29,14 +29,17 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import static io.swagger.assert4j.teststeps.TestSteps.HttpMethod.POST;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * TestServerApi implementation that uses a SwaggerCodegen based implementation
@@ -47,6 +50,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     private static final Logger logger = LoggerFactory.getLogger(CodegenBasedTestServerApi.class);
     private static final String SWAGGER_RESOURCE_PATH = ServerDefaults.SERVICE_BASE_PATH + "/executions/swagger";
     private static final String APPLICATION_JSON = "application/json";
+    private static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
     private ApiClientWrapper apiClient;
 
@@ -107,6 +111,15 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     @Override
     public void setConnectTimeout(int connectionTimeout) {
         apiClient.setConnectTimeout(connectionTimeout);
+    }
+
+    @Override
+    public ProjectResultReport addFiles(String executionID, Collection<File> filesToAdd, boolean async) throws io.swagger.client.ApiException {
+        List<Pair> queryParameters = Collections.singletonList(new Pair("async", String.valueOf(async)));
+        Map<String, File> files = filesToAdd.stream().collect(toMap(File::getName, Function.identity()));
+        String path = ServerDefaults.SERVICE_BASE_PATH + "/executions/" + executionID + "/files";
+        return apiClient.invokeAPI(path, "POST", queryParameters,
+                null, files, APPLICATION_JSON, MULTIPART_FORM_DATA, new String[0], null);
     }
 
     @Override
@@ -360,8 +373,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
 
         setAuthentication(auth);
 
-        List<Pair> queryParams = buildQueryParameters(async, executionRequest.getTestCaseName(),
-                executionRequest.getTestSuiteName(), executionRequest.getEnvironment());
+        List<Pair> queryParams = buildQueryParameters(executionRequest, async);
 
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions";
         String type = "application/xml";
@@ -408,8 +420,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
     @Override
     public ProjectResultReport postRepositoryProject(RepositoryProjectExecutionRequest request, boolean async, HttpBasicAuth auth) throws ApiException {
         setAuthentication(auth);
-        List<Pair> queryParams = buildQueryParameters(async, request.getTestCaseName(), request.getTestSuiteName(),
-                request.getEnvironment());
+        List<Pair> queryParams = buildQueryParameters(request, async);
         queryParams.add(new Pair("projectFileName", request.getProjectFileName()));
         if (request.getRepositoryName() != null) {
             queryParams.add(new Pair("repositoryName", request.getRepositoryName()));
@@ -419,17 +430,26 @@ public class CodegenBasedTestServerApi implements TestServerApi {
                 APPLICATION_JSON, queryParams, null);
     }
 
-    private List<Pair> buildQueryParameters(boolean async, String testCaseName, String testSuiteName, String environment) {
+    private List<Pair> buildQueryParameters(ProjectExecutionRequestBase executionRequest, boolean async) {
         List<Pair> queryParams = new ArrayList<>();
         queryParams.add(new Pair("async", String.valueOf(async)));
-        if (testCaseName != null) {
-            queryParams.add(new Pair("testCaseName", testCaseName));
+        if (executionRequest.getTestCaseName() != null) {
+            queryParams.add(new Pair("testCaseName", executionRequest.getTestCaseName()));
         }
-        if (testSuiteName != null) {
-            queryParams.add(new Pair("testSuiteName", testSuiteName));
+        if (executionRequest.getTestSuiteName() != null) {
+            queryParams.add(new Pair("testSuiteName", executionRequest.getTestSuiteName()));
         }
-        if (environment != null) {
-            queryParams.add(new Pair("environment", environment));
+        if (executionRequest.getEnvironment() != null) {
+            queryParams.add(new Pair("environment", executionRequest.getEnvironment()));
+        }
+        if (executionRequest.getEndpoint() != null) {
+            queryParams.add(new Pair("hostAndPort", executionRequest.getEndpoint()));
+        }
+        if (executionRequest.getProjectPassword() != null) {
+            queryParams.add(new Pair("projectPassword", executionRequest.getProjectPassword()));
+        }
+        if (!executionRequest.getTags().isEmpty()) {
+            queryParams.add(new Pair("tags", String.join(",", executionRequest.getTags())));
         }
         return queryParams;
     }

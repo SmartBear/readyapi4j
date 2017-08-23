@@ -67,7 +67,7 @@ public class TestServerRecipeExecutor extends AbstractTestServerExecutor impleme
             Optional<ExtractorData> extractorDataOptional = Optional.ofNullable(optionalExtractorData);
             extractorDataOptional.ifPresent(extractorData -> extractorDataList.add(extractorData));
             TestServerExecution execution = testServerClient.postTestRecipe(testRecipe, async);
-            cancelExecutionAndThrowExceptionIfPendingDueToMissingClientCertificate(execution.getCurrentReport(), testRecipe.getTestCase());
+            cancelExecutionAndThrowExceptionIfPending(execution.getCurrentReport(), testRecipe.getTestCase());
             return execution;
         } catch (ApiException e) {
             notifyErrorOccurred(e);

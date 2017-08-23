@@ -9,6 +9,9 @@
         <relativePath>../..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <skipApiTests>true</skipApiTests>
+    </properties>
 
     <artifactId>swagger-assert4j-maven-plugin-tester</artifactId>
     <dependencies>
@@ -52,4 +55,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>int-tests</id>
+            <properties>
+                <skipApiTests>false</skipApiTests>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.swagger.assert4j.maven;
+package io.swagger.assert4j.junitreport;
 
 import com.smartbear.readyapi.junit.ErrorDocument;
 import com.smartbear.readyapi.junit.FailureDocument;
@@ -23,19 +23,30 @@ import com.smartbear.readyapi.junit.Property;
 import com.smartbear.readyapi.junit.Testcase;
 import com.smartbear.readyapi.junit.Testsuite;
 import com.smartbear.readyapi.junit.TestsuiteDocument;
+import io.swagger.assert4j.client.model.ProjectResultReport;
+import io.swagger.assert4j.client.model.TestCaseResultReport;
+import io.swagger.assert4j.client.model.TestStepResultReport;
+import io.swagger.assert4j.client.model.TestSuiteResultReport;
 import org.apache.xmlbeans.XmlOptions;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static io.swagger.assert4j.client.model.TestStepResultReport.AssertionStatusEnum.FAILED;
 
 /**
  * Wrapper for a number of Test runs
  */
 
 public class JUnitReport {
+    private final Map properties;
     private TestsuiteDocument testsuiteDoc;
     private int noofTestCases;
     private int noofFailures;
@@ -45,15 +56,21 @@ public class JUnitReport {
     private StringBuilder systemErr;
 
     private boolean includeTestProperties;
+    private final ErrorLog errorLog;
 
-    public JUnitReport() {
+    public JUnitReport(Map properties) {
+        this(properties,  new SystemErrErrorLog());
+    }
+
+    public JUnitReport(Map properties, ErrorLog errorLog) {
+        this.properties = properties;
+        this.errorLog = errorLog;
         systemOut = new StringBuilder();
         systemErr = new StringBuilder();
 
         testsuiteDoc = TestsuiteDocument.Factory.newInstance();
         Testsuite testsuite = testsuiteDoc.addNewTestsuite();
-        Properties properties = testsuite.addNewProperties();
-        setSystemProperties(properties);
+        setSystemProperties(testsuite.addNewProperties());
     }
 
     public void setIncludeTestProperties(boolean includeTestProperties) {
@@ -189,5 +206,50 @@ public class JUnitReport {
         testsuiteDoc.getTestsuite().setTime(String.valueOf(totalTime / 1000));
 
         return testsuiteDoc;
+    }
+
+    public void handleResponse(ProjectResultReport result, String recipeFileName) throws TestFailureException {
+
+            if (result.getStatus() == ProjectResultReport.StatusEnum.FAILED) {
+
+                String message = logErrorsToConsole(result);
+                addTestCaseWithFailure(recipeFileName, result.getTimeTaken(),
+                        message, "<missing stacktrace>", new HashMap<String, String>(properties));
+
+                throw new TestFailureException("Recipe failed, recipe file: " + recipeFileName);
+            } else {
+                addTestCase(recipeFileName, result.getTimeTaken(), new HashMap<String, String>(properties));
+            }
+    }
+
+    private String logErrorsToConsole(ProjectResultReport result) {
+
+        List<String> messages = new ArrayList<>();
+
+        result.getTestSuiteResultReports().stream()
+                .map(TestSuiteResultReport::getTestCaseResultReports) // creates List<List<TestCaseResultReport>>
+                .flatMap(Collection::stream) //converts List<List<TestCaseResultReport>> to List<TestCaseResultReport>
+                .map(TestCaseResultReport::getTestStepResultReports) // List<List<TestStepResultReport>>
+                .flatMap(Collection::stream) // flattens List<List<TestStepResultReport>> to List<TestStepResultReport>
+                .filter(testStepResult -> testStepResult.getAssertionStatus() == FAILED) //keep only failed tests
+                .map(TestStepResultReport::getMessages) // creates List<List<String>>
+                .flatMap(Collection::stream) // flattens List<List<String>> to List<String>
+                .forEach(message -> { //process each message from List<String>
+                    messages.add(message);
+                    errorLog.logError("- " + message);
+                });
+        return Arrays.toString(messages.toArray());
+    }
+
+    public interface ErrorLog {
+
+        void logError(String message);
+    }
+
+    private static class SystemErrErrorLog implements ErrorLog {
+        @Override
+        public void logError(String message) {
+            System.err.println(message);
+        }
     }
 }
