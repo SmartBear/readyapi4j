@@ -118,8 +118,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         List<Pair> queryParameters = Collections.singletonList(new Pair("async", String.valueOf(async)));
         Map<String, File> files = filesToAdd.stream().collect(toMap(File::getName, Function.identity()));
         String path = ServerDefaults.SERVICE_BASE_PATH + "/executions/" + executionID + "/files";
-        return apiClient.invokeAPI(path, "POST", queryParameters,
-                null, files, APPLICATION_JSON, MULTIPART_FORM_DATA, new String[0], null);
+        return invokeAPI(path, "POST", null, MULTIPART_FORM_DATA, queryParameters, files);
     }
 
     @Override
@@ -140,7 +139,7 @@ public class CodegenBasedTestServerApi implements TestServerApi {
         if (formParams.isEmpty()) {
             return projectResultReport;
         }
-        return invokeAPI(path, POST.name(), body, "multipart/form-data", queryParams, formParams);
+        return invokeAPI(path, POST.name(), body, MULTIPART_FORM_DATA, queryParams, formParams);
     }
 
     private void addTestStepClientCertificateFile(TestCase body, Map<String, File> formParams) {
