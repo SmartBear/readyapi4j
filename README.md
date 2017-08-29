@@ -51,7 +51,7 @@ Read on to get started
 ### Running tests with TestServer
 
 To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
-need to use [Ready! API TestServer](http://readyapi.smartbear.com/testserver/start) for test execution. 
+need to use [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) for test execution. 
 
 TestServer is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
 in the same underlying JSON format that is also used in the test shown above. If you're using the RecipeExecutionFacade 
@@ -172,7 +172,7 @@ assert execution.errorMessages.empty
 ```
 ## More samples / tutorials
 
-Tutorial in the Ready! API TestServer documentation: 
+Tutorial in the ReadyAPI TestServer documentation: 
 [Creating Code-Based Recipes: Tutorial](http://readyapi.smartbear.com/testserver/tutorials/code_based/start)
 
 The [samples submodule](modules/samples) here on GitHub contains a number of samples for Java, Groovy and Maven.
@@ -181,9 +181,9 @@ The [samples submodule](modules/samples) here on GitHub contains a number of sam
 
 [Try it out online!](http://testserver.readyapi.io)
 
-[Ready! API TestServer](http://readyapi.smartbear.com/testserver/intro/about)
+[ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/intro/about)
 
-[Ready! API](http://readyapi.smartbear.com/start)
+[ReadyAPI](http://readyapi.smartbear.com/start)
 
 ## License
 

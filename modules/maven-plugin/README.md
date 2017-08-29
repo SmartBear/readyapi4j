@@ -1,6 +1,6 @@
 # Assert4J TestServer Maven Plugin
 
-A maven plugin that runs a set of Json recipes (locally or using a TestServer) and Ready! API projects (only with TestServer, not locally) - 
+A maven plugin that runs a set of Json recipes (locally or using a TestServer) and ReadyAPI projects (only with TestServer, not locally) - 
 configure it to run in whatever build phase you might find relevant, for example;
 
 ```

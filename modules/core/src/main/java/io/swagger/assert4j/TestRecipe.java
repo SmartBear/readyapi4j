@@ -8,7 +8,7 @@ import io.swagger.assert4j.extractor.ExtractorData;
 
 /**
  * Wrapper for a test recipe, which can either be read locally by the SoapUI core or converted to JSON and submitted
- * to a Ready! API TestServer instance.
+ * to a ReadyAPI TestServer instance.
  */
 public class TestRecipe {
     private final TestCase testCase;

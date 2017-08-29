@@ -8,7 +8,7 @@ import io.swagger.assert4j.testserver.teststeps.datasource.GridDataSourceTestSte
 import io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenDataSourceTestStepBuilder;
 
 /**
- * Factory methods for test steps that can only be executed by Ready! API TestServer, not by SoapUI.
+ * Factory methods for test steps that can only be executed by ReadyAPI TestServer, not by SoapUI.
  */
 public class ServerTestSteps extends TestSteps {
     public static DataSourceTestStepBuilder dataSource() {

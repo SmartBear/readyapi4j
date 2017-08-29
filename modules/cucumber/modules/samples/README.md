@@ -1,4 +1,4 @@
-## Cucumber Samples for Ready! API TestServer 
+## Cucumber Samples for ReadyAPI TestServer 
 
 This project currently contains 3 example feature files in the 
 [src/test/resources/cucumber](src/test/resources/cucumber) folder.

@@ -33,10 +33,11 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+@Ignore
 public class RestRequestLiveServerTest {
     private static Logger logger = LoggerFactory.getLogger(RestRequestLiveServerTest.class);
-    private static final String ENDPOINT = "http://api.swaggerhub.com";
-    private static final String ENDPOINT_WITH_PATH = ENDPOINT + "/specs?specType=API";
+    private static final String ENDPOINT = "https://api.swaggerhub.com";
+    private static final String ENDPOINT_WITH_PATH = ENDPOINT + "/specs?specType=API&limit=10";
     private static final String ENDPOINT_NAME = "Default listing";
     private static final String ENDPOINT_DESCRIPTION = "Default registry listing";
     private static final String TESTSERVER_URL = "http://testserver.readyapi.io:8080";

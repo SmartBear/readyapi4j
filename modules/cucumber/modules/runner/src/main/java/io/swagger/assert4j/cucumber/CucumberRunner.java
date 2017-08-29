@@ -19,7 +19,7 @@ public class CucumberRunner {
      */
 
     public static void main(String [] args) throws Throwable {
-        System.out.println( "Ready! API TestServer Cucumber Runner" );
+        System.out.println( "ReadyAPI TestServer Cucumber Runner" );
 
         ArrayList<String> argsList = Lists.newArrayList(args);
         argsList.add(0, RestStepDefs.class.getPackage().getName());

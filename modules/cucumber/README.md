@@ -1,7 +1,7 @@
 ## Cucumber/BDD testing for REST APIs
 
 This project provides a generic Cucumber vocabulary for testing APIs with the 
-[Ready! API TestServer](http://testserver.readyapi.io),
+[ReadyAPI TestServer](http://testserver.readyapi.io),
 with special support for Swagger to remove some of the technicalities required to define scenarios. 
 
 A quick example for the Petstore API at http://petstore.swagger.io, testing of the 
@@ -97,10 +97,10 @@ If you add a `-Dtestserver.cucumber.logfolder=...` system property to your comma
 generated json recipe files to the specified folder before sending them to the TestServer, for example allowing you 
 to import them into Ready API for load-testing/monitoring/etc.
 
-### Configuring Ready! API TestServer access
+### Configuring ReadyAPI TestServer access
  
 The included [Cucumber StepDefs](modules/stepdefs/src/main/java/io/swagger/assert4j/cucumber/RestStepDefs.java) 
-build and execute test recipes agains the Ready! API TestServer using the 
+build and execute test recipes agains the ReadyAPI TestServer using the 
 [assert4j-testserver](../../modules/testserver) library, by default they 
 will submit recipes to the publicly available TestServer at http://testserver.readyapi.io. If you 
 want to run against your own TestServer instance to be able to access internal APIs or not run into 
