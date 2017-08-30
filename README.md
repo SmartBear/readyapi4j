@@ -54,38 +54,6 @@ Learn more about the java testing vocabulary by:
 - having a look at the [core unit tests](modules/core/src/test/java/io/swagger/assert4j)
 - [browsing the javadoc](http://smartbear.github.io/swagger-assert4j/apidocs/) 
 
-### Running tests with TestServer
-
-To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
-need to execute your tests with [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) instead of running 
-them locally. 
-
-TestServer is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
-in the same underlying JSON format that is also used in the test shown above. If you're using the RecipeExecutionFacade 
-(as in the example above) all you have to do is add system (or environment) variables that point the facade to a 
-running TestServer instance. For example, if we add
-
-```
-testserver.endpoint=http://testserver.readyapi.io:8080
-testserver.user=demoUser
-testserver.password=demoPassword
-```
-	
-as either system/env properties to our execution and then rerun the above test - those tests will be executed by the 
-specified TestServer instance available at http://testserver.readyapi.io.
-
-### Logging of Recipes and HTTP transactions
-
-Usage of the facade as in the above examples also enables logging of both generated recipes and HTTP transaction logs 
-of executed tests (in HAR file format). Adding the following two properties:
-
-```
-swagger-assert4j.log.executions.folder=target/logs/executions
-swagger-assert4j.log.recipes.folder=target/logs/recipes
-```
-
-will automatically result in the corresponding artifacts being written to the corresponding folders.
-
 ## Getting Started with Groovy 
 
 Assert4J provides a Groovy DSL to create and execute API tests locally or on TestServer. 
@@ -183,6 +151,38 @@ Tutorial in the ReadyAPI TestServer documentation:
 [Creating Code-Based Recipes: Tutorial](http://readyapi.smartbear.com/testserver/tutorials/code_based/start)
 
 The [samples submodule](modules/samples) here on GitHub contains a number of samples for Java, Groovy and Maven.
+
+## Running tests with TestServer
+
+To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
+need to execute your tests with [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) instead of running 
+them locally. 
+
+TestServer is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
+in the same underlying JSON format that is also used in the test shown above. If you're using the RecipeExecutionFacade 
+(as in the example above) all you have to do is add system (or environment) variables that point the facade to a 
+running TestServer instance. For example, if we add
+
+```
+testserver.endpoint=http://testserver.readyapi.io:8080
+testserver.user=demoUser
+testserver.password=demoPassword
+```
+	
+as either system/env properties to our execution and then rerun the above test - those tests will be executed by the 
+specified TestServer instance available at http://testserver.readyapi.io.
+
+### Logging of Recipes and HTTP transactions
+
+Usage of the facade as in the above examples also enables logging of both generated recipes and HTTP transaction logs 
+of executed tests (in HAR file format). Adding the following two properties:
+
+```
+swagger-assert4j.log.executions.folder=target/logs/executions
+swagger-assert4j.log.recipes.folder=target/logs/recipes
+```
+
+will automatically result in the corresponding artifacts being written to the corresponding folders.
 
 ## Learn More about TestServer
 
