@@ -107,20 +107,30 @@
 
     <profiles>
         <profile>
-            <id>java-docs</id>
+            <id>javadoc</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.4</version>
+                        <version>3.0.0-M1</version>
                         <configuration>
                             <aggregate>true</aggregate>
                             <source>1.8</source>
                             <encoding>UTF-8</encoding>
                             <additionalparam>-Xdoclint:none</additionalparam>
                             <sourcepath>
-                                core/src/main/java:core/target/generated-sources/swagger/src/main/java:facade/src/main/java:groovy-dsl/src/main/groovy:local/src/main/java:swagger/src/main/java:testserver/src/main/java:groovy-dsl/target/generated-sources/groovy-stubs/main
+                                modules/core/src/main/java:
+                                modules/core/target/generated-sources/swagger/src/main/java:
+                                modules/cucumber/modules/core/src/main/java:
+                                modules/cucumber/modules/runner/src/main/java:
+                                modules/cucumber/modules/stepdefs/src/main/java
+                                modules/facade/src/main/java:
+                                modules/groovy-dsl/src/main/groovy:
+                                modules/groovy-dsl/target/generated-sources/groovy-stubs/main:
+                                modules/local/src/main/java:
+                                modules/oas/src/main/java:
+                                modules/testserver/src/main/java:
                             </sourcepath>
                             <!--<sourcepath>src/main/java;target/generated-sources/swagger/src/main/java</sourcepath>-->
                             <includes>*.java,*.groovy</includes>
@@ -180,7 +190,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.3</version>
+                        <version>3.0.0-M1</version>
                         <configuration>
                             <aggregate>true</aggregate>
                             <source>1.7</source>
@@ -257,6 +267,4 @@
             </distributionManagement>
         </profile>
     </profiles>
-
-
 </project>
