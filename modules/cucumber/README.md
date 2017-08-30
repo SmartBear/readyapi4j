@@ -99,8 +99,7 @@ to import them into ReadyAPI for load-testing/monitoring/etc.
 The included [Cucumber StepDefs](modules/stepdefs/src/main/java/io/swagger/assert4j/cucumber/RestStepDefs.java) 
 by default build and execute test recipes using the local execution engine of swagger-assert4j. If you would like
 to execute via [ReadyAPI TestServer](https://smartbear.com/product/ready-api/testserver/overview/) instead 
-you will need to download and install TestServer and configure access to it by 
-specifying the corresponding system properties when running your tests:
+you will need to download and install TestServer and specify the following system properties when running your tests:
 
 - testserver.endpoint=...url to your testserver installation...
 - testserver.user=...the configured user to use...

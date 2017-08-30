@@ -73,8 +73,8 @@ Usage of the facade as in the above examples also enables logging of both genera
 of executed tests (in HAR file format). Adding the following two properties:
 
 ```
-assert4j.log.executions.folder=target/logs/executions
-assert4j.log.recipes.folder=target/logs/recipes
+swagger-assert4j.log.executions.folder=target/logs/executions
+swagger-assert4j.log.recipes.folder=target/logs/recipes
 ```
 
 will automatically result in the corresponding artifacts being written to the corresponding folders.
