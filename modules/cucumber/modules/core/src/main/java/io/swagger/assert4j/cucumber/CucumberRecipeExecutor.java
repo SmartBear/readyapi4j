@@ -15,16 +15,14 @@ import java.io.File;
 import java.io.FileWriter;
 
 /**
- * Executes a TestServer Recipe class using the TestServer endpoint specified
- * in the testserver.endpoint system property (defaults to the public
- * TestServer instance).
+ * Executes a Recipe class using the configured execution engine (local execution is default)
  */
 
 public class CucumberRecipeExecutor {
     private static final Logger LOG = LoggerFactory.getLogger(CucumberRecipeExecutor.class);
 
-    public static final String RECIPE_LOG_FOLDER = "readyapi.cucumber.logfolder";
-    public static final String SILENT_EXECUTION = "readyapi.cucumber.silent";
+    public static final String RECIPE_LOG_FOLDER = "swagger-assert4j.cucumber.logfolder";
+    public static final String SILENT_EXECUTION = "swagger-assert4j.cucumber.silent";
 
     private RecipeExecutor executor;
     private boolean async = false;
@@ -44,7 +42,7 @@ public class CucumberRecipeExecutor {
      *
      * @param testCase the TestCase to execute
      * @param scenario the Cucumber scenario used to generate the specified Recipe
-     * @return the TestServer Execution for the executed TestCase, null if execution was bypassed
+     * @return the Execution for the executed TestCase, null if execution was bypassed
      */
 
     public Execution runTestCase(TestCase testCase, Scenario scenario) {
