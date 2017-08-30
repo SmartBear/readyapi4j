@@ -49,13 +49,17 @@ dependency to your pom:
 </dependency>
 ```
 
-Then create a JUnit runner class that uses Cucumber and point it to your feature files:
+(This library has transient dependencies on cucumber-jvm 2.0.0, so no other dependencies are required)
+
+Then create a JUnit runner class that uses Cucumber, add the swagger-assert4j glue/stepdefs, and point 
+it to your feature files, for example:
  
 ```java
 @RunWith(Cucumber.class)
 @CucumberOptions(
     plugin = {"pretty", "html:target/cucumber"},
-    features = {"src/test/resources/cucumber"})
+    features = {"src/test/resources/cucumber"},
+    glue = {"io.swagger.assert4j.cucumber" })
 public class CucumberTest {
 }
 ```
@@ -71,22 +75,24 @@ java -jar swagger-assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-f
 ```
 
 Internally this will call the regular cucumber.api.cli.Main class with an added -g argument to the
-included glue-code, all other options are passed as usual, see https://cucumber.io/docs/reference/jvm#cli-runner
+included glue-code, all other options are passed as usual, see https://cucumber.io/docs/reference/jvm#cli-runner.
 
 (you will need java8 installed on your path)
 
 ### Running with Docker
 
-If the above two options are too much of a java-hassle for you, then you can use the corresponding docker image 
+If the above two options are too much of a java-hassle for you, then you can use the prepackaged docker image 
 available at https://hub.docker.com/r/smartbear/swagger-assert4j-cucumber instead - it packages the above runner and makes it
-super-easy to run feature files for your APIs, for example:
+super-easy to run feature files for your APIs without having to install anything (except Docker of course).
+
+For example:
 
 ```
 docker run -v /Users/Ole/cucumber:/features smartbear/swagger-assert4j-cucumber -p pretty /features
 ```
 
-Here I mounted my local folder containing feature files into a volume named "/features" in the container - and then 
-specify that that volume as the source for feature files for the Cucumber Runner (together with the -p pretty argument).
+Here we mounted a local folder containing feature files into a volume named "/features" in the container - and then 
+specify that volume as the source for feature files for the Cucumber Runner, together with the -p pretty argument.
 
 ### Recipe logging
 
@@ -96,9 +102,8 @@ to import them into ReadyAPI for load-testing/monitoring/etc.
 
 ### Configuring excution with ReadyAPI TestServer
  
-The included [Cucumber StepDefs](modules/stepdefs/src/main/java/io/swagger/assert4j/cucumber/RestStepDefs.java) 
-by default build and execute test recipes using the local execution engine of swagger-assert4j. If you would like
-to execute via [ReadyAPI TestServer](https://smartbear.com/product/ready-api/testserver/overview/) instead 
+The included Cucumber StepDefs (see below) by default execute test recipes using the local open-source execution engine of swagger-assert4j. 
+If you would like to execute your tests via [ReadyAPI TestServer](https://smartbear.com/product/ready-api/testserver/overview/) instead 
 you will need to download and install TestServer and specify the following system properties when running your tests:
 
 - testserver.endpoint=...url to your testserver installation...
@@ -261,7 +266,7 @@ Feature: SwaggerHub REST API
 
 ## Extending the vocabulary
 
-You can extend the supported Gherkin vocabulary by providing custom StepDefs that tie into the underlying swagger-assert4j
+You can extend the included REST API testing vocabulary by providing custom StepDefs that tie into the underlying swagger-assert4j
 recipe generation. Do this as follows (a complete example is shown below):
  
 1. Create a Custom StepDefs class which you annotate with @ScenarioScoped
