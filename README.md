@@ -1,11 +1,13 @@
 # Swagger Assert4J - a Java library for API testing
 
-The Assert4J library lets you test APIs through Java, Groovy or Cucumber. The library has extensive support for REST, SOAP, JDBC and JMS protocols. Under the hood the library uses the test-execution engine of [SoapUI](http://www.soapui.org).
+The Assert4J library lets you test APIs through Java, Groovy or Cucumber. The library has extensive support for REST, SOAP, JDBC and JMS protocols. 
+Under the hood the library uses the open-source test-execution engine of [SoapUI](http://www.soapui.org).
 
 Read on to get started
 * [with Java](#getting-started-with-java) - together with any testing framework
 * [with Groovy](#getting-started-with-groovy) - together with any testing framework 
-* [with Cucumber](modules/cucumber) - with cucumber for java 
+* [with Cucumber](modules/cucumber) - with cucumber-jvm 
+* [with the Maven plugin](modules/maven-plugin)
 
 ## Getting Started with Java
 
@@ -24,34 +26,39 @@ Read on to get started
 	```java
 	    @Test
         public void simpleCountTest() throws Exception {
-             RecipeExecutionResult result = executeRecipe(
+             RecipeExecutionResult result = executeRecipe("Simple Count Test",
                  GET("https://api.swaggerhub.com/specs")
                      .withParameters(
-                         query( "specType", "API" ),
-                         query( "query", "testserver" )
+                         query("specType", "API"),
+                         query("query", "testserver")
                      )
                      .withAssertions(
                          json("$.totalCount", "4")
-                     )                 
-                 );
-    
-            assertExecutionResult(result);
+                     )
+             );
+             
+             assertExecutionResult(result);
         }
 	```
 
-3. Run your test.
+3. Run your test and enjoy the results (or not...);
 
-    Here is some sample output of the method above:
     ```
-    Errors: [[JsonPath Match] Comparison failed for path [$.totalCount], expecting [1], actual was [0]] 
+    java.lang.AssertionError: Execution failed: [[JsonPath Match] Comparison failed for path [$.totalCount], expecting [4], actual was [5]] 
+    Expected :FINISHED
+    Actual   :FAILED
     ```
 
-4. Look at the unit tests to see all the functionality available, or [Dive into the javadocs](http://smartbear.github.io/swagger-assert4j/apidocs/) to get an overview of the Java API.
+Learn more about the java testing vocabulary by:
+- having a look at the [java samples](modules/samples/java/src/test/java/io/swagger/assert4j/samples/java)
+- having a look at the [core unit tests](modules/core/src/test/java/io/swagger/assert4j)
+- [browsing the javadoc](http://smartbear.github.io/swagger-assert4j/apidocs/) 
 
 ### Running tests with TestServer
 
 To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
-need to use [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) for test execution. 
+need to execute your tests with [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) instead of running 
+them locally. 
 
 TestServer is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
 in the same underlying JSON format that is also used in the test shown above. If you're using the RecipeExecutionFacade 

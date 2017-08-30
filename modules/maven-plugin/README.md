@@ -111,10 +111,3 @@ mvn clean install
 
 to install the latest version of the plugin locally. It will eventually be made available on maven central also.
 
-
-## Next steps?
-
-Obviously huge list of things to improve:
-- support datadriven tests
-- improved surefire reports
-- etc..
