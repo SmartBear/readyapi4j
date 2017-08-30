@@ -117,9 +117,9 @@ mvn clean install
 To build and install the artifacts in your local maven repository - the packaged jar is created in the root
 target folder.
 
-## API Testing Vocabulary
+## API Testing Vocabulary Reference
  
-The included glue-code for API testing adds the following vocabulary:
+The included [StepDefs](modules/stepdefs) for API testing adds the following vocabulary:
 
 ##### Given statements
 

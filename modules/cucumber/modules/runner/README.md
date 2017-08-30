@@ -10,3 +10,5 @@ https://hub.docker.com/r/smartbear/swagger-assert4j-cucumber. Build it with
 ```
 mvn clean install -Pdocker
 ```
+
+and use it as described in the [main README](../../README.md)
