@@ -63,11 +63,11 @@ public class CucumberTest {
 ### Running from the command-line
 
 If you don't want to run your tests as part of a java/maven/etc-build or simply want to run them from the command-line you 
-can use the swagger-assert4j-cucumber-runner jar file which includes all required libraries including the Cucumber
+can use swagger-assert4j-cucumber-runner.jar (from the [runner module](modules/runner)) which includes all required libraries including the Cucumber
 runtime. Run tests with:
 
 ```
-java -jar swagger-assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-files>
+java -jar swagger-assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-files> -p pretty
 ```
 
 Internally this will call the regular cucumber.api.cli.Main class with an added -g argument to the
@@ -273,10 +273,10 @@ Internally the actual recipe gets created and sent to the execution engine first
 If you want to delegate some of your custom vocabulary to the existing RestStepDefs you can inject them 
 into your custom StepDefs constructor also and then use it as needed.
 
-The below class shows all the above concepts:
+The below class shows all the above concepts (this class is in the [samples module](modules/samples/src/main/java/io/swagger/assert4j/cucumber/samples/extension/CustomStepDefs.java)):
 
 ```java
-package com.smartbear.samples.cucumber.extension;
+package io.swagger.assert4j.cucumber.samples.extension;
 
 import CucumberRecipeBuilder;
 import RestStepDefs;
@@ -318,10 +318,10 @@ For example (line-breaks and comments added for readability):
 
 ```
 java -cp modules/samples/target/swagger-assert4j-cucumber-samples-1.0.0-SNAPSHOT.jar: // the extension jar
-   modules/runner/target/swagger-assert4j-cucumber-runner-1.0.1-SNAPSHOT.jar          // the runner jar  
-   CucumberRunner                    // the runner class 
-   -g com.smartbear.samples.cucumber.extension                                  // the extension package 
-   modules/samples/src/test/resources/cucumber                                  // the features folder
+   modules/runner/target/swagger-assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar          // the runner jar  
+   io.swagger.assert4j.cucumber.CucumberRunner                                        // the runner class 
+   -g io.swagger.assert4j.cucumber.samples.extension                                  // the extension package argument
+   modules/samples/src/test/resources/cucumber                                        // the features folder
 ```
 
 ## What's next?
