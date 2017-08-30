@@ -276,7 +276,7 @@ into your custom StepDefs constructor also and then use it as needed.
 The below class shows all the above concepts (this class is in the [samples module](modules/samples/src/main/java/io/swagger/assert4j/cucumber/samples/extension/CustomStepDefs.java)):
 
 ```java
-package io.swagger.assert4j.cucumber.samples.extension;
+package com.smartbear.cucumber.samples.extension;
 
 import CucumberRecipeBuilder;
 import RestStepDefs;
@@ -320,7 +320,7 @@ For example (line-breaks and comments added for readability):
 java -cp modules/samples/target/swagger-assert4j-cucumber-samples-1.0.0-SNAPSHOT.jar: // the extension jar
    modules/runner/target/swagger-assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar          // the runner jar  
    io.swagger.assert4j.cucumber.CucumberRunner                                        // the runner class 
-   -g io.swagger.assert4j.cucumber.samples.extension                                  // the extension package argument
+   -g com.smartbear.cucumber.samples.extension                                        // the extension package argument
    modules/samples/src/test/resources/cucumber                                        // the features folder
 ```
 
