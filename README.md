@@ -11,7 +11,7 @@ Read on to get started
 
 ## Getting Started with Java
 
-1. Add the following Maven repository and dependency to your project:
+1. Add the following Maven dependency to your project:
  
 	```xml
 	<dependency>
