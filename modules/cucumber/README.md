@@ -43,7 +43,7 @@ dependency to your pom:
 ```xml
 <dependency>
     <groupId>io.swagger.assert</groupId>
-    <artifactId>assert4j-cucumber-stepdefs</artifactId>
+    <artifactId>swagger-assert4j-cucumber-stepdefs</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>

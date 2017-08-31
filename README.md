@@ -11,12 +11,12 @@ Read on to get started
 
 ## Getting Started with Java
 
-1. Add the following Maven dependency to your project:
+1. Add the following Maven repository and dependency to your project:
  
 	```xml
 	<dependency>
 		<groupId>io.swagger.assert</groupId>
-		<artifactId>assert4j-facade</artifactId>
+		<artifactId>swagger-assert4j-facade</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	```
@@ -64,7 +64,7 @@ The following steps explain how to use this DSL in a JUnit test.
 	```xml
 	<dependency>
 		<groupId>io.swagger.assert</groupId>
-		<artifactId>assert4j-groovy-dsl</artifactId>
+		<artifactId>swagger-assert4j-groovy-dsl</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	```
