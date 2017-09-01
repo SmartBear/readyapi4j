@@ -9,8 +9,8 @@ Under the hood the library uses the open-source test-execution engine of [SoapUI
   * [with Cucumber](modules/cucumber) - with cucumber-jvm 
   * [with the Maven plugin](modules/maven-plugin)
 * [Running Tests with TestServer](#running-tests-with-testserver)
-* [Core Concepts](CONCEPTS.md)
-* [Architecture](ARCHITECTURE.md)
+* [Core Concepts](CONCEPTS.md) - explains swagger-assert4j core concepts
+* [Modules](MODULES.md) - an overview of the included maven modules
 
 ## Getting Started with Java
 
