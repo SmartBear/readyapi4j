@@ -1,4 +1,4 @@
-## Swagger Assert4j Modules
+# Swagger Assert4j Modules
 
 Overview of included modules and how they fit together:
 
