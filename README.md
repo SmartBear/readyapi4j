@@ -3,11 +3,14 @@
 The Assert4J library lets you test APIs through Java, Groovy or Cucumber. The library has extensive support for REST, SOAP, JDBC and JMS protocols. 
 Under the hood the library uses the open-source test-execution engine of [SoapUI](http://www.soapui.org).
 
-Read on to get started
-* [with Java](#getting-started-with-java) - together with any testing framework
-* [with Groovy](#getting-started-with-groovy) - together with any testing framework 
-* [with Cucumber](modules/cucumber) - with cucumber-jvm 
-* [with the Maven plugin](modules/maven-plugin)
+* Quickly get started:
+  * [with Java](#getting-started-with-java) - together with any testing framework
+  * [with Groovy](#getting-started-with-groovy) - together with any testing framework 
+  * [with Cucumber](modules/cucumber) - with cucumber-jvm 
+  * [with the Maven plugin](modules/maven-plugin)
+* [Running Tests with TestServer](#running-tests-with-testserver)
+* [Core Concepts](CONCEPTS.md)
+* [Architecture](ARCHITECTURE.md)
 
 ## Getting Started with Java
 
@@ -24,21 +27,21 @@ Read on to get started
 2. Create and execute a simple recipe with your favorite unit-testing framework:
 
 	```java
-	    @Test
-        public void simpleCountTest() throws Exception {
-             RecipeExecutionResult result = executeRecipe("Simple Count Test",
-                 GET("https://api.swaggerhub.com/specs")
-                     .withParameters(
-                         query("specType", "API"),
-                         query("query", "testserver")
-                     )
-                     .withAssertions(
-                         json("$.totalCount", "4")
-                     )
-             );
-             
-             assertExecutionResult(result);
-        }
+    @Test
+    public void simpleCountTest() throws Exception {
+         RecipeExecutionResult result = executeRecipe("Simple Count Test",
+             GET("https://api.swaggerhub.com/specs")
+                 .withParameters(
+                     query("specType", "API"),
+                     query("query", "testserver")
+                 )
+                 .withAssertions(
+                     json("$.totalCount", "4")
+                 )
+         );
+         
+         assertExecutionResult(result);
+    }
 	```
 
 3. Run your test and enjoy the results (or not...);
