@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Main class for invoking a Ready! API TestServer instance
+ * Main class for invoking a ReadyAPI TestServer instance
  */
 
 public class TestServerClient {

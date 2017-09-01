@@ -1,7 +1,7 @@
 package io.swagger.assert4j.testserver.execution;
 
 /**
- * Holds constants with default server configuration for the Ready! API Runtime Service.
+ * Holds constants with default server configuration for the ReadyAPI Runtime Service.
  */
 public class ServerDefaults {
 

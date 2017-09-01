@@ -1,11 +1,16 @@
 package io.swagger.assert4j.facade.execution;
 
+import com.google.common.io.Files;
 import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.TestRecipeBuilder;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.execution.RecipeExecutor;
 import io.swagger.assert4j.result.RecipeExecutionResult;
 import io.swagger.assert4j.teststeps.TestStepBuilder;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 import static io.swagger.assert4j.support.AssertionUtils.assertExecution;
 
@@ -64,5 +69,26 @@ public class RecipeExecutionFacade {
         Execution execution = executor.executeRecipe(recipe);
         assertExecution(execution);
         return execution.getExecutionResult();
+    }
+
+    /**
+     * Executes the specified JSON recipe string and returns the result
+     *
+     * @param jsonRecipe the recipe to execute
+     * @return the excution result
+     */
+    public static RecipeExecutionResult executeRecipe( String jsonRecipe ) throws IOException {
+        return executeRecipe( TestRecipeBuilder.createFrom( jsonRecipe ));
+    }
+
+    /**
+     * Executes the JSON recipe in the specified file and returns the result
+     *
+     * @param recipeFile the recipe to execute
+     * @return the excution result
+     */
+    public static RecipeExecutionResult executeRecipe( File recipeFile ) throws IOException {
+        String jsonRecipe = Files.toString(recipeFile, Charset.defaultCharset());
+        return executeRecipe( TestRecipeBuilder.createFrom( jsonRecipe ));
     }
 }

@@ -80,7 +80,7 @@ public class TestSteps {
 
     /**
      * @param pluginTestStepType test step type defined by plugin. For example one of 'MQTTPublishTestStep',
-     *                           'MQTTDropConnectionTestStep' or 'MQTTReceiveTestStep' defined by MQTT Ready! API plugin.
+     *                           'MQTTDropConnectionTestStep' or 'MQTTReceiveTestStep' defined by MQTT ReadyAPI plugin.
      * @return PluginTestStepBuilder
      */
     public static PluginTestStepBuilder pluginTestStep(String pluginTestStepType) {
