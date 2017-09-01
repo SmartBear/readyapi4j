@@ -54,7 +54,7 @@ engine - executing the above recipe locally would be achieved with these two lin
 
 ```java
 RecipeExecutor executor = new SoapUIRecipeExecutor();
-Execution result = executor.executeRecipe(recipe);
+Execution execution = executor.executeRecipe(recipe);
 ```
 
 ## Remote Execution
@@ -68,7 +68,7 @@ TestServer is a standalone server that exposes a REST API for executing API test
 ```java
 TestServerClient testServerClient = TestServerClient.fromUrl("...").withCredentials("...", "...");
 RecipeExecutorexecutor = testServerClient.createRecipeExecutor();
-Execution result = executor.executeRecipe(recipe);
+Execution execution = executor.executeRecipe(recipe);
 ```
 
 As you can see, the result of executeRecipe is the same when executing remotely, so it can be handled in the same
@@ -83,7 +83,7 @@ To allow for easy switching between local and remote execution of tests you can 
 by the [facade](modules/facade) module. Running the above tests with the facade looks as follows:
 
 ```java
-Execution result = RecipeExecutionFacade.executeRecipe( recipe );
+Execution execution = RecipeExecutionFacade.executeRecipe( recipe );
 ```
 
 The facade will by default use the local execution engine but switch to remote execution if the following 
@@ -94,7 +94,6 @@ testserver.endpoint=<testserver endpoin>
 testserver.user=<testservrer user>
 testserver.password=<testserver password>
 ```
-
 ## Logging of Recipes and HTTP transactions
 
 Usage of the facade as in the above examples also enables logging of both generated recipes and HTTP transaction logs 
@@ -107,7 +106,24 @@ swagger-assert4j.log.recipes.folder=target/logs/recipes
 
 will automatically result in the corresponding artifacts being written to the corresponding folders.
 
+## Synchronous vs Asynchronous execution
+
+The above examples all used executRecipe(TestRecipe) for executing tests - this method will execute the
+specified recipe and block until execution has finished. If you would rather execute tests asynchronously
+you can use submitRecipe(TestRecipe) instead; the returned Execution object will return 
+ProjectResultReport.StatusEnum.RUNNING until the test finishes (either passed or failed). 
+
 ## Result handling
 
-In all instances above we got an Execution object when executing the recipe. 
+In all instances above we got an Execution object when executing the recipe - getting the actual result
+of the execution is done via execution.getExecutionResult() - which returns an ExecutionResult object that
+provides details on execution time, individual teststep results, etc.
+
+In a unit-testing scenario the provided AssertionUtils class can be used to assert the outcome of an Excution:
+
+```java
+.. create executor ..
+Execution execution = executor.executeRecipe(recipe);
+AssertionUtils.assertExecutionResult( execution.getExecutionResult() );
+```
 
