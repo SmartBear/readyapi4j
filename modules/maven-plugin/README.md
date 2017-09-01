@@ -1,4 +1,4 @@
-# Assert4J TestServer Maven Plugin
+# Swagger Assert4J TestServer Maven Plugin
 
 A maven plugin that runs a set of Json recipes (locally or using a TestServer) and ReadyAPI projects (only with TestServer, not locally) - 
 configure it to run in whatever build phase you might find relevant, for example;
@@ -6,7 +6,7 @@ configure it to run in whatever build phase you might find relevant, for example
 ```
 <plugin>
     <groupId>io.swagger.assert</groupId>
-    <artifactId>assert4j-maven-plugin</artifactId>
+    <artifactId>swagger-assert4j-maven-plugin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <configuration>
         <username>defaultUser</username>

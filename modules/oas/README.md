@@ -1,0 +1,1 @@
+# Swagger Assert4j OAS / Swagger support
