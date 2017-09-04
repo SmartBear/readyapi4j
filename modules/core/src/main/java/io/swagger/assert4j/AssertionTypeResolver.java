@@ -8,6 +8,7 @@ import io.swagger.assert4j.client.model.JdbcStatusAssertion;
 import io.swagger.assert4j.client.model.JdbcTimeoutAssertion;
 import io.swagger.assert4j.client.model.JsonPathContentAssertion;
 import io.swagger.assert4j.client.model.JsonPathCountAssertion;
+import io.swagger.assert4j.client.model.JsonPathExistenceAssertion;
 import io.swagger.assert4j.client.model.NotSoapFaultAssertion;
 import io.swagger.assert4j.client.model.ResponseSLAAssertion;
 import io.swagger.assert4j.client.model.SchemaComplianceAssertion;
@@ -42,6 +43,8 @@ class AssertionTypeResolver extends AbstractTypeIdResolver {
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, JsonPathContentAssertion.class);
             case AssertionNames.JSON_PATH_COUNT:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, JsonPathCountAssertion.class);
+            case AssertionNames.JSON_EXISTENCE:
+                return TypeFactory.defaultInstance().constructSpecializedType(baseType, JsonPathExistenceAssertion.class);
             case AssertionNames.GROOVY_SCRIPT:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, GroovyScriptAssertion.class);
             case AssertionNames.RESPONSE_SLA:
