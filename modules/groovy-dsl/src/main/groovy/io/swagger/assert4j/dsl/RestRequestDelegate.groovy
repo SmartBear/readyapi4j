@@ -60,6 +60,10 @@ class RestRequestDelegate {
         requestBuilder.withRequestBody(body)
     }
 
+    void contentType(String contentType) {
+        requestBuilder.withContentType(contentType)
+    }
+
     void asserting(@DelegatesTo(RestRequestAssertionsDelegate) Closure assertionsConfig) {
         def delegate = new RestRequestAssertionsDelegate()
         assertionsConfig.delegate = delegate

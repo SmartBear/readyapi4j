@@ -236,6 +236,12 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return (RestRequestBuilderType) this;
     }
 
+    public RestRequestBuilderType withContentType(String contentType) {
+        getTestStep().setMediaType(contentType);
+
+        return (RestRequestBuilderType) this;
+    }
+
     @Override
     public RestRequestBuilderType setTimeout(String timeout) {
         return super.setTimeout(timeout);
@@ -323,4 +329,5 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
 
         return (RestRequestBuilderType) this;
     }
+
 }

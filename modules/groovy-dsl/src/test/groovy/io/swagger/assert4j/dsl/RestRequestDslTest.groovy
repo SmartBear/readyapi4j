@@ -67,6 +67,7 @@ class RestRequestDslTest {
 
         RestTestRequestStep requestStep = recipe.testCase.testSteps[0] as RestTestRequestStep
         assert requestStep.requestBody == body
+        assert requestStep.mediaType == 'application/json'
     }
 
     @Test

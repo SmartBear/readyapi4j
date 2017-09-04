@@ -43,6 +43,7 @@ class DslDelegate {
 
     void post(String URI, String bodyString) {
         post(URI, {
+            contentType 'application/json'
             body bodyString
         })
     }
