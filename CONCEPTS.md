@@ -25,13 +25,15 @@ JSON recipes are the internal representation used by swagger-assert4j to describ
 ````
 
 A recipe consists of an array of testSteps that can execute requests, transfer values, define properties, etc - each containing 
-properties corresponding to their type. For a quick reference of all available steps and their properties have a look at (REFERENCE.md).
+properties corresponding to their type. For a quick reference of all available steps and their properties have a look at [REFERENCE.md].
 
-## Recipe Libraries
+## Creating recipes with code
 
-Creating elaborate recipes with many teststeps, assertions, transfers, etc.. can be tedious - which is
-why assert4j includes java, groovy and cucumber libraries to make recipe creation and execution more accessible. 
-The above recipe can be created in java with:
+Creating elaborate recipes in JSON with many teststeps, assertions, transfers, etc.. can be tedious - which is
+why assert4j includes [java](modules/core), [groovy](modules/groovy-dsl) and [cucumber](modules/cucumber) libraries to make 
+recipe creation and execution more accessible. 
+
+For example, the above recipe can be created in java with:
 
 ```java
 TestRecipe recipe = TestRecipeBuilder.buildRecipe(
@@ -67,11 +69,11 @@ TestServer is a standalone server that exposes a REST API for executing API test
 
 ```java
 TestServerClient testServerClient = TestServerClient.fromUrl("...").withCredentials("...", "...");
-RecipeExecutorexecutor = testServerClient.createRecipeExecutor();
+RecipeExecutor executor = testServerClient.createRecipeExecutor();
 Execution execution = executor.executeRecipe(recipe);
 ```
 
-As you can see, the result of executeRecipe is the same when executing remotely, so it can be handled in the same
+The result of executeRecipe is the same when executing remotely, so it can be handled in the same
 way as for local execution.
 
 TestServer also provides functionality for running existing ReadyAPI/SoapUI projects, logging, etc - read more in the
@@ -94,6 +96,18 @@ testserver.endpoint=<testserver endpoin>
 testserver.user=<testservrer user>
 testserver.password=<testserver password>
 ```
+
+The facade also provides a couple of utility methods for easily executing recipes in string or file format:
+
+```java
+Execution execution = executor.executeRecipe(new File( "..path to recipe json file"));
+```
+or
+
+```java
+Execution execution = executor.executeRecipe( "..json recipe in a string.." );
+```
+
 ## Logging of Recipes and HTTP transactions
 
 Usage of the facade as in the above examples also enables logging of both generated recipes and HTTP transaction logs 
