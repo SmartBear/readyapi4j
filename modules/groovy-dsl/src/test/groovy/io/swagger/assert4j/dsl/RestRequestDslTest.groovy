@@ -52,6 +52,24 @@ class RestRequestDslTest {
     }
 
     @Test
+    void buildsRecipeWithPOSTAndBody() throws Exception {
+        String body = """
+            {
+                "customerId": "some_id",
+                "lineItems": [
+                  { sku: 'ABC-123', quantity: 2},
+                  { sku: 'DEF-456', quantity: 1}
+            }
+            """
+        TestRecipe recipe = recipe {
+            post URI, body
+        }
+
+        RestTestRequestStep requestStep = recipe.testCase.testSteps[0] as RestTestRequestStep
+        assert requestStep.requestBody == body
+    }
+
+    @Test
     void buildsRecipeWithPUT() throws Exception {
         TestRecipe recipe = recipe {
             put URI

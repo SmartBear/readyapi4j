@@ -231,6 +231,11 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return super.withURI(uri);
     }
 
+    public RestRequestBuilderType withRequestBody(String body) {
+        getTestStep().setRequestBody(body);
+        return (RestRequestBuilderType) this;
+    }
+
     @Override
     public RestRequestBuilderType setTimeout(String timeout) {
         return super.setTimeout(timeout);

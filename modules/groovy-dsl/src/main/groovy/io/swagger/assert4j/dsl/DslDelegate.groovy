@@ -41,6 +41,12 @@ class DslDelegate {
         createRestRequest('POST', URI, configuration)
     }
 
+    void post(String URI, String bodyString) {
+        post(URI, {
+            body bodyString
+        })
+    }
+
     void put(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('PUT', URI, configuration)
     }

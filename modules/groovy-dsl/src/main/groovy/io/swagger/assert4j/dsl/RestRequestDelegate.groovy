@@ -56,6 +56,10 @@ class RestRequestDelegate {
         requestBuilder.setTimeout(String.valueOf(timeout))
     }
 
+    void body(String body) {
+        requestBuilder.withRequestBody(body)
+    }
+
     void asserting(@DelegatesTo(RestRequestAssertionsDelegate) Closure assertionsConfig) {
         def delegate = new RestRequestAssertionsDelegate()
         assertionsConfig.delegate = delegate
