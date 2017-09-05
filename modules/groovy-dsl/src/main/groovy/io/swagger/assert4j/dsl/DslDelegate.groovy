@@ -52,6 +52,13 @@ class DslDelegate {
         createRestRequest('PUT', URI, configuration)
     }
 
+    void put(String URI, String bodyString) {
+        put(URI, {
+            contentType 'application/json'
+            body bodyString
+        })
+    }
+
     void delete(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('DELETE', URI, configuration)
     }
