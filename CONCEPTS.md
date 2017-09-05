@@ -60,6 +60,8 @@ RecipeExecutor executor = new SoapUIRecipeExecutor();
 Execution execution = executor.executeRecipe(recipe);
 ```
 
+Read more about local execution in the [local module](modules/local).
+
 ## Remote Execution
 
 To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
@@ -101,12 +103,12 @@ testserver.password=<testserver password>
 The facade also provides a couple of utility methods for easily executing recipes in string or file format:
 
 ```java
-Execution execution = executor.executeRecipe(new File( "..path to recipe json file"));
+Execution execution = RecipeExecutionFacade.executeRecipe(new File( "..path to recipe json file"));
 ```
 or
 
 ```java
-Execution execution = executor.executeRecipe( "..json recipe in a string.." );
+Execution execution = RecipeExecutionFacade.executeRecipe( "..json recipe in a string.." );
 ```
 
 ## Logging of Recipes and HTTP transactions
