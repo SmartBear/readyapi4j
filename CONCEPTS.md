@@ -47,7 +47,8 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 ## Execution modes
 
 No matter how you create JSON recipes; manually, via code, auto-generate, etc - they can be executed either locally
-using the Open-Source SoapUI execution engine - or remotely using the commercial ReadyAPI TestServer product.
+using the Open-Source SoapUI execution engine - or remotely using the commercial ReadyAPI TestServer product. Recipes
+are executed by RecipeExecutors - which can be created for either local or remote execution.
 
 ### Local Execution
 
@@ -92,8 +93,8 @@ The facade will by default use the local execution engine but switch to remote e
 system properties are set:
 
 ```
-testserver.endpoint=<testserver endpoin>
-testserver.user=<testservrer user>
+testserver.endpoint=<testserver endpoint>
+testserver.user=<testserver user>
 testserver.password=<testserver password>
 ```
 
