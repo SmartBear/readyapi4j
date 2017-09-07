@@ -3,13 +3,19 @@
 Until you've added assertions to your DSL script, you're not really testing your application. You're just checking that 
 it doesn't blow up in your face when you access it.
 
-## Generally useful assertions
+Assertions are always added in an ```asserting``` section right after the request step. See the assertion descriptions below 
+for examples.
+
+##<a name="http-specific"></a> Standard assertions
+
+This group of assertions can be applied to anything that returns a response: REST and SOAP requests as well as JDBC (database) 
+requests.
 
 ### responseContains
 
 Checks whether the body of the HTTP response contains a string or something matching a regular expression.
 
-**Arguments:** A string to look for, and optionally parameters that indicate whether the string should be 
+**Parameters:** A string to look for, and optionally parameters that indicate whether the string should be 
 used as a regular expression (```useRegexp```)and whether the search should ignore case (```ignoreCase```).
 
 
@@ -36,7 +42,7 @@ also accept Smiths and SMITHS, for instance.
 This is simply the inverse of ```responseContains``` (see above). It will assert that the response content does **not**
 contain a string or match a regular expression.
 
-**Arguments:** A string to look for, and optionally key-value pairs that indicate whether the string should be 
+**Parameters:** A string to look for, and optionally key-value pairs that indicate whether the string should be 
 used as a regular expression (```useRegexp```)and whether the search should ignore case (```ignoreCase```).
 
 
@@ -58,17 +64,122 @@ used as a regular expression (```useRegexp```)and whether the search should igno
 The first assertion will accept Smith, SMITH etc. The second one will use "smith(s)" as a regular expression and will thus
 also accept e.g. Smiths and SMITHS.
 
-## HTTP-specific assertions
+### maxResponseTime
 
-These assertions can be added to both REST and SOAP requests but obviously don't make any sense for database responses.
+Verifies that the response time is lower than the specified max time.
+
+**Parameter:** A time expression in the format ```<number> [millisecond[s])|ms|second[s])|minute[s])]```. If the time unit is omitted,
+milliseconds will be assumed.
+   Here are some valid time expressions:
+   + ```1 second```
+   + ```1.5 minutes```
+   + ```50 milliseconds```
+   + ```50 ms```
+   + ```50```
+Note that the last two expressions are equivalent.
+
+**Examples:** 
+```groovy
+ get 'https://staging-server/customers/1', {
+     asserting {
+         maxResponseTime 2 seconds
+     }
+ }
+ post 'https://staging-server/customers/1', {
+      asserting {
+          maxResponseTime 500 milliseconds
+      }
+  }
+ ```
+ 
+### script
+ 
+Uses a Groovy script to perform an assertion using the current test state. This is an advanced assertion that 
+assumes that the user is familiar with the SoapUI object model. For information about how Groovy script assertions
+work, see [this page](https://www.soapui.org/functional-testing/validating-messages/using-script-assertions.html).
+
+Usually this script will be in the form ```assert <BOOLEAN_EXPRESSION>``` - if the boolean expression is false,
+the assertion will fail.
+ 
+**Parameter:** A valid SoapUI assertion Groovy script. 
+
+**Examples:** 
+ ```groovy
+  get 'https://staging-server/customers/1', {
+      asserting {
+          script 'assert messageExchange.responseAttachments.length == 2'
+      }
+  }
+  ```
+  
+## XPath/XQuery assertions
+
+
+
+XPath and XQuery assertions have identical syntax - the only difference between them is the former start with
+```xpath``` and the latter with ```xQuery```.
+
+### xpath/xQuery <EXPRESSION> contains <EXPECTED_CONTENT>
+
+Extracts the element in the response matching the XPath in ```EXPRESSION``` and fails the assertion 
+if it isn't equal to ```EXPECTED_CONTENT```.
+
+When validating response content, the XPath and XQuery are much more useful than you'd think.
+HTML responses, JSON responses and JDBC (databases) responses can all be coerced to XML, which means you can
+use XPath or XQuery to make advanced assertions on the content.
+
+**Parameters:** A string containing the XPath/XQuery expression and another string with the expected content.
+
+**Examples:** 
+```groovy
+ get 'https://staging-server/customers/1', {
+     asserting {
+         xpath '/customer/id' contains 'JonSnow'
+     }
+ }
+ get 'https://staging-server/products/1', {
+      asserting {
+          xQuery '/customers[id == "JonSnow"]/id' contains 'JonSnow'
+      }
+  }
+ ```
+ 
+### xQuery <EXPRESSION> contains <EXPECTED_CONTENT>
+
+Extracts the element in the response matching the XPath in ```EXPRESSION``` and fails the assertion 
+if it isn't equal to ```EXPECTED_CONTENT```.
+
+When validating response content, the XPath and XQuery are much more useful than you'd think.
+HTML responses, JSON responses and JDBC (databases) responses can all be coerced to XML, which means you can
+use XPath or XQuery to make advanced assertions on the content.
+
+**Parameters:** A string containing the XPath/XQuery expression and another string with the expected content.
+
+**Examples:** 
+```groovy
+ get 'https://staging-server/customers/1', {
+     asserting {
+         xpath '/customer/id' contains 'JonSnow'
+     }
+ }
+ get 'https://staging-server/products/1', {
+      asserting {
+          xQuery '/customers[id == "JonSnow"]/id' contains 'JonSnow'
+      }
+  }
+ ```
+
+##<a name="http-specific"></a> HTTP-specific assertions
+
+These assertions can be added to both REST and SOAP requests but obviously don't make any sense for other test steps.
 
 ### status
 
 Checks the HTTP status of the response.
 
-**Argument:** One status, or a a comma-separated list of statuses.
+**Parameter:** One status, or a a comma-separated list of statuses.
 
-**Example:** 
+**Examples:** 
 ```groovy
  get 'https://staging-server/customers/1', {
      asserting {
@@ -87,9 +198,9 @@ Checks the HTTP status of the response.
 
 Checks that the HTTP status of the response is not in a list of unacceptable statuses.
 
-**Argument:** A comma-separated list of unacceptable statuses.
+**Parameter:** A comma-separated list of unacceptable statuses, or just one single status.
 
-**Examples:** 
+**Example:** 
 ```groovy
  get 'https://staging-server/customers/1', {
      asserting {
@@ -97,3 +208,20 @@ Checks that the HTTP status of the response is not in a list of unacceptable sta
      }
  }
  ```
+ 
+### responseContentType
+ 
+Verifies that the content type of the HTTP response matches the expected value.
+ 
+**Parameter:** A comma-separated list of unacceptable statuses.
+ 
+**Examples:** 
+ ```groovy
+  get 'https://staging-server/customers/1', {
+      asserting {
+          responseContentType 'text/xml'
+      }
+  }
+  ```
+ 
+ 

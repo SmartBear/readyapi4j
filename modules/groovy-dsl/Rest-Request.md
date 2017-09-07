@@ -136,7 +136,7 @@ In addition to the general-purpose [assertions](Assertions.md) for things like s
 time, there are more specific assertions for checking HTTP statuses and headers and using JsonPath expressions to validate
 parts of the response (XPath is part of the generic assertion support).
 
-The following complete code example shows you both generic assertions and HTTP-specific ones:
+The following complete code example shows you both generic assertions and ones that are only applicable to REST and HTTP.
 
 ```groovy
  import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
@@ -158,7 +158,9 @@ The following complete code example shows you both generic assertions and HTTP-s
   }
   ```
 
-Below you will find a complete all the HTTP-specific assertions, which complement the (standard assertions)[Assertions.md].
+In addition to the [standard assertions](Assertions.md#standard) and the [HTTP-specific ones](Assertions.md#http-specific), 
+the following JsonPath assertions are available for REST requests. They all use JsonPath to verify the content
+in the response body.
 
 ### jsonPath <EXPRESSION> contains <EXPECTED_CONTENT>
 
