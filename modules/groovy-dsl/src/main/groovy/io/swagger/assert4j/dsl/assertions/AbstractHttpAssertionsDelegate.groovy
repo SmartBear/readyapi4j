@@ -12,11 +12,23 @@ import static io.swagger.assert4j.assertions.Assertions.notContains
 /**
  * An abstract class which contains common assertions applicable to multiple requests: SOAP, REST etc.
  */
-abstract class AbstractAssertionsDelegate {
+abstract class AbstractHttpAssertionsDelegate extends AbstractAssertionsDelegate {
     private List<AssertionBuilder> assertionBuilders = []
 
     List<AssertionBuilder> getAssertionBuilders() {
         return assertionBuilders
+    }
+
+    /**
+     * Creates assertion to validate the status code in the response
+     * @param httpStatuses status codes which should be present in the response
+     */
+    void status(int ... httpStatuses) {
+        ValidHttpStatusCodesAssertionBuilder builder = new ValidHttpStatusCodesAssertionBuilder()
+        for (int httpStatus : httpStatuses) {
+            builder.addStatusCode(httpStatus)
+        }
+        assertionBuilders.add(builder)
     }
 
     /**
@@ -48,11 +60,31 @@ abstract class AbstractAssertionsDelegate {
     }
 
     /**
+     * Creates assertion to validate the absence of status codes in the response
+     * @param invalidStatuses status codes which should not be present in the response
+     */
+    void statusNotIn(int ... invalidStatuses) {
+        InvalidHttpStatusCodesAssertionBuilder builder = new InvalidHttpStatusCodesAssertionBuilder()
+        for (int httpStatus : invalidStatuses) {
+            builder.addStatusCode(httpStatus)
+        }
+        assertionBuilders.add(builder)
+    }
+
+    /**
      * Creates an assertion with script to validate the response as per the script
      * @param scriptText script to be executed on the response
      */
     void script(String scriptText) {
         assertionBuilders.add(Assertions.script(scriptText))
+    }
+
+    /**
+     * Creates assertions to validate the value of "Content-Type" header in the response
+     * @param contentType expected content type of the response
+     */
+    void responseContentType(String contentType) {
+        assertionBuilders.add(Assertions.contentType(contentType))
     }
 
     /**

@@ -320,7 +320,7 @@ class RestRequestDslTest {
         TestRecipe recipe = recipe {
             get '/some_uri', {
                 asserting {
-                    contentType 'text/xml'
+                    responseContentType 'text/xml'
                 }
             }
         }
