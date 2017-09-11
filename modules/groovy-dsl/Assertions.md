@@ -3,10 +3,15 @@
 Until you've added assertions to your DSL script, you're not really testing your application. You're just checking that 
 it doesn't blow up in your face when you access it.
 
+If you do add assertions, steps in your test will be marked as FAILED if the assertions fail. If not, they will have status
+ERROR if the request itself fails (e.g. because of network connectivity issues), but if a response is received the 
+status will be set to UNKNOWN. If no steps have the status FAILED or ERROR, the test will automatically be considered
+successful.
+
 Assertions are always added in an ```asserting``` section right after the request step. See the assertion descriptions below 
 for examples.
 
-##<a name="http-specific"></a> Standard assertions
+##<a name="standard"></a> Standard assertions
 
 This group of assertions can be applied to anything that returns a response: REST and SOAP requests as well as JDBC (database) 
 requests.
@@ -171,7 +176,7 @@ use XPath or XQuery to make advanced assertions on the content.
 
 ##<a name="http-specific"></a> HTTP-specific assertions
 
-These assertions can be added to both REST and SOAP requests but obviously don't make any sense for other test steps.
+These assertions can be added to both REST and SOAP requests but don't make any sense for test steps that are not HTTP-based.
 
 ### status
 
