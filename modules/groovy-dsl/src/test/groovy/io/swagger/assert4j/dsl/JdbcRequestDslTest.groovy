@@ -17,6 +17,7 @@ class JdbcRequestDslTest {
                 name 'Jdbc'
                 driver 'org.h2.Driver'
                 connectionString 'jdbc:h2:~/.readyapi/db/readyapi'
+                query 'select * from customers'
                 storedProcedure false
                 testStepProperties property1: 'value1', property2: 'value2'
             }
@@ -26,6 +27,7 @@ class JdbcRequestDslTest {
         assert jdbcRequestStep.name == 'Jdbc'
         assert jdbcRequestStep.driver == 'org.h2.Driver'
         assert jdbcRequestStep.connectionString == 'jdbc:h2:~/.readyapi/db/readyapi'
+        assert jdbcRequestStep.sqlQuery == 'select * from customers'
         assert !jdbcRequestStep.storedProcedure
         assert jdbcRequestStep.properties == [property1: 'value1', property2: 'value2']
     }

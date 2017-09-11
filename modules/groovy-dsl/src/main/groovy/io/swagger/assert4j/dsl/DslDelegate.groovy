@@ -133,6 +133,7 @@ class DslDelegate {
 
         JdbcRequestTestStepBuilder builder = new JdbcRequestTestStepBuilder(delegate.driver, delegate.connectionString,
                 delegate.storedProcedure)
+                .withSql(delegate.query)
         builder.named(delegate.testStepName)
         if (delegate.testStepProperties) {
             builder.withProperties(delegate.testStepProperties)

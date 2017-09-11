@@ -20,7 +20,7 @@ class JdbcAssertionDelegate extends AbstractAssertionsDelegate {
     }
 
     /**
-     * Creates delegate to add timeut assertion on JDBC request
+     * Creates delegate to add timeout assertion on JDBC request
      * @param timeout value to assert that JDBC request was executed within this time, assertion fails if request takes
      *                  more time than 'timeout'
      * @return TimeBasedAssertionDelegate
