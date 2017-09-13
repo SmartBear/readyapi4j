@@ -11,7 +11,7 @@ successful.
 Assertions are always added in an ```asserting``` section right after the request step. See the assertion descriptions below 
 for examples.
 
-##<a name="standard"></a> Standard assertions
+## Standard assertions
 
 This group of assertions can be applied to anything that returns a response: REST and SOAP requests as well as JDBC (database) 
 requests.
@@ -174,7 +174,7 @@ use XPath or XQuery to make advanced assertions on the content.
   }
  ```
 
-##<a name="http-specific"></a> HTTP-specific assertions
+## HTTP-specific assertions
 
 These assertions can be added to both REST and SOAP requests but don't make any sense for test steps that are not HTTP-based.
 

@@ -57,11 +57,11 @@ name. Using a ```pathParam``` with XPath will help resolve this:
 To verify that you are getting the expected response back from your web service, you should add assertions to the SOAP
  request step. This is done in an ```asserting``` section in your configuration block.
 
-In addition to the general-purpose [assertions](Assertions.md#standard) for things like simple content and the response
+In addition to the general-purpose [assertions](Assertions.md#standard-assertions) for things like simple content and the response
 time, there are more specific assertions for checking the correctness of the web service response. The XPath assertions 
 are particularly useful for SOAP responses since they will always be in XML format.
 
-The [HTTP-specific assertions](Assertions.md#http-specific) are also applicable to all SOAP requests – 
+The [HTTP-specific assertions](Assertions.md#http-specific-assertions) are also applicable to all SOAP requests – 
 
 The following complete code example shows you three generic content and response time assertions:
 

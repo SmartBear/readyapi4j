@@ -158,7 +158,7 @@ The following complete code example shows you both generic assertions and ones t
   }
   ```
 
-In addition to the [standard assertions](Assertions.md#standard) and the [HTTP-specific ones](Assertions.md#http-specific), 
+In addition to the [standard assertions](Assertions.md#standard-assertions) and the [HTTP-specific ones](Assertions.md#http-specific-assertions), 
 the following JsonPath assertions are available for REST requests. They all use JsonPath to verify the content
 in the response body.
 
