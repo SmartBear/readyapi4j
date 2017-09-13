@@ -28,7 +28,7 @@ Here's an example (without import statements):
  }
  ```
  
-This test recipe will send a GET request to ```https://staging-server/customers/1```, then use a [http://goessner.net/articles/JsonPath/](JSONPath)
+This test recipe will send a GET request to ```https://staging-server/customers/1```, then use a [JSONPath](http://goessner.net/articles/JsonPath/)
 expression to find a value inside the response and insert it into a piece of JSON. Then it will send a POST with the modified JSON to the 
 endpoint ```https://staging-server/orders```.
 
