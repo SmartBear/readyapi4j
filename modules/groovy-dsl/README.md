@@ -69,7 +69,7 @@ For detailed descriptions of the DSL features, click on the links below, or chec
 * [Assertions and test results](Assertions.md)
 * [Content transfer (Property transfer)](Property-Transfer.md)
 * [SOAP requests](Soap-Request.md) 
-* [Database queries](JDBC-Request.md)
+* [Database queries](Jdbc-Request.md)
 * [Datasources](Datasources.md)
 
 ## How to use the DSL in your build
