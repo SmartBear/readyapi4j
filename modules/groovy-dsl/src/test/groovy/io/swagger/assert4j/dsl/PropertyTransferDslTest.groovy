@@ -40,7 +40,7 @@ class PropertyTransferDslTest {
             get URI, {
                 name FIRST_STEP
             }
-            transfer sourcePath from DslDelegate.response to targetPath of DslDelegate.request
+            transfer sourcePath from response to targetPath of request
             post URI, {
                 name LAST_STEP
             }
@@ -61,7 +61,7 @@ class PropertyTransferDslTest {
     @Test
     void buildsPropertyTransferWithNameInClosure() throws Exception {
         TestRecipe recipe = recipe {
-            transfer sourcePath name TEST_STEP_NAME from DslDelegate.response to targetPath of DslDelegate.request
+            transfer sourcePath name TEST_STEP_NAME from response to targetPath of request
         }
         PropertyTransferTestStep propertyTransferStep = recipe.testCase.testSteps[0] as PropertyTransferTestStep
         assert propertyTransferStep.name == TEST_STEP_NAME
@@ -73,7 +73,7 @@ class PropertyTransferDslTest {
             get URI, {
                 name FIRST_STEP
             }
-            transfer sourcePath from DslDelegate.response to targetPath of(step: 'TheStep', property: 'Username')
+            transfer sourcePath from response to targetPath of(step: 'TheStep', property: 'Username')
             post URI, {
                 name LAST_STEP
             }
@@ -100,7 +100,7 @@ class PropertyTransferDslTest {
     @Test
     void buildsCorrectTargetWithSpecialSyntaxAndMaps() throws Exception {
         TestRecipe recipe = recipe {
-            transfer sourcePath from DslDelegate.response to(step: 'someStep', property: 'SomeProperty', path: targetPath)
+            transfer sourcePath from response to(step: 'someStep', property: 'SomeProperty', path: targetPath)
         }
 
         PropertyTransfer transferStep = extractPropertyTransferFromTestStep(recipe)
