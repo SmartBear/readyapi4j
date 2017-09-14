@@ -81,7 +81,7 @@ included glue-code, all other options are passed as usual, see https://cucumber.
 
 ### Running with Docker
 
-If the above two options are too much of a java-hassle for you, then you can use the prepackaged docker image 
+If the above two options are too much of a Java hassle for you, you can use the prepackaged docker image 
 available at https://hub.docker.com/r/smartbear/swagger-assert4j-cucumber instead - it packages the above runner and makes it
 super-easy to run feature files for your APIs without having to install anything (except Docker of course).
 
@@ -96,11 +96,11 @@ specify that volume as the source for feature files for the Cucumber Runner, tog
 
 ### Recipe logging
 
-If you add a `-Dswagger-assert4j.cucumber.logfolder=...` system property to your command line invocation the runner will write 
-generated json recipes to the specified folder before executing them, for example allowing you 
-to import them into ReadyAPI for load-testing/monitoring/etc.
+If you add the `-Dswagger-assert4j.cucumber.logfolder=...` system property to your command line invocation the runner will write 
+generated JSON recipes to the specified folder before executing them, for example allowing you 
+to import them into ReadyAPI for load-testing, monitoring, etc.
 
-### Configuring excution with ReadyAPI TestServer
+### Configuring execution with ReadyAPI TestServer
  
 The included Cucumber StepDefs (see below) by default execute test recipes using the local open-source execution engine of swagger-assert4j. 
 If you would like to execute your tests via [ReadyAPI TestServer](https://smartbear.com/product/ready-api/testserver/overview/) instead 
@@ -316,7 +316,7 @@ public class CustomStepDefs {
 To get this used during execution you will need to
 
 1. Compile the above into a jar file
-2. Include the jar file in the classpath for the Cucumber runner
+2. Include the JAR file in the classpath for the Cucumber runner
 3. Add the containing package(s) of your StepDefs with the -g argument
 
 For example (line-breaks and comments added for readability):

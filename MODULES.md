@@ -5,7 +5,7 @@ Overview of included modules and how they fit together:
 | Module | Description |
 |---|---|
 | [core](modules/core)  | Core Recipe creation and execution classes and interfaces |
-| [cucumber](modules/cucumber)  | Extensible Cucumber vocabulary for REST API testing, including commandline and Docker execution |
+| [cucumber](modules/cucumber)  | Extensible Cucumber vocabulary for REST API testing, including command line and Docker execution |
 | [facade](modules/facade) | Execution facade for dynamically switching between local end remote execution of recipes  |
 | [groovy-dsl](modules/groovy-dsl) | Grooy DSL for creating JSON Recipes  |
 | [junit-report](modules/junit-report) | Utility library for creating JUnit-style XML reports  |

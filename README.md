@@ -1,6 +1,6 @@
 # Swagger Assert4J - a Java library for API testing
 
-The Assert4J library lets you test APIs through Java, Groovy or Cucumber. The library has extensive support for REST, SOAP, JDBC and JMS protocols. 
+The Assert4J library lets you test APIs using Java, Groovy or Cucumber. The library has extensive support for REST, SOAP and JDBC protocols. 
 Under the hood the library uses the open-source test-execution engine of [SoapUI](http://www.soapui.org).
 
 * Quickly get started:
@@ -29,7 +29,7 @@ Under the hood the library uses the open-source test-execution engine of [SoapUI
 	```java
     @Test
     public void simpleCountTest() throws Exception {
-         RecipeExecutionResult result = executeRecipe("Simple Count Test",
+         RecipeExecutionResult result = executeRecipe(
              GET("https://api.swaggerhub.com/specs")
                  .withParameters(
                      query("specType", "API"),
@@ -52,7 +52,7 @@ Under the hood the library uses the open-source test-execution engine of [SoapUI
     Actual   :FAILED
     ```
 
-Learn more about the java testing vocabulary by:
+Learn more about the Java testing vocabulary by:
 - having a look at the [java samples](modules/samples/java/src/test/java/io/swagger/assert4j/samples/java)
 - having a look at the [core unit tests](modules/core/src/test/java/io/swagger/assert4j)
 - [browsing the javadoc](http://smartbear.github.io/swagger-assert4j/apidocs/) 

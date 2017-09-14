@@ -2,7 +2,8 @@
 
 ## JSON Recipes
 
-JSON recipes are the internal representation used by swagger-assert4j to describe API tests. A very simple example:
+JSON recipes are the external representation used by swagger-assert4j to describe API tests which you either
+create manually or using one of our code libraries (see below). A very simple example:
 
 ````json
 {
@@ -29,7 +30,7 @@ properties corresponding to their type. For a quick reference of all available s
 
 ## Creating recipes with code
 
-Creating elaborate recipes in JSON with many teststeps, assertions, transfers, etc.. can be tedious - which is
+Creating elaborate recipes in JSON with many teststeps, assertions, transfers, etc can be tedious - which is
 why assert4j includes [java](modules/core), [groovy](modules/groovy-dsl) and [cucumber](modules/cucumber) libraries to make 
 recipe creation and execution more accessible. 
 
@@ -46,7 +47,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 
 ## Execution modes
 
-No matter how you create JSON recipes; manually, via code, auto-generate, etc - they can be executed either locally
+No matter how you create JSON recipes - manually, via code, auto-generate, etc - they can be executed either locally
 using the Open-Source SoapUI execution engine - or remotely using the commercial ReadyAPI TestServer product. Recipes
 are executed by RecipeExecutors - which can be created for either local or remote execution.
 
@@ -64,7 +65,7 @@ Read more about local execution in the [local module](modules/local).
 
 ## Remote Execution
 
-To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
+To get access to extended functionality like data-driven testing, centralized execution and reporting, etc, you 
 can execute your tests with [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) instead of running 
 them locally. 
 
@@ -136,7 +137,7 @@ In all instances above we got an Execution object when executing the recipe - ge
 of the execution is done via execution.getExecutionResult() - which returns an ExecutionResult object that
 provides details on execution time, individual teststep results, etc.
 
-In a unit-testing scenario the provided AssertionUtils class can be used to assert the outcome of an Excution:
+In a unit testing scenario the provided AssertionUtils class can be used to assert the outcome of an Execution:
 
 ```java
 .. create executor ..
