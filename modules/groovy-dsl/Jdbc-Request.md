@@ -52,7 +52,8 @@ In other words, you can insert Groovy code inside it. You can also add comments 
 
 To veryify that the database request didn't just complete but also returned what you expected, you need to add assertions
 to your JDBC request step. To detect that an error was returned from the database, you need to add the 
-[jdbcStatusOk assertion](#jdbcStatusOk) The standard assertions [general-purpose assertions](Assertions.md#standard-assertions). 
+```jdbcStatusOk``` assertion (see below). To verify that the correct data was returned from the database, use the 
+[general-purpose assertions](Assertions.md#standard-assertions), such as ```responseContains```. 
 
 The following complete code example shows you how to verify that you got a result containing the text "JonSnow" back within
 3 seconds:
@@ -106,7 +107,7 @@ The following code will assert that the returned CustomerId value is "JonSnow":
   
 Below you find descriptions of the two JDBC specific assertions.
 
-### <a name="jdbcStatusOk></a>jdbcStatusOk
+### jdbcStatusOk
 
 Asserts that no error was returned from the database. Fails if an error was returned.
 
