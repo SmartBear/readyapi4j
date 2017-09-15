@@ -75,13 +75,13 @@ For detailed descriptions of the DSL features, click on the links below, or chec
 ## How to use the DSL in your build
 
 To compile and run tests using the Assert4J DSL in a Maven build, simply add this dependency (assuming that you are using
-version 1.0.0; if not just replace the contents of the ```version``` element):
+version 1.0.0-SNAPSHOT; if not just enter the version you use into the ```version``` element):
 
 ```xml
 <dependency>
     <groupId>io.swagger.assert</groupId>
     <artifactId>swagger-assert4j-groovy-dsl</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
  ```
@@ -92,7 +92,7 @@ your production code.
 To do the same thing in Gradle, add this line to the ```dependencies``` block:
 
 ```groovy
-runtime group: 'org.groovy', name: 'groovy', version: '2.2.0', ext: 'jar'
+testCompile group: 'io.swagger.assert', name: 'swagger-assert4j-groovy-dsl', version: '1.0.0-SNAPSHOT', ext: 'jar'
 ```
 
 ## Tell us what's missing!
