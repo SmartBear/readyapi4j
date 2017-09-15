@@ -3,7 +3,9 @@
 Datasources is likely the most complex feature in the Assert4J Test DSL, and unless you've already used DataSources in 
 [ReadyApi](https://smartbear.com/product/ready-api/overview/) or SoapUI Pro you may need some time to understand how to use them. 
 
-Arguably, it's also the most powerful feature in the DSL, however.
+Arguably, it's also the most powerful feature in the DSL, however, so it's very likely that it will be worth the investment. 
+Datasources allow you to easily make your test data-driven and thus much more relevant and to generate test data if you don't have
+it. Read on to learn the basic concepts and syntax of DataSources.
 
 ***NOTE:*** Datasources are only available for TestServer executions, not for local executions. In other words you need a ReadyApi TestServer 
 to be able to use them.
@@ -24,78 +26,142 @@ For instance, assume that you have an Excel file called ```cities.xls``` with th
 |Italy | Rome |
 
 
+We're now going to use this data to execute the same test (two test steps) once for every row in the Excel sheet:
 
 ```groovy
  import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
-    soapRequest {
-           wsdl = 'http://www.webservicex.com/globalweather.asmx?WSDL'
-           binding = 'GlobalWeatherSoap12'
-           operation = 'GetCitiesByCountry'
-           namedParam 'CountryName', 'France'
-           asserting {
-               responseContains 'Paris'
-               responseDoesNotContain 'London'
-               maxResponseTime 3500 ms
-           }
-       }
-     
+    /* Loop over all the rows in the Excel file. */
+    usingExcelFile 'cities.xls', {
+    
+        get 'https://staging-server/cities_by_country', {
+            parameters { 
+                // set the query parameter to the value in the Country column
+                query 'country', '${ExcelDataSource#Country}'
+            }
+            asserting {
+               /* assert that the response contains the value in the City column */
+               responseContains '${ExcelDataSource#City}'
+            }
+        }
+        get 'https://staging-server/city_search', {
+            parameters { 
+                /* set the query parameter to the value in the Country column */
+                query 'country', '${ExcelDataSource#Country}'
+            }
+            asserting {
+                statusNotIn 404
+            }
+        }
+        
+        /* end loop */
+     }
   }
 ```
 
-## Adding assertions to the SOAP response
+The somewhat cryptic strings ```${ExcelFile#Country}``` and ```${ExcelFile#City}``` are **property expansions**, which
+retrieve the current values of the columns ```Country``` and ```City``` for every row.
 
-To verify that you are getting the expected response back from your web service, you should add assertions to the SOAP
- request step. This is done in an ```asserting``` section in your configuration block.
+In addition to Excel data sources, the following data sources can be created from the Assert4J Test DSL:
+* Grid data sources
+* CSV data sources
 
-In addition to the general-purpose [assertions](Assertions.md#standard-assertions) for things like simple content and the response
-time, there are more specific assertions for checking the correctness of the web service response. The XPath assertions 
-are particularly useful for SOAP responses since they will always be in XML format.
+See below for descriptions of these different data sources.
 
-The [HTTP-specific assertions](Assertions.md#http-specific-assertions) are also applicable to all SOAP requests – 
+### usingData
 
-The following complete code example shows you three generic content and response time assertions:
+The ```usingData``` data loop allows you to simply create a data source programmatically, using a Groovy map object. The names 
+of the data columns will be the keys in the map. Each column name will be mapped to a list with all the names. For instance,
+the data that we saw in the Excel example above:
+
+|Country|City|
+|-------|-----|
+|France | Paris |
+|Sweden | Stockholm |
+|Italy | Rome |
+
+... will be represented by the following Groovy map:
+
+```groovy
+[Country: ['France', 'Sweden', 'Italy'], City: ['Paris', 'Stockholm', 'Rome']]
+```
 
 ```groovy
  import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
  
+  def data = [Country: ['France', 'Sweden', 'Italy'], City: ['Paris', 'Stockholm', 'Rome']]
   executeRecipe {
-    soapRequest {
-           wsdl = 'http://www.webservicex.com/globalweather.asmx?WSDL'
-           binding = 'GlobalWeatherSoap12'
-           operation = 'GetCitiesByCountry'
-           namedParam 'CountryName', 'France'
-           asserting {
-               responseContains 'Paris'
-               responseDoesNotContain 'London'
-               maxResponseTime 3500 ms
-           }
-       }
-     
+    /* Loop over all the rows in the data. */
+    usingData data, {
+    
+        get 'https://staging-server/cities_by_country', {
+            parameters { 
+                // set the query parameter to the value in the Country column
+                query 'country', '${GridDataSource#Country}'
+            }
+            asserting {
+               /* assert that the response contains the value in the City column */
+               responseContains '${GridDataSource#City}'
+            }
+        }
+        get 'https://staging-server/city_search', {
+            parameters { 
+                /* set the query parameter to the value in the Country column */
+                query 'country', '${GridDataSource#Country}'
+            }
+            asserting {
+                statusNotIn 404
+            }
+        }
+        
+        /* end loop */
+     }
   }
 ```
 
-The following code example demonstrates the use of the HTTP status assertion, and the two SOAP-specific assertions ```notSoapFault``` and
-```schemaCompliance```. The former will fail if a SOAP fault is returned by the web service; the latter if the response
-payload doesn't comply with the schema defined in the WSDL of the web service.
+### usingCsvFile
+
+The ```usingCsvFile``` data loop allows you to use a CSV file as the data source. For instance, let's assume that the CSV 
+```countries.csv``` has the following contents:
+
+```
+Country,City
+France,Paris
+Sweden,Stockholm
+Italy,Rome
+```
+The following code will then execute the same tests as the Excel example above:
 
 ```groovy
  import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
-    soapRequest {
-           wsdl = 'http://www.webservicex.com/globalweather.asmx?WSDL'
-           binding = 'GlobalWeatherSoap12'
-           operation = 'GetCitiesByCountry'
-           namedParam 'CountryName', 'France'
-           asserting {
-               status 200
-               notSoapFault
-               schemaCompliance
-           }
-       }
-     
+    /* Loop over all the rows in the Excel file. */
+    usingCsvFile 'cities.xls', {
+    
+        get 'https://staging-server/cities_by_country', {
+            parameters { 
+                // set the query parameter to the value in the Country column
+                query 'country', '${CsvDataSource#Country}'
+            }
+            asserting {
+               /* assert that the response contains the value in the City column */
+               responseContains '${CsvDataSource#City}'
+            }
+        }
+        get 'https://staging-server/city_search', {
+            parameters { 
+                /* set the query parameter to the value in the Country column */
+                query 'country', '${CsvDataSource#Country}'
+            }
+            asserting {
+                statusNotIn 404
+            }
+        }
+        
+        /* end loop */
+     }
   }
 ```
 
