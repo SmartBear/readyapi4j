@@ -88,7 +88,7 @@
     </build>
     <profiles>
         <profile>
-            <id>java-docs</id>
+            <id>javadoc</id>
             <build>
                 <plugins>
                     <plugin>

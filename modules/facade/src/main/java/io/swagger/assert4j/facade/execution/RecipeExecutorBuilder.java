@@ -21,8 +21,8 @@ import java.util.Map;
  * - testserver.endpoint - endpoint to a TestServer installation
  * - testserver.user - used for TestServer authentication
  * - testserver.password - for TestServer authentication
- * - assert4j.log.executions.folder - all executions will be logged to this folder
- * - assert4j.log.recipes.folder - all recipes will be logged to this folder
+ * - swagger-assert4j.log.executions.folder - all executions will be logged to this folder
+ * - swagger-assert4j.log.recipes.folder - all recipes will be logged to this folder
  */
 public class RecipeExecutorBuilder {
 
@@ -31,8 +31,8 @@ public class RecipeExecutorBuilder {
     private static final String TESTSERVER_ENDPOINT_PROPERTY = "testserver.endpoint";
     private static final String TESTSERVER_USER_PROPERTY = "testserver.user";
     private static final String TESTSERVER_PASSWORD_PROPERTY = "testserver.password";
-    private static final String EXECUTION_LOG_FOLDER_PROPERTY = "assert4j.log.executions.folder";
-    private static final String RECIPE_LOG_FOLDER_PROPERTY = "assert4j.log.recipes.folder";
+    private static final String EXECUTION_LOG_FOLDER_PROPERTY = "swagger-assert4j.log.executions.folder";
+    private static final String RECIPE_LOG_FOLDER_PROPERTY = "swagger-assert4j.log.recipes.folder";
 
     private String testServerUser;
     private String testServerPassword;
