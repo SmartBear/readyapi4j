@@ -5,7 +5,7 @@ Under the hood the library uses the open-source test-execution engine of [SoapUI
 
 * Quickly get started:
   * [with Java](#getting-started-with-java) - together with any testing framework
-  * [with Groovy](#getting-started-with-groovy) - together with any testing framework 
+  * [with our Groovy DSL](#getting-started-with-groovy) - read [the documentation of the DSL here](modules/groovy-dsl)
   * [with Cucumber](modules/cucumber) - with cucumber-jvm 
   * [with the Maven plugin](modules/maven-plugin)
 * [Running Tests with TestServer](#running-tests-with-testserver)
@@ -59,7 +59,9 @@ Learn more about the Java testing vocabulary by:
 
 ## Getting Started with Groovy 
 
-Assert4J provides a Groovy DSL to create and execute API tests locally or on TestServer. 
+Assert4J provides a Groovy DSL to create and execute API tests locally or on TestServer. Documentation of the DSL
+is [available here](modules/groovy-dsl).
+
 The following steps explain how to use this DSL in a JUnit test.
 
 1. Add the following Maven dependency to your project:
