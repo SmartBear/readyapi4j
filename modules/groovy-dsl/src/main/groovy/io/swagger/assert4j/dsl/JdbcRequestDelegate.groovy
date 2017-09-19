@@ -13,6 +13,7 @@ class JdbcRequestDelegate {
     boolean storedProcedure;
     Map<String, String> testStepProperties
     List<AssertionBuilder> assertions
+    String query
 
     void name(String testStepName) {
         this.testStepName = testStepName;
@@ -24,6 +25,10 @@ class JdbcRequestDelegate {
 
     void connectionString(String connectionString) {
         this.connectionString = connectionString;
+    }
+
+    void query(String query) {
+        this.query = query
     }
 
     void storedProcedure(boolean storedProcedure) {

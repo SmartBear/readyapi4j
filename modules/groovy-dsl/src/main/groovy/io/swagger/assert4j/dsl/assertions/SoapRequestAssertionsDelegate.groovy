@@ -9,7 +9,7 @@ import io.swagger.assert4j.assertions.SoapFaultAssertionBuilder
 /**
  * The delegate to respond to commands inside 'asserting' closure of SOAP request
  */
-class SoapRequestAssertionsDelegate extends AbstractAssertionsDelegate {
+class SoapRequestAssertionsDelegate extends AbstractHttpAssertionsDelegate {
 
     /**
      * Creates 'SOAP Fault' assertion.

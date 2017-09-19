@@ -52,6 +52,13 @@ class DslDelegate {
         createRestRequest('PUT', URI, configuration)
     }
 
+    void put(String URI, String bodyString) {
+        put(URI, {
+            contentType 'application/json'
+            body bodyString
+        })
+    }
+
     void delete(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('DELETE', URI, configuration)
     }
@@ -126,6 +133,7 @@ class DslDelegate {
 
         JdbcRequestTestStepBuilder builder = new JdbcRequestTestStepBuilder(delegate.driver, delegate.connectionString,
                 delegate.storedProcedure)
+                .withSql(delegate.query)
         builder.named(delegate.testStepName)
         if (delegate.testStepProperties) {
             builder.withProperties(delegate.testStepProperties)

@@ -80,6 +80,25 @@ class RestRequestDslTest {
     }
 
     @Test
+    void buildsRecipeWithPUTAndBody() throws Exception {
+        String body = """
+            {
+                "customerId": "some_id",
+                "lineItems": [
+                  { sku: 'ABC-123', quantity: 2},
+                  { sku: 'DEF-456', quantity: 1}
+            }
+            """
+        TestRecipe recipe = recipe {
+            put URI, body
+        }
+
+        RestTestRequestStep requestStep = recipe.testCase.testSteps[0] as RestTestRequestStep
+        assert requestStep.requestBody == body
+        assert requestStep.mediaType == 'application/json'
+    }
+
+    @Test
     void buildsRecipeWithDELETE() throws Exception {
         TestRecipe recipe = recipe {
             delete URI
@@ -301,7 +320,7 @@ class RestRequestDslTest {
         TestRecipe recipe = recipe {
             get '/some_uri', {
                 asserting {
-                    contentType 'text/xml'
+                    responseContentType 'text/xml'
                 }
             }
         }

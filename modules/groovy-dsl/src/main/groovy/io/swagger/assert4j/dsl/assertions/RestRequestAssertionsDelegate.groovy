@@ -5,7 +5,7 @@ import io.swagger.assert4j.assertions.Assertions
 /**
  * The delegate to respond to commands inside 'asserting' closure of REST request
  */
-class RestRequestAssertionsDelegate extends AbstractAssertionsDelegate {
+class RestRequestAssertionsDelegate extends AbstractHttpAssertionsDelegate {
 
     /**
      * Creates delegate for JSON path assertion.
