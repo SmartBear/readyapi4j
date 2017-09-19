@@ -160,7 +160,7 @@ public class RunMojo extends AbstractMojo {
             Result projectExecutionResult = runProjects(xmlProjectFiles, report);
 
 
-            getLog().info("Ready! API TestServer Maven Plugin");
+            getLog().info("ReadyAPI TestServer Maven Plugin");
             getLog().info("--------------------------------------");
             getLog().info("Recipes run: " + recipeExecutionResult.executionCount);
             getLog().info("Projects run: " + projectExecutionResult.executionCount);

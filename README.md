@@ -1,11 +1,16 @@
 # Swagger Assert4J - a Java library for API testing
 
-The Assert4J library lets you test APIs through Java, Groovy or Cucumber. The library has extensive support for REST, SOAP, JDBC and JMS protocols. Under the hood the library uses the test-execution engine of [SoapUI](http://www.soapui.org).
+The Assert4J library lets you test APIs using Java, Groovy or Cucumber. The library has extensive support for REST, SOAP and JDBC protocols. 
+Under the hood the library uses the open-source test-execution engine of [SoapUI](http://www.soapui.org).
 
-Read on to get started
-* [with Java](#getting-started-with-java) - together with any testing framework
-* [with Groovy](#getting-started-with-groovy) - together with any testing framework 
-* [with Cucumber](modules/cucumber) - with cucumber for java 
+* Quickly get started:
+  * [with Java](#getting-started-with-java) - together with any testing framework
+  * [with Groovy](#getting-started-with-groovy) - together with any testing framework 
+  * [with Cucumber](modules/cucumber) - with cucumber-jvm 
+  * [with the Maven plugin](modules/maven-plugin)
+* [Running Tests with TestServer](#running-tests-with-testserver)
+* [Core Concepts](CONCEPTS.md) - explains swagger-assert4j core concepts
+* [Modules](MODULES.md) - an overview of the included maven modules
 
 ## Getting Started with Java
 
@@ -14,7 +19,7 @@ Read on to get started
 	```xml
 	<dependency>
 		<groupId>io.swagger.assert</groupId>
-		<artifactId>assert4j-facade</artifactId>
+		<artifactId>swagger-assert4j-facade</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	```
@@ -22,62 +27,35 @@ Read on to get started
 2. Create and execute a simple recipe with your favorite unit-testing framework:
 
 	```java
-	    @Test
-        public void simpleCountTest() throws Exception {
-             RecipeExecutionResult result = executeRecipe(
-                 GET("https://api.swaggerhub.com/specs")
-                     .withParameters(
-                         query( "specType", "API" ),
-                         query( "query", "testserver" )
-                     )
-                     .withAssertions(
-                         json("$.totalCount", "4")
-                     )                 
-                 );
-    
-            assertExecutionResult(result);
-        }
+    @Test
+    public void simpleCountTest() throws Exception {
+         RecipeExecutionResult result = executeRecipe(
+             GET("https://api.swaggerhub.com/specs")
+                 .withParameters(
+                     query("specType", "API"),
+                     query("query", "testserver")
+                 )
+                 .withAssertions(
+                     json("$.totalCount", "4")
+                 )
+         );
+         
+         assertExecutionResult(result);
+    }
 	```
 
-3. Run your test.
+3. Run your test and enjoy the results (or not...);
 
-    Here is some sample output of the method above:
     ```
-    Errors: [[JsonPath Match] Comparison failed for path [$.totalCount], expecting [1], actual was [0]] 
+    java.lang.AssertionError: Execution failed: [[JsonPath Match] Comparison failed for path [$.totalCount], expecting [4], actual was [5]] 
+    Expected :FINISHED
+    Actual   :FAILED
     ```
 
-4. Look at the unit tests to see all the functionality available, or [Dive into the javadocs](http://smartbear.github.io/swagger-assert4j/apidocs/) to get an overview of the Java API.
-
-### Running tests with TestServer
-
-To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
-need to use [Ready! API TestServer](http://readyapi.smartbear.com/testserver/start) for test execution. 
-
-TestServer is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
-in the same underlying JSON format that is also used in the test shown above. If you're using the RecipeExecutionFacade 
-(as in the example above) all you have to do is add system (or environment) variables that point the facade to a 
-running TestServer instance. For example, if we add
-
-```
-testserver.endpoint=http://testserver.readyapi.io:8080
-testserver.user=demoUser
-testserver.password=demoPassword
-```
-	
-as either system/env properties to our execution and then rerun the above test - those tests will be executed by the 
-specified TestServer instance available at http://testserver.readyapi.io.
-
-### Logging of Recipes and HTTP transactions
-
-Usage of the facade as in the above examples also enables logging of both generated recipes and HTTP transaction logs 
-of executed tests (in HAR file format). Adding the following two properties:
-
-```
-assert4j.log.executions.folder=target/logs/executions
-assert4j.log.recipes.folder=target/logs/recipes
-```
-
-will automatically result in the corresponding artifacts being written to the corresponding folders.
+Learn more about the Java testing vocabulary by:
+- having a look at the [java samples](modules/samples/java/src/test/java/io/swagger/assert4j/samples/java)
+- having a look at the [core unit tests](modules/core/src/test/java/io/swagger/assert4j)
+- [browsing the javadoc](http://smartbear.github.io/swagger-assert4j/apidocs/) 
 
 ## Getting Started with Groovy 
 
@@ -89,7 +67,7 @@ The following steps explain how to use this DSL in a JUnit test.
 	```xml
 	<dependency>
 		<groupId>io.swagger.assert</groupId>
-		<artifactId>assert4j-groovy-dsl</artifactId>
+		<artifactId>swagger-assert4j-groovy-dsl</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</dependency>
 	```
@@ -172,18 +150,50 @@ assert execution.errorMessages.empty
 ```
 ## More samples / tutorials
 
-Tutorial in the Ready! API TestServer documentation: 
+Tutorial in the ReadyAPI TestServer documentation: 
 [Creating Code-Based Recipes: Tutorial](http://readyapi.smartbear.com/testserver/tutorials/code_based/start)
 
 The [samples submodule](modules/samples) here on GitHub contains a number of samples for Java, Groovy and Maven.
+
+## Running tests with TestServer
+
+To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
+need to execute your tests with [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) instead of running 
+them locally. 
+
+TestServer is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
+in the same underlying JSON format that is also used in the test shown above. If you're using the RecipeExecutionFacade 
+(as in the example above) all you have to do is add system (or environment) variables that point the facade to a 
+running TestServer instance. For example, if we add
+
+```
+testserver.endpoint=http://testserver.readyapi.io:8080
+testserver.user=demoUser
+testserver.password=demoPassword
+```
+	
+as either system/env properties to our execution and then rerun the above test - those tests will be executed by the 
+specified TestServer instance available at http://testserver.readyapi.io.
+
+### Logging of Recipes and HTTP transactions
+
+Usage of the facade as in the above examples also enables logging of both generated recipes and HTTP transaction logs 
+of executed tests (in HAR file format). Adding the following two properties:
+
+```
+swagger-assert4j.log.executions.folder=target/logs/executions
+swagger-assert4j.log.recipes.folder=target/logs/recipes
+```
+
+will automatically result in the corresponding artifacts being written to the corresponding folders.
 
 ## Learn More about TestServer
 
 [Try it out online!](http://testserver.readyapi.io)
 
-[Ready! API TestServer](http://readyapi.smartbear.com/testserver/intro/about)
+[ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/intro/about)
 
-[Ready! API](http://readyapi.smartbear.com/start)
+[ReadyAPI](http://readyapi.smartbear.com/start)
 
 ## License
 

@@ -1,4 +1,4 @@
-package io.swagger.assert4j.cucumber.samples.extension;
+package com.smartbear.cucumber.samples.extension;
 
 import io.swagger.assert4j.cucumber.CucumberRecipeBuilder;
 import io.swagger.assert4j.cucumber.RestStepDefs;

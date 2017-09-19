@@ -1,12 +1,12 @@
-# Assert4J TestServer Maven Plugin
+# Swagger Assert4J TestServer Maven Plugin
 
-A maven plugin that runs a set of Json recipes (locally or using a TestServer) and Ready! API projects (only with TestServer, not locally) - 
+A maven plugin that runs a set of Json recipes (locally or using a TestServer) and ReadyAPI projects (only with TestServer, not locally) - 
 configure it to run in whatever build phase you might find relevant, for example;
 
 ```
 <plugin>
     <groupId>io.swagger.assert</groupId>
-    <artifactId>assert4j-maven-plugin</artifactId>
+    <artifactId>swagger-assert4j-maven-plugin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <configuration>
         <username>defaultUser</username>
@@ -111,10 +111,3 @@ mvn clean install
 
 to install the latest version of the plugin locally. It will eventually be made available on maven central also.
 
-
-## Next steps?
-
-Obviously huge list of things to improve:
-- support datadriven tests
-- improved surefire reports
-- etc..

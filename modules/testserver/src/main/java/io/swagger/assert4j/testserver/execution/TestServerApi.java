@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.Collection;
 
 /**
- * Defines an API stub that can communicate with the Ready! API Server.
+ * Defines an API stub that can communicate with the ReadyAPI Server.
  */
 public interface TestServerApi {
 
