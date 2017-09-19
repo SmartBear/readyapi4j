@@ -1,7 +1,7 @@
 # Property transfers - Transferring content in Assert4J DSL
 
 One of the most powerful features of [SoapUI](https://www.soapui.org) is the ability to easily transfer values from one test step
-to another in. This feature is known as ***Property transfer***. It is most often used to extract some part of it 
+to another one. This feature is known as ***Property transfer***. It is most often used to extract some part of it 
 and pass it into a subsequent request.
 
 Here's a simple example where we use JSONPath to replace the value ```WILL_BE_REPLACED``` with a customer ID

@@ -9,7 +9,22 @@ status will be set to UNKNOWN. If no steps have the status FAILED or ERROR, the 
 successful.
 
 Assertions are always added in an ```asserting``` section right after the request step. See the assertion descriptions below 
-for examples.
+for examples. In addition to the assertions listed below, there are specialized assertions [for REST requests](Rest-Request.md#adding-assertions-to-the-response) 
+and [for JDBC requests](Jdbc-Request.md#adding-assertions-to-the-jdbc-response)
+
+### Available assertions
+
+[Standard assertions](#standard-assertions)
++ [responseContains](#responsecontains)
++ [responseDoesNotContain](#responsedoesnotcontain)
++ [maxResponseTime](#maxresponsetime)
++ [script](#script)
++ [xpath/xQuery <EXPRESSION> contains <EXPECTED_CONTENT>](#xpathxquery--contains-expected_content)
+
+[HTTP-specific assertions](#http-specific-assertions)
++ [status](#status)
++ [statusNotIn](#statusnotin)
++ [responseContentType](#responsecontenttype)
 
 ## Standard assertions
 
@@ -99,8 +114,8 @@ Note that the last two expressions are equivalent.
  
 ### script
  
-Uses a Groovy script to perform an assertion using the current test state. This is an advanced assertion that 
-assumes that the user is familiar with the SoapUI object model. For information about how Groovy script assertions
+Uses a Groovy script to perform an assertion using the state of the currently executing test. This is an advanced assertion that 
+assumes that the user is familiar with the [SoapUI object model](https://www.soapui.org/scripting---properties/the-soapui-object-model.html). For information about how Groovy script assertions
 work, see [this page](https://www.soapui.org/functional-testing/validating-messages/using-script-assertions.html).
 
 Usually this script will be in the form ```assert <BOOLEAN_EXPRESSION>``` - if the boolean expression is false,
@@ -117,46 +132,16 @@ the assertion will fail.
   }
   ```
   
-## XPath/XQuery assertions
-
-
-
-XPath and XQuery assertions have identical syntax - the only difference between them is the former start with
-```xpath``` and the latter with ```xQuery```.
-
 ### xpath/xQuery <EXPRESSION> contains <EXPECTED_CONTENT>
 
-Extracts the element in the response matching the XPath in ```EXPRESSION``` and fails the assertion 
-if it isn't equal to ```EXPECTED_CONTENT```.
+XPath and XQuery assertions have identical syntax - the only difference between them is the former start with
+```xpath``` and the latter with ```xQuery```. 
 
-When validating response content, the XPath and XQuery are much more useful than you'd think.
+When validating response content, XPath and XQuery are much more useful than you'd think.
 HTML responses, JSON responses and JDBC (databases) responses can all be coerced to XML, which means you can
 use XPath or XQuery to make advanced assertions on the content.
-
-**Parameters:** A string containing the XPath/XQuery expression and another string with the expected content.
-
-**Examples:** 
-```groovy
- get 'https://staging-server/customers/1', {
-     asserting {
-         xpath '/customer/id' contains 'JonSnow'
-     }
- }
- get 'https://staging-server/products/1', {
-      asserting {
-          xQuery '/customers[id == "JonSnow"]/id' contains 'JonSnow'
-      }
-  }
- ```
- 
-### xQuery <EXPRESSION> contains <EXPECTED_CONTENT>
-
 Extracts the element in the response matching the XPath in ```EXPRESSION``` and fails the assertion 
 if it isn't equal to ```EXPECTED_CONTENT```.
-
-When validating response content, the XPath and XQuery are much more useful than you'd think.
-HTML responses, JSON responses and JDBC (databases) responses can all be coerced to XML, which means you can
-use XPath or XQuery to make advanced assertions on the content.
 
 **Parameters:** A string containing the XPath/XQuery expression and another string with the expected content.
 

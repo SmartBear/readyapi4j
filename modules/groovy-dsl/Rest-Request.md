@@ -129,7 +129,7 @@ To tell a DSL script to go and fetch the page you've been redirected to, use the
 
 ## Adding assertions to the response
 
-The Assert4J DSL is a **Test** DSL, you're really not putting it to good use unless you verify the responses you
+The Assert4J DSL is a **Test** DSL, so you're really not putting it to good use unless you verify the responses you
 get back. This is done in an ```asserting``` section in your configuration block.
 
 In addition to the general-purpose [assertions](Assertions.md) for things like simple content and the response
