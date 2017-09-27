@@ -9,7 +9,7 @@ import static io.swagger.assert4j.facade.execution.RecipeExecutionFacade.execute
 import static io.swagger.assert4j.support.AssertionUtils.assertExecutionResult;
 import static io.swagger.assert4j.teststeps.TestSteps.soapRequest;
 
-public class SimpleSoapTest extends ApiTestBase {
+public class SimpleSoapTest {
 
     @Test
     public void simpleSoapTest() throws Exception {
