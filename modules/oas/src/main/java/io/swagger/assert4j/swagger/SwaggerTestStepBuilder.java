@@ -23,7 +23,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 /**
- * Utility class for building RestRequestStepBuilders for operations in a Swagger 2.0 definition
+ * Utility class for building RestRequestStepBuilders for operations in a Swagger/OAS 2.0 definition
  */
 
 public class SwaggerTestStepBuilder {
