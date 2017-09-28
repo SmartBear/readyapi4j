@@ -187,8 +187,8 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
     }
 
     @Override
-    public RestRequestBuilderType setAuthentication(AuthenticationBuilder authenticationBuilder) {
-        return super.setAuthentication(authenticationBuilder);
+    public RestRequestBuilderType withAuthentication(AuthenticationBuilder authenticationBuilder) {
+        return super.withAuthentication(authenticationBuilder);
     }
 
     @Override

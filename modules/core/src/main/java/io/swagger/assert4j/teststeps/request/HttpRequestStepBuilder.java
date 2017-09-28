@@ -76,7 +76,7 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         return (RequestBuilderType) this;
     }
 
-    public RequestBuilderType setAuthentication(AuthenticationBuilder authenticationBuilder) {
+    public RequestBuilderType withAuthentication(AuthenticationBuilder authenticationBuilder) {
         testStep.setAuthentication(authenticationBuilder.build());
         return (RequestBuilderType) this;
     }

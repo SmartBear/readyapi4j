@@ -112,8 +112,8 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
     }
 
     @Override
-    public SoapRequestStepBuilder setAuthentication(AuthenticationBuilder authenticationBuilder) {
-        return super.setAuthentication(authenticationBuilder);
+    public SoapRequestStepBuilder withAuthentication(AuthenticationBuilder authenticationBuilder) {
+        return super.withAuthentication(authenticationBuilder);
     }
 
     @Override
