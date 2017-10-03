@@ -47,7 +47,7 @@ Assert4j expresses tests as "recipes" - which are an ordered list of steps that 
 executed. There are a fair number of built-in test steps (outlined below) - and there is an underlying extension 
 mechansim for providing custom steps also.
 
-Building a recipe with the fluent API is easiest done with the [TestRecipeBuilder](src/main/java/io/swagger/assert4j/TestRecipeBuilder.java)
+Building a recipe with the fluent API is easiest done with the [TestRecipeBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/TestRecipeBuilder.html)
 class:
 
 ```java
@@ -63,7 +63,7 @@ RecipeExecutionResult result = RecipeExecutorBuilder.buildDefault().executeRecip
 # Test Steps
 
 Test steps represent the actual actions performed during the execution of a test, the 
-[TestSteps](src/main/java/io/swagger/assert4j/teststeps/TestSteps.java) class provides factory
+[TestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/TestSteps.html) class provides factory
 methods for creating TestStepBuilders for each supported test step type - as you will see below. 
 
 ## REST Requests
@@ -125,7 +125,7 @@ the built in serialization support json, yaml and xml media types.
 ### Authentication
 
 If you need to add authentication to your request, then use one of the factory methods
-provided by the [Authentications](src/main/java/io/swagger/assert4j/auth/Authentications.java) class.
+provided by the [Authentications](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/auth/Authentications.html) class.
 
 ```java
 TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
@@ -144,9 +144,37 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 
 ### Attachments
 
+If you'd like to attach a file to the body of a request instead of providing it as content as shown above, you can 
+ use the `withAttachments(...)` method together with the factory methods in the 
+  [Attachments](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/attachments/Attachments.html) class
 
+```java
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
+  POST( "http://petstore.swagger.io/v2/store/order" ).
+     withAttachments(
+         file( "request.json", "application/json" )
+     )
+):
+ ``` 
 
 ## SOAP Requests
+
+The built in SOAP support makes it super-easy to call SOAP Services; you'll need to provide the underlying WSDL and
+info on which binding and operation to call, filling out the actual message body can either be done using utility
+methods or manually by providing the request XML:
+
+```java
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
+   soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                  .forBinding("GlobalWeatherSoap12")
+                  .forOperation("GetWeather")
+                  .withParameter("CountryName", "Sweden")
+                  .withPathParameter("//*:CityName", "Stockholm")
+):
+ ``` 
+As you can see in this example we're making a call to the `GetOperation` method and we set the `CountryName` parameter
+using simple the corresponding element name ignoring namespaces. The `CityName` parameter is set using an XPath 
+pointer - but it could equally have been done with the `withParameter` method.
 
 ## Property Transfers
 
