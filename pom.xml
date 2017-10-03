@@ -134,6 +134,7 @@
                             </sourcepath>
                             <!--<sourcepath>src/main/java;target/generated-sources/swagger/src/main/java</sourcepath>-->
                             <includes>*.java,*.groovy</includes>
+                            <reportOutputDirectory>apidocs</reportOutputDirectory>
                         </configuration>
                         <executions>
                             <execution>
