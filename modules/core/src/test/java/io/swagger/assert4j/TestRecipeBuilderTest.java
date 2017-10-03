@@ -9,7 +9,6 @@ import io.swagger.assert4j.client.model.PropertyTransferTarget;
 import io.swagger.assert4j.client.model.PropertyTransferTestStep;
 import io.swagger.assert4j.client.model.SoapMockResponseTestStep;
 import io.swagger.assert4j.client.model.TestStep;
-import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 import io.swagger.assert4j.teststeps.propertytransfer.PathLanguage;
 import org.junit.Test;

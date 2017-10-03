@@ -166,19 +166,65 @@ methods or manually by providing the request XML:
 ```java
 TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
    soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
-                  .forBinding("GlobalWeatherSoap12")
+                  .forBinding("GlobalWeatherSoap11")
                   .forOperation("GetWeather")
                   .withParameter("CountryName", "Sweden")
                   .withPathParameter("//*:CityName", "Stockholm")
 ):
  ``` 
-As you can see in this example we're making a call to the `GetOperation` method and we set the `CountryName` parameter
+As you can see in this example we're making a call to the `GetOperation` method defined in the WSDL. The actual XML 
+request for this operation looks as follows:
+
+```xml
+<soapenv:Envelope
+    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:web="http://www.webserviceX.NET">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <web:GetWeather>
+            <web:CityName>?</web:CityName>
+            <web:CountryName>?</web:CountryName>
+        </web:GetWeather>
+    </soapenv:Body>
+</soapenv:Envelope>
+```
+
+Fortunately we never have to create any XML, we simply set the `CountryName` parameter
 using simple the corresponding element name ignoring namespaces. The `CityName` parameter is set using an XPath 
 pointer - but it could equally have been done with the `withParameter` method.
 
 ## Property Transfers
 
+Transferring values from the response of one TestStep to the request of another is a very common task when creating
+multi-step tests. The Property Transfer TestStep handles this for you:
+
+```java
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(
+    GET( "http://petstore.swagger.io/v2/pet/findByStatus?status=test" ).named("getPets"),
+    propertyTransfer(
+        fromPreviousResponse( "$.[0].id" ).toNextRequestProperty("petId")
+    ),
+    GET( "http://petstore.swagger.io/v2/pet/{petId}" ).named( "getPet" ).
+        withAssertions(
+            statusCodes( 200 )
+        )
+);
+```
+The example above uses XPath to extract the `id` property of the first item in the response to the `petId` path 
+parameter in the following request - using the `fromPreviousResponse` and `toNextRequest` convenience methods in the
+[PropertyTransferBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/propertytransfer/PropertyTransferBuilder.html) class.
+
 ## Delay
+
+Use the `delayStep` to insert a delay between two TestSteps:
+
+```java
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
+    GET( "http://petstore.swagger.io/v2/pet/findByStatus?status=test" ),
+    delayStep( 1000 ), // wait for one second...
+    GET( "http://petstore.swagger.io/v2/pet/(id}" )
+):
+``` 
 
 ## Script
 
