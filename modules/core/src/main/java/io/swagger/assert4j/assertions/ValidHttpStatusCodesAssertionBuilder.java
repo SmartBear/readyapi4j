@@ -1,12 +1,11 @@
 package io.swagger.assert4j.assertions;
 
 import io.swagger.assert4j.client.model.ValidHttpStatusCodesAssertion;
-import io.swagger.assert4j.AssertionNames;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.swagger.assert4j.Validator.validateNotEmpty;
+import static io.swagger.assert4j.support.Validations.validateNotEmpty;
 
 public class ValidHttpStatusCodesAssertionBuilder implements HttpStatusCodeAssertionBuilder {
     protected List<String> statusCodes = new ArrayList<>();

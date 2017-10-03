@@ -1,7 +1,6 @@
 package io.swagger.assert4j.assertions;
 
 import io.swagger.assert4j.client.model.JdbcStatusAssertion;
-import io.swagger.assert4j.AssertionNames;
 
 public class DefaultJdbcStatusAssertionBuilder implements JdbcStatusAssertionBuilder {
     private final JdbcStatusAssertion statusAssertion = new JdbcStatusAssertion();

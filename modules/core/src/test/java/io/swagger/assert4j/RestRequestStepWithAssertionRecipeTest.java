@@ -12,8 +12,7 @@ import io.swagger.assert4j.client.model.SimpleContainsAssertion;
 import io.swagger.assert4j.client.model.ValidHttpStatusCodesAssertion;
 import io.swagger.assert4j.client.model.XPathContainsAssertion;
 import io.swagger.assert4j.client.model.XQueryContainsAssertion;
-import io.swagger.assert4j.AssertionNames;
-import io.swagger.assert4j.TestRecipe;
+import io.swagger.assert4j.assertions.AssertionNames;
 import org.junit.Test;
 
 import java.util.Arrays;

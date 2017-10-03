@@ -1,4 +1,4 @@
-package io.swagger.assert4j;
+package io.swagger.assert4j.support;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * Utility class for validations
  */
 
-public class Validator {
+public class Validations {
     public static void validateNotEmpty(String value, String message) {
         if (StringUtils.isBlank(value)) {
             throw new IllegalStateException(message);

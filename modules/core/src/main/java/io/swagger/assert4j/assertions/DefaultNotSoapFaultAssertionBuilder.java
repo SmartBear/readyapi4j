@@ -1,7 +1,6 @@
 package io.swagger.assert4j.assertions;
 
 import io.swagger.assert4j.client.model.NotSoapFaultAssertion;
-import io.swagger.assert4j.AssertionNames;
 
 public class DefaultNotSoapFaultAssertionBuilder implements NotSoapFaultAssertionBuilder {
 

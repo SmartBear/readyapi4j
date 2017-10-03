@@ -12,7 +12,7 @@ import io.swagger.assert4j.teststeps.request.HttpRequestStepBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.swagger.assert4j.Validator.validateNotEmpty;
+import static io.swagger.assert4j.support.Validations.validateNotEmpty;
 import static io.swagger.assert4j.assertions.Assertions.jsonContent;
 import static io.swagger.assert4j.assertions.Assertions.jsonCount;
 import static io.swagger.assert4j.assertions.Assertions.jsonExists;

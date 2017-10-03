@@ -1,8 +1,7 @@
 package io.swagger.assert4j.assertions;
 
 import io.swagger.assert4j.client.model.SimpleContainsAssertion;
-import io.swagger.assert4j.AssertionNames;
-import io.swagger.assert4j.Validator;
+import io.swagger.assert4j.support.Validations;
 
 public class DefaultContainsAssertionBuilder implements ContainsAssertionBuilder {
     protected SimpleContainsAssertion containsAssertion = new SimpleContainsAssertion();
@@ -31,7 +30,7 @@ public class DefaultContainsAssertionBuilder implements ContainsAssertionBuilder
 
     @Override
     public SimpleContainsAssertion build() {
-        Validator.validateNotEmpty(containsAssertion.getToken(), "Missing token, it's a mandatory parameter for ContainsAssertion");
+        Validations.validateNotEmpty(containsAssertion.getToken(), "Missing token, it's a mandatory parameter for ContainsAssertion");
         containsAssertion.setType(AssertionNames.SIMPLE_CONTAINS);
         return containsAssertion;
     }

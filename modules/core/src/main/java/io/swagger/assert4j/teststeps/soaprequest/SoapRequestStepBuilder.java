@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.swagger.assert4j.Validator.validateNotEmpty;
+import static io.swagger.assert4j.support.Validations.validateNotEmpty;
 
 public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestStepBuilder, SoapRequestTestStep> {
 
