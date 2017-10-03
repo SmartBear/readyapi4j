@@ -1,0 +1,26 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <fileMode>444</fileMode>
+            <includes>
+                <include>io.swagger.assert:swagger-assert4j-cucumber-runner</include>
+            </includes>
+            <outputDirectory>.</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+        <fileSet>
+            <directory>src/docker/resources</directory>
+            <includes>
+                <include>entry-point.sh</include>
+                <include>soapui-log4j.xml</include>
+            </includes>
+            <fileMode>544</fileMode>
+            <outputDirectory>.</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

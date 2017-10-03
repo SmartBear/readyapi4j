@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>swagger-assert4j-cucumber</artifactId>
+        <groupId>io.swagger.assert</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>swagger-assert4j-cucumber-runner</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger.assert</groupId>
+            <artifactId>swagger-assert4j-cucumber-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.assert</groupId>
+            <artifactId>swagger-assert4j-cucumber-stepdefs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>io.swagger.assert4j.cucumber.CucumberRunner</mainClass>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                <!-- first remove the existing soapui-log4j.xml so we can add our own -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                                    <resource>com/eviware/soapui/resources/conf/soapui-log4j.xml</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                                    <resource>com/eviware/soapui/resources/conf/soapui-log4j.xml</resource>
+                                    <file>src/docker/resources/soapui-log4j.xml</file>
+                                </transformer>
+                            </transformers>
+                            <filters>
+                                <!--  filter to address "Invalid signature file" issue - see http://stackoverflow.com/a/6743609/589215-->
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.20.0</version>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <images>
+                                <image>
+                                    <alias>swagger-assert4j-cucumber</alias>
+                                    <name>smartbear/swagger-assert4j-cucumber:latest</name>
+                                    <build>
+                                        <from>java:8-jre</from>
+                                        <maintainer>ole.lensmar@smartbear.com</maintainer>
+                                        <tags>
+                                            <tag>latest</tag>
+                                        </tags>
+                                        <assembly>
+                                            <basedir>/maven</basedir>
+                                            <descriptor>/src/docker/resources/assembly.xml</descriptor>
+                                        </assembly>
+                                        <volumes>
+                                            <volume>/cucumber</volume>
+                                        </volumes>
+                                        <entryPoint>
+                                            <exec>
+                                                <args>/maven/entry-point.sh</args>
+                                            </exec>
+                                        </entryPoint>
+                                    </build>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>package</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

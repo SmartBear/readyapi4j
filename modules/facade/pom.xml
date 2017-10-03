@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>swagger-assert4j</artifactId>
+        <groupId>io.swagger.assert</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>swagger-assert4j-facade</artifactId>
+    <name>swagger-assert4j-facade</name>
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger.assert</groupId>
+            <artifactId>swagger-assert4j-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.assert</groupId>
+            <artifactId>swagger-assert4j-local</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.assert</groupId>
+            <artifactId>swagger-assert4j-testserver</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

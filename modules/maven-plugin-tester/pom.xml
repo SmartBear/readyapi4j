@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>swagger-assert4j</artifactId>
+        <groupId>io.swagger.assert</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <skipApiTests>true</skipApiTests>
+    </properties>
+
+    <artifactId>swagger-assert4j-maven-plugin-tester</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger.assert</groupId>
+            <artifactId>swagger-assert4j-maven-plugin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.swagger.assert</groupId>
+                <artifactId>swagger-assert4j-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>RunLocally</id>
+                        <configuration>
+                            <ignoreProjectFiles>true</ignoreProjectFiles>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>RunWithTestServer</id>
+                        <configuration>
+                            <username>demoUser</username>
+                            <password>demoPassword</password>
+                            <server>http://testserver.readyapi.io:8080</server>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>int-tests</id>
+            <properties>
+                <skipApiTests>false</skipApiTests>
+            </properties>
+        </profile>
+    </profiles>
+</project>

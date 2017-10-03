@@ -1,0 +1,30 @@
+{
+  "testSteps": [
+    {
+      "type": "REST Request",
+      "method": "GET",
+      "URI": "https://api.swaggerhub.com/apis",
+      "parameters": [
+        {
+          "type": "QUERY",
+          "name": "query",
+          "value": "testserver"
+        }
+      ],
+      "assertions": [
+        {
+          "type": "Valid HTTP Status Codes",
+          "validStatusCodes": [
+            "200"
+          ]
+        },
+        {
+          "type": "JsonPath Count",
+          "jsonPath": "$.totalCount",
+          "expectedCount": "1",
+          "allowWildcards": false
+        }
+      ]
+    }
+  ]
+}

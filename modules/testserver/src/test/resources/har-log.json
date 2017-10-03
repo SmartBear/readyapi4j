@@ -1,0 +1,637 @@
+{
+  "log": {
+    "version": "1.2",
+    "creator": {
+      "name": "ReadyAPI TestServer",
+      "version": "1.7.1-SNAPSHOT"
+    },
+    "pages": [
+      {
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "id": "1463064414028",
+        "title": "Transaction 0",
+        "pageTimings": {
+          "onContentLoad": -1,
+          "onLoad": -1,
+          "comment": ""
+        }
+      },
+      {
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "id": "1463064414287",
+        "title": "Transaction 1",
+        "pageTimings": {
+          "onContentLoad": -1,
+          "onLoad": -1,
+          "comment": ""
+        }
+      },
+      {
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "id": "1463064414315",
+        "title": "Transaction 2",
+        "pageTimings": {
+          "onContentLoad": -1,
+          "onLoad": -1,
+          "comment": ""
+        }
+      },
+      {
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "id": "1463064414344",
+        "title": "Transaction 3",
+        "pageTimings": {
+          "onContentLoad": -1,
+          "onLoad": -1,
+          "comment": ""
+        }
+      },
+      {
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "id": "1463064414380",
+        "title": "Transaction 4",
+        "pageTimings": {
+          "onContentLoad": -1,
+          "onLoad": -1,
+          "comment": ""
+        }
+      },
+      {
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "id": "1463064414404",
+        "title": "Transaction 5",
+        "pageTimings": {
+          "onContentLoad": -1,
+          "onLoad": -1,
+          "comment": ""
+        }
+      }
+    ],
+    "entries": [
+      {
+        "pageref": "1463064414028",
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "time": 106,
+        "request": {
+          "method": "GET",
+          "url": "http://google.se",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "Connection",
+              "value": "Keep-Alive"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Apache-HttpClient/4.3.1 (java 1.5)"
+            },
+            {
+              "name": "Host",
+              "value": "google.se"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip,deflate"
+            }
+          ],
+          "queryString": [],
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "response": {
+          "status": 301,
+          "statusText": "Moved",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "public, max-age=2592000"
+            },
+            {
+              "name": "Server",
+              "value": "gws"
+            },
+            {
+              "name": "Expires",
+              "value": "Sat, 11 Jun 2016 14:47:00 GMT"
+            },
+            {
+              "name": "#status#",
+              "value": "HTTP/1.1 301 Moved Permanently"
+            },
+            {
+              "name": "Content-Length",
+              "value": "218"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Date",
+              "value": "Thu, 12 May 2016 14:47:00 GMT"
+            },
+            {
+              "name": "Location",
+              "value": "http://www.google.se/"
+            },
+            {
+              "name": "Content-Type",
+              "value": "text/html; charset=UTF-8"
+            }
+          ],
+          "content": {
+            "size": 218,
+            "mimeType": "text/html; charset=UTF-8",
+            "text": "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<TITLE>301 Moved<\/TITLE><\/HEAD><BODY>\n<H1>301 Moved<\/H1>\nThe document has moved\n<A HREF=\"http://www.google.se/\">here<\/A>.\r\n<\/BODY><\/HTML>\r\n"
+          },
+          "redirectURL": "http://www.google.se/",
+          "headersSize": -1,
+          "bodySize": 218
+        },
+        "cache": {},
+        "timings": {
+          "send": 0,
+          "wait": 0,
+          "receive": 0
+        }
+      },
+      {
+        "pageref": "1463064414287",
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "time": 23,
+        "request": {
+          "method": "GET",
+          "url": "http://google.se",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "Connection",
+              "value": "Keep-Alive"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Apache-HttpClient/4.3.1 (java 1.5)"
+            },
+            {
+              "name": "Host",
+              "value": "google.se"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip,deflate"
+            }
+          ],
+          "queryString": [],
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "response": {
+          "status": 301,
+          "statusText": "Moved",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "public, max-age=2592000"
+            },
+            {
+              "name": "Server",
+              "value": "gws"
+            },
+            {
+              "name": "Expires",
+              "value": "Sat, 11 Jun 2016 14:47:00 GMT"
+            },
+            {
+              "name": "#status#",
+              "value": "HTTP/1.1 301 Moved Permanently"
+            },
+            {
+              "name": "Content-Length",
+              "value": "218"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Date",
+              "value": "Thu, 12 May 2016 14:47:00 GMT"
+            },
+            {
+              "name": "Location",
+              "value": "http://www.google.se/"
+            },
+            {
+              "name": "Content-Type",
+              "value": "text/html; charset=UTF-8"
+            }
+          ],
+          "content": {
+            "size": 218,
+            "mimeType": "text/html; charset=UTF-8",
+            "text": "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<TITLE>301 Moved<\/TITLE><\/HEAD><BODY>\n<H1>301 Moved<\/H1>\nThe document has moved\n<A HREF=\"http://www.google.se/\">here<\/A>.\r\n<\/BODY><\/HTML>\r\n"
+          },
+          "redirectURL": "http://www.google.se/",
+          "headersSize": -1,
+          "bodySize": 218
+        },
+        "cache": {},
+        "timings": {
+          "send": 0,
+          "wait": 0,
+          "receive": 0
+        }
+      },
+      {
+        "pageref": "1463064414315",
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "time": 23,
+        "request": {
+          "method": "GET",
+          "url": "http://google.se",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "Connection",
+              "value": "Keep-Alive"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Apache-HttpClient/4.3.1 (java 1.5)"
+            },
+            {
+              "name": "Host",
+              "value": "google.se"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip,deflate"
+            }
+          ],
+          "queryString": [],
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "response": {
+          "status": 301,
+          "statusText": "Moved",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "public, max-age=2592000"
+            },
+            {
+              "name": "Server",
+              "value": "gws"
+            },
+            {
+              "name": "Expires",
+              "value": "Sat, 11 Jun 2016 14:47:00 GMT"
+            },
+            {
+              "name": "#status#",
+              "value": "HTTP/1.1 301 Moved Permanently"
+            },
+            {
+              "name": "Content-Length",
+              "value": "218"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Date",
+              "value": "Thu, 12 May 2016 14:47:00 GMT"
+            },
+            {
+              "name": "Location",
+              "value": "http://www.google.se/"
+            },
+            {
+              "name": "Content-Type",
+              "value": "text/html; charset=UTF-8"
+            }
+          ],
+          "content": {
+            "size": 218,
+            "mimeType": "text/html; charset=UTF-8",
+            "text": "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<TITLE>301 Moved<\/TITLE><\/HEAD><BODY>\n<H1>301 Moved<\/H1>\nThe document has moved\n<A HREF=\"http://www.google.se/\">here<\/A>.\r\n<\/BODY><\/HTML>\r\n"
+          },
+          "redirectURL": "http://www.google.se/",
+          "headersSize": -1,
+          "bodySize": 218
+        },
+        "cache": {},
+        "timings": {
+          "send": 0,
+          "wait": 0,
+          "receive": 0
+        }
+      },
+      {
+        "pageref": "1463064414344",
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "time": 29,
+        "request": {
+          "method": "GET",
+          "url": "http://google.se",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "Connection",
+              "value": "Keep-Alive"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Apache-HttpClient/4.3.1 (java 1.5)"
+            },
+            {
+              "name": "Host",
+              "value": "google.se"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip,deflate"
+            }
+          ],
+          "queryString": [],
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "response": {
+          "status": 301,
+          "statusText": "Moved",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "public, max-age=2592000"
+            },
+            {
+              "name": "Server",
+              "value": "gws"
+            },
+            {
+              "name": "Expires",
+              "value": "Sat, 11 Jun 2016 14:47:00 GMT"
+            },
+            {
+              "name": "#status#",
+              "value": "HTTP/1.1 301 Moved Permanently"
+            },
+            {
+              "name": "Content-Length",
+              "value": "218"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Date",
+              "value": "Thu, 12 May 2016 14:47:00 GMT"
+            },
+            {
+              "name": "Location",
+              "value": "http://www.google.se/"
+            },
+            {
+              "name": "Content-Type",
+              "value": "text/html; charset=UTF-8"
+            }
+          ],
+          "content": {
+            "size": 218,
+            "mimeType": "text/html; charset=UTF-8",
+            "text": "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<TITLE>301 Moved<\/TITLE><\/HEAD><BODY>\n<H1>301 Moved<\/H1>\nThe document has moved\n<A HREF=\"http://www.google.se/\">here<\/A>.\r\n<\/BODY><\/HTML>\r\n"
+          },
+          "redirectURL": "http://www.google.se/",
+          "headersSize": -1,
+          "bodySize": 218
+        },
+        "cache": {},
+        "timings": {
+          "send": 0,
+          "wait": 0,
+          "receive": 0
+        }
+      },
+      {
+        "pageref": "1463064414380",
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "time": 20,
+        "request": {
+          "method": "GET",
+          "url": "http://google.se",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "Connection",
+              "value": "Keep-Alive"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Apache-HttpClient/4.3.1 (java 1.5)"
+            },
+            {
+              "name": "Host",
+              "value": "google.se"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip,deflate"
+            }
+          ],
+          "queryString": [],
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "response": {
+          "status": 301,
+          "statusText": "Moved",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "public, max-age=2592000"
+            },
+            {
+              "name": "Server",
+              "value": "gws"
+            },
+            {
+              "name": "Expires",
+              "value": "Sat, 11 Jun 2016 14:47:01 GMT"
+            },
+            {
+              "name": "#status#",
+              "value": "HTTP/1.1 301 Moved Permanently"
+            },
+            {
+              "name": "Content-Length",
+              "value": "218"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Date",
+              "value": "Thu, 12 May 2016 14:47:01 GMT"
+            },
+            {
+              "name": "Location",
+              "value": "http://www.google.se/"
+            },
+            {
+              "name": "Content-Type",
+              "value": "text/html; charset=UTF-8"
+            }
+          ],
+          "content": {
+            "size": 218,
+            "mimeType": "text/html; charset=UTF-8",
+            "text": "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<TITLE>301 Moved<\/TITLE><\/HEAD><BODY>\n<H1>301 Moved<\/H1>\nThe document has moved\n<A HREF=\"http://www.google.se/\">here<\/A>.\r\n<\/BODY><\/HTML>\r\n"
+          },
+          "redirectURL": "http://www.google.se/",
+          "headersSize": -1,
+          "bodySize": 218
+        },
+        "cache": {},
+        "timings": {
+          "send": 0,
+          "wait": 0,
+          "receive": 0
+        }
+      },
+      {
+        "pageref": "1463064414404",
+        "startedDateTime": "2016-05-12T14:46:54Z",
+        "time": 26,
+        "request": {
+          "method": "GET",
+          "url": "http://google.se",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "Connection",
+              "value": "Keep-Alive"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Apache-HttpClient/4.3.1 (java 1.5)"
+            },
+            {
+              "name": "Host",
+              "value": "google.se"
+            },
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip,deflate"
+            }
+          ],
+          "queryString": [],
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "response": {
+          "status": 301,
+          "statusText": "Moved",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "public, max-age=2592000"
+            },
+            {
+              "name": "Server",
+              "value": "gws"
+            },
+            {
+              "name": "Expires",
+              "value": "Sat, 11 Jun 2016 14:47:01 GMT"
+            },
+            {
+              "name": "#status#",
+              "value": "HTTP/1.1 301 Moved Permanently"
+            },
+            {
+              "name": "Content-Length",
+              "value": "218"
+            },
+            {
+              "name": "X-XSS-Protection",
+              "value": "1; mode=block"
+            },
+            {
+              "name": "Date",
+              "value": "Thu, 12 May 2016 14:47:01 GMT"
+            },
+            {
+              "name": "Location",
+              "value": "http://www.google.se/"
+            },
+            {
+              "name": "Content-Type",
+              "value": "text/html; charset=UTF-8"
+            }
+          ],
+          "content": {
+            "size": 218,
+            "mimeType": "text/html; charset=UTF-8",
+            "text": "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<TITLE>301 Moved<\/TITLE><\/HEAD><BODY>\n<H1>301 Moved<\/H1>\nThe document has moved\n<A HREF=\"http://www.google.se/\">here<\/A>.\r\n<\/BODY><\/HTML>\r\n"
+          },
+          "redirectURL": "http://www.google.se/",
+          "headersSize": -1,
+          "bodySize": 218
+        },
+        "cache": {},
+        "timings": {
+          "send": 0,
+          "wait": 0,
+          "receive": 0
+        }
+      }
+    ]
+  }
+}
