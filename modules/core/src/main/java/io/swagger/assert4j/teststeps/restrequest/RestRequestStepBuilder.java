@@ -238,7 +238,6 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
 
     public RestRequestBuilderType withContentType(String contentType) {
         getTestStep().setMediaType(contentType);
-
         return (RestRequestBuilderType) this;
     }
 
@@ -322,12 +321,8 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return super.assertHeaderExists(header);
     }
 
+    @Override
     public RestRequestBuilderType withAssertions(AssertionBuilder... assertionBuilders) {
-        for (AssertionBuilder assertionBuilder : assertionBuilders) {
-            addAssertion(assertionBuilder);
-        }
-
-        return (RestRequestBuilderType) this;
+        return super.withAssertions( assertionBuilders );
     }
-
 }

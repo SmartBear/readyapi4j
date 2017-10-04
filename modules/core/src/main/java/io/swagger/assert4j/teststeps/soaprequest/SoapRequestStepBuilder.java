@@ -240,4 +240,9 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
     public SoapRequestStepBuilder assertHeader(String header, String value) {
         return super.assertHeader(header, value);
     }
+
+    @Override
+    public SoapRequestStepBuilder withAssertions(AssertionBuilder... assertionBuilders) {
+        return super.withAssertions( assertionBuilders );
+    }
 }

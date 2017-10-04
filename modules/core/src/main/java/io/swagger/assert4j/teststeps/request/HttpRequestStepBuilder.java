@@ -7,6 +7,7 @@ import io.swagger.assert4j.attachments.RequestAttachmentBuilder;
 import io.swagger.assert4j.auth.AuthenticationBuilder;
 import io.swagger.assert4j.extractor.Extractor;
 import io.swagger.assert4j.teststeps.TestStepBuilder;
+import io.swagger.assert4j.teststeps.TestStepTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -230,7 +231,13 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
         extractors.addAll(Arrays.stream(argExtractors)
                 .filter(extractor -> extractor != null)
                 .collect(Collectors.toList()));
-        extractors.forEach(extractor -> extractor.setSource(testStep.getName()));
+        extractors.forEach(extractor -> {
+            extractor.setSource(testStep.getName());
+            if( testStep.getType().equals( TestStepTypes.SOAP_REQUEST.getName()) &&
+                extractor.getProperty().equals( "ResponseAsXml")){
+                extractor.setProperty("Response");
+            }
+        });
         return (RequestBuilderType) this;
     }
 
@@ -244,5 +251,13 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
                 .collect(Collectors.toList()));
 
         return (RequestBuilderType) this;
+    }
+
+    public RequestBuilderType withAssertions(AssertionBuilder... assertionBuilders) {
+        for (AssertionBuilder assertionBuilder : assertionBuilders) {
+            addAssertion(assertionBuilder);
+        }
+
+        return (RequestBuilderType)this;
     }
 }

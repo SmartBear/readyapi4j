@@ -15,16 +15,12 @@ remotely as described in the [Concepts](../../CONCEPTS.md) document.
   * [Property Transfers](#property-transfers)
   * [Delay](#delay)
   * [Script](#script)
-  * [MockResponse](#mockresponse)
   * [JDBC Request](#jdbc-request)
-  * [Properties](#properties)
-  * [Plugin](#plugin)
 * [Assertions](#assertions)
   * [HTTP Assertions](#http-assertions)
   * [Content Assertions](#content-assertions)
-    * [JSON](#json)
-    * [XML](#xml)
-  * [Script](#script)
+  * [Miscellaneous Assertions](#miscellaneous-assertions)
+* [Property Transfers](#property-transfers)
 * [Extractors](#extractors)
 * [Executing Recipes](#executing-recipes)
   * [Execution Listeners](#execution-listeners)
@@ -228,29 +224,156 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 
 ## Script
 
-## MockResponse
+Script TestSteps allow you to execute an arbitrary block of Groovy code as part of your test, for example 
+
+```java
+```java
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
+    GET( "http://petstore.swagger.io/v2/pet/findByStatus?status=test" ),
+    delayStep( 1000 ), // wait for one second...
+    groovyScriptStep( "System.out.println(\"Hello world!\")" ),
+    GET( "http://petstore.swagger.io/v2/pet/(id}" )
+):
+``` 
+The specified code has access to the complete underlying object-model of the executing test, see 
+https://www.soapui.org/scripting---properties/the-soapui-object-model.html and https://www.soapui.org/functional-testing/working-with-scripts.html
+for more info. 
 
 ## JDBC Request
 
-## Properties
+Test recipes can contain JDBC requests to interact with relational databases as part of a test. This can be valuable for either 
+initializing data needed for a test - or validating data that previous TestSteps are meant to create/modify. To use the JDBC
+TestStep make sure you have the corresponding JDBC driver(s) in your classpath - then create a 
+[JdbcConnection](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/jdbcrequest/JdbcConnection.html) 
+object to the database which can be used to build the actual TestSteps:
 
-## Plugin
+```java
+JdbcConnection connection = jdbcConnection("org.mysql.Driver", "jdbc:mysql://localhost/mydb" );
+
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
+   connection.jdbcRequest("select * from some_table")
+):
+```
+Internally the result returned from the query is converted to XML format - which you could for example use this in 
+combination with a property-transfer:  
+
+```java
+JdbcConnection connection = jdbcConnection("org.mysql.Driver", "jdbc:mysql://localhost/mydb" );
+
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
+    connection.jdbcRequest("select id from pets").named( "SelectPetIds"),
+    propertyTransfer(
+           // use xpath to select first returned id
+           fromPreviousResponse( "//id[0]" ).toNextRequestProperty("petId")
+       ),
+       GET( "http://petstore.swagger.io/v2/pet/{petId}" ).named( "getPet" ).
+           withAssertions(
+               statusCodes( 200 )
+           )
+):
+```
 
 # Assertions
 
+Assertions can be added to REST, SOAP and JDBC request teststeps via the `withAssertions(...)` method to assert the content of their respective responses.
+The [Assertions](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/assertions/Assertions.html)
+method contains factory methods that allow you to easily create any of the supported assertions, for example;
+
+```java
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
+   soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                  .forBinding("GlobalWeatherSoap11")
+                  .forOperation("GetWeather")
+                  .withParameter("CountryName", "Sweden")
+                  .withPathParameter("//*:CityName", "Stockholm")
+      .withAssertions(
+          validStatusCodes( 200 ),
+          notSoapFault(),
+          xPathContent( "//*:CityName", "Stockholm")
+      )
+):
+```
+
 ## HTTP Assertions
+
+The following HTTP-specific assertions are available:
+* `contentType( String contentType )` - asserts the content-type of the response 
+* `headerExists( String header )` - asserts that the specified HTTP header exists in the response
+* `headerValue( String header, String value)` - asserts that the specified HTTP header has the specified value in the response 
+* `validStatusCodes( Integer... statusCodes)` - asserts that the response has one of the specified HTTP status codes 
+* `invalidStatusCodes( Integer... statusCodes)contentType` - asserts that the response does not have one of the specified HTTP status codes 
 
 ## Content Assertions
 
-### JSON
+These assertions are for validating the body content of a response:
+* `contains(String token)` - asserts that the response body contains the specified token
+* `notContains(String token)` - asserts that the response body does not contain the specified token
+* `matches( String regexToken)` - asserts that the response matches the specified regular expression
+* `json(String jsonPath, String expectedContent)` - asserts that the node identified by the specified jsonPath contains the expected value
+* `jsonCount( String jsonPath, int count)` - asserts that the number of nodes selected by the specified jsonPath matches the specified count
+* `jsonExists( String jsonPath )` - asserts that a node exists at the specified JSON Path
+* `jsonNotExists( String jsonPath )` - asserts that a node does not exist at the specified JSON Path
+* `xPathContains( String xpath, String expectedValue )` - asserts that the XML node at the specified XPath contains the exptected value
+* `xQueryContains( String xquery, String expectedValue )` - asserts that the value selected by the specified XQuery contains the exptected value
 
-### XML
+Internally the execution engine uses:
+* [JsonPath](https://github.com/json-path/JsonPath) for JSON Path evalution
+* [Saxonica](http://www.saxonica.com/documentation/documentation.xml) for XPath/XQuery evaluation
 
-## Script
+## SOAP Assertions
+
+The following SOAP-specific assertions are available:
+* `notSoapFault()` - assert that the SOAP response it not a SOAP Fault
+* `soapFault()` - assert that the SOAP response is a SOAP Fault (for negative testing) 
+* `schemaCompliance()` - asserts that the response is compliant with the XML Schema defined for the response message
+
+## JDBC Assertions
+
+The following assertions are available for JDBC TestSteps:
+* `jdbcRequestStatusOk()` - asserts that the JDBC statement was executed successfully
+* `jdbcRequestTimeout( long timeout)` - asserts the JDBC response-time in milliseconds
+
+## Miscellaneous Assertions
+
+* `maxResponseTime( long timeInMillis)` - assert the response time of the request to be within the specified time
+* `script(String script)` - execute the specified groovy script for asserting the response - see [Using Script Assertions](https://www.soapui.org/functional-testing/validating-messages/using-script-assertions.html) for some examples
+
+# Properties and Property Expansion
+
+ 
 
 # Extractors
 
+Extractors allow you to easily extract values from a response message to use in your tests after the Test Recipe 
+has executed. For example you might want to use those values as input to other tests that are executed as part of an 
+orchestrated end-to-end test suite:
+
+```java
+String conversionRate;
+
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
+    soapRequest(new URL("http://www.webservicex.com/CurrencyConvertor.asmx?wsdl"))
+        .forBinding("CurrencyConvertorSoap")
+        .forOperation("ConversionRate")
+        .named( "GetConversionRate")
+        .withParameter("FromCurrency", "USD")
+        .withParameter("ToCurrency", "SEK")
+        .withAssertions(
+            schemaCompliance(),
+            notSoapFault()
+        )
+        .withExtractors(
+            fromResponse( "//*:ConversionRateResult/text()", v -> {
+                 conversionRate = v;
+            })
+        )
+        
+etc...        
+```
+
 # Executing Recipes
+
+
 
 ## Execution Listeners
 
