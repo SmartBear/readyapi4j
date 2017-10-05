@@ -487,7 +487,7 @@ executor.executeRecipe( ... )
 
 When an execution finishes the `Execution` object exposes a 
 [RecipeExecutionResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/RecipeExecutionResult.html)
-object that gives access to a [TestStepResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/TestStepResult.html) 
+ that gives access to a [TestStepResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/TestStepResult.html) 
 for each executed TestStep. For example if you want to log the response content for all executed TestSteps you can do:
 
 ```java

@@ -26,7 +26,8 @@ create manually or using one of our code libraries (see below). A very simple ex
 ````
 
 A recipe consists of an array of testSteps that can execute requests, transfer values, define properties, etc - each containing 
-properties corresponding to their type. For a quick reference of all available steps and their properties have a look at [REFERENCE.md].
+properties corresponding to their type, have a look at the [core module](modules/core/README.md) for an overview of available
+TestSteps, Assertions, etc. 
 
 ## Creating recipes with code
 
@@ -146,4 +147,4 @@ Execution execution = executor.executeRecipe(recipe);
 AssertionUtils.assertExecutionResult( execution.getExecutionResult() );
 ```
 
-See the [Results](modules/core/README.md#results) documentation for more details!
+See the [Results](modules/core/README.md#execution-results) documentation for more details!
