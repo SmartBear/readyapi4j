@@ -339,7 +339,39 @@ The following assertions are available for JDBC TestSteps:
 
 # Properties and Property Expansion
 
- 
+Properties are a common concept in the SoapUI execution engine; all TestSteps expose properties and there is even 
+a dedicated Properties TestStep for defining properties for a Test:
+
+```java
+TestRecipe testRecipe = newTestRecipe(
+            properties(
+                property( "username", "..."),
+                property( "password", "...")
+            )
+            .named("Properties"),
+            ...more TestSteps...
+        ).buildTestRecipe();
+``` 
+
+Using defined properties is done via [Property Expansion](https://www.soapui.org/scripting---properties/property-expansion.html), 
+for example, the above defined properties could be user for authentication:
+
+```java
+TestRecipe testRecipe = newTestRecipe(
+           properties(
+               property( "username", "..."),
+               property( "password", "...")
+           )
+           .named("Properties"),
+           GET("..some endpoint..")
+               .withAuthentication(basic("${Properties#username}", "${Properties#password}")
+               )
+           )
+        ).buildTestRecipe();
+``` 
+
+Of course you could simply define username/password as java variables when building the recipe; the advantage of
+using properties is related to the augmentation and reuse of recipes as described under recipe filters below.
 
 # Extractors
 
