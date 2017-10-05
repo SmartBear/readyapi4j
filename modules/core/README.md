@@ -25,8 +25,7 @@ remotely as described in the [Concepts](../../CONCEPTS.md) document.
 * [Executing Recipes](#executing-recipes)
   * [Execution Listeners](#execution-listeners)
   * [Recipe Filters](#recipe-filters)
-* [Results](#results)
-  * [Transaction Logs](#transaction-logs)
+* [Execution Results](#execution-results)
   
   
 # Fluent vs Pojo API
@@ -344,8 +343,8 @@ The following assertions are available for JDBC TestSteps:
 
 # Extractors
 
-Extractors allow you to easily extract values from a response message to use in your tests after the Test Recipe 
-has executed. For example you might want to use those values as input to other tests that are executed as part of an 
+Extractors allow you to easily extract values from a response message using XPath or JSONPath. For example you 
+might want to use those values as input to other tests that are executed as part of an 
 orchestrated end-to-end test suite:
 
 ```java
@@ -368,21 +367,104 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
             })
         )
         
-etc...        
+// execute recipe and use extracted conversionRate for something else
+RecipeExecutionFacade.executeRecipe( recipe );    
 ```
 
 # Executing Recipes
 
+The [Concepts](../../CONCEPTS.md) document shows how to execute recipes using both the local and remote execution 
+engines via the [RecipeExecutionFacade]() class. Using the underlying [RecipeExecutorBuilder]() makes it possible to 
+augment execution using execution listeners and recipe filters as described below.
 
+The actual [Execution](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/execution/Execution.html)
+object available for the execution of a recipe is useful for querying asynchronous test execution status:
+
+```java
+// use submitRecipe for async execution
+Execution execution = RecipeExecutionFacade.submitRecipe( ... );
+
+while( execution.getCurrentStatus() == RUNNING ){
+    // do something useful
+}
+
+System.out.println( "Test finished with status: " + execution.getCurrentStatus() );
+``` 
 
 ## Execution Listeners
 
+[ExecutionListener](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/ExecutionListener.html)s 
+get notified of specific events related to recipe execution - for example the provided 
+[ExecutionLogger](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/support/ExecutionLogger.html) 
+writes all execution transaction logs as HAR files to a specified folder:
+
+```java
+// build a local executor that logs executions to a logs folder
+RecipeExecutor executor = new RecipeExecutorBuilder()
+    .withExecutionListener(new ExecutionLogger("logs"))
+    .buildLocal();
+
+executor.executeRecipe( ... )
+```
+
+Since the `ExecutionLogger` is commonly used the `RecipeExecutorBuilder` actually has a 
+dedicated `withExecutionLog( String logFolder)` method:
+
+```java
+// build a local executor that logs executions to a logs folder
+RecipeExecutor executor = new RecipeExecutorBuilder()
+    .withExecutionLog("logs")
+    .buildLocal();
+
+executor.executeRecipe( ... )
+```  
+
 ## Recipe Filters
 
-# Results
+[RecipeFilter](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/execution/RecipeFilter.html)s
+can be used to augment the underlying [TestRecipe](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/TestRecipe.html)
+for a test before it is executed; for example it could add common authentication settings to all REST Requests, or 
+common property values to all TestSteps of a certain type.
 
-## Transaction Logs
+The included [RecipeLogger](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/support/RecipeLogger.html)
+filter logs all generated recipes to a specified folder - which can be useful for debugging/logging purposes or if you want to repurposes
+these recipes as LoadTests in [LoadUI](https://smartbear.com/product/ready-api/loadui) or API monitors using [AlertSite](https://smartbear.com/product/alertsite/integrations/ready-api-and-soapui/) 
 
+```java
+// build a local executor that logs json recipes to a logs folder
+RecipeExecutor executor = new RecipeExecutorBuilder()
+    .withRecipeFilter(new RecipeLogger("logs"))
+    .buildLocal();
+
+executor.executeRecipe( ... )
+```
+
+Similar to the `ExecutionLogger` above, the `RecipeExecutorBuilder` has a 
+dedicated `withRecipeLog( String logFolder)` method:
+
+```java
+// build a local executor that logs executions to a logs folder
+RecipeExecutor executor = new RecipeExecutorBuilder()
+    .withRecipeLog("logs")
+    .buildLocal();
+
+executor.executeRecipe( ... )
+```  
+
+# Execution Results
+
+When an execution finishes the `Execution` object exposes a 
+[RecipeExecutionResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/RecipeExecutionResult.html)
+object that gives access to a [TestStepResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/TestStepResult.html) 
+for each executed TestStep. For example if you want to log the response content for all executed TestSteps you can do:
+
+```java
+RecipeExecutionResult result = executor.executeRecipe(...);
+
+for( TestStepResult testStepResult : result.getTestStepResults()){
+    System.out.println( "TestStep [" + testStepResult.getTestStepName() + "] returned [" + testStepResult.getResponseContent() + "]");
+}
+``` 
 
 
 

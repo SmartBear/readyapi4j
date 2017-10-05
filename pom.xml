@@ -122,7 +122,7 @@
                                 modules/core/src/main/java:
                                 modules/cucumber/modules/core/src/main/java:
                                 modules/cucumber/modules/runner/src/main/java:
-                                modules/cucumber/modules/stepdefs/src/main/java
+                                modules/cucumber/modules/stepdefs/src/main/java:
                                 modules/facade/src/main/java:
                                 modules/groovy-dsl/src/main/groovy:
                                 modules/groovy-dsl/target/generated-sources/groovy-stubs/main:
