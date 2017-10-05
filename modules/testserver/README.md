@@ -100,7 +100,7 @@ A [ServerTestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.h
 A quick example of what's possible with dataGen DataSources, taken from the samples module:
 
 ```java
-TestRecipe testRecipe = newTestRecipe(
+TestRecipe recipe = TestRecipeBuilder.buildRecipe(
         dataGenDataSource()
                 .withNumberOfRows(10)
                 .withProperties(
@@ -117,7 +117,7 @@ TestRecipe testRecipe = newTestRecipe(
                             query("c", "${DataSourceStep#integerProperty}")
                         )
                 )
-        ).buildRecipe();
+        );
 ```
 
 Here we create a recipe that runs a google search 10 times, each with different values retreived
