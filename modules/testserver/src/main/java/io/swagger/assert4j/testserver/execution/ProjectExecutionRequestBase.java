@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-class ProjectExecutionRequestBase {
+public class ProjectExecutionRequestBase {
     String testSuiteName;
     String testCaseName;
     String environment;

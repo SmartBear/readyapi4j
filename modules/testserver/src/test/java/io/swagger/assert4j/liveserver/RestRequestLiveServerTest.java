@@ -1,14 +1,14 @@
 package io.swagger.assert4j.liveserver;
 
 import com.google.code.tempusfugit.temporal.Duration;
+import io.swagger.assert4j.TestRecipe;
+import io.swagger.assert4j.TestRecipeBuilder;
 import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.client.model.TestCaseResultReport;
 import io.swagger.assert4j.client.model.TestStepResultReport;
 import io.swagger.assert4j.client.model.TestSuiteResultReport;
-import io.swagger.assert4j.ExecutionListener;
-import io.swagger.assert4j.TestRecipe;
-import io.swagger.assert4j.TestRecipeBuilder;
 import io.swagger.assert4j.execution.Execution;
+import io.swagger.assert4j.execution.ExecutionListener;
 import io.swagger.assert4j.testserver.execution.TestServerClient;
 import io.swagger.assert4j.testserver.execution.TestServerRecipeExecutor;
 import io.swagger.assert4j.teststeps.TestStepBuilder;

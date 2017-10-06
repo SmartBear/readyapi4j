@@ -1,6 +1,6 @@
 package io.swagger.assert4j.facade.execution;
 
-import io.swagger.assert4j.ExecutionListener;
+import io.swagger.assert4j.execution.ExecutionListener;
 import io.swagger.assert4j.execution.RecipeExecutor;
 import io.swagger.assert4j.execution.RecipeFilter;
 import io.swagger.assert4j.local.execution.SoapUIRecipeExecutor;

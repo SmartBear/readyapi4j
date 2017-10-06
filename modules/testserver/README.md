@@ -47,7 +47,7 @@ ProjectExecutor projectExecutor = testServerClient.createProjectExecutor();
 
 Projects to be executed can reside either locally or remotely on the server (using the TestServer Repository functionality), create and 
 pass corresponding instances of [ProjectExecutionRequest](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/execution/ProjectExecutionRequest.html) 
-and [RepositoryProjectExecutionRequest]() to the execute/submitProject methods.
+and [RepositoryProjectExecutionRequest](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/execution/RepositoryProjectExecutionRequest.html) to the execute/submitProject methods.
 
 Before executing tests you can further narrow down which TestSuites/TestCases to run, specify tags, properties, endpoints, etc. by 
 setting the corresponding properties in either of these execution request classes.
