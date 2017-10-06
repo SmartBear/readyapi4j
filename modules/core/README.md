@@ -240,7 +240,7 @@ for more info.
 
 Test recipes can contain JDBC requests to interact with relational databases as part of a test. This can be valuable for either 
 initializing data needed for a test, or for validating data that previous TestSteps are meant to create/modify. To use the JDBC
-TestStep make sure you have the corresponding JDBC driver in your classpat, then create a 
+TestStep make sure you have the corresponding JDBC driver in your classpath, then create a 
 [JdbcConnection](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/jdbcrequest/JdbcConnection.html) 
 object to the database which can be used to build the actual TestSteps:
 
