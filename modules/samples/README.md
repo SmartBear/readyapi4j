@@ -1,6 +1,6 @@
 # Swagger Assert4j Samples
 
-This module contains sample submodules showing to create/execute test recipes with [Grooy](groovy), 
+This module contains sample submodules showing to create/execute test recipes with [Groovy](groovy), 
 [Java](java) or the [Maven plugin](maven-plugin).
 
 Execute the Java or Groovy samples by running the following command in their respective root folder:
