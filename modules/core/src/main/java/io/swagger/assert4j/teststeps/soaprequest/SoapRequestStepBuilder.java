@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.swagger.assert4j.Validator.validateNotEmpty;
+import static io.swagger.assert4j.support.Validations.validateNotEmpty;
 
 public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestStepBuilder, SoapRequestTestStep> {
 
@@ -112,8 +112,8 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
     }
 
     @Override
-    public SoapRequestStepBuilder setAuthentication(AuthenticationBuilder authenticationBuilder) {
-        return super.setAuthentication(authenticationBuilder);
+    public SoapRequestStepBuilder withAuthentication(AuthenticationBuilder authenticationBuilder) {
+        return super.withAuthentication(authenticationBuilder);
     }
 
     @Override
@@ -239,5 +239,10 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
     @Override
     public SoapRequestStepBuilder assertHeader(String header, String value) {
         return super.assertHeader(header, value);
+    }
+
+    @Override
+    public SoapRequestStepBuilder withAssertions(AssertionBuilder... assertionBuilders) {
+        return super.withAssertions( assertionBuilders );
     }
 }

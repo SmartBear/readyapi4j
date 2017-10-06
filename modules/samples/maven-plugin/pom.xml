@@ -20,7 +20,7 @@
 
     <profiles>
         <profile>
-            <id>RunSamples</id>
+            <id>RunSamplesRemotely</id>
             <build>
                 <plugins>
                     <plugin>
@@ -32,6 +32,40 @@
                             <password>${testserver.password}</password>
                             <server>${testserver.host}</server>
 
+                            <properties>
+                                <apitest.host>https://api.swaggerhub.com</apitest.host>
+                            </properties>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>run</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>slf4j-simple</artifactId>
+                                <version>1.7.12</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>RunSamplesLocally</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.swagger.assert</groupId>
+                        <artifactId>swagger-assert4j-maven-plugin</artifactId>
+                        <version>${project.version}</version>
+                        <configuration>
                             <properties>
                                 <apitest.host>https://api.swaggerhub.com</apitest.host>
                             </properties>

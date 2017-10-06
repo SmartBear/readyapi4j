@@ -9,7 +9,6 @@ import io.swagger.assert4j.client.model.PropertyTransferTarget;
 import io.swagger.assert4j.client.model.PropertyTransferTestStep;
 import io.swagger.assert4j.client.model.SoapMockResponseTestStep;
 import io.swagger.assert4j.client.model.TestStep;
-import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 import io.swagger.assert4j.teststeps.propertytransfer.PathLanguage;
 import org.junit.Test;
@@ -258,9 +257,23 @@ public class TestRecipeBuilderTest {
 
     @Test
     public void buildsRecipeWithPropertiesTestStep() throws Exception {
-        TestRecipe testRecipe = newTestRecipe(properties()
+        TestRecipe testRecipe = newTestRecipe(
+            properties()
                 .named("PropertiesStep")
                 .addProperty("property1", "value1")
+        ).buildTestRecipe();
+        PropertiesTestStep testStep = (PropertiesTestStep) testRecipe.getTestCase().getTestSteps().get(0);
+        assertThat(testStep.getType(), is(TestStepTypes.PROPERTIES.getName()));
+        assertThat(testStep.getProperties().get("property1"), is("value1"));
+    }
+
+    @Test
+    public void buildsRecipeWithFluentPropertiesTestStep() throws Exception {
+        TestRecipe testRecipe = newTestRecipe(
+            properties(
+                property( "property1", "value1")
+            )
+            .named("PropertiesStep")
         ).buildTestRecipe();
         PropertiesTestStep testStep = (PropertiesTestStep) testRecipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getType(), is(TestStepTypes.PROPERTIES.getName()));

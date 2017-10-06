@@ -1,1 +1,0 @@
-# Swagger Assert4j Reference

@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 
+/**
+ * Base class for custom Jackson type resolvers
+ */
+
 public abstract class AbstractTypeIdResolver implements TypeIdResolver {
     JavaType baseType;
 

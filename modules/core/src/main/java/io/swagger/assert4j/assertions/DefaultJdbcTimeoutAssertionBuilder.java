@@ -1,7 +1,6 @@
 package io.swagger.assert4j.assertions;
 
 import io.swagger.assert4j.client.model.JdbcTimeoutAssertion;
-import io.swagger.assert4j.AssertionNames;
 
 import java.util.Objects;
 

@@ -60,6 +60,11 @@ public class PropertyTransferBuilder {
         return this;
     }
 
+    public PropertyTransferBuilder toNextRequestProperty(String property) {
+        this.propertyTransferTargetBuilder = new PropertyTransferTargetBuilder()
+            .withProperty(property);
+        return this;
+    }
 
     void setPreviousTestStep(TestStep lastTestStep) {
         previousTestStep = lastTestStep;

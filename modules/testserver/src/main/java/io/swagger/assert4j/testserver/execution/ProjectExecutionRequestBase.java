@@ -44,6 +44,30 @@ class ProjectExecutionRequestBase {
         return customPropertiesMap;
     }
 
+    public void setTestSuiteName(String testSuiteName) {
+        this.testSuiteName = testSuiteName;
+    }
+
+    public void setTestCaseName(String testCaseName) {
+        this.testCaseName = testCaseName;
+    }
+
+    public void setEnvironment(String environment) {
+        this.environment = environment;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
+    }
+
+    public void setProjectPassword(String projectPassword) {
+        this.projectPassword = projectPassword;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
     public static abstract class AbstractProjectExecutionRequestBuilder<Builder extends AbstractProjectExecutionRequestBuilder,
             Request extends ProjectExecutionRequestBase> {
         Request projectExecutionRequest;

@@ -20,7 +20,7 @@ import static io.swagger.assert4j.support.AssertionUtils.assertExecutionResult;
  * same tests as in SimpleTest but without using the fluent interfaces
  */
 
-public class SimpleNonFluentTest extends ApiTestBase {
+public class SimpleNonFluentTest {
 
     @Test
     public void simpleCountTest() throws Exception {

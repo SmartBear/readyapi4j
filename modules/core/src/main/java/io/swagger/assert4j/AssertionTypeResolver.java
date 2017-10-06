@@ -2,6 +2,7 @@ package io.swagger.assert4j;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import io.swagger.assert4j.assertions.AssertionNames;
 import io.swagger.assert4j.client.model.GroovyScriptAssertion;
 import io.swagger.assert4j.client.model.InvalidHttpStatusCodesAssertion;
 import io.swagger.assert4j.client.model.JdbcStatusAssertion;

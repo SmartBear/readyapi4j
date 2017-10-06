@@ -1,7 +1,6 @@
 package io.swagger.assert4j.assertions;
 
 import io.swagger.assert4j.client.model.JsonPathExistenceAssertion;
-import io.swagger.assert4j.AssertionNames;
 
 public class JsonPathExistenceAssertionBuilder implements JsonPathAssertionBuilder<JsonPathExistenceAssertion> {
     private final JsonPathExistenceAssertion jsonPathExistenceAssertion = new JsonPathExistenceAssertion();

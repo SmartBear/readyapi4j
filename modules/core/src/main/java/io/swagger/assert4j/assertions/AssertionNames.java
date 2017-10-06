@@ -1,4 +1,4 @@
-package io.swagger.assert4j;
+package io.swagger.assert4j.assertions;
 
 /**
  * Constants containing the names of all assertions

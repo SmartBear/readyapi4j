@@ -1,5 +1,6 @@
 package io.swagger.assert4j.teststeps;
 
+import io.swagger.assert4j.properties.PropertyBuilder;
 import io.swagger.assert4j.teststeps.delay.DelayTestStepBuilder;
 import io.swagger.assert4j.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import io.swagger.assert4j.teststeps.jdbcrequest.JdbcConnection;
@@ -72,6 +73,15 @@ public class TestSteps {
 
     public static PropertiesTestStepBuilder properties(Map<String, String> properties) {
         return new PropertiesTestStepBuilder(properties);
+    }
+
+    public static PropertiesTestStepBuilder properties(PropertyBuilder... properties) {
+        PropertiesTestStepBuilder builder = new PropertiesTestStepBuilder();
+        for( PropertyBuilder propertyBuilder : properties ){
+            PropertyBuilder.Property property = propertyBuilder.build();
+            builder.addProperty( property.getKey(), property.getValue());
+        }
+        return builder;
     }
 
     public static JdbcConnection jdbcConnection(String driver, String connectionString) {
