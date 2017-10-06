@@ -121,5 +121,5 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
         );
 ```
 
-Here we create a recipe that runs a Google search 10 times, each with different values retreived
+Here we create a recipe that runs a Google search 10 times, each with different values retrieved
 from the DataSource using PropertyExpansion syntax in the query parameters. 
