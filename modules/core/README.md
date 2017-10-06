@@ -38,15 +38,13 @@ pojo approach.
 
 # Recipes
 
-Assert4j expresses tests as "recipes" - which are an ordered list of steps that are executed one after the other when
-executed. There are a fair number of built-in test steps (outlined below) - and there is an underlying extension 
-mechansim for providing custom steps also.
-
-Building a recipe with the fluent API is easiest done with the [TestRecipeBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/TestRecipeBuilder.html)
+Assert4j expresses tests as "recipes". A test recipe is an ordered list of steps that are executed sequentially when the 
+test is run. The easiest way to build a recipe is to use the 
+[TestRecipeBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/TestRecipeBuilder.html)
 class:
 
 ```java
-TestRecipe recipe = TestRecipeBuilder.buildRecipe( ...list of TestStepBuilder objects... ):
+TestRecipe recipe = TestRecipeBuilder.buildRecipe( ...list of TestStepBuilder objects... );
 
 // optionally add some more teststeps
 recipe.addStep( ...another TestStepBuilder object... );
@@ -59,7 +57,7 @@ RecipeExecutionResult result = RecipeExecutorBuilder.buildDefault().executeRecip
 
 Test steps represent the actual actions performed during the execution of a test, the 
 [TestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/TestSteps.html) class provides factory
-methods for creating TestStepBuilders for each supported test step type - as you will see below. 
+methods for creating TestStepBuilders for each supported test step type, as you will see below. 
 
 ## REST Requests
 
@@ -72,7 +70,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
     POST( "http://petstore.swagger.io/v2/store/order" ),
     DELETE( "http://petstore.swagger.io/v2//pet/{petId}"),
     GET( "http://petstore.swagger.io/v2/pet/findByStatus" )
-):
+);
 ``` 
 
 ### Parameters
@@ -88,7 +86,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
     ,
     GET( "http://petstore.swagger.io/v2/pet/findByStatus" ).
         withQueryParameter( "status", "test")
-):
+);
 ``` 
  
 If you need to add multiple parameters you can use 
@@ -100,7 +98,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
          query( "status", "test"),
          query("limit", "10")
      )
-):
+);
  ``` 
 
 ### Content
@@ -112,7 +110,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
     POST( "http://petstore.swagger.io/v2/store/order" ).
         withMediaType( "application/json").
         withRequestBody( ...some object that can be serialized to JSON... )
-):
+);
 ``` 
 
 the built in serialization support json, yaml and xml media types.
@@ -134,7 +132,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
         oAuth2().
             withAccessToken( ... ) 
      )
-):
+);
  ``` 
 
 ### Attachments
@@ -149,13 +147,13 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
      withAttachments(
          file( "request.json", "application/json" )
      )
-):
+);
  ``` 
 
 ## SOAP Requests
 
-The built in SOAP support makes it super-easy to call SOAP Services; you'll need to provide the underlying WSDL and
-info on which binding and operation to call, filling out the actual message body can either be done using utility
+The built in SOAP support makes it super-easy to call SOAP Services. You will need to provide the underlying WSDL and
+details on which binding and operation to call. Filling out the actual message body can either be done using utility
 methods or manually by providing the request XML:
 
 ```java
@@ -165,7 +163,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
                   .forOperation("GetWeather")
                   .withParameter("CountryName", "Sweden")
                   .withPathParameter("//*:CityName", "Stockholm")
-):
+);
  ``` 
 As you can see in this example we're making a call to the `GetOperation` method defined in the WSDL. The actual XML 
 request for this operation looks as follows:
@@ -184,9 +182,9 @@ request for this operation looks as follows:
 </soapenv:Envelope>
 ```
 
-Fortunately we never have to create any XML, we simply set the `CountryName` parameter
+Fortunately we never have to create any XML: we simply set the `CountryName` parameter
 using simple the corresponding element name ignoring namespaces. The `CityName` parameter is set using an XPath 
-pointer - but it could equally have been done with the `withParameter` method.
+pointer, but it could equally have been done with the `withParameter` method.
 
 ## Property Transfers
 
@@ -206,7 +204,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 );
 ```
 The example above uses XPath to extract the `id` property of the first item in the response to the `petId` path 
-parameter in the following request - using the `fromPreviousResponse` and `toNextRequest` convenience methods in the
+parameter in the following request, using the `fromPreviousResponse` and `toNextRequest` convenience methods in the
 [PropertyTransferBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/propertytransfer/PropertyTransferBuilder.html) class.
 
 ## Delay
@@ -218,7 +216,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
     GET( "http://petstore.swagger.io/v2/pet/findByStatus?status=test" ),
     delayStep( 1000 ), // wait for one second...
     GET( "http://petstore.swagger.io/v2/pet/(id}" )
-):
+);
 ``` 
 
 ## Script
@@ -232,7 +230,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
     delayStep( 1000 ), // wait for one second...
     groovyScriptStep( "System.out.println(\"Hello world!\")" ),
     GET( "http://petstore.swagger.io/v2/pet/(id}" )
-):
+);
 ``` 
 The specified code has access to the complete underlying object-model of the executing test, see 
 https://www.soapui.org/scripting---properties/the-soapui-object-model.html and https://www.soapui.org/functional-testing/working-with-scripts.html
@@ -241,8 +239,8 @@ for more info.
 ## JDBC Request
 
 Test recipes can contain JDBC requests to interact with relational databases as part of a test. This can be valuable for either 
-initializing data needed for a test - or validating data that previous TestSteps are meant to create/modify. To use the JDBC
-TestStep make sure you have the corresponding JDBC driver(s) in your classpath - then create a 
+initializing data needed for a test, or for validating data that previous TestSteps are meant to create/modify. To use the JDBC
+TestStep make sure you have the corresponding JDBC driver in your classpat, then create a 
 [JdbcConnection](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/jdbcrequest/JdbcConnection.html) 
 object to the database which can be used to build the actual TestSteps:
 
@@ -251,10 +249,10 @@ JdbcConnection connection = jdbcConnection("org.mysql.Driver", "jdbc:mysql://loc
 
 TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
    connection.jdbcRequest("select * from some_table")
-):
+);
 ```
-Internally the result returned from the query is converted to XML format - which you could for example use this in 
-combination with a property-transfer:  
+Internally the result returned from the query is converted to XML format, which you could for example use in 
+combination with a property transfer:  
 
 ```java
 JdbcConnection connection = jdbcConnection("org.mysql.Driver", "jdbc:mysql://localhost/mydb" );
@@ -269,7 +267,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
            withAssertions(
                statusCodes( 200 )
            )
-):
+);
 ```
 
 # Assertions
@@ -290,7 +288,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
           notSoapFault(),
           xPathContent( "//*:CityName", "Stockholm")
       )
-):
+);
 ```
 
 ## HTTP Assertions
@@ -335,7 +333,7 @@ The following assertions are available for JDBC TestSteps:
 ## Miscellaneous Assertions
 
 * `maxResponseTime( long timeInMillis)` - assert the response time of the request to be within the specified time
-* `script(String script)` - execute the specified groovy script for asserting the response - see [Using Script Assertions](https://www.soapui.org/functional-testing/validating-messages/using-script-assertions.html) for some examples
+* `script(String script)` - execute the specified Groovy script for asserting the response - see [Using Script Assertions](https://www.soapui.org/functional-testing/validating-messages/using-script-assertions.html) for some examples
 
 # Properties and Property Expansion
 
@@ -459,7 +457,7 @@ for a test before it is executed; for example it could add common authentication
 common property values to all TestSteps of a certain type.
 
 The included [RecipeLogger](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/support/RecipeLogger.html)
-filter logs all generated recipes to a specified folder - which can be useful for debugging/logging purposes or if you want to repurposes
+filter logs all generated recipes to a specified folder - which can be useful for debugging/logging purposes or if you want to repurpose
 these recipes as LoadTests in [LoadUI](https://smartbear.com/product/ready-api/loadui) or API monitors using [AlertSite](https://smartbear.com/product/alertsite/integrations/ready-api-and-soapui/) 
 
 ```java
@@ -471,8 +469,7 @@ RecipeExecutor executor = new RecipeExecutorBuilder()
 executor.executeRecipe( ... )
 ```
 
-Similar to the `ExecutionLogger` above, the `RecipeExecutorBuilder` has a 
-dedicated `withRecipeLog( String logFolder)` method:
+Similar to the `ExecutionLogger` above, the `RecipeExecutorBuilder` has a dedicated `withRecipeLog( String logFolder)` method:
 
 ```java
 // build a local executor that logs executions to a logs folder

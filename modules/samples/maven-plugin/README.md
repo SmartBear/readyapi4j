@@ -1,7 +1,7 @@
 # Swagger Assert4j Maven Plugin Samples
 
-This module contains a number [sample recipes](src/test/resources/recipes) in JSON format that are 
-executed via the maven-plugin as defined in the pom.xml using one of the RunSamplesLocally or 
+This module contains [sample recipes](src/test/resources/recipes) in JSON format that are 
+executed via the Maven plugin as defined in the pom.xml using one of the RunSamplesLocally or 
  RunSampleRemotely profiles. 
 
 You can run these samples using the local execution engine with

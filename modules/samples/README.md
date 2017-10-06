@@ -1,15 +1,15 @@
 # Swagger Assert4j Samples
 
-This module contains sample submodules showing to create/execute test recipes with [grooy](groovy), 
+This module contains sample submodules showing to create/execute test recipes with [Grooy](groovy), 
 [java](java) or the [maven-plugin](maven-plugin).
 
-Execute the java or groovy samples by running the following command in their respective root folder:
+Execute the Java or Groovy samples by running the following command in their respective root folder:
 
 ```
 mvn test -PRunSamples
 ```
 
-Some of the tests require remote execution since they use TestServer specific features, by default
+Some of the tests require remote execution since they use TestServer-specific features, by default
 they will be executed on the public TestServer instance at [http://testserver.readyapi.io/]. You 
 can override the TestServer endpoint with:
 

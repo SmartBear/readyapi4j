@@ -94,7 +94,8 @@ RecipeExecutionResult result = execution.getExecutionResult();
 The ReadyAPI TestServer adds a number of constructs to the JSON Recipe format to allow for data-driven testing, similar to 
 what is possible with [Data Driven testing in SoapUI Pro](https://smartbear.com/product/ready-api/soapui/features/data-driven-tests/).
 
-A [ServerTestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/teststeps/ServerTestSteps.html) class makes it easy to build the corresponding TestStep, corresponding to the 
+A [ServerTestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/teststeps/ServerTestSteps.html) 
+class makes it easy to build the corresponding TestStep, matching the 
 [TestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/TestSteps.html) class in core.
 
 A quick example of what's possible with dataGen DataSources, taken from the samples module:
@@ -120,5 +121,5 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
         );
 ```
 
-Here we create a recipe that runs a google search 10 times, each with different values retreived
+Here we create a recipe that runs a Google search 10 times, each with different values retreived
 from the DataSource using PropertyExpansion syntax in the query parameters. 
