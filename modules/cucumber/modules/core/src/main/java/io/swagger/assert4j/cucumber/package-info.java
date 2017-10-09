@@ -1,4 +1,4 @@
 /**
- * Core cucumber execution classes
+ * Core cucumber execution classes.
  */
 package io.swagger.assert4j.cucumber;

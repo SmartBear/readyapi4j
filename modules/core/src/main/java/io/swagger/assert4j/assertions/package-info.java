@@ -1,4 +1,4 @@
 /**
- * Assertion builders and utilities
+ * Assertion builders and utilities.
  */
 package io.swagger.assert4j.assertions;

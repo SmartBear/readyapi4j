@@ -1,5 +1,5 @@
 /**
- * Root package containing core TestRecipe functionality
+ * Root package containing core TestRecipe functionality.
  */
 
 package io.swagger.assert4j;

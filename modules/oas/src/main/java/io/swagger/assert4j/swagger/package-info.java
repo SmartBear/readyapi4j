@@ -1,4 +1,4 @@
 /**
- * Swagger-related extensions to core API
+ * Swagger-related extensions to core API.
  */
 package io.swagger.assert4j.swagger;
