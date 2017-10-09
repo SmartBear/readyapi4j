@@ -1,8 +1,7 @@
 package io.swagger.assert4j.assertions;
 
 import io.swagger.assert4j.client.model.InvalidHttpStatusCodesAssertion;
-import io.swagger.assert4j.AssertionNames;
-import io.swagger.assert4j.Validator;
+import io.swagger.assert4j.support.Validations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +62,7 @@ public class InvalidHttpStatusCodesAssertionBuilder implements HttpStatusCodeAss
 
     @Override
     public InvalidHttpStatusCodesAssertion build() {
-        Validator.validateNotEmpty(statusCodes, "Missing status codes. Status codes are mandatory for InvalidHttpStatusCodesAssertion");
+        Validations.validateNotEmpty(statusCodes, "Missing status codes. Status codes are mandatory for InvalidHttpStatusCodesAssertion");
         InvalidHttpStatusCodesAssertion invalidHttpStatusCodesAssertion = new InvalidHttpStatusCodesAssertion();
         invalidHttpStatusCodesAssertion.setType(AssertionNames.INVALID_HTTP_STATUS_CODES);
         invalidHttpStatusCodesAssertion.setInvalidStatusCodes(statusCodes);

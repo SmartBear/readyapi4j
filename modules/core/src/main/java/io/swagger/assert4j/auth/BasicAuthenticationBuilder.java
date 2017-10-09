@@ -2,7 +2,7 @@ package io.swagger.assert4j.auth;
 
 import io.swagger.assert4j.client.model.Authentication;
 
-import static io.swagger.assert4j.Validator.validateNotEmpty;
+import static io.swagger.assert4j.support.Validations.validateNotEmpty;
 
 /**
  * Builds an authentication object for basic authentication

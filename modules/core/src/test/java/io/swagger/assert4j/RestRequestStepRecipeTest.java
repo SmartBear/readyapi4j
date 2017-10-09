@@ -272,7 +272,7 @@ public class RestRequestStepRecipeTest {
     public void buildsRestRequestTestStepRecipeWithBasicAuthentication() throws Exception {
         TestRecipe recipe = newTestRecipe(
                     GET(URI)
-                        .setAuthentication(basic("username", "password")
+                        .withAuthentication(basic("username", "password")
                         )
                 )
                 .buildTestRecipe();
@@ -289,7 +289,7 @@ public class RestRequestStepRecipeTest {
     public void buildsRestRequestTestStepRecipeWithNTLMAuthentication() throws Exception {
         TestRecipe recipe = newTestRecipe(
                     GET(URI)
-                        .setAuthentication(ntlm("username", "password")
+                        .withAuthentication(ntlm("username", "password")
                                 .setDomain("domain")
                         )
                 )
@@ -308,7 +308,7 @@ public class RestRequestStepRecipeTest {
     public void buildsRestRequestTestStepRecipeWithKerberosAuthentication() throws Exception {
         TestRecipe recipe = newTestRecipe(
                     GET(URI)
-                        .setAuthentication(kerberos("username", "password")
+                        .withAuthentication(kerberos("username", "password")
                                 .setDomain("domain1")
                         )
                 )

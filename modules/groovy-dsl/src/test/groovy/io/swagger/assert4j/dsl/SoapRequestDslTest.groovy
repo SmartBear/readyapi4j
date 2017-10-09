@@ -5,7 +5,7 @@ import io.swagger.assert4j.client.model.NotSoapFaultAssertion
 import io.swagger.assert4j.client.model.SoapFaultAssertion
 import io.swagger.assert4j.client.model.SoapRequestTestStep
 import io.swagger.assert4j.client.model.ValidHttpStatusCodesAssertion
-import io.swagger.assert4j.AssertionNames
+import io.swagger.assert4j.assertions.AssertionNames
 import io.swagger.assert4j.TestRecipe
 import io.swagger.assert4j.extractor.ExtractorData
 import org.junit.Test

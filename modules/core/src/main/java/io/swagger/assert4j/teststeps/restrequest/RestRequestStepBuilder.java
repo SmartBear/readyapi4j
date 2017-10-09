@@ -12,7 +12,7 @@ import io.swagger.assert4j.teststeps.request.HttpRequestStepBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.swagger.assert4j.Validator.validateNotEmpty;
+import static io.swagger.assert4j.support.Validations.validateNotEmpty;
 import static io.swagger.assert4j.assertions.Assertions.jsonContent;
 import static io.swagger.assert4j.assertions.Assertions.jsonCount;
 import static io.swagger.assert4j.assertions.Assertions.jsonExists;
@@ -187,8 +187,8 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
     }
 
     @Override
-    public RestRequestBuilderType setAuthentication(AuthenticationBuilder authenticationBuilder) {
-        return super.setAuthentication(authenticationBuilder);
+    public RestRequestBuilderType withAuthentication(AuthenticationBuilder authenticationBuilder) {
+        return super.withAuthentication(authenticationBuilder);
     }
 
     @Override
@@ -238,7 +238,6 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
 
     public RestRequestBuilderType withContentType(String contentType) {
         getTestStep().setMediaType(contentType);
-
         return (RestRequestBuilderType) this;
     }
 
@@ -322,12 +321,8 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return super.assertHeaderExists(header);
     }
 
+    @Override
     public RestRequestBuilderType withAssertions(AssertionBuilder... assertionBuilders) {
-        for (AssertionBuilder assertionBuilder : assertionBuilders) {
-            addAssertion(assertionBuilder);
-        }
-
-        return (RestRequestBuilderType) this;
+        return super.withAssertions( assertionBuilders );
     }
-
 }

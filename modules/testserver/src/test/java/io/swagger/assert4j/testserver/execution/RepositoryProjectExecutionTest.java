@@ -1,15 +1,14 @@
 package io.swagger.assert4j.testserver.execution;
 
 import io.swagger.assert4j.client.model.ProjectResultReport;
-import io.swagger.assert4j.ExecutionListener;
 import io.swagger.assert4j.execution.Execution;
+import io.swagger.assert4j.execution.ExecutionListener;
 import io.swagger.client.auth.HttpBasicAuth;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;

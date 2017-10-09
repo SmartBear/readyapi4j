@@ -9,7 +9,7 @@ import static io.swagger.assert4j.support.AssertionUtils.assertExecutionResult;
 import static io.swagger.assert4j.teststeps.TestSteps.GET;
 import static io.swagger.assert4j.teststeps.restrequest.ParameterBuilder.query;
 
-public class SimpleRestTest extends ApiTestBase {
+public class SimpleRestTest {
 
     @Test
     public void simpleCountTest() throws Exception {

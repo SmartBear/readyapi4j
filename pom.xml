@@ -107,6 +107,7 @@
 
     <profiles>
         <profile>
+            <!-- create project javadoc in /apidocs folder with "mvn javadoc:aggregate -P javadoc" -->
             <id>javadoc</id>
             <build>
                 <plugins>
@@ -115,16 +116,14 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.0.0-M1</version>
                         <configuration>
-                            <aggregate>true</aggregate>
                             <source>1.8</source>
                             <encoding>UTF-8</encoding>
                             <additionalparam>-Xdoclint:none</additionalparam>
                             <sourcepath>
                                 modules/core/src/main/java:
-                                modules/core/target/generated-sources/swagger/src/main/java:
                                 modules/cucumber/modules/core/src/main/java:
                                 modules/cucumber/modules/runner/src/main/java:
-                                modules/cucumber/modules/stepdefs/src/main/java
+                                modules/cucumber/modules/stepdefs/src/main/java:
                                 modules/facade/src/main/java:
                                 modules/groovy-dsl/src/main/groovy:
                                 modules/groovy-dsl/target/generated-sources/groovy-stubs/main:
@@ -132,7 +131,11 @@
                                 modules/oas/src/main/java:
                                 modules/testserver/src/main/java:
                             </sourcepath>
-                            <!--<sourcepath>src/main/java;target/generated-sources/swagger/src/main/java</sourcepath>-->
+                            <excludePackageNames>
+                                io.swagger.assert4j.client.teststeps
+                            </excludePackageNames>
+                            <reportOutputDirectory>apidocs</reportOutputDirectory>
+                            <overview>modules/core/src/main/java/overview.html</overview>
                             <includes>*.java,*.groovy</includes>
                             <reportOutputDirectory>apidocs</reportOutputDirectory>
                         </configuration>
@@ -210,7 +213,6 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.0.0-M1</version>
                         <configuration>
-                            <aggregate>true</aggregate>
                             <source>1.8</source>
                             <encoding>UTF-8</encoding>
                             <maxmemory>1g</maxmemory>

@@ -1,10 +1,8 @@
-package io.swagger.assert4j.execution;
+package io.swagger.assert4j.extractor;
 
 import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.client.model.TestCaseResultReport;
 import io.swagger.assert4j.client.model.TestSuiteResultReport;
-import io.swagger.assert4j.extractor.ExtractorData;
-import io.swagger.assert4j.extractor.ExtractorOperator;
 
 import java.util.Collection;
 import java.util.List;

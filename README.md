@@ -4,8 +4,8 @@ The Assert4J library lets you easily test REST and SOAP APIs using Java, Groovy 
 Under the hood the library uses the open-source test-execution engine of [SoapUI](http://www.soapui.org).
 
 * Quickly get started:
-  * [with Java](#getting-started-with-java) - together with any testing framework
-  * [with our Groovy DSL](#getting-started-with-groovy) - read [the documentation of the DSL here](modules/groovy-dsl)
+  * [with Java](#getting-started-with-java) - together with any testing framework - read the documentation for the core Java APIs [here](modules/core)
+  * [with our Groovy DSL](#getting-started-with-groovy) - read the documentation of the DSL [here](modules/groovy-dsl)
   * [with Cucumber](modules/cucumber) - with cucumber-jvm 
   * [with the Maven plugin](modules/maven-plugin)
 * [Running Tests with TestServer](#running-tests-with-testserver)
@@ -53,6 +53,7 @@ Under the hood the library uses the open-source test-execution engine of [SoapUI
     ```
 
 Learn more about the Java testing vocabulary by:
+- having a look at the [core module](modules/core)
 - having a look at the [java samples](modules/samples/java/src/test/java/io/swagger/assert4j/samples/java)
 - having a look at the [core unit tests](modules/core/src/test/java/io/swagger/assert4j)
 - [browsing the javadoc](http://smartbear.github.io/swagger-assert4j/apidocs/) 

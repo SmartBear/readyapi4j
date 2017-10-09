@@ -1,14 +1,13 @@
 package io.swagger.assert4j.dsl.execution
 
-import io.swagger.assert4j.client.model.ProjectResultReport
-import io.swagger.assert4j.ExecutionListener
 import io.swagger.assert4j.TestRecipe
+import io.swagger.assert4j.client.model.ProjectResultReport
 import io.swagger.assert4j.execution.Execution
+import io.swagger.assert4j.execution.ExecutionListener
 import io.swagger.assert4j.execution.ExecutionMode
 import io.swagger.assert4j.execution.RecipeExecutor
 import io.swagger.assert4j.execution.RecipeFilter
 import io.swagger.assert4j.testserver.execution.TestServerExecution
-
 
 class RecipeExecutorAdaptor implements RecipeExecutor {
     @Override

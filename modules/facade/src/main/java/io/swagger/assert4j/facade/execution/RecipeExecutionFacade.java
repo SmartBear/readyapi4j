@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static io.swagger.assert4j.support.AssertionUtils.assertExecution;
-
 /**
  * Utility for running recipes either locally or on a remote TestServer based on system/env property values<br/>
  * <p>
@@ -57,7 +55,7 @@ public class RecipeExecutionFacade {
      * Executes the specified TestRecipe and returns the result
      *
      * @param recipe the recipe to execute
-     * @return the excution result
+     * @return the execution result
      */
     public static RecipeExecutionResult executeRecipe(TestRecipe recipe) {
         synchronized (RecipeExecutionFacade.class) {
@@ -67,7 +65,6 @@ public class RecipeExecutionFacade {
         }
 
         Execution execution = executor.executeRecipe(recipe);
-        assertExecution(execution);
         return execution.getExecutionResult();
     }
 
@@ -85,10 +82,73 @@ public class RecipeExecutionFacade {
      * Executes the JSON recipe in the specified file and returns the result
      *
      * @param recipeFile the recipe to execute
-     * @return the excution result
+     * @return the execution result
      */
     public static RecipeExecutionResult executeRecipe( File recipeFile ) throws IOException {
         String jsonRecipe = Files.toString(recipeFile, Charset.defaultCharset());
         return executeRecipe( TestRecipeBuilder.createFrom( jsonRecipe ));
+    }
+
+    /**
+     * Builds and executes a TestRecipe from the specified TestStepBuilders using either a local or remote
+     * executor as configured. The recipe is always executed asynchronously.
+     *
+     * @param testStepBuilders the builds for the TestSteps to execute
+     * @return the ongoing Execution for the TestRecipe
+     */
+    public static Execution submitRecipe(TestStepBuilder... testStepBuilders) {
+        TestRecipe recipe = TestRecipeBuilder.newTestRecipe(testStepBuilders).buildTestRecipe();
+        return submitRecipe(recipe);
+    }
+
+    /**
+     * Builds and executes a TestRecipe from the specified TestStepBuilders using either a local or remote
+     * executor as configured. The recipe is always executed asynchronously.
+     *
+     * @param name the name of the recipe
+     * @param testStepBuilders the builds for the TestSteps to execute
+     * @return the ongoing Execution for the TestRecipe
+     */
+    public static Execution submitRecipe(String name, TestStepBuilder... testStepBuilders) {
+        TestRecipe recipe = TestRecipeBuilder.newTestRecipe(testStepBuilders).named(name).buildTestRecipe();
+        return submitRecipe(recipe);
+    }
+
+    /**
+     * Submits the specified TestRecipe for asynchronous execution and returns the Execution object
+     *
+     * @param recipe the recipe to execute
+     * @return the ongoing Execution for the TestRecipe
+     */
+
+    public static Execution submitRecipe(TestRecipe recipe) {
+        synchronized (RecipeExecutionFacade.class) {
+            if (executor == null) {
+                executor = RecipeExecutorBuilder.buildDefault();
+            }
+        }
+
+        return executor.submitRecipe(recipe);
+    }
+
+    /**
+     * Submits the specified JSON recipe string for asynchronous execution
+     *
+     * @param jsonRecipe the recipe to execute
+     * @return the ongoing Execution for the TestRecipe
+     */
+    public static Execution submitRecipe(String jsonRecipe ) throws IOException {
+        return submitRecipe( TestRecipeBuilder.createFrom( jsonRecipe ));
+    }
+
+    /**
+     * Submits the specified JSON recipe file for asynchronous execution
+     *
+     * @param recipeFile the recipe to execute
+     * @return the ongoing Execution for the TestRecipe
+     */
+    public static Execution submitRecipe(File recipeFile ) throws IOException {
+        String jsonRecipe = Files.toString(recipeFile, Charset.defaultCharset());
+        return submitRecipe( TestRecipeBuilder.createFrom( jsonRecipe ));
     }
 }

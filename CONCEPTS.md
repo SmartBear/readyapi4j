@@ -26,7 +26,8 @@ create manually or using one of our code libraries (see below). A very simple ex
 ````
 
 A recipe consists of an array of testSteps that can execute requests, transfer values, define properties, etc - each containing 
-properties corresponding to their type. For a quick reference of all available steps and their properties have a look at [REFERENCE.md].
+properties corresponding to their type, have a look at the [core module](modules/core/README.md) for an overview of available
+TestSteps, Assertions, etc. 
 
 ## Creating recipes with code
 
@@ -126,16 +127,17 @@ will automatically result in the corresponding artifacts being written to the co
 
 ## Synchronous vs Asynchronous execution
 
-The above examples all used executRecipe(TestRecipe) for executing tests - this method will execute the
+The above examples all used `executeRecipe(TestRecipe)` for executing tests - this method will execute the
 specified recipe and block until execution has finished. If you would rather execute tests asynchronously
-you can use submitRecipe(TestRecipe) instead; the returned Execution object will return 
-ProjectResultReport.StatusEnum.RUNNING until the test finishes (either passed or failed). 
+you can use `submitRecipe(TestRecipe)` instead; the returned Execution object will return 
+`ProjectResultReport.StatusEnum.RUNNING` until the test finishes (either passed or failed). 
 
 ## Result handling
 
-In all instances above we got an Execution object when executing the recipe - getting the actual result
-of the execution is done via execution.getExecutionResult() - which returns an ExecutionResult object that
-provides details on execution time, individual teststep results, etc.
+In all instances above we got an Execution object when executing the recipe, use 
+`execution.getExecutionResult()` to get a  
+[RecipeExecutionResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/RecipeExecutionResult.html) 
+object that provides details on execution time, individual teststep results, etc. 
 
 In a unit testing scenario the provided AssertionUtils class can be used to assert the outcome of an Execution:
 
@@ -145,3 +147,4 @@ Execution execution = executor.executeRecipe(recipe);
 AssertionUtils.assertExecutionResult( execution.getExecutionResult() );
 ```
 
+See the [Results](modules/core/README.md#execution-results) documentation for more details!
