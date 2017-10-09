@@ -2,8 +2,6 @@ io.swagger.assert4j
 io.swagger.assert4j.assertions
 io.swagger.assert4j.attachments
 io.swagger.assert4j.auth
-io.swagger.assert4j.client.model
-io.swagger.assert4j.client.teststeps
 io.swagger.assert4j.cucumber
 io.swagger.assert4j.dsl
 io.swagger.assert4j.dsl.assertions
@@ -11,6 +9,7 @@ io.swagger.assert4j.dsl.execution
 io.swagger.assert4j.dsl.pro
 io.swagger.assert4j.execution
 io.swagger.assert4j.extractor
+io.swagger.assert4j.facade.execution
 io.swagger.assert4j.local.execution
 io.swagger.assert4j.properties
 io.swagger.assert4j.result
@@ -31,6 +30,3 @@ io.swagger.assert4j.teststeps.propertytransfer
 io.swagger.assert4j.teststeps.request
 io.swagger.assert4j.teststeps.restrequest
 io.swagger.assert4j.teststeps.soaprequest
-io.swagger.client
-io.swagger.client.api
-io.swagger.client.auth
