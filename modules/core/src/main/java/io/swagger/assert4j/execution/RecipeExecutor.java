@@ -1,6 +1,5 @@
 package io.swagger.assert4j.execution;
 
-import io.swagger.assert4j.ExecutionListener;
 import io.swagger.assert4j.TestRecipe;
 
 import java.util.List;

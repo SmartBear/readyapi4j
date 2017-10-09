@@ -3,7 +3,7 @@ package io.swagger.assert4j.testserver.execution;
 import java.io.File;
 
 /**
- * Command wrapper for executing an existing project with the ProjectExcecutor
+ * Command wrapper for executing an existing project with the ProjectExecutor
  */
 
 public class ProjectExecutionRequest extends ProjectExecutionRequestBase {

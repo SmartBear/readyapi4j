@@ -107,6 +107,7 @@
 
     <profiles>
         <profile>
+            <!-- create project javadoc in /apidocs folder with "mvn javadoc:aggregate -P javadoc" -->
             <id>javadoc</id>
             <build>
                 <plugins>
@@ -130,6 +131,11 @@
                                 modules/oas/src/main/java:
                                 modules/testserver/src/main/java:
                             </sourcepath>
+                            <excludePackageNames>
+                                io.swagger.assert4j.client.teststeps
+                            </excludePackageNames>
+                            <reportOutputDirectory>apidocs</reportOutputDirectory>
+                            <overview>modules/core/src/main/java/overview.html</overview>
                             <includes>*.java,*.groovy</includes>
                         </configuration>
                         <executions>

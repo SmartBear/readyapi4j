@@ -404,7 +404,8 @@ RecipeExecutionFacade.executeRecipe( recipe );
 # Executing Recipes
 
 The [Concepts](../../CONCEPTS.md) document shows how to execute recipes using both the local and remote execution 
-engines via the [RecipeExecutionFacade]() class. Using the underlying [RecipeExecutorBuilder]() makes it possible to 
+engines via the [RecipeExecutionFacade](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/facade/execution/RecipeExecutionFacade.html) class. 
+Using the underlying [RecipeExecutorBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/facade/execution/RecipeExecutorBuilder.html) makes it possible to 
 augment execution using execution listeners and recipe filters as described below.
 
 The actual [Execution](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/execution/Execution.html)

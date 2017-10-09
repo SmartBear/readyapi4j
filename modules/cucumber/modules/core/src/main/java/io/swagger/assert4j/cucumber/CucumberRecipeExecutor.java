@@ -1,12 +1,12 @@
 package io.swagger.assert4j.cucumber;
 
-import io.swagger.assert4j.client.model.TestCase;
-import io.swagger.assert4j.ExecutionListener;
+import cucumber.api.Scenario;
 import io.swagger.assert4j.TestRecipe;
+import io.swagger.assert4j.client.model.TestCase;
 import io.swagger.assert4j.execution.Execution;
+import io.swagger.assert4j.execution.ExecutionListener;
 import io.swagger.assert4j.execution.RecipeExecutor;
 import io.swagger.assert4j.facade.execution.RecipeExecutorBuilder;
-import cucumber.api.Scenario;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

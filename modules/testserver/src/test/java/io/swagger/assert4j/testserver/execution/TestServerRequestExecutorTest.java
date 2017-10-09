@@ -1,12 +1,12 @@
 package io.swagger.assert4j.testserver.execution;
 
+import io.swagger.assert4j.TestRecipe;
+import io.swagger.assert4j.TestRecipeBuilder;
 import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.client.model.ProjectResultReports;
 import io.swagger.assert4j.client.model.TestCase;
-import io.swagger.assert4j.ExecutionListener;
-import io.swagger.assert4j.TestRecipe;
-import io.swagger.assert4j.TestRecipeBuilder;
 import io.swagger.assert4j.execution.Execution;
+import io.swagger.assert4j.execution.ExecutionListener;
 import io.swagger.assert4j.extractor.ExtractorData;
 import io.swagger.assert4j.teststeps.TestSteps;
 import io.swagger.client.auth.HttpBasicAuth;

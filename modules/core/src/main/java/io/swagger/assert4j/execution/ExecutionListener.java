@@ -1,6 +1,4 @@
-package io.swagger.assert4j;
-
-import io.swagger.assert4j.execution.Execution;
+package io.swagger.assert4j.execution;
 
 /**
  * Listener for events related to test execution

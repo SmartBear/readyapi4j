@@ -1,14 +1,15 @@
 package io.swagger.assert4j.testserver.teststeps.datasource.datagen;
 
+import com.sun.jersey.api.client.GenericType;
+import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.client.model.DataSource;
 import io.swagger.assert4j.client.model.DataSourceTestStep;
 import io.swagger.assert4j.client.model.ExcelDataSource;
 import io.swagger.assert4j.client.model.FileDataSource;
 import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.client.model.TestStep;
-import io.swagger.assert4j.ExecutionListener;
-import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.execution.Execution;
+import io.swagger.assert4j.execution.ExecutionListener;
 import io.swagger.assert4j.testserver.execution.ApiClientWrapper;
 import io.swagger.assert4j.testserver.execution.CodegenBasedTestServerApi;
 import io.swagger.assert4j.testserver.execution.RecipeExecutorTestCreator;
@@ -18,7 +19,6 @@ import io.swagger.assert4j.testserver.execution.TestServerClient;
 import io.swagger.assert4j.testserver.execution.TestServerRecipeExecutor;
 import io.swagger.assert4j.testserver.teststeps.ServerTestSteps;
 import io.swagger.assert4j.teststeps.TestStepTypes;
-import com.sun.jersey.api.client.GenericType;
 import io.swagger.client.ApiException;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
