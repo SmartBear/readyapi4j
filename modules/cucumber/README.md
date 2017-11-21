@@ -1,7 +1,7 @@
 ## Cucumber/BDD testing for REST APIs
 
 This module provides a generic Cucumber vocabulary for testing APIs with swagger-assert4j
-with dedicated support for Swagger 2.0 to remove some of the technicalities required to define scenarios. 
+with dedicated support for OAS/Swagger 2.0 to remove some of the technicalities required to define scenarios. 
 
 A quick example for the Petstore API at http://petstore.swagger.io, testing of the 
 /pet/findByTags resource could be defined withe following Scenario:
@@ -16,11 +16,11 @@ A quick example for the Petstore API at http://petstore.swagger.io, testing of t
     And the response type is json
 ```
 
-Using the integrated Swagger support this can be shortened to
+Using the integrated OAS/Swagger support this can be shortened to
 
 ```gherkin
   Scenario: Find pet by tags
-    Given the Swagger definition at http://petstore.swagger.io/v2/swagger.json
+    Given the OAS definition at http://petstore.swagger.io/v2/swagger.json
     # deducts path and method from Swagger definition by operationId
     When a request to findPetsByTags is made
     # deducts type of "tags" parameter (query/path/parameter/body) from Swagger definition
@@ -30,8 +30,8 @@ Using the integrated Swagger support this can be shortened to
     And the response type is json
 ```
 
-Not a huge difference - but as you can see by the comments the Swagger support removes some of the 
-technicalities; read more about Swagger specific steps below!
+Not a huge difference - but as you can see by the comments the OAS/Swagger support removes some of the 
+technicalities; read more about OAS/Swagger specific steps below!
 
 Check out the [samples](modules/samples) submodule for more examples.
 
@@ -127,9 +127,9 @@ The included [StepDefs](modules/stepdefs) for API testing adds the following voc
 
 ##### Given statements
 
-- "the Swagger definition at &lt;swagger endpoint&gt;"
-    - The specified endpoint must reference a valid Swagger 2.0 definition
-    - Example: "the Swagger definition at http://petstore.swagger.io/v2/swagger.json"
+- "the OAS definition at &lt;swagger endpoint&gt;"
+    - The specified endpoint must reference a valid OAS/Swagger 2.0 definition
+    - Example: "the OAS definition at http://petstore.swagger.io/v2/swagger.json"
 
 - "the API running at &lt;API endpoint&gt;"
     - Example: "the API running at http://petstore.swagger.io/v2"
@@ -226,7 +226,7 @@ Below is the [swaggerhub.feature](modules/samples/src/test/resources/cucumber/sw
 Feature: SwaggerHub REST API
 
   Background:
-    Given the Swagger definition at https://api.swaggerhub.com/apis/swagger-hub/registry-api/1.0.10
+    Given the OAS definition at https://api.swaggerhub.com/apis/swagger-hub/registry-api/1.0.10
 
   Scenario: Default API Listing
     When a request to searchApis is made
