@@ -93,8 +93,8 @@
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <alias>swagger2cucumber</alias>
-                                    <name>smartbear/swagger2cucumber:latest</name>
+                                    <alias>oas2cucumber</alias>
+                                    <name>smartbear/oas2cucumber:latest</name>
                                     <build>
                                         <from>java:8-jre</from>
                                         <maintainer>ole.lensmar@smartbear.com</maintainer>

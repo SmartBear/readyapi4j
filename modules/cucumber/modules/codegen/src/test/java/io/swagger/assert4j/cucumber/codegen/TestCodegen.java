@@ -28,7 +28,7 @@ public class TestCodegen {
         SwaggerCodegen.main(new String[]{
             "generate",
             "-l", "Assert4jCucumberFeatureGenerator",
-            "-i", "https://api.swaggerhub.com/apis/swagger-hub/registry-api/1.0.0",
+            "-i", "swagger.json",
             "-o", target.getPath()
         });
 

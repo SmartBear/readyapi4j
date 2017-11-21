@@ -39,6 +39,11 @@ public class SwaggerStepDefs {
         this.restStepDefs = restStepDefs;
     }
 
+    @Given("^the OAS definition at (.*)$")
+    public void theOASDefinitionAt(String swaggerUrl) {
+        theSwaggerDefinitionAt( swaggerUrl );
+    }
+
     @Given("^the Swagger definition at (.*)$")
     public void theSwaggerDefinitionAt(String swaggerUrl) {
 

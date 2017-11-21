@@ -1,7 +1,7 @@
 Feature: {{appDescription}} - Version {{version}}
 
 Background:
-  Given the Swagger definition at {{basePath}}swagger.json
+  Given the OAS definition at {{basePath}}/swagger.json
 {{#operations}}{{#operation}}{{#responses}}
   Scenario: {{description}}
     When a request to {{operationId}} is made
