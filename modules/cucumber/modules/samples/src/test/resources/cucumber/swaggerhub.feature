@@ -1,7 +1,7 @@
 Feature: SwaggerHub REST API
 
   Background:
-    Given the Swagger definition at https://api.swaggerhub.com/apis/swagger-hub/registry-api/1.0.10
+    Given the OAS definition at https://api.swaggerhub.com/apis/swagger-hub/registry-api/1.0.10
 
 #  Scenario: Default API Listing
 #    When a request to searchApis is made
