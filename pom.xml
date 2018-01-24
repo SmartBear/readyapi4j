@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.swagger.assert</groupId>
     <artifactId>swagger-assert4j</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>modules/core</module>
         <module>modules/testserver</module>
