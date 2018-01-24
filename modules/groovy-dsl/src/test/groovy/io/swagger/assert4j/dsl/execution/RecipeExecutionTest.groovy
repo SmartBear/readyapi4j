@@ -10,7 +10,7 @@ class RecipeExecutionTest extends GroovyTestCase {
     void testThrowsExceptionWhenLocalRecipeExecutorNotInClasspath() throws Exception {
         shouldFail(IllegalStateException.class, {
             executeRecipe {
-                groovyScriptStep 'println Hello! From Groovy Script step.'
+                groovyScriptStep 'println "Hello! From Groovy Script step."'
             }
         })
     }
@@ -18,7 +18,7 @@ class RecipeExecutionTest extends GroovyTestCase {
     void testRecipeExecutionWithRecipeExecutor() {
         RecipeExecutor recipeExecutor = new RecipeExecutorAdaptor()
         Execution execution = executeRecipe recipeExecutor, {
-            groovyScriptStep 'println Hello! From Groovy Script step.'
+            groovyScriptStep 'println "Hello! From Groovy Script step."'
         }
         assert execution
     }
