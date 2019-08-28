@@ -49,7 +49,7 @@
                 </executions>
                 <inherited>true</inherited>
                 <configuration>
-                    <javaSource>1.5</javaSource>
+                    <javaSource>1.8</javaSource>
                     <verbose>false</verbose>
                     <schemaDirectory>src/main/resources</schemaDirectory>
                 </configuration>
