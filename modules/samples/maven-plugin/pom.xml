@@ -13,9 +13,9 @@
     <artifactId>swagger-assert4j-maven-plugin-samples</artifactId>
 
     <properties>
-        <testserver.user>demoUser</testserver.user>
-        <testserver.password>demoPassword</testserver.password>
-        <testserver.host>http://testserver.readyapi.io:8080</testserver.host>
+        <testengine.user>demoUser</testengine.user>
+        <testengine.password>demoPassword</testengine.password>
+        <testengine.host>http://testengine.readyapi.io:8080</testengine.host>
     </properties>
 
     <profiles>
@@ -28,9 +28,9 @@
                         <artifactId>swagger-assert4j-maven-plugin</artifactId>
                         <version>${project.version}</version>
                         <configuration>
-                            <username>${testserver.user}</username>
-                            <password>${testserver.password}</password>
-                            <server>${testserver.host}</server>
+                            <username>${testengine.user}</username>
+                            <password>${testengine.password}</password>
+                            <server>${testengine.host}</server>
 
                             <properties>
                                 <apitest.host>https://api.swaggerhub.com</apitest.host>

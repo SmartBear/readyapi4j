@@ -1463,7 +1463,7 @@ components:
         timeTaken:
           type: integer
           description: >-
-            The number of milliseconds it took the TestServer to run the test
+            The number of milliseconds it took the TestEngine to run the test
             step.
           format: int64
         transactionId:
@@ -1784,7 +1784,7 @@ components:
             preload:
               type: boolean
               description: >-
-                If <code>true</code>, the TestServer tries to preload the data
+                If <code>true</code>, the TestEngine tries to preload the data
                 before running the test.
               default: false
             failOnEmpty:
@@ -1812,7 +1812,7 @@ components:
             expandProperties:
               type: boolean
               description: >-
-                If <code>true</code>, TestServer expands property expansion
+                If <code>true</code>, TestEngine expands property expansion
                 expressions in retrieved values.
               default: false
             shared:
@@ -2114,7 +2114,7 @@ components:
         Properties of the test recipe. Analogues of the <a
         href="http://readyapi.smartbear.com/structure/cases/options/basic">test
         case options</a>.<br/>See also <a
-        href="http://readyapi.smartbear.com/testserver/howto/text/modifying">Modifying
+        href="http://readyapi.smartbear.com/testengine/howto/text/modifying">Modifying
         Test Options</a>.
       type: object
       properties:
@@ -2133,12 +2133,12 @@ components:
         abortOnError:
           type: boolean
           default: false
-          description: Specifies if TestServer stops the recipe execution if an error occurs.
+          description: Specifies if TestEngine stops the recipe execution if an error occurs.
         failTestCaseOnError:
           type: boolean
           default: false
           description: >-
-            Specifies if TestServer logs the test run as failed if an error
+            Specifies if TestEngine logs the test run as failed if an error
             occurs.
         name:
           type: string
@@ -2147,7 +2147,7 @@ components:
           type: boolean
           default: false
           description: >-
-            Specifies if TestServer logs messages on successful test step
+            Specifies if TestEngine logs messages on successful test step
             execution (false) or not (true). Set this property to true to save
             memory.
         socketTimeout:
@@ -2265,7 +2265,7 @@ components:
           properties:
             URI:
               type: string
-              description: 'The URL, to which TestServer send the request.'
+              description: 'The URL, to which TestEngine send the request.'
             requestBody:
               type: string
               description: The request body contents.
@@ -2298,15 +2298,15 @@ components:
               type: boolean
               default: false
               description: >-
-                Specifies how TestServer handles redirects. If this property is
-                false and a redirect occurs, TestServer processes the response as
+                Specifies how TestEngine handles redirects. If this property is
+                false and a redirect occurs, TestEngine processes the response as
                 it is. If the property is true, it waits for the response from the
                 new location.
             entitizeParameters:
               type: boolean
               default: false
               description: >-
-                Specifies if TestServer escapes special characters like &gt; or &amp; in
+                Specifies if TestEngine escapes special characters like &gt; or &amp; in
                 the request body. Set this property to false if data is already
                 escaped.
             clientCertificateFileName:
@@ -2339,7 +2339,7 @@ components:
               type: boolean
               default: false
               description: >-
-                Specifies if the TestServer includes the query string parameters
+                Specifies if the TestEngine includes the query string parameters
                 to the request body or not.
           required:
             - URI
@@ -2362,7 +2362,7 @@ components:
         - contentType
         - content
     PluginTestStep:
-      description: data structure for defining a test step which is part of a Ready! API/TestServer plugin
+      description: data structure for defining a test step which is part of a Ready! API/TestEngine plugin
       allOf:
         - $ref: '#/components/schemas/TestStep'
         - type: object

@@ -1,11 +1,11 @@
 package io.swagger.assert4j.client.teststeps;
 
-import io.swagger.assert4j.testserver.teststeps.ServerTestSteps;
-import io.swagger.assert4j.testserver.teststeps.datasource.DataSourceTestStepBuilder;
-import io.swagger.assert4j.testserver.teststeps.datasource.ExcelDataSourceTestStepBuilder;
-import io.swagger.assert4j.testserver.teststeps.datasource.FileDataSourceTestStepBuilder;
-import io.swagger.assert4j.testserver.teststeps.datasource.GridDataSourceTestStepBuilder;
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenDataSourceTestStepBuilder;
+import io.swagger.assert4j.testengine.teststeps.ServerTestSteps;
+import io.swagger.assert4j.testengine.teststeps.datasource.DataSourceTestStepBuilder;
+import io.swagger.assert4j.testengine.teststeps.datasource.ExcelDataSourceTestStepBuilder;
+import io.swagger.assert4j.testengine.teststeps.datasource.FileDataSourceTestStepBuilder;
+import io.swagger.assert4j.testengine.teststeps.datasource.GridDataSourceTestStepBuilder;
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.DataGenDataSourceTestStepBuilder;
 import io.swagger.assert4j.teststeps.groovyscript.GroovyScriptTestStepBuilder;
 import io.swagger.assert4j.teststeps.jdbcrequest.JdbcConnection;
 import io.swagger.assert4j.teststeps.plugin.PluginTestStepBuilder;

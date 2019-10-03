@@ -17,7 +17,7 @@ public class SimpleRestTest {
                 GET("https://api.swaggerhub.com/specs")
                         .withParameters(
                                 query("specType", "API"),
-                                query("query", "testserver")
+                                query("query", "testengine")
                         )
                         .withAssertions(
                                 json("$.totalCount", "4")

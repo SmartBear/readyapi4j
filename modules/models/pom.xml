@@ -62,11 +62,11 @@
         <testengine.api.version>1.0.1</testengine.api.version>
         <testengine.api.folder>testengine</testengine.api.folder>
 
-        <testserver.api.swagger.file>testserver-api.yml</testserver.api.swagger.file>
-        <testserver.api.name>ready-api-testserver</testserver.api.name>
-        <testserver-api.apis.owner>smartbear</testserver-api.apis.owner>
-        <testserver.api.version>2.2.0</testserver.api.version>
-        <testserver.api.folder>testserver</testserver.api.folder>
+        <testengine.api.swagger.file>testengine-api.yml</testengine.api.swagger.file>
+        <testengine.api.name>ready-api-testengine</testengine.api.name>
+        <testengine-api.apis.owner>smartbear</testengine-api.apis.owner>
+        <testengine.api.version>2.2.0</testengine.api.version>
+        <testengine.api.folder>testengine</testengine.api.folder>
 
         <swaggerhub.apis.host>https://api.swaggerhub.com/apis</swaggerhub.apis.host>
 
@@ -116,11 +116,11 @@
                                                 <goal>generate</goal>
                                             </goals>
                                             <configuration>
-                                                <inputSpec>${swaggerhub.apis.host}/${testserver-api.apis.owner}/${testserver.api.name}/${testserver.api.version}</inputSpec>
+                                                <inputSpec>${swaggerhub.apis.host}/${testengine-api.apis.owner}/${testengine.api.name}/${testengine.api.version}</inputSpec>
                                                 <language>openapi-yaml</language>
-                                                <output>${codegen.directory}/${testserver.api.folder}</output>
+                                                <output>${codegen.directory}/${testengine.api.folder}</output>
                                                 <configOptions>
-                                                    <outputFile>${testserver.api.swagger.file}</outputFile>
+                                                    <outputFile>${testengine.api.swagger.file}</outputFile>
                                                 </configOptions>
                                             </configuration>
                                         </execution>
@@ -131,7 +131,7 @@
                                                 <goal>generate</goal>
                                             </goals>
                                             <configuration>
-                                                <inputSpec>${codegen.directory}/${testserver.api.folder}/${testserver.api.swagger.file}</inputSpec>
+                                                <inputSpec>${codegen.directory}/${testengine.api.folder}/${testengine.api.swagger.file}</inputSpec>
                                                 <generateSupportingFiles>false</generateSupportingFiles>
                                                 <generateApiTests>false</generateApiTests>
                                                 <language>spring</language>

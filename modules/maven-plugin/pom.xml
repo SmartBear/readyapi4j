@@ -13,7 +13,7 @@
     <packaging>maven-plugin</packaging>
     <name>Assert4J Maven Plugin</name>
 
-    <description>Maven plugin for executing test recipes locally or against ReadyAPI TestServer</description>
+    <description>Maven plugin for executing test recipes locally or against ReadyAPI TestEngine</description>
 
     <dependencies>
         <dependency>

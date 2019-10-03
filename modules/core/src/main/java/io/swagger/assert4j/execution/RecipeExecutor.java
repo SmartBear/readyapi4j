@@ -60,7 +60,7 @@ public interface RecipeExecutor {
     void removeRecipeFilter(RecipeFilter recipeFilter);
 
     /**
-     * @return executionMode <code>ExecutionMode.LOCAL</code> if running locally, <code>ExecutionMode.LOCAL</code> otherwise (when running on TestServer)
+     * @return executionMode <code>ExecutionMode.LOCAL</code> if running locally, <code>ExecutionMode.LOCAL</code> otherwise (when running on TestEngine)
      */
     ExecutionMode getExecutionMode();
 }

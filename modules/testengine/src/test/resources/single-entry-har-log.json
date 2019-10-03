@@ -2,7 +2,7 @@
   "log": {
     "version": "1.2",
     "creator": {
-      "name": "ReadyAPI TestServer",
+      "name": "ReadyAPI TestEngine",
       "version": "1.7.1-SNAPSHOT"
     },
     "pages": [

@@ -3,17 +3,17 @@ package io.swagger.assert4j.samples.groovy
 import io.swagger.assert4j.execution.Execution
 import org.junit.Test
 
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipeOnServer
+import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipeOnTestEngine
 
 class DataGenDataSourceTest {
-    private static final String TEST_SERVER_URL = 'http://testserver.readyapi.io:8080'
+    private static final String TEST_SERVER_URL = 'http://testengine.readyapi.io:8080'
     private static final String TEST_SERVER_USER = 'demoUser'
     private static final String TEST_SERVER_PASSWORD = 'demoPassword'
 
     @Test
     void dataGenDataSourceTest() throws Exception {
-        //Data Source test step is a Pro test step and hence can be used with TestServer, but not with SoapUI OS engine and local execution
-        Execution execution = executeRecipeOnServer(TEST_SERVER_URL, TEST_SERVER_USER, TEST_SERVER_PASSWORD, {
+        //Data Source test step is a Pro test step and hence can be used with TestEngine, but not with SoapUI OS engine and local execution
+        Execution execution = executeRecipeOnTestEngine(TEST_SERVER_URL, TEST_SERVER_USER, TEST_SERVER_PASSWORD, {
             withGeneratedData 'DataSourceTestStep', {
                 numberOfRows 10
                 cityName 'City'

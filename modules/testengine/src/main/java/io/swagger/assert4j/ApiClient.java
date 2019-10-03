@@ -28,7 +28,7 @@ import java.util.Map.Entry;
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2019-08-27T17:58:38.260+02:00")
 public class ApiClient {
     private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
-    private String basePath = "http://testserver.readyapi.io:8080/v1";
+    private String basePath = "http://testengine.readyapi.io:8080/v1";
     private boolean debugging = false;
     private int connectionTimeout = 0;
 

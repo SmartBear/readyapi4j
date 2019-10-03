@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import static io.swagger.assert4j.facade.execution.RecipeExecutionFacade.executeRecipe;
 import static io.swagger.assert4j.support.AssertionUtils.assertExecutionResult;
-import static io.swagger.assert4j.testserver.teststeps.ServerTestSteps.dataGenDataSource;
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.*;
+import static io.swagger.assert4j.testengine.teststeps.ServerTestSteps.dataGenDataSource;
+import static io.swagger.assert4j.testengine.teststeps.datasource.datagen.DataGenerators.*;
 import static io.swagger.assert4j.teststeps.TestSteps.GET;
 import static io.swagger.assert4j.teststeps.restrequest.ParameterBuilder.query;
 

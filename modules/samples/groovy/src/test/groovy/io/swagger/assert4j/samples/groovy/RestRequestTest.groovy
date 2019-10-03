@@ -8,7 +8,7 @@ import static io.swagger.assert4j.dsl.execution.RecipeExecution.*
 
 class RestRequestTest {
 
-    private static final String TEST_SERVER_URL = 'http://testserver.readyapi.io:8080'
+    private static final String TEST_SERVER_URL = 'http://testengine.readyapi.io:8080'
     private static final String TEST_SERVER_USER = 'demoUser'
     private static final String TEST_SERVER_PASSWORD = 'demoPassword'
 
@@ -18,7 +18,7 @@ class RestRequestTest {
         Execution execution = executeRecipe {
             get 'https://api.swaggerhub.com/apis', {
                 parameters {
-                    query 'query', 'testserver'
+                    query 'query', 'testengine'
                 }
                 asserting {
                     status 200
@@ -31,11 +31,11 @@ class RestRequestTest {
     }
 
     @Test
-    void testSimpleCountByRunningRecipeOnTestServer() throws Exception {
-        Execution execution = executeRecipeOnServer TEST_SERVER_URL, TEST_SERVER_USER, TEST_SERVER_PASSWORD, {
+    void testSimpleCountByRunningRecipeOnTestEngine() throws Exception {
+        Execution execution = executeRecipeOnTestEngine TEST_SERVER_URL, TEST_SERVER_USER, TEST_SERVER_PASSWORD, {
             get 'https://api.swaggerhub.com/apis', {
                 parameters {
-                    query 'query', 'testserver'
+                    query 'query', 'testengine'
                 }
                 asserting {
                     status 200
@@ -55,7 +55,7 @@ class RestRequestTest {
         Execution execution = executeRecipe executor, {
             get 'https://api.swaggerhub.com/apis', {
                 parameters {
-                    query 'query', 'testserver'
+                    query 'query', 'testengine'
                 }
                 asserting {
                     status 200

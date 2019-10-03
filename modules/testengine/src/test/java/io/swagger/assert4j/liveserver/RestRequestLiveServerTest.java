@@ -9,8 +9,8 @@ import io.swagger.assert4j.client.model.TestStepResultReport;
 import io.swagger.assert4j.client.model.TestSuiteResultReport;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.execution.ExecutionListener;
-import io.swagger.assert4j.testserver.execution.TestServerClient;
-import io.swagger.assert4j.testserver.execution.TestServerRecipeExecutor;
+import io.swagger.assert4j.testengine.execution.TestEngineClient;
+import io.swagger.assert4j.testengine.execution.TestEngineRecipeExecutor;
 import io.swagger.assert4j.teststeps.TestStepBuilder;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -40,9 +40,9 @@ public class RestRequestLiveServerTest {
     private static final String ENDPOINT_WITH_PATH = ENDPOINT + "/specs?specType=API&limit=10";
     private static final String ENDPOINT_NAME = "Default listing";
     private static final String ENDPOINT_DESCRIPTION = "Default registry listing";
-    private static final String TESTSERVER_URL = "http://testserver.readyapi.io:8080";
-    private static final String TESTSERVER_USER = "demoUser";
-    private static final String TESTSERVER_PASSWORD = "demoPassword";
+    private static final String TESTENGINE_URL = "http://testengine.readyapi.io:8080";
+    private static final String TESTENGINE_USER = "demoUser";
+    private static final String TESTENGINE_PASSWORD = "demoPassword";
     private static final String REST_REQUEST_NAME = "swaggerhubrequest";
     private static final String SECOND_REST_REQUEST_NAME = "secondswaggerhubrequest";
 
@@ -50,12 +50,12 @@ public class RestRequestLiveServerTest {
     private final CountDownLatch waitForExecution = new CountDownLatch(2);
 
 
-    private TestServerClient testServerClient;
+    private TestEngineClient testEngineClient;
 
     @Before
     public void setup() throws MalformedURLException {
-        testServerClient = TestServerClient.fromUrl(TESTSERVER_URL)
-                .withCredentials(TESTSERVER_USER, TESTSERVER_PASSWORD);
+        testEngineClient = TestEngineClient.fromUrl(TESTENGINE_URL)
+                .withCredentials(TESTENGINE_USER, TESTENGINE_PASSWORD);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class RestRequestLiveServerTest {
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromResponse("$.name", property -> extractedProperty[0] = property)));
-        Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
+        Execution execution = testEngineClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
         report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT_NAME));
@@ -78,7 +78,7 @@ public class RestRequestLiveServerTest {
                 GET(ENDPOINT_WITH_PATH)
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property)));
-        Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
+        Execution execution = testEngineClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
         report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT));
@@ -92,7 +92,7 @@ public class RestRequestLiveServerTest {
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromResponse("$.name", property -> extractedProperty[0] = property),
                                 fromResponse("$.description", property -> extractedProperty[1] = property)));
-        Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
+        Execution execution = testEngineClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
         report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT_NAME));
@@ -107,7 +107,7 @@ public class RestRequestLiveServerTest {
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property),
                                 fromProperty("Response", property -> extractedProperty[1] = property)));
-        Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
+        Execution execution = testEngineClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
         report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT));
@@ -123,7 +123,7 @@ public class RestRequestLiveServerTest {
                         .named(REST_REQUEST_NAME)
                         .withExtractors(fromProperty("Endpoint", property -> extractedProperty[0] = property),
                                 fromResponse("$.name", property -> extractedProperty[1] = property)));
-        Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
+        Execution execution = testEngineClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
         report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT));
@@ -141,7 +141,7 @@ public class RestRequestLiveServerTest {
                         .named(SECOND_REST_REQUEST_NAME)
                         .withExtractors(fromResponse("$.name", property -> extractedProperty[1] = property)));
 
-        Execution execution = testServerClient.createRecipeExecutor().executeRecipe(testRecipe);
+        Execution execution = testEngineClient.createRecipeExecutor().executeRecipe(testRecipe);
         Optional<TestStepResultReport> report = extractTestStepResultReport(execution.getCurrentReport());
         report.ifPresent(testStepResultReport -> assertThat(testStepResultReport.getAssertionStatus(), is(UNKNOWN)));
         assertThat(extractedProperty[0], is(ENDPOINT));
@@ -192,7 +192,7 @@ public class RestRequestLiveServerTest {
             }
         };
 
-        TestServerRecipeExecutor executor = testServerClient.createRecipeExecutor();
+        TestEngineRecipeExecutor executor = testEngineClient.createRecipeExecutor();
         executor.addExecutionListener(listener);
         executor.submitRecipe(testRecipe1);
         executor.submitRecipe(testRecipe2);

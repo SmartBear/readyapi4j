@@ -16,7 +16,7 @@ You can run these samples using the remote execution engine with
 mvn integration-test -PRunSamplesRemotely
 ```
 
-By default the remote execution will use the public TestServer instance available at 
-http://testserver.readyapi.io/ - change the defined endpoint properties in the pom to execute 
+By default the remote execution will use the public TestEngine instance available at 
+http://testengine.readyapi.io/ - change the defined endpoint properties in the pom to execute 
 with a different server.
 

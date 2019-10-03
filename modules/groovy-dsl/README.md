@@ -1,7 +1,7 @@
 # Domain-specific language (DSL) for tests
 
 We've created Swagger Assert4J to make the full functionality of SoapUI and ReadyApi 
-TestServer accessible to coders. However, we also had a more ambitious vision: to let testers and 
+TestEngine accessible to coders. However, we also had a more ambitious vision: to let testers and 
 other people with limited coding skills understand or even write API tests.
 
 We're trying to achieve this both with the [Cucumber functionality](../cucumber/README.md), and with our **Domain-specific language for tests**.
@@ -55,7 +55,7 @@ something slightly more interesting, introducing the concepts of *assertions* an
  3. Send a GET to the URL ```https://staging-server/orders?filter=JonSnow``` and verify
     + that the request returned 200 OK
     + that the response contains the text PROCESSED
- 4. After running the recipe, either locally or on a TestServer, use a standard Groovy assert to check that the requests completed, 
+ 4. After running the recipe, either locally or on a TestEngine, use a standard Groovy assert to check that the requests completed, 
  and that the HTTP status and response met our expectations. 
  
 Although we hope that these two examples got you interested in the Assert4J DSL, we've really only

@@ -1,7 +1,7 @@
 package io.swagger.assert4j.dsl.pro
 
 import io.swagger.assert4j.TestRecipeBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.DataSourceTestStepBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.DataSourceTestStepBuilder
 import io.swagger.assert4j.teststeps.TestStepBuilder
 
 import static groovy.lang.Closure.DELEGATE_FIRST

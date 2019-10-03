@@ -26,7 +26,7 @@ public class SimpleNonFluentTest {
 
         RestParameter parameter = new RestParameter();
         parameter.setName("query");
-        parameter.setValue("testserver");
+        parameter.setValue("testengine");
         parameter.setType(RestParameter.TypeEnum.QUERY);
         restTestRequestStep.setParameters(Arrays.asList(parameter));
 

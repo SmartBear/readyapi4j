@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static io.swagger.assert4j.facade.execution.RecipeExecutionFacade.executeRecipe;
-import static io.swagger.assert4j.testserver.teststeps.ServerTestSteps.gridDataSource;
+import static io.swagger.assert4j.testengine.teststeps.ServerTestSteps.gridDataSource;
 import static io.swagger.assert4j.teststeps.TestSteps.GET;
 
 public class LocalExecutionTest {

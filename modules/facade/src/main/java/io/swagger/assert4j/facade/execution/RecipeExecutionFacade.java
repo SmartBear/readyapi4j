@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**
- * Utility for running recipes either locally or on a remote TestServer based on system/env property values<br/>
+ * Utility for running recipes either locally or on a remote TestEngine based on system/env property values<br/>
  * <p>
- * If a <code>testserver.endpoint</code> system or environment property is available and contains a valid URL
+ * If a <code>testengine.endpoint</code> system or environment property is available and contains a valid URL
  * remote execution will be used by the executeRecipe method. The values of
- * <code>testserver.user</code> and <code>testserver.password</code> properties/environment variables will be used to
- * authenticate on the TestServer.
+ * <code>testengine.user</code> and <code>testengine.password</code> properties/environment variables will be used to
+ * authenticate on the TestEngine.
  * If no valid server URL has been specified recipe execution will be local instead.</p>
  */
 

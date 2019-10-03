@@ -28,9 +28,9 @@ import io.swagger.assert4j.execution.RecipeExecutor;
 import io.swagger.assert4j.facade.execution.RecipeExecutorBuilder;
 import io.swagger.assert4j.junitreport.JUnitReport;
 import io.swagger.assert4j.junitreport.TestFailureException;
-import io.swagger.assert4j.testserver.execution.ProjectExecutionRequest;
-import io.swagger.assert4j.testserver.execution.ProjectExecutor;
-import io.swagger.assert4j.testserver.execution.TestServerClient;
+import io.swagger.assert4j.testengine.execution.ProjectExecutionRequest;
+import io.swagger.assert4j.testengine.execution.ProjectExecutor;
+import io.swagger.assert4j.testengine.execution.TestEngineClient;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.execution.MavenSession;
@@ -55,7 +55,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 import static io.swagger.assert4j.client.model.TestStepResultReport.AssertionStatusEnum.FAILED;
-import static io.swagger.assert4j.testserver.execution.ProjectExecutionRequest.Builder.forProjectFile;
+import static io.swagger.assert4j.testengine.execution.ProjectExecutionRequest.Builder.forProjectFile;
 
 @Mojo(name = "run")
 public class RunMojo extends AbstractMojo {
@@ -86,13 +86,13 @@ public class RunMojo extends AbstractMojo {
     @Parameter(defaultValue = "true")
     private boolean failOnFailures;
 
-    @Parameter(required = false, property = "testserver.username")
+    @Parameter(required = false, property = "testengine.username")
     private String username;
 
-    @Parameter(required = false, property = "testserver.password")
+    @Parameter(required = false, property = "testengine.password")
     private String password;
 
-    @Parameter(required = false, property = "testserver.endpoint")
+    @Parameter(required = false, property = "testengine.endpoint")
     private String server;
 
     @Parameter(defaultValue = "${project.basedir}/src/test/resources/recipes", required = true)
@@ -154,7 +154,7 @@ public class RunMojo extends AbstractMojo {
             Result projectExecutionResult = runProjects(xmlProjectFiles, report);
 
 
-            getLog().info("ReadyAPI TestServer Maven Plugin");
+            getLog().info("ReadyAPI TestEngine Maven Plugin");
             getLog().info("--------------------------------------");
             getLog().info("Recipes run: " + recipeExecutionResult.executionCount);
             getLog().info("Projects run: " + projectExecutionResult.executionCount);
@@ -338,14 +338,14 @@ public class RunMojo extends AbstractMojo {
 
     private TestJobReport runXmlProject(File file) throws IOException, MavenFilteringException, MojoFailureException {
         if (StringUtils.isEmpty(server)) {
-            throw new MojoFailureException("Project execution is supported only with TestServer, not locally.");
+            throw new MojoFailureException("Project execution is supported only with TestEngine, not locally.");
         }
         getLog().info("Executing project " + file.getName());
 
         ProjectExecutionRequest executionRequest = forProjectFile(file)
                 .forEnvironment(environment)
                 .build();
-        TestServerClient testServerClient = TestServerClient.fromUrl(server);
+        TestEngineClient testServerClient = TestEngineClient.fromUrl(server);
         testServerClient.setCredentials(username, password);
         ProjectExecutor projectExecutor = testServerClient.createProjectExecutor();
         Execution execution = async ? projectExecutor.submitProject(executionRequest) :

@@ -1,53 +1,53 @@
-# Swagger Assert4j TestServer executor
+# Swagger Assert4j TestEngine executor
 
-The testserver module provides a test execution engine that utilizes a remote TestServer instance for executing
+The testengine module provides a test execution engine that utilizes a remote TestEngine instance for executing
 recipes.
 
 See [Concepts](../../CONCEPTS.md#remote_execution) for general info and the [Core Module](../core) for an overview of
 the Java API.
 
-# TestServer Extensions
+# TestEngine Extensions
 
-ReadyAPI TestServer provides a number of additional features that are not available when using swagger-assert4j with the
+ReadyAPI TestEngine provides a number of additional features that are not available when using swagger-assert4j with the
 [local execution engine](../local), namely;
 
 * The possibility to execute tests in existing ReadyAPI/SoapUI projects
 * The possibility to validate APIs based on their Swagger definition
 * The possibility to perform data-driven testing in Test Recipes 
 
-The corresponding REST API exposed by the TestServer for this functionality is 
-[available on SwaggerHub](https://app.swaggerhub.com/apis/smartbear/ready-api-testserver)
+The corresponding REST API exposed by the TestEngine for this functionality is 
+[available on SwaggerHub](https://app.swaggerhub.com/apis/smartbear/ready-api-testengine)
 This module provides a Java API for these extensions, as described below 
 
-## Using the TestServerClient
+## Using the TestEngineClient
 
-The [TestServerClient](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/execution/TestServerClient.html)
-class is the main entry point to the additional features provided by TestServer:
+The [TestEngineClient](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/TestEngineClient.html)
+class is the main entry point to the additional features provided by TestEngine:
 
 ```java
-TestServerClient testServerClient = TestServerClient.fromUrl(TESTSERVER_URL)
+TestEngineClient testEngineClient = TestEngineClient.fromUrl(TESTSERVER_URL)
                 .withCredentials(TESTSERVER_USER, TESTSERVER_PASSWORD);
 ```
 
 Executing TestRecipes on the server is done via the 
-[TestServerRecipeExecutor](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/execution/TestServerRecipeExecutor.html) 
-created with `TestServerClient.createRecipeExecutor`, which is the same `Executor` created when using the [facade](../facade) for remote execution.
+[TestEngineRecipeExecutor](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/TestEngineRecipeExecutor.html) 
+created with `TestEngineClient.createRecipeExecutor`, which is the same `Executor` created when using the [facade](../facade) for remote execution.
 
 ## Running existing projects
 
-Use the [ProjectExecutor](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/execution/ProjectExecutor.html)
+Use the [ProjectExecutor](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/ProjectExecutor.html)
 to execute existing SoapUI / ReadyAPI projects. 
 
 ```java
-TestServerClient testServerClient = TestServerClient.fromUrl(TESTSERVER_URL)
+TestEngineClient testEngineClient = TestEngineClient.fromUrl(TESTSERVER_URL)
                 .withCredentials(TESTSERVER_USER, TESTSERVER_PASSWORD);
 
-ProjectExecutor projectExecutor = testServerClient.createProjectExecutor();
+ProjectExecutor projectExecutor = testEngineClient.createProjectExecutor();
 ```
 
-Projects to be executed can reside either locally or remotely on the server (using the TestServer Repository functionality), create and 
-pass corresponding instances of [ProjectExecutionRequest](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/execution/ProjectExecutionRequest.html) 
-and [RepositoryProjectExecutionRequest](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/execution/RepositoryProjectExecutionRequest.html) to the execute/submitProject methods.
+Projects to be executed can reside either locally or remotely on the server (using the TestEngine Repository functionality), create and 
+pass corresponding instances of [ProjectExecutionRequest](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/ProjectExecutionRequest.html) 
+and [RepositoryProjectExecutionRequest](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/RepositoryProjectExecutionRequest.html) to the execute/submitProject methods.
 
 Before executing tests you can further narrow down which TestSuites/TestCases to run, specify tags, properties, endpoints, etc. by 
 setting the corresponding properties in either of these execution request classes.
@@ -68,17 +68,17 @@ projectExecutor.executeProject( request );
 
 ## Validating Swagger-defined APIs
 
-ReadyAPI TestServer supports "instant validation" of an API based on its Swagger definition; the server
+ReadyAPI TestEngine supports "instant validation" of an API based on its Swagger definition; the server
 will generate an ad-hoc TestSuite based on this Swagger definition, execute it, and return the result. 
 
 This functionality is exposed in Java via the 
-[SwaggerApiValidator](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/execution/SwaggerApiValidator.html) class, use as follows:
+[SwaggerApiValidator](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/SwaggerApiValidator.html) class, use as follows:
 
 ```java
-TestServerClient testServerClient = TestServerClient.fromUrl(TESTSERVER_URL)
+TestEngineClient testEngineClient = TestEngineClient.fromUrl(TESTSERVER_URL)
                 .withCredentials(TESTSERVER_USER, TESTSERVER_PASSWORD);
 
-SwaggerApiValidator validator = testServerClient.createApiValidator();
+SwaggerApiValidator validator = testEngineClient.createApiValidator();
 
 // validate the petstore
 Execution execution = validator.validateApiSynchronously( "http://petstore.swagger.io/v2/swagger.json", null, null );
@@ -89,12 +89,12 @@ RecipeExecutionResult result = execution.getExecutionResult();
 
 ```
 
-## TestServer data-driven testing
+## TestEngine data-driven testing
 
-The ReadyAPI TestServer adds a number of constructs to the JSON Recipe format to allow for data-driven testing, similar to 
+The ReadyAPI TestEngine adds a number of constructs to the JSON Recipe format to allow for data-driven testing, similar to 
 what is possible with [Data Driven testing in SoapUI Pro](https://smartbear.com/product/ready-api/soapui/features/data-driven-tests/).
 
-A [ServerTestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testserver/teststeps/ServerTestSteps.html) 
+A [ServerTestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/teststeps/ServerTestSteps.html) 
 class makes it easy to build the corresponding TestStep, matching the 
 [TestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/TestSteps.html) class in core.
 

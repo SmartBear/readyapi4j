@@ -16,9 +16,9 @@
             <con:parameters>
                 <con:parameter>
                     <con:name>query</con:name>
-                    <con:value>testserver</con:value>
+                    <con:value>testengine</con:value>
                     <con:style>QUERY</con:style>
-                    <con:default>testserver</con:default>
+                    <con:default>testengine</con:default>
                     <con:path xsi:nil="true"/>
                     <con:description xsi:nil="true"/>
                 </con:parameter>
@@ -41,7 +41,7 @@
                     </con:credentials>
                     <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
                     <con:parameters>
-                        <entry key="query" value="testserver" xmlns="http://eviware.com/soapui/config"/>
+                        <entry key="query" value="testengine" xmlns="http://eviware.com/soapui/config"/>
                     </con:parameters>
                     <con:parameterOrder>
                         <con:entry>query</con:entry>
@@ -93,7 +93,7 @@
                         </con:credentials>
                         <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
                         <con:parameters>
-                            <entry key="query" value="testserver" xmlns="http://eviware.com/soapui/config"/>
+                            <entry key="query" value="testengine" xmlns="http://eviware.com/soapui/config"/>
                         </con:parameters>
                         <con:parameterOrder>
                             <con:entry>query</con:entry>

@@ -40,11 +40,11 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>RunWithTestServer</id>
+                        <id>RunWithTestEngine</id>
                         <configuration>
                             <username>demoUser</username>
                             <password>demoPassword</password>
-                            <server>http://testserver.readyapi.io:8080</server>
+                            <server>http://testengine.readyapi.io:8080</server>
                         </configuration>
                         <phase>test</phase>
                         <goals>

@@ -129,7 +129,7 @@
                                 modules/groovy-dsl/target/generated-sources/groovy-stubs/main:
                                 modules/local/src/main/java:
                                 modules/oas/src/main/java:
-                                modules/testserver/src/main/java:
+                                modules/testengine/src/main/java:
                             </sourcepath>
                             <excludePackageNames>
                                 io.swagger.assert4j.client.teststeps

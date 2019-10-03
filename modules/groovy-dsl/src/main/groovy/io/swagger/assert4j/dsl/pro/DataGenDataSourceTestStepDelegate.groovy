@@ -1,9 +1,18 @@
 package io.swagger.assert4j.dsl.pro
 
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.*
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.AbstractDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.CustomStringDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.DataGenDataSourceTestStepBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.DateAndTimeDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.IntegerDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.PhoneNumberDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.StringDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.UKPostCodeDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.USZipDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.ValuesFromSetDataGeneratorBuilder
 
 import static groovy.lang.Closure.DELEGATE_FIRST
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.*
+import static io.swagger.assert4j.testengine.teststeps.datasource.datagen.DataGenerators.*
 
 class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataGenDataSourceTestStepBuilder> {
     DataGenDataSourceTestStepDelegate(String testStepName) {

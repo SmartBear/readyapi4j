@@ -8,7 +8,7 @@ Under the hood the library uses the open-source test-execution engine of [SoapUI
   * [with our Groovy DSL](#getting-started-with-groovy) - read the documentation of the DSL [here](modules/groovy-dsl)
   * [with Cucumber](modules/cucumber) - with cucumber-jvm 
   * [with the Maven plugin](modules/maven-plugin)
-* [Running Tests with TestServer](#running-tests-with-testserver)
+* [Running Tests with TestEngine](#running-tests-with-testengine)
 * [Core Concepts](CONCEPTS.md) - explains swagger-assert4j core concepts
 * [Modules](MODULES.md) - an overview of the included maven modules
 
@@ -33,7 +33,7 @@ Under the hood the library uses the open-source test-execution engine of [SoapUI
              GET("https://api.swaggerhub.com/specs")
                  .withParameters(
                      query("specType", "API"),
-                     query("query", "testserver")
+                     query("query", "testengine")
                  )
                  .withAssertions(
                      json("$.totalCount", "4")
@@ -60,7 +60,7 @@ Learn more about the Java testing vocabulary by:
 
 ## Getting Started with Groovy 
 
-Assert4J provides a Groovy DSL to create and execute API tests locally or on TestServer. Documentation of the DSL
+Assert4J provides a Groovy DSL to create and execute API tests locally or on TestEngine. Documentation of the DSL
 is [available here](modules/groovy-dsl).
 
 The following steps explain how to use this DSL in a JUnit test.
@@ -94,7 +94,7 @@ The following steps explain how to use this DSL in a JUnit test.
                 get 'https://api.swaggerhub.com/specs', {
                     parameters {
                         query 'specType', 'API'
-                        query 'query', 'testserver'
+                        query 'query', 'testengine'
                     }
                     asserting {
                         jsonPath '$.totalCount' occurs 0 times
@@ -116,7 +116,7 @@ The following steps explain how to use this DSL in a JUnit test.
           io.swagger.assert4j.local.execution.SoapUIRecipeExecution@f810c18
    ```
    
-   Similarly, you can execute the recipe on TestServer with the following:
+   Similarly, you can execute the recipe on TestEngine with the following:
    ```groovy
    import io.swagger.assert4j.execution.Execution
    import org.junit.Test
@@ -126,11 +126,11 @@ The following steps explain how to use this DSL in a JUnit test.
    class DslTestDemo {
        @Test
        void testSwaggerHubApi() {
-           Execution execution = executeRecipeOnServer '<your TestServer url, e.g. http://localhost:8080>', '<your user>', '<your password>', {
+           Execution execution = executeRecipeOnServer '<your TestEngine url, e.g. http://localhost:8080>', '<your user>', '<your password>', {
                get 'https://api.swaggerhub.com/specs', {
                    parameters {
                        query 'specType', 'API'
-                       query 'query', 'testserver'
+                       query 'query', 'testengine'
                    }
                    asserting {
                        jsonPath '$.totalCount' occurs 0 times
@@ -149,34 +149,34 @@ assert execution.errorMessages.empty
        |         |             |
        |         |             false
        |         [TestStepName: GET request 1, messages: [JsonPath Count] Comparison failed. Path: [$.totalCount]; Expected value: [0]; Actual value: [1].]
-       io.swagger.assert4j.testserver.execution.TestServerExecution@dfddc9a
+       io.swagger.assert4j.testengine.execution.TestEngineExecution@dfddc9a
 ```
 ## More samples / tutorials
 
-Tutorial in the ReadyAPI TestServer documentation: 
-[Creating Code-Based Recipes: Tutorial](http://readyapi.smartbear.com/testserver/tutorials/code_based/start)
+Tutorial in the ReadyAPI TestEngine documentation: 
+[Creating Code-Based Recipes: Tutorial](http://readyapi.smartbear.com/testengine/tutorials/code_based/start)
 
 The [samples submodule](modules/samples) here on GitHub contains a number of samples for Java, Groovy and Maven.
 
-## Running tests with TestServer
+## Running tests with TestEngine
 
 To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
-need to execute your tests with [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) instead of running 
+need to execute your tests with [ReadyAPI TestEngine](http://readyapi.smartbear.com/testengine/start) instead of running 
 them locally. 
 
-TestServer is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
+TestEngine is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
 in the same underlying JSON format that is also used in the test shown above. If you're using the RecipeExecutionFacade 
 (as in the example above) all you have to do is add system (or environment) variables that point the facade to a 
-running TestServer instance. For example, if we add
+running TestEngine instance. For example, if we add
 
 ```
-testserver.endpoint=http://testserver.readyapi.io:8080
-testserver.user=demoUser
-testserver.password=demoPassword
+testengine.endpoint=http://testengine.readyapi.io:8080
+testengine.user=demoUser
+testengine.password=demoPassword
 ```
 	
 as either system/env properties to our execution and then rerun the above test - those tests will be executed by the 
-specified TestServer instance available at http://testserver.readyapi.io.
+specified TestEngine instance available at http://testengine.readyapi.io.
 
 ### Logging of Recipes and HTTP transactions
 
@@ -190,11 +190,11 @@ swagger-assert4j.log.recipes.folder=target/logs/recipes
 
 will automatically result in the corresponding artifacts being written to the corresponding folders.
 
-## Learn More about TestServer
+## Learn More about TestEngine
 
-[Try it out online!](http://testserver.readyapi.io)
+[Try it out online!](http://testengine.readyapi.io)
 
-[ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/intro/about)
+[ReadyAPI TestEngine](http://readyapi.smartbear.com/testengine/intro/about)
 
 [ReadyAPI](http://readyapi.smartbear.com/start)
 
