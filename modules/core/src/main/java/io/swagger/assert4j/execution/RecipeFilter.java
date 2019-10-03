@@ -14,5 +14,5 @@ public interface RecipeFilter {
      *
      * @param testRecipe
      */
-    void filterRecipe( TestRecipe testRecipe );
+    void filterRecipe(TestRecipe testRecipe);
 }

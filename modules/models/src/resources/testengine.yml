@@ -1,0 +1,3077 @@
+openapi: 3.0.2
+info:
+  version: "1.0.2"
+  title: ReadyAPI TestEngine API
+  description: >-
+    A REST based API testing framework; submit Ready API/SoapUI projects using your
+    favorite HTTP client, one of the existing open-source clients/tools on
+    GitHub to run API tests either asynchronously or synchronously:
+    - Generate your own client from this specification: https://app.swaggerhub.com/apis/smartbear/readyapi-testengine
+    - Use our Jenkins plugin: https://support.smartbear.com/downloads/readyapi/
+
+  contact:
+    name: SmartBear Software
+    url: http://smartbear.com/
+    email: sales@smartbear.com
+
+  license:
+    name: SmartBear Terms of Use
+    url: https://smartbear.com/terms-of-use/
+
+paths:
+  /testjobs:
+    get:
+      tags:
+        - testjob
+      summary: Returns test run results stored in TestEngine.
+      description: >-
+        Use this operation to get results of the latest test runs stored in TestEngine.
+      operationId: getTestjobs
+      parameters:
+        - name: fetch
+          in: query
+          required: false
+          description: Number of testjobs to return. Use ALL to get all testjobs.
+          schema:
+            anyOf:
+              - type: string
+                enum:
+                  - ALL
+              - type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: The array of executed test jobs.
+                items:
+                  $ref: '#/components/schemas/TestJobSummary'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+    post:
+      tags:
+        - testjob
+      summary: Executes a ReadyAPI project.
+      description: >-
+        Use this operation to send a ReadyAPI test project to TestEngine.
+        You command TestEngine to execute the entire project, or an
+        individual test suite or test case in it. The body of the request should be a
+        ReadyAPI project file. Either send the .xml file as is, or zip it.
+        A zip is needed to send in a composite project or when sending in a project with file dependencies.
+      operationId: postProjectTestjob
+      parameters:
+        - $ref: '#/components/parameters/testSuiteParam'
+        - $ref: '#/components/parameters/testCaseParam'
+        - $ref: '#/components/parameters/environmentParam'
+        - $ref: '#/components/parameters/asyncParam'
+        - $ref: '#/components/parameters/callbackParam'
+        - $ref: '#/components/parameters/clientCertParam'
+        - $ref: '#/components/parameters/clientCertPasswordParam'
+        - $ref: '#/components/parameters/projectPasswordParam'
+        - $ref: '#/components/parameters/hostAndPortParam'
+        - $ref: '#/components/parameters/tagsParam'
+        - $ref: '#/components/parameters/proxyHostParam'
+        - $ref: '#/components/parameters/proxyPortParam'
+        - $ref: '#/components/parameters/proxyUsernameParam'
+        - $ref: '#/components/parameters/proxyPasswordParam'
+      requestBody:
+        description: ReadyAPI project and dependencies if needed.
+        required: true
+        content:
+          application/zip:
+            schema:
+              type: string
+              format: binary
+          application/xml:
+            schema:
+              type: string
+              format: binary
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                zip:
+                  type: string
+                  format: binary
+                project:
+                  type: string
+                  format: binary
+              additionalProperties:
+                type: string
+                format: binary
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestJobReport'
+            application/junit+xml:
+              schema:
+                type: string
+        412:
+          description: >-
+            Request contains unresolved files needed to execute the test job. It can be
+            data sources, attachment or client certificates mentioned in test job
+            but not provided in the request. Resend the request with all mentioned files.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnresolvedFile'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+    delete:
+      tags:
+        - admin
+      summary: Deletes testjobs
+      description: >-
+        Delete jobs older than the specified date. If a date is not provided, `maxDaysToKeep` and `maxJobsToKeep`
+        value is taken from the configuration file and either config deleting more number of jobs will be the considered.
+        The default values can be changed by changing `maxDaysToKeep` and `maxJobsToKeep` in the configuration file.
+      operationId: deleteTestJobs
+      parameters:
+        - name: before
+          in: query
+          required: false
+          description: Testjobs older than this date/time will be deleted.
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Test jobs were successfully deleted
+          content:
+            application/json:
+              schema:
+                type: integer
+                description: number of deleted jobs
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  '/testjobs/{testjobId}':
+    delete:
+      tags:
+        - testjob
+      summary: Cancels the specified testjob
+      description: >-
+        Use this operation to stop the run specified by <i>testjobId</i>. You
+        can find the testjobId in the response to your testjob request,
+        or you can send a GET <code>/testjobs</code> request to the
+        TestEngine.
+      operationId: cancelTestjob
+      parameters:
+        - $ref: '#/components/parameters/testjobIdParam'
+      responses:
+        200:
+          description: Testjob canceled
+        404:
+          description: The specified test run was not found
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  '/testjobs/{testjobId}/report':
+    get:
+      tags:
+        - testjob
+      summary: Returns the status and result of the specified testjob.
+      description: >-
+        Use this operation to get information on the testjob specified
+        by <i>testjobId</i>.  You can find in the response to your testjob
+        request , or you can send a GET <code>/testjobs</code> request to TestEngine.
+      operationId: getTestjobReport
+      parameters:
+        - $ref: '#/components/parameters/testjobIdParam'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestJobReport'
+            application/junit+xml:
+              schema:
+                type: string
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: The specified test job was not found
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  '/testjobs/{testjobId}/transactions':
+    get:
+      tags:
+        - testjob
+      summary: Returns the transaction logs for the specified test job.
+      description: >-
+        Use this operation to get transaction logs (individual request and
+        response of executed test steps) of the test job specified by
+        <i>test jobID</i>.  You can find it in the response of your test job
+        request , or you can send a GET <code>/testjobs/{testjobId}/logs</code>
+        request to TestEngine.
+      operationId: getTransactions
+      parameters:
+        - $ref: '#/components/parameters/testjobIdParam'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HarLogRoot'
+        404:
+          description: The specified test job was not found
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  '/testjobs/{testjobId}/transactions/{transactionId}':
+    get:
+      tags:
+        - testjob
+      summary: Gets message exchange for a test step test job transaction
+      description: >-
+        A particular test job of a test step is referred as transaction. Use
+        this operation to get the request and response for a transaction in HAR
+        format.
+      operationId: getTransaction
+      parameters:
+        - $ref: '#/components/parameters/testjobIdParam'
+        - name: transactionId
+          description: >-
+            The id of the transaction (test step test job) to get the message
+            exchange (request and response) for.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HarLogRoot'
+        404:
+          description: The specified test job or transaction was not found
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  /testjobs/stats/current:
+    get:
+      tags:
+        - stats
+      description: TestEngine statistics
+      summary: Returns the number of currently running and queued jobs
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageStatistics'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  /testjobs/stats/peak:
+    get:
+      tags:
+        - stats
+      description: TestEngine peak statistics
+      summary: Returns peak usage statistics grouped per hour
+      parameters:
+        - in: query
+          name: from
+          description: The timestamp to return statistics from
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: to
+          description: The timestamp to return statistics to
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeakUsageStatistics'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  /testjobs/stats/count:
+    get:
+      tags:
+        - stats
+      description: TestEngine run statistics
+      summary: Returns running and queued counts per hour
+      parameters:
+        - in: query
+          name: from
+          description: The timestamp to return statistics from, default will be 24 hours
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: to
+          description: The timestamp to return statistics to
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobCountStatistics'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  /testjobs/stats/wait:
+    get:
+      tags:
+        - stats
+      description: TestEngine run statistics
+      summary: Returns maximum and average wait times for a selected period
+      parameters:
+        - in: query
+          name: from
+          description: The timestamp to return statistics from, default will be 24 hours
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: to
+          description: The timestamp to return statistics to
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobWaitStatistics'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  /users:
+    get:
+      tags:
+        - user
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: Array of active users
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+    post:
+      tags:
+        - user
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+  '/users/{username}':
+    get:
+      tags:
+        - user
+      parameters:
+        - name: username
+          in: path
+          description: The username to request information for
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        403:
+          description: The authenticated user does not have access to the requested user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        404:
+          description: The user does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+    put:
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: username
+          description: The username to update information for
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        403:
+          description: The authenticated user does not have access to the requested user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        404:
+          description: The user does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+    delete:
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: username
+          description: The username to request information for
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User deleted successfully
+        403:
+          description: The authenticated user does not have access to the requested user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        404:
+          description: user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  /token:
+    get:
+      description: >-
+        This will provide us a JWT token with a short validity, and can be used
+        to connect to WebSocket
+      tags:
+        - user
+      responses:
+        200:
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  /auditlog:
+    get:
+      tags:
+        - admin
+      parameters:
+        - name: userName
+          in: query
+          required: false
+          description: The username to request information for
+          schema:
+            type: string
+        - name: from
+          in: query
+          required: false
+          description: 'start date and time, example: 2017-07-21T17:32:28Z'
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          required: false
+          description: 'end date and time, example: 2017-07-21T17:32:28Z'
+          schema:
+            type: string
+            format: date-time
+        - name: sortOrder
+          in: query
+          required: false
+          description: Optional parameter for sorting the list on the time.
+          schema:
+            type: string
+            enum:
+              - DESC
+              - ASC
+            default: DESC
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditEvent'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      security:
+        - basicAuth: []
+  /analytics:
+    get:
+      tags:
+        - misc
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsProviderDetails'
+        404:
+          description: Analytics disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /version:
+    get:
+      description: Get version of the TestEngine server
+      tags:
+        - misc
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Version'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /license:
+    get:
+      tags:
+        - admin
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseDetails'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    post:
+      tags:
+        - admin
+      security:
+        - basicAuth: []
+      requestBody:
+        description: License file (.zip or .key) and activation info.
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                activationInfo:
+                  $ref: '#/components/schemas/LicenseActivationInfo'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FloatingLicenseServerInfo'
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseDetails'
+        400:
+          description: Unable to install or activate license
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    delete:
+      tags:
+        - admin
+      security:
+        - basicAuth: []
+      summary: This will deactivate the license.
+      responses:
+        200:
+          description: OK, Successfully deactivated
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /license/reclaim:
+    post:
+      tags:
+        - admin
+      summary: Forces an update of the license session
+      security:
+        - basicAuth: []
+      responses:
+        200:
+          description: OK
+        503:
+          description: Unable to reclaim the license
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+  /settings:
+    get:
+      tags:
+        - admin
+      security:
+        - basicAuth: []
+      summary: Retrieve current settings from the server
+      operationId: getServerSettings
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerSettings'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+    put:
+      tags:
+        - admin
+      security:
+        - basicAuth: []
+      summary: Update the settings on the server
+      operationId: updateServerSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServerSettings'
+      responses:
+        200:
+          description: Settings successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerSettings'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+components:
+  requestBodies:
+    User:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: >-
+        ReadyAPI TestEngine uses Basic authentication. Send in the authentication
+        information preemptively.
+      scheme: basic
+  parameters:
+    testCaseParam:
+      name: testCaseName
+      description: The name of the test case to run.
+      in: query
+      required: false
+      schema:
+        type: string
+    testSuiteParam:
+      name: testSuiteName
+      description: The name of the test suite to run.
+      in: query
+      required: false
+      schema:
+        type: string
+    environmentParam:
+      name: environment
+      description: The target environment for test job.
+      in: query
+      required: false
+      schema:
+        type: string
+    asyncParam:
+      name: async
+      description: >-
+        Specifies when TestEngine replies:<br/>`true` -
+        Immediately.<br/>`false` - After the test job is over.
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: true
+    callbackParam:
+      name: callback
+      description: 'The URL, to which the results will be posted.'
+      in: query
+      required: false
+      schema:
+        type: string
+    clientCertParam:
+      name: clientCertFileName
+      description: The name of the separately provided client certificate file.
+      in: query
+      required: false
+      schema:
+        type: string
+    clientCertPasswordParam:
+      name: clientCertPassword
+      description: The password for the separately provided client certificate file.
+      in: query
+      required: false
+      schema:
+        type: string
+    projectPasswordParam:
+      name: projectPassword
+      description: The password used to decrypt an encrypted project file.
+      in: query
+      required: false
+      schema:
+        type: string
+    hostAndPortParam:
+      name: hostAndPort
+      description: >-
+        The endpoint to be used for HTTP requests sent by this test, in the
+        format host:[port].
+      in: query
+      required: false
+      schema:
+        type: string
+    tagsParam:
+      name: tags
+      description: >-
+        A comma-separated list of tags identifying the test cases to be run
+        when executing the test
+      in: query
+      required: false
+      schema:
+        type: string
+    proxyHostParam:
+      name: proxyHost
+      description: the HTTP proxy host
+      in: query
+      required: false
+      schema:
+        type: string
+    proxyPortParam:
+      name: proxyPort
+      description: the proxy port
+      in: query
+      required: false
+      schema:
+        type: string
+    proxyUsernameParam:
+      name: proxyUsername
+      description: the proxy username
+      in: query
+      required: false
+      schema:
+        type: string
+    proxyPasswordParam:
+      name: proxyPassword
+      description: the proxy password
+      in: query
+      required: false
+      schema:
+        type: string
+    testjobIdParam:
+      name: testjobId
+      description: The unique identifier of a test job
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    ErrorResponse:
+      description: An error has occured
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  schemas:
+    TestJobSummary:
+      type: object
+      description: Data structure for test job summary.
+      properties:
+        userName:
+          type: string
+          description: The name of the user who made the test job request.
+        projectName:
+          type: string
+          description: The name of the executed project.
+        status:
+          type: string
+          description: >-
+            Current test job status. If the assertion fail, the test is also
+            FAILED.
+          enum:
+            - QUEUED
+            - RUNNING
+            - CANCELED
+            - FINISHED
+            - FAILED
+        totalTime:
+          type: integer
+          description: Time taken (ms) to run the test job.
+          format: int64
+        startTime:
+          type: integer
+          description: The timestamp of the test job start.
+          format: int64
+        submitTime:
+          type: integer
+          description: The timestamp of when the test job was submitted.
+          format: int64
+        queueTime:
+          type: integer
+          description: Time spent in QUEUED state before starting.
+          format: int64
+        testjobId:
+          type: string
+          description: The identifier of the test run.
+        executionParameters:
+          $ref: '#/components/schemas/ExecutionParameters'
+    TestJobReport:
+      allOf:
+        - $ref: '#/components/schemas/TestJobSummary'
+        - type: object
+          required:
+            - testSuiteResultReports
+          properties:
+            testSuiteResultReports:
+              type: array
+              description: The array of reports for test suites in the test job.
+              items:
+                $ref: '#/components/schemas/TestSuiteResultReport'
+    RequestTimings:
+      type: object
+      description: Timings for a request withing a test step
+      properties:
+        readTime:
+          type: integer
+          description: Response read time (ms) for a http request.
+          format: int64
+        totalRequestTime:
+          type: integer
+          description: Total time (ms) taken by http request.
+          format: int64
+        connectionTime:
+          type: integer
+          description: Connection creation time (ms).
+          format: int64
+        timeToFirstByte:
+          type: integer
+          description: Time taken (ms) to receive first byte.
+          format: int64
+        connectTime:
+          type: integer
+          description: Time taken (ms) to connect
+          format: int64
+        timeStamp:
+          type: integer
+          description: Time when request started
+          format: int64
+    User:
+      description: >-
+        User object containing the basic user information which will be returned
+        for the current user or when the user with role ADMIN tries to get all
+        user information.
+      properties:
+        userName:
+          type: string
+        password:
+          type: string
+        admin:
+          type: boolean
+    AuditEvent:
+      description: Object containing the log details.
+      properties:
+        eventTime:
+          type: string
+          format: date-time
+        userName:
+          type: string
+        eventType:
+          type: string
+        eventData:
+          type: object
+          additionalProperties:
+            oneOf:
+              - type: string
+              - type: integer
+    AnalyticsProviderDetails:
+      description: Object containing details of analytics provider.
+      properties:
+        provider:
+          type: string
+          description: name of the analytics provider.
+        token:
+          type: string
+          description: token for provider.
+    Version:
+      description: Object containing version of the TestEngine server.
+      properties:
+        version:
+          type: string
+          description: TestEngine server version.
+    LicenseDetails:
+      description: Details of the licence installed.
+      properties:
+        licensedModule:
+          type: string
+        userName:
+          type: string
+        organization:
+          type: string
+        startDate:
+          type: string
+          description: The timestamp of activation.
+          format: date-time
+        expireDate:
+          type: string
+          description: The timestamp of expiration.
+          format: date-time
+        licenseId:
+          type: string
+        professional:
+          type: boolean
+        fixed:
+          type: boolean
+        expired:
+          type: boolean
+        trial:
+          type: boolean
+        maxConcurrentJobs:
+          type: integer
+          format: int32
+        active:
+          type: boolean
+    UsageStatistics:
+      description: Usage statistics for TestEngine
+      properties:
+        running:
+          description: Number of currently running jobs
+          type: integer
+        queued:
+          description: Number of currently queued jobs
+          type: integer
+    PeakUsageStatistics:
+      description: Peak value usage statistics for one hour
+      allOf:
+        - $ref: '#/components/schemas/UsageStatistics'
+        - type: object
+          properties:
+            from:
+              type: string
+              format: date-time
+            to:
+              type: string
+              format: date-time
+            maxConcurrentJobs:
+              description: The limit of the concurrent jobs at this time
+              type: integer
+              format: int32
+    JobCountStatistics:
+      description: Running / Queued statics for one hour
+      allOf:
+        - $ref: '#/components/schemas/UsageStatistics'
+        - type: object
+          properties:
+            from:
+              type: string
+              format: date-time
+            to:
+              type: string
+              format: date-time
+    JobWaitStatistics:
+      description: Maximum and average wait time
+      properties:
+        from:
+          type: string
+          format: date-time
+          description: time since we need statics from.
+        to:
+          type: string
+          format: date-time
+          description: time till we need statics.
+        maxWaitTime:
+          type: integer
+          format: int64
+          description: time in millis
+        avgWaitTime:
+          type: integer
+          format: int64
+          description: time in millis
+    ExecutionParameters:
+      description: Details about the type of the test, what test case or test suite is requested.
+      properties:
+        testSuiteName:
+          description: Name of test suite if present in request parameters
+          type: string
+        testCaseName:
+          description: Name of test case if present in request parameters
+          type: string
+        tags:
+          description: List of tags specified in request.
+          type: array
+          items:
+            type: string
+    FloatingLicenseServerInfo:
+      type: object
+      description: Data structure to specify a floating license server
+      properties:
+        host:
+          type: string
+          description: Host name or IP address of the floating license server
+        port:
+          type: integer
+          description: The port of the floating license server
+    LicenseActivationInfo:
+      type: object
+      required:
+        - email
+        - firstName
+        - lastName
+      properties:
+        email:
+          type: string
+          format: email
+          example: foo@bar.com
+        firstName:
+          type: string
+          example: Foo
+        lastName:
+          type: string
+          example: Bar
+        title:
+          type: string
+        company:
+          type: string
+          example: My Company
+        address:
+          type: string
+          example: 1 Gold Bolvd
+        city:
+          type: string
+          example: San Francisco
+        zipCode:
+          type: string
+          example: 94401
+        state:
+          type: string
+          example: CA
+        country:
+          type: string
+          example: USA
+        phone:
+          type: string
+          example: +1 206 555 0100
+    ErrorMessage:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        details:
+          type: string
+    ServerSettings:
+      description: Settings for the server that can be updated while the server is running
+      properties:
+        maxDaysToKeep:
+          description: >-
+            The number of days jobs will be kept when DELETE /testjobs is called without the before parameter.
+            It accepts only 0 , -1 and positive integer values.
+            To disable this config use -1 as value.
+          type: integer
+          format: int32
+        maxJobsToKeep:
+          description: >-
+            The number of jobs will be kept when DELETE /testjobs is called without the before parameter.
+            It accepts only 0 , -1 and positive integer values.
+            To disable this config use -1 as value.
+          type: integer
+          format: int32
+        allowedConnectTargets:
+          description: External targets that the tests are allowed to connect to.
+          type: array
+          items:
+            type: string
+        allowedFilePaths:
+          description: Paths that the tests are allowed to read from/write to.
+          type: array
+          items:
+            type: string
+    NonNegativeInteger:
+      type: integer
+      format: int64
+      minimum: 1
+    JsonPathContentAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/property/json/match/introduction">JsonPath
+        Match</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/assertions/property/json/match/introduction">JsonPath
+            Match</a> assertion.
+          properties:
+            jsonPath:
+              type: string
+              description: The path expression to use in matching.
+            expectedContent:
+              type: string
+              description: Expected result.
+            allowWildcards:
+              type: boolean
+              description: >-
+                Specifies if asterisks  (<code>*</code>) in expectedContent are
+                handled as wildcards.
+              default: false
+    JsonPathExistenceAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/property/json/exist/introduction">JsonPath
+        Existence Match</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/assertions/property/json/match/introduction">JsonPath
+            Match</a> assertion.
+          properties:
+            jsonPath:
+              type: string
+              description: The path expression to use in matching.
+            expectedContent:
+              type: string
+              description: Expected result.
+              default: 'true'
+            allowWildcards:
+              type: boolean
+              description: >-
+                Specifies if asterisks  (<code>*</code>) in expectedContent are
+                handled as wildcards.
+              default: false
+    MultiPart:
+      type: object
+      properties:
+        contentDisposition:
+          $ref: '#/components/schemas/ContentDisposition'
+        entity:
+          type: object
+          description: Entity items.
+        headers:
+          type: object
+          description: Headers array.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        messageBodyWorkers:
+          $ref: '#/components/schemas/MessageBodyWorkers'
+        parent:
+          $ref: '#/components/schemas/MultiPart'
+        providers:
+          $ref: '#/components/schemas/Providers'
+        bodyParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BodyPart'
+        parameterizedHeaders:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ParameterizedHeader'
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          description: Request parameters.
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+          default: false
+        wildcardSubtype:
+          type: boolean
+          default: false
+    JdbcRequestTestStep:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/steps/request/jdbc/properties">JDBC
+        Request</a> test step.
+      allOf:
+        - $ref: '#/components/schemas/TestStep'
+        - type: object
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/steps/request/jdbc/properties">JDBC
+            Request</a> test step.
+          properties:
+            driver:
+              type: string
+              description: The name of the driver used to connect to the database.
+            connectionString:
+              type: string
+              description: >-
+                Full database URI including username and password as query
+                parameters.
+            password:
+              type: string
+              description: Password used to connect to the database.
+            sqlQuery:
+              type: string
+              description: Query used to search the database.
+            properties:
+              type: object
+              description: Properties used to store received query results.
+              additionalProperties:
+                type: object
+            assertions:
+              type: array
+              description: Array of assertions used to verify test step results.
+              items:
+                $ref: '#/components/schemas/Assertion'
+            storedProcedure:
+              type: boolean
+              description: Specifies if the sqlQuery refers to the stored procedure.
+              default: false
+    UnresolvedFile:
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: Name fo the unresolved file
+    FormDataBodyPart:
+      type: object
+      properties:
+        contentDisposition:
+          $ref: '#/components/schemas/ContentDisposition'
+        entity:
+          type: object
+        headers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        messageBodyWorkers:
+          $ref: '#/components/schemas/MessageBodyWorkers'
+        parent:
+          $ref: '#/components/schemas/MultiPart'
+        providers:
+          $ref: '#/components/schemas/Providers'
+        name:
+          type: string
+        value:
+          type: string
+        formDataContentDisposition:
+          $ref: '#/components/schemas/FormDataContentDisposition'
+        simple:
+          type: boolean
+          default: false
+        parameterizedHeaders:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ParameterizedHeader'
+    InputStream:
+      type: object
+    PropertyTransferTestStep:
+      allOf:
+        - $ref: '#/components/schemas/TestStep'
+        - type: object
+          description: The array of property transfers.
+          properties:
+            transfers:
+              type: array
+              items:
+                $ref: '#/components/schemas/PropertyTransfer'
+    Authentication:
+      type: object
+      description: Data structure for authentication in test recipes.
+      properties:
+        type:
+          type: string
+          description: >-
+            Authentication type. Possible values:
+            <ul><li>Basic</li><li>SPNEGO/Kerberos</li><li>OAuth 2.0</li></ul>
+        username:
+          type: string
+          description: Username used for authentication.
+        password:
+          type: string
+          description: Password used for authentication.
+        domain:
+          type: string
+          description: Domain the user belongs to. Required for Kerberos authentication.
+        accessToken:
+          type: string
+          description: For OAuth 2.0 only. Access token attached to the user.
+        accessTokenPosition:
+          type: string
+          description: For OAuth 2.0 only. The position of the access token.
+        accessTokenUri:
+          type: string
+          description: For OAuth 2.0 only. The URI used to retrieve the access token.
+        clientId:
+          type: string
+          description: For OAuth 2.0 only. The client ID attached to the user.
+        clientSecret:
+          type: string
+          description: For OAuth 2.0 only. The client secret key attached to the user.
+        refreshToken:
+          type: string
+          description: For OAuth 2.0 only. Specifies the refresh token used.
+    XQueryContainsAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/property/xpath/xquery/match">XQuery
+        Match</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/assertions/property/xpath/xquery/match">XQuery
+            Match</a> assertion.
+          properties:
+            xquery:
+              type: string
+              description: XQuery expression used to validate the message.
+            expectedContent:
+              type: string
+              description: Expected content returned by the XQuery expression.
+            allowWildcards:
+              type: boolean
+              description: >-
+                Specifies if asterisks  (<code>*</code>) in expectedContent are
+                handled as wildcards.
+              default: false
+    TestStepResultReport:
+      type: object
+      description: Data structure for test step results in the report.
+      properties:
+        testStepName:
+          type: string
+          description: The name of the test step
+        assertionStatus:
+          type: string
+          description: Specifies if the assertions failed or succeeded.
+          enum:
+            - UNKNOWN
+            - OK
+            - FAILED
+            - CANCELED
+        timeTaken:
+          type: integer
+          description: >-
+            The number of milliseconds it took the TestServer to run the test
+            step.
+          format: int64
+        transactionId:
+          type: string
+          description: The transaction id to identify a particular execution of a test step.
+        messages:
+          type: array
+          description: Error messages returned by the assertions.
+          items:
+            type: string
+    DataSource:
+      type: object
+      description: >-
+        Data structure for specifying a <a
+        href="http://readyapi.smartbear.com/structure/steps/data/source/start">DataSource</a>.
+      properties:
+        properties:
+          type: array
+          description: The array of properties used to store retrieved data.
+          items:
+            type: string
+        grid:
+          type: object
+          description: >-
+            Data structure for <a
+            href="http://readyapi.smartbear.com/structure/sources/grid/start">Grid
+            Data Source</a>.
+          additionalProperties:
+            type: array
+            description: The array of comma-separated data source items.
+            items:
+              type: string
+        excel:
+          $ref: '#/components/schemas/ExcelDataSource'
+        file:
+          $ref: '#/components/schemas/FileDataSource'
+        dataGen:
+          $ref: '#/components/schemas/DataGenDataSource'
+    PropertyTransferTarget:
+      type: object
+      description: Data structure for specifying the target of the property transfer.
+      properties:
+        targetName:
+          type: string
+          description: The full name of the target test step.
+        property:
+          type: string
+          description: Property name to transfer the values to.
+        pathLanguage:
+          type: string
+          description: >-
+            The language used to specify the path expression. Possible values:
+            <ul><li>XPath</li><li>XQuery</li><li>JSONPath</li></ul>
+        path:
+          type: string
+          description: >-
+            The expression in the specified language that specifies the exact
+            element to which the data is be written.
+    PropertyTransferSource:
+      type: object
+      description: Data structure for specifying the source of the property transfer.
+      properties:
+        sourceName:
+          type: string
+          description: The full name of the source test step.
+        property:
+          type: string
+          description: Property name to get the values from.
+        pathLanguage:
+          type: string
+          description: >-
+            The language used to specify the path expression. Possible values:
+            <ul><li>XPath</li><li>XQuery</li><li>JSONPath</li></ul>
+        path:
+          type: string
+          description: >-
+            The expression in the specified language that specifies the exact
+            element from which the data source gets the data.
+    TestStep:
+      type: object
+      description: Data structure for specifying test step properties.
+      discriminator: type
+      properties:
+        type:
+          type: string
+          description: >-
+            Test step type. Possible values:
+            <ul><li>DataSource</li><li>Groovy</li><li>JDBC
+            Request</li><li>Property Transfer</li><li>REST
+            Request</li><li>TestStepStruct</li></ul>
+        name:
+          type: string
+          description: >-
+            Test step name. This name is used to refer to the test step in the
+            test recipe.
+    FileDataSource:
+      type: object
+      description: >-
+        Data structure for specifying <a
+        href="http://readyapi.smartbear.com/structure/sources/file/introduction">File
+        Data Source</a> test step.
+      properties:
+        file:
+          type: string
+          description: The name of the file used for the data source.
+        charset:
+          type: string
+          description: Character set used in the data file.
+        separator:
+          type: string
+          description: Character used in the file to separate the values.
+        trim:
+          type: boolean
+          description: Removes excess blank spaces.
+          default: false
+        quotedValues:
+          type: boolean
+          description: Set this to true if values are in quotes.
+          default: false
+    FormDataMultiPart:
+      type: object
+      properties:
+        contentDisposition:
+          $ref: '#/components/schemas/ContentDisposition'
+        entity:
+          type: object
+        headers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        messageBodyWorkers:
+          $ref: '#/components/schemas/MessageBodyWorkers'
+        parent:
+          $ref: '#/components/schemas/MultiPart'
+        providers:
+          $ref: '#/components/schemas/Providers'
+        bodyParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BodyPart'
+        fields:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/FormDataBodyPart'
+        parameterizedHeaders:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ParameterizedHeader'
+    InvalidHttpStatusCodesAssertion:
+      description: >-
+        Data structure for <a
+        href="http://readyapi.smartbear.com/structure/assertions/compliance/http/invalid/start">Invalid
+        HTTP Status Codes</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties:
+            invalidStatusCodes:
+              type: array
+              description: >-
+                A comma-separated list of HTTP codes receiving which causes the
+                assertion to fail.
+              items:
+                type: string
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/assertions/compliance/http/invalid/start">Invalid
+            HTTP Status Codes</a> assertion.
+    TestCaseResultReport:
+      type: object
+      description: Data structure for the test results report of the test case execution.
+      properties:
+        testCaseName:
+          type: string
+          description: The name of the test case the report is for.
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+        testStepResultReports:
+          type: array
+          description: The array of test step result reports.
+          items:
+            $ref: '#/components/schemas/TestStepResultReport'
+    RestParameter:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - PATH
+            - QUERY
+            - HEADER
+            - MATRIX
+          default: QUERY
+        name:
+          type: string
+        value:
+          type: string
+      description: REST Parameter definition.
+    SoapParameter:
+      type: object
+      properties:
+        name:
+          type: string
+        path:
+          type: string
+        value:
+          type: string
+      description: SOAP Parameter definition.
+    FormDataContentDisposition:
+      type: object
+      properties:
+        type:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        fileName:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+        modificationDate:
+          type: string
+          format: date-time
+        readDate:
+          type: string
+          format: date-time
+        size:
+          type: integer
+          format: int64
+        name:
+          type: string
+    XPathContainsAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/property/xpath/xpath/match">XPath
+        Match</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties:
+            xpath:
+              type: string
+              description: >-
+                XPath expression used to select content from the test step
+                results.
+            expectedContent:
+              type: string
+              description: Expected match results.
+            allowWildcards:
+              type: boolean
+              description: Treat <code>*</code> as wildcard in a match.
+              default: false
+            ignoreNamespaces:
+              type: boolean
+              description: Match in all namespaces.
+              default: false
+            ignoreComments:
+              type: boolean
+              description: Skip XML comments when matching.
+              default: false
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/assertions/property/xpath/xpath/match">XPath
+            Match</a> assertion.
+    ResponseSLAAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/sla/response">Response
+        SLA</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties:
+            maxResponseTime:
+              type: string
+              description: Maximum accepted response time.
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/assertions/sla/response">Response
+            SLA</a> assertion.
+    DataSourceTestStep:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/steps/data/source/start">Data
+        Source</a> test step.
+      allOf:
+        - $ref: '#/components/schemas/TestStep'
+        - type: object
+          properties:
+            dataSource:
+              $ref: '#/components/schemas/DataSource'
+            testSteps:
+              type: array
+              description: >-
+                Array of test steps using the data source and forming a data
+                source loop.
+              items:
+                $ref: '#/components/schemas/TestStep'
+            restartOnRun:
+              type: boolean
+              description: >-
+                If <code>true</code>, the iterator is set to the first row each
+                time the test reaches the DataSource test step.
+              readOnly: true
+              default: false
+            preload:
+              type: boolean
+              description: >-
+                If <code>true</code>, the TestServer tries to preload the data
+                before running the test.
+              default: false
+            failOnEmpty:
+              type: boolean
+              description: >-
+                If <code>true</code>, the test step fails if the data source is
+                empty.
+              default: false
+            skipLoopOnEmpty:
+              type: boolean
+              description: >-
+                If <code>true</code>, skips the data source loop if the data
+                source is empty.
+              default: false
+            trimValues:
+              type: boolean
+              description: 'If <code>true</code>, all leading and trailing spaces are removed.'
+              default: false
+            entitizeValues:
+              type: boolean
+              description: >-
+                If <code>true</code>, all HTML symbols are replaced with
+                appropriate entities.
+              default: false
+            expandProperties:
+              type: boolean
+              description: >-
+                If <code>true</code>, TestServer expands property expansion
+                expressions in retrieved values.
+              default: false
+            shared:
+              type: boolean
+              description: >-
+                If <code>true</code>, the data source iterator is used by all
+                concurrent virtual users.
+              default: false
+            restartShared:
+              type: boolean
+              description: >-
+                If <code>true</code> and <code>shared</code> is also
+                <code>true</code>, resets the iterator when it reaches the end of
+                data source.
+              default: false
+            startRow:
+              type: string
+              description: Zero-based index of the initial row that the data source uses.
+            endRow:
+              type: string
+              description: Zero-based index of the last row that the data source uses
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/steps/data/source/start">Data
+            Source</a> test step.
+    ParameterizedHeader:
+      type: object
+      properties:
+        value:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+    JdbcStatusAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/jdbc/status">JDBC
+        Status</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/assertions/jdbc/status">JDBC
+            Status</a> test step.
+          properties: {}
+    PropertyTransfer:
+      type: object
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/steps/property/transfer/intro/step">Property
+        Transfer</a> test step.
+      properties:
+        transferName:
+          type: string
+          description: The name of the property transfer test step.
+        source:
+          $ref: '#/components/schemas/PropertyTransferSource'
+        target:
+          $ref: '#/components/schemas/PropertyTransferTarget'
+        failTransferOnError:
+          type: boolean
+          description: >-
+            If <code>true</code>, the property transfer test step fails when an
+            error occurs.
+          default: false
+        setNullOnMissingSource:
+          type: boolean
+          description: >-
+            If <code>true</code>, sets target to <code>null</code> if the source
+            is missing.
+          default: false
+        transferTextContent:
+          type: boolean
+          description: 'If <code>true</code>, only transfers text content.'
+          default: false
+        ignoreEmptyValue:
+          type: boolean
+          description: 'If <code>true</code>, does not transfer empty or missing values.'
+          default: false
+        transferToAll:
+          type: boolean
+          description: 'If <code>true</code>, transfers to all matching transfer selections.'
+          default: false
+        transferChildNodes:
+          type: boolean
+          description: >-
+            If <code>true</code>, transfers child nodes of the source node as
+            children of the target node.
+          default: false
+        entitizeTransferredValues:
+          type: boolean
+          description: >-
+            If <code>true</code>, all HTML symbols are replaced with appropriate
+            entities.
+          default: false
+    MessageBodyWorkers:
+      type: object
+    ExcelDataSource:
+      type: object
+      description: >-
+        Data structure for <a
+        href="http://readyapi.smartbear.com/structure/sources/excel/introduction">Excel
+        Data Source</a>.
+      properties:
+        file:
+          type: string
+          description: The name of the file used for the data source.
+        worksheet:
+          type: string
+          description: The name of the excel worksheet the test step gets data from.
+        startAtCell:
+          type: string
+          description: The cell from which the iterator starts gathering data.
+        ignoreEmpty:
+          type: boolean
+          description: 'If <code>true</code>, skips rows without data.'
+          default: false
+    GroovyScriptTestStep:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/steps/script/groovy/step">Groovy
+        Script</a> test step.
+      allOf:
+        - $ref: '#/components/schemas/TestStep'
+        - type: object
+          properties:
+            script:
+              type: string
+              description: A string holding the groovy script to execute.
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/steps/script/groovy/step">Groovy
+            Script</a> test step.
+    DelayTestStep:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/steps/exec/delay/step">Delay</a> test step.
+      allOf:
+        - $ref: '#/components/schemas/TestStep'
+        - type: object
+          properties:
+            delay:
+              type: integer
+              format: int32
+              description: An integer holding the value of delay in milliseconds.
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/steps/exec/delay/step">Delay</a> test step.
+    JsonPathCountAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/property/json/count/introduction">JSONPath
+        Count</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          description: >-
+            Properties of the <a
+            href="http://readyapi.smartbear.com/structure/assertions/property/json/count/introduction">JSONPath
+            Count</a> assertion.
+          properties:
+            jsonPath:
+              type: string
+              description: >-
+                JSONPath expression used to select content from the test step
+                results.
+            expectedCount:
+              type: string
+              description: Expected number of matched results.
+            allowWildcards:
+              type: boolean
+              description: Treat <code>*</code> as wildcard in a match.
+              default: false
+
+    Assertion:
+      type: object
+      description: Data Structure for specifying the assertion type.
+      discriminator: type
+      properties:
+        type:
+          type: string
+          description: >-
+            Assertion type. Possible values: <ul><li>AssertionStruct</li>
+            <li>Contains</li> <li>Invalid HTTP Status Codes</li> <li>JDBC
+            Status</li> <li>JDBC Timeout</li> <li>JsonPath Count</li> <li>JsonPath
+            Match</li> <li>Not Contains</li> <li>Response SLA</li> <li>Script
+            Assertion</li> <li>Valid HTTP Status Codes</li> <li>XPath Match</li>
+            <li>XQuery Match</li> </ul>
+        name:
+          type: string
+    Providers:
+      type: object
+    GroovyScriptAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/script/groovy"
+        target="_blank">Groovy Script</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties:
+            script:
+              type: string
+              description: >-
+                The desired Groovy script code. You can use the log, context and
+                messageExchange variables.
+          description: Properties of the "Groovy Script" assertion.
+    SimpleNotContainsAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/property/content/not_contains"
+        target="_blank">Not Contains</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties:
+            token:
+              type: string
+              description: The sought-for text or regular expression.
+            ignoreCase:
+              type: boolean
+              default: false
+              description: >-
+                Specifies if the search is case-sensitive (false) or not (true).
+                Ignored, if you search with regular expressions.
+            useRegexp:
+              type: boolean
+              default: false
+              description: >-
+                Specifies if the token property is a regular expression (true) or
+                plain text (false).
+          description: Properties of the "Not Contains" assertion.
+    ContentDisposition:
+      type: object
+      properties:
+        type:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        fileName:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+        modificationDate:
+          type: string
+          format: date-time
+        readDate:
+          type: string
+          format: date-time
+        size:
+          type: integer
+          format: int64
+    BodyPart:
+      type: object
+      properties:
+        contentDisposition:
+          $ref: '#/components/schemas/ContentDisposition'
+        entity:
+          type: object
+        headers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        messageBodyWorkers:
+          $ref: '#/components/schemas/MessageBodyWorkers'
+        parent:
+          $ref: '#/components/schemas/MultiPart'
+        providers:
+          $ref: '#/components/schemas/Providers'
+        parameterizedHeaders:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ParameterizedHeader'
+    JdbcTimeoutAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/jdbc/timeout"
+        target="_blank">JDBC Timeout</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties:
+            timeout:
+              type: string
+              description: The sought-for text or regular expression.
+    TestCase:
+      description: >-
+        Properties of the test recipe. Analogues of the <a
+        href="http://readyapi.smartbear.com/structure/cases/options/basic">test
+        case options</a>.<br/>See also <a
+        href="http://readyapi.smartbear.com/testserver/howto/text/modifying">Modifying
+        Test Options</a>.
+      type: object
+      properties:
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+        searchProperties:
+          type: boolean
+          default: false
+          description: '???'
+        maintainSession:
+          type: boolean
+          default: false
+          description: '???'
+        abortOnError:
+          type: boolean
+          default: false
+          description: Specifies if TestServer stops the recipe execution if an error occurs.
+        failTestCaseOnError:
+          type: boolean
+          default: false
+          description: >-
+            Specifies if TestServer logs the test run as failed if an error
+            occurs.
+        name:
+          type: string
+          description: Recipe name
+        discardOkResults:
+          type: boolean
+          default: false
+          description: >-
+            Specifies if TestServer logs messages on successful test step
+            execution (false) or not (true). Set this property to true to save
+            memory.
+        socketTimeout:
+          type: string
+          description: '???'
+        testCaseTimeout:
+          type: integer
+          format: int32
+          description: >-
+            Sets the maximum execution time for the test in milliseconds. Default:
+            0 = timeout is not set.
+        clientCertFileName:
+          type: string
+          description: Client certificate file name
+        clientCertPassword:
+          type: string
+          description: Client certificate password
+        testSteps:
+          description: An array of test steps to be executed.
+          type: array
+          items:
+            $ref: '#/components/schemas/TestStep'
+      example:
+        testSteps:
+          - type: REST Request
+            method: GET
+            URI: 'https://api.swaggerhub.com/apis'
+            assertions:
+              - type: Valid HTTP Status Codes
+                validStatusCodes:
+                  - 200
+    SimpleContainsAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/property/content/contains"
+        target="_blank">Contains</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties:
+            token:
+              type: string
+              description: The sought-for text or regular expression.
+            ignoreCase:
+              type: boolean
+              default: false
+              description: >-
+                Specifies if the search is case-sensitive (false) or not (true).
+                Ignored, if you search with a regular expressions.
+            useRegexp:
+              type: boolean
+              default: false
+              description: >-
+                Specifies if the token property is a regular expression (true) or
+                plain text (false).
+          description: Properties of the "Contains" assertion.
+    SoapRequestTestStep:
+      description: A SOAP request
+      allOf:
+        - $ref: '#/components/schemas/RequestTestStepBase'
+        - type: object
+          properties:
+            wsdl:
+              type: string
+              description: the location of the WSDL for the target SOAP Service
+            binding:
+              type: string
+              description: the WSDL binding defining the target operation
+            operation:
+              type: string
+              description: the WSDL operation for the target operation
+            parameters:
+              type: array
+              description: An array of request parameters.
+              items:
+                $ref: '#/components/schemas/SoapParameter'
+          required:
+            - type
+            - wsdl
+            - operation
+    SoapMockResponseTestStep:
+      description: A SOAP mock response test step
+      allOf:
+        - $ref: '#/components/schemas/TestStep'
+        - type: object
+          properties:
+            wsdl:
+              type: string
+              description: the location of the WSDL for the target SOAP Service
+            binding:
+              type: string
+              description: the WSDL binding defining the target operation
+            operation:
+              type: string
+              description: the WSDL operation for the target operation
+            path:
+              type: string
+              description: path for accessing the mock response. Endpoint will be the host on which it is run.
+            port:
+              type: integer
+              format: int32
+              description: port to which mock service bind.
+            createResponse:
+              type: boolean
+              description: Boolean parameter to indicate whether a default response should be created.
+          required:
+            - type
+            - wsdl
+            - operation
+    RequestTestStepBase:
+      description: Base for HTTP test steps (REST and SOAP)
+      allOf:
+        - $ref: '#/components/schemas/TestStep'
+        - type: object
+          properties:
+            URI:
+              type: string
+              description: 'The URL, to which TestServer send the request.'
+            requestBody:
+              type: string
+              description: The request body contents.
+            authentication:
+              $ref: '#/components/schemas/Authentication'
+            assertions:
+              description: An array of assertions that verify the response to the request.
+              type: array
+              items:
+                $ref: '#/components/schemas/Assertion'
+            headers:
+              type: object
+              additionalProperties:
+                type: object
+              description: Custom headers to be added to the request.
+            attachments:
+              description: an array of attached files
+              type: array
+              items:
+                $ref: '#/components/schemas/RequestAttachment'
+            encoding:
+              type: string
+              description: 'The request data encoding, for example, utf-8.'
+            timeout:
+              type: string
+              description: >-
+                The maximum allowed execution time for the request in
+                milliseconds.
+            followRedirects:
+              type: boolean
+              default: false
+              description: >-
+                Specifies how TestServer handles redirects. If this property is
+                false and a redirect occurs, TestServer processes the response as
+                it is. If the property is true, it waits for the response from the
+                new location.
+            entitizeParameters:
+              type: boolean
+              default: false
+              description: >-
+                Specifies if TestServer escapes special characters like &gt; or &amp; in
+                the request body. Set this property to false if data is already
+                escaped.
+            clientCertificateFileName:
+              type: string
+              description: Path of the test step specific client certificate file
+            clientCertificatePassword:
+              type: string
+              description: Password of the test step specific client certificate
+    RestTestRequestStep:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/requests/rest/step/start"
+        target="_blank">REST Request</a> test step.
+      allOf:
+        - $ref: '#/components/schemas/RequestTestStepBase'
+        - type: object
+          properties:
+            method:
+              type: string
+              description: 'The request type: GET, POST, DELETE, PUT and so on.'
+            parameters:
+              type: array
+              description: An array of request parameters.
+              items:
+                $ref: '#/components/schemas/RestParameter'
+            mediaType:
+              type: string
+              description: 'The request data media type, for example, multipart/form-data.'
+            postQueryString:
+              type: boolean
+              default: false
+              description: >-
+                Specifies if the TestServer includes the query string parameters
+                to the request body or not.
+          required:
+            - URI
+            - method
+    RequestAttachment:
+      description: content attached to either a REST or SOAP request
+      type: object
+      properties:
+        contentType:
+          type: string
+        name:
+          type: string
+        contentId:
+          type: string
+        content:
+          type: string
+          description: base64 encoded attachment content
+          format: byte
+      required:
+        - contentType
+        - content
+    PluginTestStep:
+      description: data structure for defining a test step which is part of a Ready! API/TestServer plugin
+      allOf:
+        - $ref: '#/components/schemas/TestStep'
+        - type: object
+          properties:
+            configuration:
+              type: object
+              additionalProperties:
+                type: object
+    PropertiesTestStep:
+      description: data structure for defining a Properties test step in recipe.
+      allOf:
+        - $ref: '#/components/schemas/TestStep'
+        - type: object
+          properties:
+            properties:
+              type: object
+              additionalProperties:
+                type: string
+    TestSuiteResultReport:
+      type: object
+      description: Results of a test suite execution.
+      properties:
+        testSuiteName:
+          type: string
+          description: The test suite name.
+        testCaseResultReports:
+          type: array
+          description: An array of test case execution results.
+          items:
+            $ref: '#/components/schemas/TestCaseResultReport'
+    ValidHttpStatusCodesAssertion:
+      description: >-
+        Data structure for the <a
+        href="http://readyapi.smartbear.com/structure/assertions/compliance/http/valid/start"
+        target="_blank">Valid HTTP Status Codes</a> assertion.
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties:
+            validStatusCodes:
+              type: array
+              description: An array of HTTP status codes which the assertion considers valid.
+              items:
+                type: string
+                description: An individual HTTP status code.
+          description: Properties of the "Valid HTTP Status Codes" assertion.
+    SchemaComplianceAssertion:
+      description: Schema Compliance Assertion
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties: {}
+    SoapFaultAssertion:
+      description: SOAP Fault Assertion
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties: {}
+    NotSoapFaultAssertion:
+      description: Not SOAP Fault Assertion
+      allOf:
+        - $ref: '#/components/schemas/Assertion'
+        - type: object
+          properties: {}
+    HarLogRoot:
+      type: object
+      properties:
+        log:
+          $ref: '#/components/schemas/HarLog'
+    HarLog:
+      type: object
+      properties:
+        version:
+          type: string
+        creator:
+          $ref: '#/components/schemas/HarCreator'
+        browser:
+          $ref: '#/components/schemas/HarBrowser'
+        pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/HarPage'
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/HarEntry'
+        comment:
+          type: string
+    HarCreator:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        comment:
+          type: string
+    HarBrowser:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        comment:
+          type: string
+    HarPage:
+      type: object
+      properties:
+        startedDateTime:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        pageTimings:
+          $ref: '#/components/schemas/HarPageTimings'
+        comment:
+          type: string
+    HarPageTimings:
+      type: object
+      properties:
+        onContentLoad:
+          type: integer
+          format: int64
+        onLoad:
+          type: integer
+          format: int64
+        comment:
+          type: string
+    HarEntry:
+      type: object
+      properties:
+        pageref:
+          type: string
+        startedDateTime:
+          type: string
+        time:
+          type: integer
+          format: int64
+        request:
+          $ref: '#/components/schemas/HarRequest'
+        response:
+          $ref: '#/components/schemas/HarResponse'
+        cache:
+          $ref: '#/components/schemas/HarCache'
+        timings:
+          $ref: '#/components/schemas/HarTimings'
+        serverIPAddress:
+          type: string
+        connection:
+          type: string
+        comment:
+          type: string
+    HarRequest:
+      type: object
+      properties:
+        method:
+          type: string
+        url:
+          type: string
+        httpVersion:
+          type: string
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/HarCookie'
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HarHeader'
+        queryString:
+          type: array
+          items:
+            $ref: '#/components/schemas/HarQueryString'
+        postData:
+          $ref: '#/components/schemas/HarPostData'
+        headersSize:
+          type: integer
+          format: int64
+        bodySize:
+          type: integer
+          format: int64
+        comment:
+          type: string
+    HarResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        statusText:
+          type: string
+        httpVersion:
+          type: string
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/HarCookie'
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HarHeader'
+        content:
+          $ref: '#/components/schemas/HarContent'
+        redirectURL:
+          type: string
+        headersSize:
+          type: integer
+          format: int64
+        bodySize:
+          type: integer
+          format: int64
+        comment:
+          type: string
+    HarCache:
+      type: object
+      properties:
+        beforeRequest:
+          $ref: '#/components/schemas/HarCacheRequest'
+        afterRequest:
+          $ref: '#/components/schemas/HarCacheRequest'
+        comment:
+          type: string
+    HarTimings:
+      type: object
+      properties:
+        blocked:
+          type: integer
+          format: int64
+        dns:
+          type: integer
+          format: int64
+        connect:
+          type: integer
+          format: int64
+        send:
+          type: integer
+          format: int64
+        wait:
+          type: integer
+          format: int64
+        receive:
+          type: integer
+          format: int64
+        ssl:
+          type: integer
+          format: int64
+        comment:
+          type: string
+    HarCookie:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+        domain:
+          type: string
+        expires:
+          type: string
+        httpOnly:
+          type: boolean
+          default: false
+        secure:
+          type: boolean
+          default: false
+        comment:
+          type: string
+    HarHeader:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        comment:
+          type: string
+    HarContent:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+        compression:
+          type: integer
+          format: int64
+        mimeType:
+          type: string
+        text:
+          type: string
+        comment:
+          type: string
+    HarQueryString:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        comment:
+          type: string
+    HarCacheRequest:
+      type: object
+      properties:
+        expires:
+          type: string
+          format: date-time
+        lastAccess:
+          type: string
+          format: date-time
+        hitCount:
+          type: integer
+          format: int64
+        comment:
+          type: string
+        etag:
+          type: string
+    HarPostData:
+      type: object
+      properties:
+        mimeType:
+          type: string
+        params:
+          type: array
+          items:
+            $ref: '#/components/schemas/HarParam'
+        text:
+          type: string
+        comment:
+          type: string
+    HarParam:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        fileName:
+          type: string
+        contentType:
+          type: string
+        comment:
+          type: string
+    DataGenDataSource:
+      type: object
+      description: Data structure for specifying Data Generator data sources.
+      properties:
+        numberOfRows:
+          type: string
+          description: Number of rows to generate
+          default: '10'
+        dataGenerators:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataGenerator'
+          description: Data generators for various properties.
+    DataGenerator:
+      type: object
+      description: Data structure for specifying Data Generator data source properties.
+      discriminator: type
+      properties:
+        type:
+          type: string
+          description: >-
+            Test data generator type. Possible values:
+            <ul><li>Boolean</li><li>State</li><li>Integer</li><li>Real</li><li>Date
+            and Time</li><li></li></ul>
+        propertyName:
+          type: string
+          description: Property name for which data generator should generate the values.
+        duplicationFactor:
+          type: integer
+          format: int32
+          default: 1
+          minimum: 1
+    BooleanDataGenerator:
+      description: Data structure for the BooleanDataGenerator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            format:
+              type: string
+              enum:
+                - True/False
+                - Yes/No
+                - 1/0
+              default: True/False
+              description: A string holding the format of the generated values.
+    ComputerAddressDataGenerator:
+      description: Data structure for the Computer Address data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            addressType:
+              type: string
+              enum:
+                - IPv4
+                - Mac48
+              default: IPv4
+              description: A string holding the format of the generated computer addeses.
+    CustomStringDataGenerator:
+      description: Data structure for the Custom String data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            value:
+              type: string
+              description: >-
+                A string holding the value or expression for the generating the
+                custom string values.
+    StringDataGenerator:
+      description: Data structure for the String data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            minimumCharacters:
+              type: integer
+              format: int32
+              default: 5
+              description: >-
+                An integer holding the value for minimum number of characters in
+                the generated string.
+            maximumCharacters:
+              type: integer
+              format: int32
+              default: 10
+              description: >-
+                An integer holding the value for maximum number of characters in
+                the generated string.
+            useLetters:
+              type: boolean
+              default: true
+              description: >-
+                An boolean holding the value whether generated string should
+                contain letters or not.
+            useDigits:
+              type: boolean
+              default: true
+              description: >-
+                An boolean holding the value whether generated string should
+                contain digits or not.
+            useSpaces:
+              type: boolean
+              default: true
+              description: >-
+                An boolean holding the value whether generated string should
+                contain white spaces or not.
+            usePunctuationMarks:
+              type: boolean
+              default: true
+              description: >-
+                An boolean holding the value whether generated string should
+                contain punctuation marks or not.
+    StateNameDataGenerator:
+      description: Data structure for the State Name data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            nameFormat:
+              type: string
+              enum:
+                - Full
+                - Abbreviated
+              default: Full
+              description: A string holding the format of the generated state names.
+    NameDataGenerator:
+      description: Data structure for the Name data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            gender:
+              type: string
+              enum:
+                - Any
+                - Male
+                - Female
+              default: Any
+              description: A string holding the gender for the generated names.
+            nameType:
+              type: string
+              enum:
+                - Full
+                - FirstName
+                - LastName
+              default: Full
+              description: A string holding the format of the generated names.
+    IntegerDataGenerator:
+      description: Data structure for the Integer data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            minimumValue:
+              type: integer
+              format: int32
+              default: 1
+              description: An integer holding the minimum value for Integer data generator.
+            maximumValue:
+              type: integer
+              format: int32
+              default: 100
+              description: An integer holding the maximum value for Integer data generator.
+            generationMode:
+              type: string
+              enum:
+                - Random
+                - Sequential
+              default: Random
+              description: A string holding the value of how to generate the integer numbers.
+            incrementBy:
+              type: integer
+              format: int32
+              default: 1
+              description: Increment value for generating sequential values if generationMode is Sequential. Ignored if generationMode is Random.
+    RealNumberDataGenerator:
+      description: Data structure for the Integer data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            minimumValue:
+              type: float
+              default: 1
+              description: >-
+                An double holding the minimum value for Real Number data
+                generator.
+            maximumValue:
+              type: float
+              default: 100
+              description: >-
+                An double holding the maximum value for Real Number data
+                generator.
+            decimalPlaces:
+              type: integer
+              format: int32
+              default: 2
+              description: >-
+                An integer holding the value for number of decimal places in
+                generated values.
+            generationMode:
+              type: string
+              enum:
+                - Random
+                - Sequential
+              default: Random
+              description: >-
+                A string holding the value of how to generate the Real number
+                values.
+            incrementBy:
+              type: float
+              default: 1
+              description: Increment value for generating sequential values if generationMode is Sequential. Ignored if generationMode is Random.
+    ValuesFromSetDataGenerator:
+      description: Data structure for the Values from Set data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            generationMode:
+              type: string
+              enum:
+                - Random
+                - Sequential
+              default: Random
+              description: A string holding the value of how to produce values from the set.
+            values:
+              description: >-
+                An array containing the string values from which data generator
+                should distribute.
+              type: array
+              items:
+                type: string
+    UKPostCodeDataGenerator:
+      description: Data structure for the United Kingdom Postcode data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            codeFormat:
+              type: string
+              enum:
+                - All
+                - A9 9AA
+                - A99 9AA
+                - AA9 9AA
+                - A9A 9AA
+                - AA99 9AA
+                - AA9A 9AA
+              default: All
+              description: A string holding the format of the produced postcodes.
+    USZIPCodeDataGenerator:
+      description: Data structure for the United States Postcode data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            codeFormat:
+              type: string
+              enum:
+                - All
+                - XXXXX
+                - XXXXX-XXXX
+              default: All
+              description: A string holding the format of the produced ZIP codes.
+    PhoneNumberDataGenerator:
+      description: Data structure for the United States Postcode data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            numberFormat:
+              type: string
+              default: XXX-XXX-XXXX
+              description: >-
+                A string holding the number format of the produced ZIP codes.
+                Allowed values: XXX-XXX-XXXX, +1 XXX-XXX-XXXX, +1 (XXX)-XXX-XXXX,
+                +X XXX-XXX-XXXX, +X (XXX)-XXX-XXXX
+    DateAndTimeDataGenerator:
+      description: Data structure for the Date and Time data generator data source.
+      allOf:
+        - $ref: '#/components/schemas/DataGenerator'
+        - type: object
+          properties:
+            dateTimeFormat:
+              type: string
+              enum:
+                - 'HH:MM AM/PM'
+                - 'HH:MM (24-hour)'
+                - 'HH:MM:SS AM/PM'
+                - 'HH:MM:SS (24-hour)'
+                - 'M/D/YYYY HH:MM:SS AM/PM'
+                - 'M/D/YYYY HH:MM:SS (24-hour)'
+                - M/D/YYYY
+                - D Month YYYY
+                - DayOfWeek D Month YYYY
+                - 'YYYY-MM-DDTHH:mm:ssZ (ISO-8601)'
+              default: 'HH:MM AM/PM'
+              description: >-
+                String value containing the format of the generated date and time
+                values
+            minimumValue:
+              type: string
+              format: date-time
+              default: {}
+              description: String containing the start date value in ISO-8601 format.
+            maximumValue:
+              type: string
+              format: date-time
+              default: {}
+              description: >-
+                String containing the end date value in ISO-8601 format. Default
+                willl be current date.
+            generationMode:
+              type: string
+              enum:
+                - Random
+                - Sequential
+              default: Random
+            incrementValueDay:
+              type: integer
+              format: int32
+              default: 1
+              description: >-
+                Integer value containing the incremental step for day used for
+                generating sequential values. Ignored if generation mode is
+                Random.
+            incrementValueHour:
+              type: integer
+              format: int32
+              default: 1
+              description: >-
+                Integer value containing the incremental step for hour used for
+                generating sequential values. Ignored if generation mode is
+                Random.
+            incrementValueMinute:
+              type: integer
+              format: int32
+              default: 1
+              description: >-
+                Integer value containing the incremental step for minute used for
+                generating sequential values. Ignored if generation mode is
+                Random.
+            incrementValueSecond:
+              type: integer
+              format: int32
+              default: 1
+              description: >-
+                Integer value containing the incremental step for seconds used for
+                generating sequential values. Ignored if generation mode is
+                Random.
+    CustomProperties:
+      description: Entity representing a custome property of Test Suite or a Test Case. This should be send along with XML project execution request to set the custom values for these properties. Value will be updated if property exists otherwise a property will be created with the provided name and value, before execution.
+      type: object
+      required:
+        - targetName
+      properties:
+        targetName:
+          type: string
+          description: Name of the target Test Suite or Test Case
+        properties:
+          type: object
+          additionalProperties:
+            type: string

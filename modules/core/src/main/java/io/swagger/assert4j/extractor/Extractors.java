@@ -23,13 +23,13 @@ public class Extractors {
      * value of a given response: "$[0].testName", Runs the lambda operation given in the ExtractorOperation field after
      * the testserver run
      *
-     * @param path The path for extracting the property in the response of the given teststep, can be both JsonPath or XPath
+     * @param path     The path for extracting the property in the response of the given teststep, can be both JsonPath or XPath
      * @param operator The lambda function to be run on the extracted property
      * @return The extractor that is added to the testserver run
      */
     public static Extractor fromResponse(String path, ExtractorOperator operator) {
         Extractor extractor;
-        if(path.startsWith("$")){
+        if (path.startsWith("$")) {
             extractor = new Extractor("Response", path, operator);
             extractor.setPathLanguage(PathLanguage.JSONPath);
             return extractor;

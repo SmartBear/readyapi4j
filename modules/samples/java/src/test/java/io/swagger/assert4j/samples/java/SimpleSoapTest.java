@@ -17,15 +17,15 @@ public class SimpleSoapTest {
     @Test
     public void simpleSoapTest() throws Exception {
         RecipeExecutionResult result = executeRecipe("Simple SOAP Test",
-            soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
-                .forBinding("GlobalWeatherSoap12")
-                .forOperation("GetWeather")
-                .withParameter("CountryName", "Sweden")
-                .withPathParameter("//*:CityName", "Stockholm")
-                .withAssertions(
-                    schemaCompliance(),
-                    notSoapFault()
-                )
+                soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
+                        .forBinding("GlobalWeatherSoap12")
+                        .forOperation("GetWeather")
+                        .withParameter("CountryName", "Sweden")
+                        .withPathParameter("//*:CityName", "Stockholm")
+                        .withAssertions(
+                                schemaCompliance(),
+                                notSoapFault()
+                        )
         );
 
         assertExecutionResult(result);
@@ -34,21 +34,21 @@ public class SimpleSoapTest {
     @Test
     public void simpleSoapWithExtractorTest() throws Exception {
         RecipeExecutionResult result = executeRecipe("Simple SOAP Test",
-            soapRequest(new URL("http://www.webservicex.com/CurrencyConvertor.asmx?wsdl"))
-                .forBinding("CurrencyConvertorSoap")
-                .forOperation("ConversionRate")
-                .named( "GetConversionRate")
-                .withParameter("FromCurrency", "USD")
-                .withParameter("ToCurrency", "SEK")
-                .withAssertions(
-                    schemaCompliance(),
-                    notSoapFault()
-                )
-                .withExtractors(
-                    fromResponse( "//*:ConversionRateResult/text()", v -> {
-                        System.out.println( "Result is [" + v + "]" );
-                    })
-                )
+                soapRequest(new URL("http://www.webservicex.com/CurrencyConvertor.asmx?wsdl"))
+                        .forBinding("CurrencyConvertorSoap")
+                        .forOperation("ConversionRate")
+                        .named("GetConversionRate")
+                        .withParameter("FromCurrency", "USD")
+                        .withParameter("ToCurrency", "SEK")
+                        .withAssertions(
+                                schemaCompliance(),
+                                notSoapFault()
+                        )
+                        .withExtractors(
+                                fromResponse("//*:ConversionRateResult/text()", v -> {
+                                    System.out.println("Result is [" + v + "]");
+                                })
+                        )
         );
 
         assertExecutionResult(result);

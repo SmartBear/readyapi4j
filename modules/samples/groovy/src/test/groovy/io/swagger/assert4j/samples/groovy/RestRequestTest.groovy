@@ -4,10 +4,7 @@ import io.swagger.assert4j.execution.Execution
 import io.swagger.assert4j.execution.RecipeExecutor
 import org.junit.Test
 
-import static io.swagger.assert4j.client.model.ProjectResultReport.StatusEnum.FINISHED
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipeOnServer
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.remoteRecipeExecutor
+import static io.swagger.assert4j.dsl.execution.RecipeExecution.*
 
 class RestRequestTest {
 

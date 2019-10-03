@@ -1,7 +1,7 @@
 package io.swagger.assert4j.dsl
 
-import io.swagger.assert4j.client.model.SoapMockResponseTestStep
 import io.swagger.assert4j.TestRecipe
+import io.swagger.assert4j.client.model.SoapMockResponseTestStep
 import org.junit.Test
 
 import static io.swagger.assert4j.dsl.TestDsl.recipe

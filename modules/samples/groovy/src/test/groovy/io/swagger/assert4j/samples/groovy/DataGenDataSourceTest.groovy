@@ -3,7 +3,6 @@ package io.swagger.assert4j.samples.groovy
 import io.swagger.assert4j.execution.Execution
 import org.junit.Test
 
-import static io.swagger.assert4j.client.model.ProjectResultReport.StatusEnum.FINISHED
 import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipeOnServer
 
 class DataGenDataSourceTest {

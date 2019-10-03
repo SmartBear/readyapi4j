@@ -1,9 +1,9 @@
 package io.swagger.assert4j.dsl
 
+import io.swagger.assert4j.TestRecipe
 import io.swagger.assert4j.client.model.PropertyTransfer
 import io.swagger.assert4j.client.model.PropertyTransferTestStep
 import io.swagger.assert4j.client.model.TestStep
-import io.swagger.assert4j.TestRecipe
 import org.junit.Test
 
 import static io.swagger.assert4j.dsl.TestDsl.recipe

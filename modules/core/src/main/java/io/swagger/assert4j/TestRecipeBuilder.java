@@ -4,25 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
-import io.swagger.assert4j.client.model.Assertion;
-import io.swagger.assert4j.client.model.BooleanDataGenerator;
-import io.swagger.assert4j.client.model.ComputerAddressDataGenerator;
-import io.swagger.assert4j.client.model.CustomStringDataGenerator;
-import io.swagger.assert4j.client.model.DataGenerator;
-import io.swagger.assert4j.client.model.DateAndTimeDataGenerator;
-import io.swagger.assert4j.client.model.IntegerDataGenerator;
-import io.swagger.assert4j.client.model.NameDataGenerator;
-import io.swagger.assert4j.client.model.PhoneNumberDataGenerator;
-import io.swagger.assert4j.client.model.PropertyTransfer;
-import io.swagger.assert4j.client.model.PropertyTransferTestStep;
-import io.swagger.assert4j.client.model.RealNumberDataGenerator;
-import io.swagger.assert4j.client.model.StateNameDataGenerator;
-import io.swagger.assert4j.client.model.StringDataGenerator;
-import io.swagger.assert4j.client.model.TestCase;
-import io.swagger.assert4j.client.model.TestStep;
-import io.swagger.assert4j.client.model.UKPostCodeDataGenerator;
-import io.swagger.assert4j.client.model.USZIPCodeDataGenerator;
-import io.swagger.assert4j.client.model.ValuesFromSetDataGenerator;
+import io.swagger.assert4j.client.model.*;
 import io.swagger.assert4j.extractor.Extractor;
 import io.swagger.assert4j.extractor.ExtractorData;
 import io.swagger.assert4j.properties.PropertyBuilder;
@@ -35,11 +17,7 @@ import io.swagger.assert4j.teststeps.request.HttpRequestStepBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.swagger.assert4j.properties.Properties.property;
 
@@ -85,12 +63,12 @@ public class TestRecipeBuilder {
     /**
      * Builds a recipe for the specified TestStep builders
      *
-     * @param name the name of the recipe
+     * @param name     the name of the recipe
      * @param builders the TestStep builders
      * @return the resulting TestRecipe
      */
     public static TestRecipe buildRecipe(String name, TestStepBuilder... builders) {
-        return newTestRecipe(builders).named( name).buildTestRecipe();
+        return newTestRecipe(builders).named(name).buildTestRecipe();
     }
 
     private static ObjectMapper getObjectMapper() {

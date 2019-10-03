@@ -7,11 +7,12 @@ public interface ExecutionListener {
 
     /**
      * Called if an error occurs during recipe execution
-
+     *
      * @param exception
      */
 
-    default void errorOccurred(Exception exception){}
+    default void errorOccurred(Exception exception) {
+    }
 
     /**
      * Called when a recipe has been submitted for execution - this is only called for asynchronous executions
@@ -19,7 +20,8 @@ public interface ExecutionListener {
      * @param execution the started execution
      */
 
-    default void executionStarted(Execution execution){}
+    default void executionStarted(Execution execution) {
+    }
 
     /**
      * Called when a recipe execution has finished - this is called for both synchronous and asynchronous executions
@@ -27,5 +29,6 @@ public interface ExecutionListener {
      * @param execution the finished execution
      */
 
-    default void executionFinished(Execution execution){}
+    default void executionFinished(Execution execution) {
+    }
 }

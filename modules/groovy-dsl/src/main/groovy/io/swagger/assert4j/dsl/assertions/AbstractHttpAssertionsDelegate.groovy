@@ -1,10 +1,6 @@
 package io.swagger.assert4j.dsl.assertions
 
-import io.swagger.assert4j.assertions.AssertionBuilder
-import io.swagger.assert4j.assertions.Assertions
-import io.swagger.assert4j.assertions.ContainsAssertionBuilder
-import io.swagger.assert4j.assertions.InvalidHttpStatusCodesAssertionBuilder
-import io.swagger.assert4j.assertions.ValidHttpStatusCodesAssertionBuilder
+import io.swagger.assert4j.assertions.*
 
 import static io.swagger.assert4j.assertions.Assertions.contains
 import static io.swagger.assert4j.assertions.Assertions.notContains

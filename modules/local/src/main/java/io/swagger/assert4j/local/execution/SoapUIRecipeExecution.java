@@ -3,37 +3,24 @@ package io.swagger.assert4j.local.execution;
 import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.impl.wsdl.testcase.WsdlProjectRunner;
 import com.eviware.soapui.model.iface.MessageExchange;
-import com.eviware.soapui.model.testsuite.MessageExchangeTestStepResult;
 import com.eviware.soapui.model.testsuite.TestCase;
-import com.eviware.soapui.model.testsuite.TestCaseRunner;
-import com.eviware.soapui.model.testsuite.TestProperty;
-import com.eviware.soapui.model.testsuite.TestRunner;
-import com.eviware.soapui.model.testsuite.TestStepResult;
-import com.eviware.soapui.model.testsuite.TestSuiteRunner;
+import com.eviware.soapui.model.testsuite.*;
 import com.google.common.collect.Maps;
-import io.swagger.assert4j.client.model.HarEntry;
-import io.swagger.assert4j.client.model.ProjectResultReport;
-import io.swagger.assert4j.client.model.TestCaseResultReport;
-import io.swagger.assert4j.client.model.TestStepResultReport;
-import io.swagger.assert4j.client.model.TestSuiteResultReport;
+import io.swagger.assert4j.client.model.*;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.execution.RecipeExecutionException;
 import io.swagger.assert4j.result.AbstractRecipeExecutionResult;
 import io.swagger.assert4j.result.AbstractTestStepResult;
 import io.swagger.assert4j.result.RecipeExecutionResult;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SoapUIRecipeExecution implements Execution {
 
     private Map<TestStepResultReport, MessageExchange[]> messageExchangeMap = Maps.newConcurrentMap();
     private final String executionId;
     private final WsdlProjectRunner projectRunner;
-    private ProjectResultReport finalReport;
+    private TestJobReport finalReport;
 
     SoapUIRecipeExecution(String executionId, WsdlProjectRunner projectRunner) {
         this.executionId = executionId;
@@ -46,7 +33,7 @@ public class SoapUIRecipeExecution implements Execution {
     }
 
     @Override
-    public ProjectResultReport.StatusEnum getCurrentStatus() {
+    public TestJobReport.StatusEnum getCurrentStatus() {
         return convertTestRunnerStatus(projectRunner.getStatus());
     }
 
@@ -55,16 +42,16 @@ public class SoapUIRecipeExecution implements Execution {
     }
 
     @Override
-    public ProjectResultReport getCurrentReport() {
+    public TestJobReport getCurrentReport() {
         if (finalReport != null) {
             return finalReport;
         }
 
-        ProjectResultReport report = new ProjectResultReport();
+        TestJobReport report = new TestJobReport();
         report.setStatus(convertTestRunnerStatus(projectRunner.getStatus()));
-        report.setTimeTaken(projectRunner.getTimeTaken());
+        report.setTotalTime(projectRunner.getTimeTaken());
         report.setStartTime(projectRunner.getStartTime());
-        report.setExecutionID(executionId);
+        report.setTestjobId(executionId);
         List<TestSuiteResultReport> testSuiteResultReports = new ArrayList<>();
         report.setProjectName(projectRunner.getProject().getName());
         for (TestSuiteRunner testSuiteResult : projectRunner.getResults()) {
@@ -72,7 +59,7 @@ public class SoapUIRecipeExecution implements Execution {
         }
         report.setTestSuiteResultReports(testSuiteResultReports);
 
-        if (report.getStatus() == ProjectResultReport.StatusEnum.FINISHED) {
+        if (report.getStatus() == TestJobReport.StatusEnum.FINISHED) {
             finalReport = report;
         }
 
@@ -151,27 +138,23 @@ public class SoapUIRecipeExecution implements Execution {
         }
     }
 
-    private ProjectResultReport.StatusEnum convertTestRunnerStatus(TestRunner.Status status) {
+    private TestJobReport.StatusEnum convertTestRunnerStatus(TestRunner.Status status) {
         switch (status) {
-            case INITIALIZED:
-                return ProjectResultReport.StatusEnum.INITIALIZED;
             case RUNNING:
-                return ProjectResultReport.StatusEnum.RUNNING;
+                return TestJobReport.StatusEnum.RUNNING;
             case CANCELED:
-                return ProjectResultReport.StatusEnum.CANCELED;
+                return TestJobReport.StatusEnum.CANCELED;
             case FINISHED:
-                return ProjectResultReport.StatusEnum.FINISHED;
+                return TestJobReport.StatusEnum.FINISHED;
             case FAILED:
-                return ProjectResultReport.StatusEnum.FAILED;
-            case WARNING:
-                return ProjectResultReport.StatusEnum.WARNING;
+                return TestJobReport.StatusEnum.FAILED;
             default:
                 throw new RecipeExecutionException("Unexpected Test Runner status: " + status);
         }
     }
 
     public static class SoapUIExecutionResult extends AbstractRecipeExecutionResult {
-        SoapUIExecutionResult(ProjectResultReport currentReport, SoapUIRecipeExecution execution) {
+        SoapUIExecutionResult(TestJobReport currentReport, SoapUIRecipeExecution execution) {
             super(currentReport, e -> new SoapUITestStepResult(e, execution));
         }
     }

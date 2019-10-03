@@ -1,9 +1,9 @@
 package io.swagger.assert4j.teststeps.restrequest;
 
-import io.swagger.assert4j.client.model.RestParameter;
-import io.swagger.assert4j.client.model.RestTestRequestStep;
 import io.swagger.assert4j.assertions.AssertionBuilder;
 import io.swagger.assert4j.auth.AuthenticationBuilder;
+import io.swagger.assert4j.client.model.RestParameter;
+import io.swagger.assert4j.client.model.RestTestRequestStep;
 import io.swagger.assert4j.support.HttpHeaders;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 import io.swagger.assert4j.teststeps.TestSteps;
@@ -12,11 +12,8 @@ import io.swagger.assert4j.teststeps.request.HttpRequestStepBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.swagger.assert4j.assertions.Assertions.*;
 import static io.swagger.assert4j.support.Validations.validateNotEmpty;
-import static io.swagger.assert4j.assertions.Assertions.jsonContent;
-import static io.swagger.assert4j.assertions.Assertions.jsonCount;
-import static io.swagger.assert4j.assertions.Assertions.jsonExists;
-import static io.swagger.assert4j.assertions.Assertions.jsonNotExists;
 
 public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestStepBuilder> extends HttpRequestStepBuilder<RestRequestBuilderType, RestTestRequestStep> {
 
@@ -118,6 +115,11 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
         return addAssertion(jsonNotExists(jsonPath));
     }
 
+    public RestRequestBuilderType method(String method) {
+        getTestStep().setMethod(method.toUpperCase());
+        return (RestRequestBuilderType) this;
+    }
+
     public RestRequestBuilderType get(String uri) {
         getTestStep().setMethod("GET");
         getTestStep().setURI(uri);
@@ -141,6 +143,13 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
 
     public RestRequestBuilderType delete(String uri) {
         getTestStep().setMethod("DELETE");
+        getTestStep().setURI(uri);
+
+        return (RestRequestBuilderType) this;
+    }
+
+    public RestRequestBuilderType patch(String uri) {
+        getTestStep().setMethod("PATCH");
         getTestStep().setURI(uri);
 
         return (RestRequestBuilderType) this;
@@ -323,6 +332,6 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
 
     @Override
     public RestRequestBuilderType withAssertions(AssertionBuilder... assertionBuilders) {
-        return super.withAssertions( assertionBuilders );
+        return super.withAssertions(assertionBuilders);
     }
 }

@@ -48,6 +48,17 @@ class DslDelegate {
         })
     }
 
+    void patch(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
+        createRestRequest('PATCH', URI, configuration)
+    }
+
+    void patch(String URI, String bodyString) {
+        post(URI, {
+            contentType 'application/json'
+            body bodyString
+        })
+    }
+
     void put(String URI, @DelegatesTo(RestRequestDelegate) Closure configuration = null) {
         createRestRequest('PUT', URI, configuration)
     }

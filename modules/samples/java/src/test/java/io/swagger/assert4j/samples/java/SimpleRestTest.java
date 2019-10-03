@@ -14,14 +14,14 @@ public class SimpleRestTest {
     @Test
     public void simpleCountTest() throws Exception {
         RecipeExecutionResult result = executeRecipe("Simple Count Test",
-            GET("https://api.swaggerhub.com/specs")
-                .withParameters(
-                    query("specType", "API"),
-                    query("query", "testserver")
-                )
-                .withAssertions(
-                    json("$.totalCount", "4")
-                )
+                GET("https://api.swaggerhub.com/specs")
+                        .withParameters(
+                                query("specType", "API"),
+                                query("query", "testserver")
+                        )
+                        .withAssertions(
+                                json("$.totalCount", "4")
+                        )
         );
 
         assertExecutionResult(result);
@@ -30,8 +30,8 @@ public class SimpleRestTest {
     @Test
     public void simpleRedirectTest() throws Exception {
         RecipeExecutionResult result = executeRecipe("Simple Redirect Test",
-            GET("https://api.swaggerhub.com/apis")
-                .assertValidStatusCodes(303)
+                GET("https://api.swaggerhub.com/apis")
+                        .assertValidStatusCodes(303)
         );
 
         assertExecutionResult(result);

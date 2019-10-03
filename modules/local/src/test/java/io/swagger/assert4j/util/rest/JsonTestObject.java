@@ -27,7 +27,9 @@ public class JsonTestObject {
     }
 
     @Override
-    public int hashCode() { return message.hashCode() ^ alternatePath.hashCode(); }
+    public int hashCode() {
+        return message.hashCode() ^ alternatePath.hashCode();
+    }
 
     @Override
     public boolean equals(Object o) {

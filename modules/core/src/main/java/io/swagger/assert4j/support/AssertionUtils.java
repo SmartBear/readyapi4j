@@ -1,7 +1,7 @@
 package io.swagger.assert4j.support;
 
 import io.swagger.assert4j.client.model.HarResponse;
-import io.swagger.assert4j.client.model.ProjectResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.result.RecipeExecutionResult;
 import io.swagger.assert4j.result.TestStepResult;
@@ -29,7 +29,7 @@ public class AssertionUtils {
         }
 
         assertEquals("Execution failed: " + Arrays.toString(execution.getErrorMessages().toArray()),
-            ProjectResultReport.StatusEnum.FINISHED, execution.getCurrentStatus());
+                TestJobReport.StatusEnum.FINISHED, execution.getCurrentStatus());
     }
 
     public static void assertExecutionResult(RecipeExecutionResult execution) {
@@ -40,7 +40,7 @@ public class AssertionUtils {
         }
 
         assertEquals("Execution failed: " + Arrays.toString(execution.getErrorMessages().toArray()),
-            ProjectResultReport.StatusEnum.FINISHED, execution.getStatus());
+                TestJobReport.StatusEnum.FINISHED, execution.getStatus());
     }
 
     public static void logExecution(RecipeExecutionResult execution) {
@@ -48,7 +48,7 @@ public class AssertionUtils {
             if (result.getHarEntry() != null && result.getHarEntry().getResponse() != null) {
                 HarResponse response = result.getHarEntry().getResponse();
                 LOG.info("TestStep [" + result.getTestStepName() + "] response: " + response.getStatus() +
-                    " - " + response.getContent().getText());
+                        " - " + response.getContent().getText());
             } else {
                 LOG.debug("Missing HAR response for TestStep [" + result.getTestStepName() + "]");
             }

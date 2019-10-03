@@ -37,7 +37,7 @@ public class SwaggerTestStepBuilder {
     /**
      * Creates a SwaggerTestStepBuilder for the specified Swagger definition and target targetEndpoint
      *
-     * @param swaggerUrl endpoint to the Swagger definition to use
+     * @param swaggerUrl     endpoint to the Swagger definition to use
      * @param targetEndpoint where the target API under test running
      * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
      */
@@ -61,9 +61,9 @@ public class SwaggerTestStepBuilder {
      * Creates a SwaggerTestStepBuilder for the specified Swagger definition and target targetEndpoint
      *
      * @param swaggerInputStream stream from which the Swagger definition can be read
-     * @param targetEndpoint where the target API under test running
+     * @param targetEndpoint     where the target API under test running
      * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
-     * @throws IOException if the Swagger definition can not be read
+     * @throws IOException              if the Swagger definition can not be read
      */
     public SwaggerTestStepBuilder(InputStream swaggerInputStream, String targetEndpoint) throws IllegalArgumentException, IOException {
         this.swagger = parseSwagger(swaggerInputStream);
@@ -76,7 +76,7 @@ public class SwaggerTestStepBuilder {
      *
      * @param swaggerInputStream stream from which the swagger definition can be read
      * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
-     * @throws IOException if the Swagger definition can not be read
+     * @throws IOException              if the Swagger definition can not be read
      */
     public SwaggerTestStepBuilder(InputStream swaggerInputStream) throws IllegalArgumentException, IOException {
         this(swaggerInputStream, null);
@@ -85,9 +85,9 @@ public class SwaggerTestStepBuilder {
     private Swagger parseSwagger(String swaggerUrl) throws IllegalArgumentException {
         SwaggerDeserializationResult result = new SwaggerParser().readWithInfo(swaggerUrl, null, true);
         Swagger swagger = result.getSwagger();
-        if( swagger == null ){
-            throw new IllegalArgumentException( "Failed to parse Swagger definition at [" + swaggerUrl + "]; " +
-                Arrays.toString(result.getMessages().toArray()));
+        if (swagger == null) {
+            throw new IllegalArgumentException("Failed to parse Swagger definition at [" + swaggerUrl + "]; " +
+                    Arrays.toString(result.getMessages().toArray()));
         }
         return swagger;
     }
@@ -111,10 +111,10 @@ public class SwaggerTestStepBuilder {
      * @throws IllegalArgumentException if the operationId is not found in the Swagger definition
      */
     public RestRequestStepBuilder<RestRequestStepBuilder> operation(String operationId) {
-        for( String path : swagger.getPaths().keySet()){
-            Path swaggerPath = swagger.getPaths().get( path );
+        for (String path : swagger.getPaths().keySet()) {
+            Path swaggerPath = swagger.getPaths().get(path);
 
-            for(HttpMethod method: swaggerPath.getOperationMap().keySet()) {
+            for (HttpMethod method : swaggerPath.getOperationMap().keySet()) {
                 Operation swaggerOperation = swaggerPath.getOperationMap().get(method);
                 if (operationId.equalsIgnoreCase(swaggerOperation.getOperationId())) {
                     return new RestRequestStepBuilder<>(targetBasePath + path, toHttpMethod(method));
@@ -122,7 +122,7 @@ public class SwaggerTestStepBuilder {
             }
         }
 
-        throw new IllegalArgumentException("operationId [" + operationId + "] not found in Swagger definition" );
+        throw new IllegalArgumentException("operationId [" + operationId + "] not found in Swagger definition");
     }
 
     /**
@@ -135,7 +135,7 @@ public class SwaggerTestStepBuilder {
     public RestRequestStepWithBodyBuilder operationWithBody(String operationId) {
         for (Map.Entry<String, Path> path : swagger.getPaths().entrySet()) {
 
-            for(Map.Entry<HttpMethod, Operation> method: path.getValue().getOperationMap().entrySet()) {
+            for (Map.Entry<HttpMethod, Operation> method : path.getValue().getOperationMap().entrySet()) {
                 Operation swaggerOperation = method.getValue();
                 if (!operationId.equalsIgnoreCase(swaggerOperation.getOperationId())) {
                     continue;
@@ -148,17 +148,17 @@ public class SwaggerTestStepBuilder {
             }
         }
 
-        throw new IllegalArgumentException("operationId [" + operationId + "] not found in Swagger definition" );
+        throw new IllegalArgumentException("operationId [" + operationId + "] not found in Swagger definition");
     }
 
     /**
      * Creates a RestRequestStepBuilder for an arbitrary path and method - the targetEndpoint and basePath will be prefixed
      * to the specified path.
      *
-     * @param path the path to append to the targetEndpoint and basePath
+     * @param path   the path to append to the targetEndpoint and basePath
      * @param method the HTTP method to use
      */
-    public RestRequestStepBuilder<RestRequestStepBuilder> request(String path, TestSteps.HttpMethod method){
+    public RestRequestStepBuilder<RestRequestStepBuilder> request(String path, TestSteps.HttpMethod method) {
         return new RestRequestStepBuilder<>(targetBasePath + path, method);
     }
 
@@ -169,7 +169,7 @@ public class SwaggerTestStepBuilder {
      * @param path   the path to append to the targetEndpoint and basePath
      * @param method the HTTP method to use
      */
-    public RestRequestStepWithBodyBuilder requestWithBody(String path, TestSteps.HttpMethod method){
+    public RestRequestStepWithBodyBuilder requestWithBody(String path, TestSteps.HttpMethod method) {
         ensureHttpMethodWithBody(method);
         return new RestRequestStepWithBodyBuilder(targetBasePath + path, method);
     }
@@ -178,9 +178,9 @@ public class SwaggerTestStepBuilder {
         for (Parameter param : operation.getParameters()) {
             if (param instanceof BodyParameter) {
                 return;
-            } else if (param instanceof RefParameter){
+            } else if (param instanceof RefParameter) {
                 final Parameter unboxedParam = unboxRefParameter((RefParameter) param);
-                if (unboxedParam instanceof BodyParameter){
+                if (unboxedParam instanceof BodyParameter) {
                     return;
                 }
             }

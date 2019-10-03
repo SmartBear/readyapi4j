@@ -1,7 +1,6 @@
 package io.swagger.assert4j;
 
 import io.swagger.assert4j.client.model.PluginTestStep;
-import io.swagger.assert4j.TestRecipe;
 import org.junit.Test;
 
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
@@ -14,11 +13,11 @@ public class PluginTestStepBuilderTest {
     @Test
     public void buildsRecipeWithPluginTestStep() throws Exception {
         TestRecipe testRecipe = newTestRecipe(
-                    pluginTestStep("MQTTPublishTestStep")
+                pluginTestStep("MQTTPublishTestStep")
                         .named("MQTT Publish Test Step")
                         .withConfigProperty("config", new TestStepConfig())
                         .andWithConfigProperty("ClientID", "Client1")
-                )
+        )
                 .buildTestRecipe();
 
         PluginTestStep pluginTestStep = (PluginTestStep) testRecipe.getTestCase().getTestSteps().get(0);

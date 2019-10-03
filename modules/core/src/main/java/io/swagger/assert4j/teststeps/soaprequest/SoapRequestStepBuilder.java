@@ -32,7 +32,7 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
         validateNotEmpty(getTestStep().getBinding(), "Missing WSDL Binding");
         validateNotEmpty(getTestStep().getOperation(), "Missing WSDL Operation");
 
-        getTestStep().setParameters( parameters );
+        getTestStep().setParameters(parameters);
 
         return getTestStep();
     }
@@ -243,6 +243,6 @@ public class SoapRequestStepBuilder extends HttpRequestStepBuilder<SoapRequestSt
 
     @Override
     public SoapRequestStepBuilder withAssertions(AssertionBuilder... assertionBuilders) {
-        return super.withAssertions( assertionBuilders );
+        return super.withAssertions(assertionBuilders);
     }
 }

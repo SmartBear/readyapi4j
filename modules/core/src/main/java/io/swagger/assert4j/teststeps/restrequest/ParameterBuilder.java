@@ -16,7 +16,7 @@ public abstract class ParameterBuilder {
     }
 
     public RestParameter build() {
-        return new RestParameter().type(type ).name(name).value(value);
+        return new RestParameter().type(type).name(name).value(value);
     }
 
     public static class QueryParameterBuilder extends ParameterBuilder {

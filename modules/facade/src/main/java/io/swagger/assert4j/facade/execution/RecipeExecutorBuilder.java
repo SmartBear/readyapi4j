@@ -171,10 +171,10 @@ public class RecipeExecutorBuilder {
         TestServerClient testServerClient = TestServerClient.fromUrl(url.toString());
 
         String user = testServerUser != null ? testServerUser :
-            env.getOrDefault(TESTSERVER_USER_PROPERTY, System.getProperty(TESTSERVER_USER_PROPERTY));
+                env.getOrDefault(TESTSERVER_USER_PROPERTY, System.getProperty(TESTSERVER_USER_PROPERTY));
 
         String password = testServerPassword != null ? testServerPassword :
-            env.getOrDefault(TESTSERVER_PASSWORD_PROPERTY, System.getProperty(TESTSERVER_PASSWORD_PROPERTY));
+                env.getOrDefault(TESTSERVER_PASSWORD_PROPERTY, System.getProperty(TESTSERVER_PASSWORD_PROPERTY));
 
         testServerClient.setCredentials(user, password);
         RecipeExecutor executor = testServerClient.createRecipeExecutor();

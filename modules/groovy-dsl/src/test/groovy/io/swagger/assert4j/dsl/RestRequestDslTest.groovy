@@ -1,18 +1,7 @@
 package io.swagger.assert4j.dsl
 
-import io.swagger.assert4j.client.model.Assertion
-import io.swagger.assert4j.client.model.GroovyScriptAssertion
-import io.swagger.assert4j.client.model.InvalidHttpStatusCodesAssertion
-import io.swagger.assert4j.client.model.JsonPathContentAssertion
-import io.swagger.assert4j.client.model.JsonPathCountAssertion
-import io.swagger.assert4j.client.model.JsonPathExistenceAssertion
-import io.swagger.assert4j.client.model.RestParameter
-import io.swagger.assert4j.client.model.RestTestRequestStep
-import io.swagger.assert4j.client.model.SimpleContainsAssertion
-import io.swagger.assert4j.client.model.ValidHttpStatusCodesAssertion
-import io.swagger.assert4j.client.model.XPathContainsAssertion
-import io.swagger.assert4j.client.model.XQueryContainsAssertion
 import io.swagger.assert4j.TestRecipe
+import io.swagger.assert4j.client.model.*
 import io.swagger.assert4j.extractor.ExtractorData
 import org.junit.Test
 

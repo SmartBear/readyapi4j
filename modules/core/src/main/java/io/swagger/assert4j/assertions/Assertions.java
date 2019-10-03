@@ -211,5 +211,7 @@ public class Assertions {
         return new DefaultNotSoapFaultAssertionBuilder();
     }
 
-    public static SchemaComplianceAssertionBuilder schemaCompliance() { return new DefaultSchemaComplianceAssertionBuilder(); }
+    public static SchemaComplianceAssertionBuilder schemaCompliance() {
+        return new DefaultSchemaComplianceAssertionBuilder();
+    }
 }

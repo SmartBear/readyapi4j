@@ -3,20 +3,20 @@ package io.swagger.assert4j.cucumber;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.swagger.assert4j.assertions.Assertions;
+import io.swagger.assert4j.assertions.DefaultResponseSLAAssertionBuilder;
+import io.swagger.assert4j.assertions.ValidHttpStatusCodesAssertionBuilder;
 import io.swagger.assert4j.client.model.Assertion;
 import io.swagger.assert4j.client.model.Authentication;
 import io.swagger.assert4j.client.model.RestParameter;
 import io.swagger.assert4j.client.model.RestTestRequestStep;
-import io.swagger.assert4j.assertions.Assertions;
-import io.swagger.assert4j.assertions.DefaultResponseSLAAssertionBuilder;
-import io.swagger.assert4j.assertions.ValidHttpStatusCodesAssertionBuilder;
 import io.swagger.assert4j.support.ContentUtils;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 import io.swagger.assert4j.teststeps.restrequest.ParameterBuilder;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import cucumber.runtime.java.guice.ScenarioScoped;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,6 +159,8 @@ public class RestStepDefs {
         testStep.setURI(endpoint + path);
         testStep.setMethod(method);
         testStep.setType(TestStepTypes.REST_REQUEST.getName());
+        testStep.setAssertions(Lists.newArrayList());
+        testStep.setParameters(Lists.newArrayList());
 
         if (requestBody != null) {
             testStep.setRequestBody(requestBody);

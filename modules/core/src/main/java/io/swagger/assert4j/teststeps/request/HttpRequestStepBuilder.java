@@ -1,31 +1,18 @@
 package io.swagger.assert4j.teststeps.request;
 
-import io.swagger.assert4j.client.model.RequestTestStepBase;
 import io.swagger.assert4j.assertions.AssertionBuilder;
 import io.swagger.assert4j.assertions.Assertions;
 import io.swagger.assert4j.attachments.RequestAttachmentBuilder;
 import io.swagger.assert4j.auth.AuthenticationBuilder;
+import io.swagger.assert4j.client.model.RequestTestStepBase;
 import io.swagger.assert4j.extractor.Extractor;
 import io.swagger.assert4j.teststeps.TestStepBuilder;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static io.swagger.assert4j.assertions.Assertions.contains;
-import static io.swagger.assert4j.assertions.Assertions.invalidStatusCodes;
-import static io.swagger.assert4j.assertions.Assertions.maxResponseTime;
-import static io.swagger.assert4j.assertions.Assertions.notContains;
-import static io.swagger.assert4j.assertions.Assertions.script;
-import static io.swagger.assert4j.assertions.Assertions.validStatusCodes;
-import static io.swagger.assert4j.assertions.Assertions.xPathContains;
-import static io.swagger.assert4j.assertions.Assertions.xQueryContains;
+import static io.swagger.assert4j.assertions.Assertions.*;
 
 abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequestStepBuilder, RequestTestStepType extends RequestTestStepBase> implements TestStepBuilder {
     private final RequestTestStepType testStep;
@@ -233,8 +220,8 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
                 .collect(Collectors.toList()));
         extractors.forEach(extractor -> {
             extractor.setSource(testStep.getName());
-            if( testStep.getType().equals( TestStepTypes.SOAP_REQUEST.getName()) &&
-                extractor.getProperty().equals( "ResponseAsXml")){
+            if (testStep.getType().equals(TestStepTypes.SOAP_REQUEST.getName()) &&
+                    extractor.getProperty().equals("ResponseAsXml")) {
                 extractor.setProperty("Response");
             }
         });
@@ -258,6 +245,6 @@ abstract public class HttpRequestStepBuilder<RequestBuilderType extends HttpRequ
             addAssertion(assertionBuilder);
         }
 
-        return (RequestBuilderType)this;
+        return (RequestBuilderType) this;
     }
 }

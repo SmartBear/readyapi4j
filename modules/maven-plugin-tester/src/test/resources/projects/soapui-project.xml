@@ -1,111 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="f18ae7a5-8493-4e65-80bc-11e30104fb25" activeEnvironment="Default environment" name="REST Project 3" lastOpened="2017-03-08T17:10:55.764+01:00" resourceRoot="" soapui-version="6.0.0" xmlns:con="http://eviware.com/soapui/config">
-  <con:settings/>
-  <con:interface xsi:type="con:RestService" id="b6de7829-63da-45e1-bcb9-7e11940d1762" wadlVersion="http://wadl.dev.java.net/2009/02" name="https://api.swaggerhub.com" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<con:soapui-project id="f18ae7a5-8493-4e65-80bc-11e30104fb25" activeEnvironment="Default environment"
+                    name="REST Project 3" lastOpened="2017-03-08T17:10:55.764+01:00" resourceRoot=""
+                    soapui-version="6.0.0" xmlns:con="http://eviware.com/soapui/config">
     <con:settings/>
-    <con:definitionCache type="TEXT" rootPart=""/>
-    <con:endpoints>
-      <con:endpoint>https://api.swaggerhub.com</con:endpoint>
-    </con:endpoints>
-    <con:resource name="Apis" path="/apis" id="285d67f2-14ce-4738-9e71-3e46c2244d0a">
-      <con:settings/>
-      <con:parameters>
-        <con:parameter>
-          <con:name>query</con:name>
-          <con:value>testserver</con:value>
-          <con:style>QUERY</con:style>
-          <con:default>testserver</con:default>
-          <con:path xsi:nil="true"/>
-          <con:description xsi:nil="true"/>
-        </con:parameter>
-      </con:parameters>
-      <con:method name="Apis" id="f5f7af10-8be4-4ca6-a1a7-91734010fa49" method="GET">
+    <con:interface xsi:type="con:RestService" id="b6de7829-63da-45e1-bcb9-7e11940d1762"
+                   wadlVersion="http://wadl.dev.java.net/2009/02" name="https://api.swaggerhub.com" type="rest"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <con:settings/>
-        <con:parameters/>
-        <con:representation type="RESPONSE">
-          <con:mediaType>application/json</con:mediaType>
-          <con:status>200</con:status>
-          <con:params/>
-          <con:element xmlns:apis="https://api.swaggerhub.com/apis">apis:Response</con:element>
-        </con:representation>
-        <con:request name="Request 1" id="a0ba25e4-c170-4fb6-971a-e671437c6263" mediaType="application/json">
-          <con:settings/>
-          <con:endpoint>https://api.swaggerhub.com</con:endpoint>
-          <con:request/>
-          <con:credentials>
-            <con:authType>No Authorization</con:authType>
-          </con:credentials>
-          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
-          <con:parameters>
-            <entry key="query" value="testserver" xmlns="http://eviware.com/soapui/config"/>
-          </con:parameters>
-          <con:parameterOrder>
-            <con:entry>query</con:entry>
-          </con:parameterOrder>
-        </con:request>
-      </con:method>
-    </con:resource>
-  </con:interface>
-  <con:testSuite id="2570b904-5b7b-4f1f-b691-819156b5f9c8" name="https://api.swaggerhub.com TestSuite">
-    <con:settings/>
-    <con:runType>SEQUENTIAL</con:runType>
-    <con:testCase id="b7a83963-9cbb-4804-9a2b-f7c1f781bca8" discardOkResults="true" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="https://api.swaggerhub.com TestCase" searchProperties="true" timeout="0">
-      <con:settings/>
-      <con:savedRecentRuns>1</con:savedRecentRuns>
-      <con:testStep type="restrequest" name="Request 1" id="c5ebc04f-b83f-4e14-ae39-9c6eaa02a205">
-        <con:settings/>
-        <con:config service="https://api.swaggerhub.com" resourcePath="/apis" methodName="Apis" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-          <con:restRequest name="Request 1" id="a0ba25e4-c170-4fb6-971a-e671437c6263" mediaType="application/json">
-            <con:settings>
-              <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
-            </con:settings>
+        <con:definitionCache type="TEXT" rootPart=""/>
+        <con:endpoints>
             <con:endpoint>https://api.swaggerhub.com</con:endpoint>
-            <con:request/>
-            <con:originalUri>https://api.swaggerhub.com/apis</con:originalUri>
-            <con:assertion type="Valid HTTP Status Codes" id="19b852ab-473d-472a-a60a-680f34a6e345" name="Valid HTTP Status Codes">
-              <con:settings/>
-              <con:configuration>
-                <codes>200</codes>
-              </con:configuration>
-            </con:assertion>
-            <con:assertion type="JsonPath Count" id="1feabf45-99a6-4f47-aeb3-4eb3433e9f2f" name="JsonPath Count">
-              <con:configuration>
-                <path>$.totalCount</path>
-                <content>1</content>
-                <allowWildcards>false</allowWildcards>
-                <ignoreNamspaceDifferences>false</ignoreNamspaceDifferences>
-                <ignoreComments>false</ignoreComments>
-              </con:configuration>
-            </con:assertion>
-            <con:credentials>
-              <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
-              <con:authType>No Authorization</con:authType>
-            </con:credentials>
-            <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+        </con:endpoints>
+        <con:resource name="Apis" path="/apis" id="285d67f2-14ce-4738-9e71-3e46c2244d0a">
+            <con:settings/>
             <con:parameters>
-              <entry key="query" value="testserver" xmlns="http://eviware.com/soapui/config"/>
+                <con:parameter>
+                    <con:name>query</con:name>
+                    <con:value>testserver</con:value>
+                    <con:style>QUERY</con:style>
+                    <con:default>testserver</con:default>
+                    <con:path xsi:nil="true"/>
+                    <con:description xsi:nil="true"/>
+                </con:parameter>
             </con:parameters>
-            <con:parameterOrder>
-              <con:entry>query</con:entry>
-            </con:parameterOrder>
-          </con:restRequest>
-        </con:config>
-      </con:testStep>
-      <con:properties/>
-      <con:reportParameters/>
-    </con:testCase>
+            <con:method name="Apis" id="f5f7af10-8be4-4ca6-a1a7-91734010fa49" method="GET">
+                <con:settings/>
+                <con:parameters/>
+                <con:representation type="RESPONSE">
+                    <con:mediaType>application/json</con:mediaType>
+                    <con:status>200</con:status>
+                    <con:params/>
+                    <con:element xmlns:apis="https://api.swaggerhub.com/apis">apis:Response</con:element>
+                </con:representation>
+                <con:request name="Request 1" id="a0ba25e4-c170-4fb6-971a-e671437c6263" mediaType="application/json">
+                    <con:settings/>
+                    <con:endpoint>https://api.swaggerhub.com</con:endpoint>
+                    <con:request/>
+                    <con:credentials>
+                        <con:authType>No Authorization</con:authType>
+                    </con:credentials>
+                    <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+                    <con:parameters>
+                        <entry key="query" value="testserver" xmlns="http://eviware.com/soapui/config"/>
+                    </con:parameters>
+                    <con:parameterOrder>
+                        <con:entry>query</con:entry>
+                    </con:parameterOrder>
+                </con:request>
+            </con:method>
+        </con:resource>
+    </con:interface>
+    <con:testSuite id="2570b904-5b7b-4f1f-b691-819156b5f9c8" name="https://api.swaggerhub.com TestSuite">
+        <con:settings/>
+        <con:runType>SEQUENTIAL</con:runType>
+        <con:testCase id="b7a83963-9cbb-4804-9a2b-f7c1f781bca8" discardOkResults="true" failOnError="true"
+                      failTestCaseOnErrors="true" keepSession="false" name="https://api.swaggerhub.com TestCase"
+                      searchProperties="true" timeout="0">
+            <con:settings/>
+            <con:savedRecentRuns>1</con:savedRecentRuns>
+            <con:testStep type="restrequest" name="Request 1" id="c5ebc04f-b83f-4e14-ae39-9c6eaa02a205">
+                <con:settings/>
+                <con:config service="https://api.swaggerhub.com" resourcePath="/apis" methodName="Apis"
+                            xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <con:restRequest name="Request 1" id="a0ba25e4-c170-4fb6-971a-e671437c6263"
+                                     mediaType="application/json">
+                        <con:settings>
+                            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+                        </con:settings>
+                        <con:endpoint>https://api.swaggerhub.com</con:endpoint>
+                        <con:request/>
+                        <con:originalUri>https://api.swaggerhub.com/apis</con:originalUri>
+                        <con:assertion type="Valid HTTP Status Codes" id="19b852ab-473d-472a-a60a-680f34a6e345"
+                                       name="Valid HTTP Status Codes">
+                            <con:settings/>
+                            <con:configuration>
+                                <codes>200</codes>
+                            </con:configuration>
+                        </con:assertion>
+                        <con:assertion type="JsonPath Count" id="1feabf45-99a6-4f47-aeb3-4eb3433e9f2f"
+                                       name="JsonPath Count">
+                            <con:configuration>
+                                <path>$.totalCount</path>
+                                <content>1</content>
+                                <allowWildcards>false</allowWildcards>
+                                <ignoreNamspaceDifferences>false</ignoreNamspaceDifferences>
+                                <ignoreComments>false</ignoreComments>
+                            </con:configuration>
+                        </con:assertion>
+                        <con:credentials>
+                            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+                            <con:authType>No Authorization</con:authType>
+                        </con:credentials>
+                        <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+                        <con:parameters>
+                            <entry key="query" value="testserver" xmlns="http://eviware.com/soapui/config"/>
+                        </con:parameters>
+                        <con:parameterOrder>
+                            <con:entry>query</con:entry>
+                        </con:parameterOrder>
+                    </con:restRequest>
+                </con:config>
+            </con:testStep>
+            <con:properties/>
+            <con:reportParameters/>
+        </con:testCase>
+        <con:properties/>
+        <con:reportParameters/>
+    </con:testSuite>
+    <con:requirements/>
     <con:properties/>
-    <con:reportParameters/>
-  </con:testSuite>
-  <con:requirements/>
-  <con:properties/>
-  <con:wssContainer/>
-  <con:databaseConnectionContainer/>
-  <con:oAuth2ProfileContainer/>
-  <con:reporting>
-    <con:xmlTemplates/>
-    <con:parameters/>
-  </con:reporting>
-  <con:authRepository/>
-  <con:tags/>
+    <con:wssContainer/>
+    <con:databaseConnectionContainer/>
+    <con:oAuth2ProfileContainer/>
+    <con:reporting>
+        <con:xmlTemplates/>
+        <con:parameters/>
+    </con:reporting>
+    <con:authRepository/>
+    <con:tags/>
 </con:soapui-project>

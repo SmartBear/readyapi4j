@@ -62,7 +62,7 @@ public class PropertyTransferBuilder {
 
     public PropertyTransferBuilder toNextRequestProperty(String property) {
         this.propertyTransferTargetBuilder = new PropertyTransferTargetBuilder()
-            .withProperty(property);
+                .withProperty(property);
         return this;
     }
 

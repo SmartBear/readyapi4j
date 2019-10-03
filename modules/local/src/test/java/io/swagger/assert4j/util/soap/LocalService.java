@@ -11,12 +11,12 @@ import javax.jws.WebService;
 public class LocalService {
     private static Logger logger = LoggerFactory.getLogger(LocalService.class);
 
-    public LocalService(){
+    public LocalService() {
         logger.debug("Starting localservice!");
     }
 
     @WebMethod
-    public int importantCalculation(@WebParam(name = "a")int a,  @WebParam(name = "b") int b){
-        return a+b;
+    public int importantCalculation(@WebParam(name = "a") int a, @WebParam(name = "b") int b) {
+        return a + b;
     }
 }

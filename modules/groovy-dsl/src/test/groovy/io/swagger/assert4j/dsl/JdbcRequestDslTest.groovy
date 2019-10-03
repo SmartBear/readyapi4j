@@ -1,11 +1,11 @@
 package io.swagger.assert4j.dsl
 
+import io.swagger.assert4j.TestRecipe
+import io.swagger.assert4j.assertions.AssertionNames
 import io.swagger.assert4j.client.model.Assertion
 import io.swagger.assert4j.client.model.JdbcRequestTestStep
 import io.swagger.assert4j.client.model.JdbcStatusAssertion
 import io.swagger.assert4j.client.model.JdbcTimeoutAssertion
-import io.swagger.assert4j.assertions.AssertionNames
-import io.swagger.assert4j.TestRecipe
 import org.junit.Test
 
 class JdbcRequestDslTest {

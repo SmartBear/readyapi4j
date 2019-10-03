@@ -1,6 +1,6 @@
 package io.swagger.assert4j.execution;
 
-import io.swagger.assert4j.client.model.ProjectResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.result.RecipeExecutionResult;
 
 import java.util.List;
@@ -20,16 +20,17 @@ public interface Execution {
     /**
      * @return the current status for the execution
      */
-    ProjectResultReport.StatusEnum getCurrentStatus();
+    TestJobReport.StatusEnum getCurrentStatus();
 
     /**
      * @return the current result report for the execution
      */
-    ProjectResultReport getCurrentReport();
+    TestJobReport getCurrentReport();
 
     /**
      * @return the current ExecutionResult for this execution - might not be complete if the execution has not finished
-s     */
+     * s
+     */
 
     RecipeExecutionResult getExecutionResult();
 

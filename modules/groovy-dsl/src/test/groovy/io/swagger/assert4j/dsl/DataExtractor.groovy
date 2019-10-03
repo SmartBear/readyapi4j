@@ -1,8 +1,8 @@
 package io.swagger.assert4j.dsl
 
-import io.swagger.assert4j.client.model.TestStep
 import io.swagger.assert4j.TestRecipe
-import org.junit.Assert;
+import io.swagger.assert4j.client.model.TestStep
+import org.junit.Assert
 
 /**
  * Utility methods to extract data for the benefit of unit tests.

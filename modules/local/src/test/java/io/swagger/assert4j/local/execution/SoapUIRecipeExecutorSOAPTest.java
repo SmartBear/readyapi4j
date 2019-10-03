@@ -1,9 +1,9 @@
 package io.swagger.assert4j.local.execution;
 
 import com.eviware.soapui.support.xml.XmlUtils;
-import io.swagger.assert4j.client.model.HarResponse;
-import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.TestRecipe;
+import io.swagger.assert4j.client.model.HarResponse;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.util.soap.LocalService;
 import org.junit.AfterClass;
@@ -17,9 +17,7 @@ import java.net.URL;
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
 import static io.swagger.assert4j.teststeps.TestSteps.soapRequest;
 import static io.swagger.assert4j.util.PortFinder.portFinder;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -68,7 +66,7 @@ public class SoapUIRecipeExecutorSOAPTest {
         ).buildTestRecipe();
         Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
-        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(execution.getCurrentStatus(), is(TestJobReport.StatusEnum.FINISHED));
 
         HarResponse harResponse = execution.getExecutionResult().getTestStepResult(0).getHarEntry().getResponse();
         assertThat(harResponse, is(not(nullValue())));

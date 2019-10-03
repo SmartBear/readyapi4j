@@ -75,7 +75,7 @@ java -jar swagger-assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-f
 ```
 
 Internally this will call the regular cucumber.api.cli.Main class with an added -g argument to the
-included glue-code, all other options are passed as usual, see https://cucumber.io/docs/reference/jvm#cli-runner.
+included glue-code, all other options are passed as usual, see https://cucumber.io/docs/cucumber/api/#from-the-command-line.
 
 (you will need java8 installed on your path)
 

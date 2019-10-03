@@ -1,8 +1,8 @@
 package io.swagger.assert4j.dsl.assertions
 
+import io.swagger.assert4j.TestRecipe
 import io.swagger.assert4j.client.model.ResponseSLAAssertion
 import io.swagger.assert4j.client.model.RestTestRequestStep
-import io.swagger.assert4j.TestRecipe
 import org.junit.Test
 
 import static io.swagger.assert4j.dsl.DataExtractor.extractFirstTestStep

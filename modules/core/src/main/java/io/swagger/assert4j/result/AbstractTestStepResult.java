@@ -1,10 +1,6 @@
 package io.swagger.assert4j.result;
 
-import io.swagger.assert4j.client.model.HarContent;
-import io.swagger.assert4j.client.model.HarEntry;
-import io.swagger.assert4j.client.model.HarHeader;
-import io.swagger.assert4j.client.model.HarResponse;
-import io.swagger.assert4j.client.model.TestStepResultReport;
+import io.swagger.assert4j.client.model.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

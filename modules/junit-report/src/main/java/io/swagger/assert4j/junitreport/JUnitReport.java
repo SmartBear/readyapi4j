@@ -16,28 +16,17 @@
 
 package io.swagger.assert4j.junitreport;
 
-import com.smartbear.readyapi.junit.ErrorDocument;
-import com.smartbear.readyapi.junit.FailureDocument;
 import com.smartbear.readyapi.junit.Properties;
-import com.smartbear.readyapi.junit.Property;
-import com.smartbear.readyapi.junit.Testcase;
-import com.smartbear.readyapi.junit.Testsuite;
-import com.smartbear.readyapi.junit.TestsuiteDocument;
-import io.swagger.assert4j.client.model.ProjectResultReport;
+import com.smartbear.readyapi.junit.*;
 import io.swagger.assert4j.client.model.TestCaseResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.client.model.TestStepResultReport;
 import io.swagger.assert4j.client.model.TestSuiteResultReport;
 import org.apache.xmlbeans.XmlOptions;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static io.swagger.assert4j.client.model.TestStepResultReport.AssertionStatusEnum.FAILED;
 
@@ -59,7 +48,7 @@ public class JUnitReport {
     private final ErrorLog errorLog;
 
     public JUnitReport(Map properties) {
-        this(properties,  new SystemErrErrorLog());
+        this(properties, new SystemErrErrorLog());
     }
 
     public JUnitReport(Map properties, ErrorLog errorLog) {
@@ -208,21 +197,21 @@ public class JUnitReport {
         return testsuiteDoc;
     }
 
-    public void handleResponse(ProjectResultReport result, String recipeFileName) throws TestFailureException {
+    public void handleResponse(TestJobReport result, String recipeFileName) throws TestFailureException {
 
-            if (result.getStatus() == ProjectResultReport.StatusEnum.FAILED) {
+        if (result.getStatus() == TestJobReport.StatusEnum.FAILED) {
 
-                String message = logErrorsToConsole(result);
-                addTestCaseWithFailure(recipeFileName, result.getTimeTaken(),
-                        message, "<missing stacktrace>", new HashMap<String, String>(properties));
+            String message = logErrorsToConsole(result);
+            addTestCaseWithFailure(recipeFileName, result.getTotalTime(),
+                    message, "<missing stacktrace>", new HashMap<String, String>(properties));
 
-                throw new TestFailureException("Recipe failed, recipe file: " + recipeFileName);
-            } else {
-                addTestCase(recipeFileName, result.getTimeTaken(), new HashMap<String, String>(properties));
-            }
+            throw new TestFailureException("Recipe failed, recipe file: " + recipeFileName);
+        } else {
+            addTestCase(recipeFileName, result.getTotalTime(), new HashMap<String, String>(properties));
+        }
     }
 
-    private String logErrorsToConsole(ProjectResultReport result) {
+    private String logErrorsToConsole(TestJobReport result) {
 
         List<String> messages = new ArrayList<>();
 
