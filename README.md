@@ -153,15 +153,12 @@ assert execution.errorMessages.empty
 ```
 ## More samples / tutorials
 
-Tutorial in the ReadyAPI TestEngine documentation: 
-[Creating Code-Based Recipes: Tutorial](http://readyapi.smartbear.com/testengine/tutorials/code_based/start)
-
 The [samples submodule](modules/samples) here on GitHub contains a number of samples for Java, Groovy and Maven.
 
 ## Running tests with TestEngine
 
 To get access to extended functionality like data-driven testing, centralized execution and reporting, etc., you 
-need to execute your tests with [ReadyAPI TestEngine](http://readyapi.smartbear.com/testengine/start) instead of running 
+need to execute your tests with [ReadyAPI TestEngine](https://support.smartbear.com/readyapi/docs/testengine/index.html) instead of running 
 them locally. 
 
 TestEngine is a standalone server that exposes a REST API for running API tests, it receives and runs *test recipes* 
@@ -192,11 +189,9 @@ will automatically result in the corresponding artifacts being written to the co
 
 ## Learn More about TestEngine
 
-[Try it out online!](http://testengine.readyapi.io)
+[ReadyAPI TestEngine](https://smartbear.com/product/ready-api/testengine/overview/)
 
-[ReadyAPI TestEngine](http://readyapi.smartbear.com/testengine/intro/about)
-
-[ReadyAPI](http://readyapi.smartbear.com/start)
+[ReadyAPI](https://smartbear.com/product/ready-api/overview/)
 
 ## License
 
