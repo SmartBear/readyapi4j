@@ -7,7 +7,6 @@ import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.testengine.execution.ExecutionTestHelper;
 import io.swagger.assert4j.testengine.execution.ProjectExecutionTestBase;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,7 +26,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
-@Ignore
 @RunWith(Parameterized.class)
 public class JsonTextRecipeExecutorTest extends ProjectExecutionTestBase {
 

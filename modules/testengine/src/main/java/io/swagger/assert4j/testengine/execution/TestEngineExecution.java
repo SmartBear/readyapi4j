@@ -75,7 +75,7 @@ public class TestEngineExecution implements Execution {
             for (TestSuiteResultReport testSuiteReport : executionStatusReports.getLast().getTestSuiteResultReports()) {
                 for (TestCaseResultReport testCaseResultReport : testSuiteReport.getTestCaseResultReports()) {
                     for (TestStepResultReport testStepResultReport : testCaseResultReport.getTestStepResultReports()) {
-                        if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
+                        if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAIL) {
                             result.add(String.format("TestStepName: %s, messages: %s",
                                     testStepResultReport.getTestStepName(),
                                     String.join(", ", testStepResultReport.getMessages())));

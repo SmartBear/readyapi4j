@@ -25,7 +25,8 @@ public class DataExtractors {
                 .map(TestSuiteResultReport::getTestCaseResultReports)
                 .flatMap(Collection::stream)
                 .filter(testCaseResultReport ->
-                        extractorDataIdList.contains(testCaseResultReport.getProperties().get(ExtractorData.EXTRACTOR_DATA_KEY)))
+                            testCaseResultReport.getProperties() != null &&
+                            extractorDataIdList.contains(testCaseResultReport.getProperties().get(ExtractorData.EXTRACTOR_DATA_KEY)))
                 .findAny();
 
         resultReport.ifPresent(testCaseResultReport -> {

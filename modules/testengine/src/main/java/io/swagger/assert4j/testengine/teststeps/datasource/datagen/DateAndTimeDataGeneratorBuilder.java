@@ -4,6 +4,8 @@ import io.swagger.assert4j.client.model.DataGenerator;
 import io.swagger.assert4j.client.model.DateAndTimeDataGenerator;
 import io.swagger.assert4j.client.model.DateAndTimeDataGenerator.DateTimeFormatEnum;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -24,8 +26,8 @@ public class DateAndTimeDataGeneratorBuilder extends AbstractDataGeneratorBuilde
         dateAndTimeDataGenerator.setIncrementValueMinute(0);
         dateAndTimeDataGenerator.setIncrementValueSecond(0);
         try {
-//            dateAndTimeDataGenerator.setMinimumValue(new ISO8601DateFormat().parse("1984-02-12T17:26:20Z"));
-//            dateAndTimeDataGenerator.setMaximumValue(new Date());
+            dateAndTimeDataGenerator.setMinimumValue(OffsetDateTime.parse("1984-02-12T17:26:20Z"));
+            dateAndTimeDataGenerator.setMaximumValue(OffsetDateTime.MAX);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,12 +52,12 @@ public class DateAndTimeDataGeneratorBuilder extends AbstractDataGeneratorBuilde
     }
 
     public DateAndTimeDataGeneratorBuilder startingAt(Date startDate) {
-        // dateAndTimeDataGenerator.setMinimumValue(  startDate);
+        dateAndTimeDataGenerator.setMinimumValue( startDate.toInstant().atOffset( ZoneOffset.UTC ) );
         return this;
     }
 
     public DateAndTimeDataGeneratorBuilder endingAt(Date endDate) {
-        //  dateAndTimeDataGenerator.setMaximumValue(endDate);
+        dateAndTimeDataGenerator.setMaximumValue(endDate.toInstant().atOffset( ZoneOffset.UTC ));
         return this;
     }
 

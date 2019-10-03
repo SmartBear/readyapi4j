@@ -1,6 +1,5 @@
 package io.swagger.assert4j.testengine.execution;
 
-import io.swagger.assert4j.testengine.execution.*;
 import org.junit.Before;
 
 import static org.mockito.Mockito.mock;

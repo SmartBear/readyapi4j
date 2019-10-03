@@ -12,7 +12,6 @@ ReadyAPI TestEngine provides a number of additional features that are not availa
 [local execution engine](../local), namely;
 
 * The possibility to execute tests in existing ReadyAPI/SoapUI projects
-* The possibility to validate APIs based on their Swagger definition
 * The possibility to perform data-driven testing in Test Recipes 
 
 The corresponding REST API exposed by the TestEngine for this functionality is 
@@ -65,29 +64,6 @@ request.setTestCaseName( "My TestCase")
 projectExecutor.executeProject( request );
 
 ``` 
-
-## Validating Swagger-defined APIs
-
-ReadyAPI TestEngine supports "instant validation" of an API based on its Swagger definition; the server
-will generate an ad-hoc TestSuite based on this Swagger definition, execute it, and return the result. 
-
-This functionality is exposed in Java via the 
-[SwaggerApiValidator](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/SwaggerApiValidator.html) class, use as follows:
-
-```java
-TestEngineClient testEngineClient = TestEngineClient.fromUrl(TESTSERVER_URL)
-                .withCredentials(TESTSERVER_USER, TESTSERVER_PASSWORD);
-
-SwaggerApiValidator validator = testEngineClient.createApiValidator();
-
-// validate the petstore
-Execution execution = validator.validateApiSynchronously( "http://petstore.swagger.io/v2/swagger.json", null, null );
-
-// do something with the result
-RecipeExecutionResult result = execution.getExecutionResult();
-...
-
-```
 
 ## TestEngine data-driven testing
 

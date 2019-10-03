@@ -13,9 +13,9 @@
     <artifactId>swagger-assert4j-maven-plugin-samples</artifactId>
 
     <properties>
-        <testengine.user>demoUser</testengine.user>
-        <testengine.password>demoPassword</testengine.password>
-        <testengine.host>http://testengine.readyapi.io:8080</testengine.host>
+        <testengine.user>admin</testengine.user>
+        <testengine.password>testengine</testengine.password>
+        <testengine.host>http://localhost:8080</testengine.host>
     </properties>
 
     <profiles>

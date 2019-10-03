@@ -3,10 +3,7 @@ package io.swagger.assert4j.testengine.teststeps.datasource.datagen;
 import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.client.model.*;
 import io.swagger.assert4j.teststeps.TestStepTypes;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import java.math.BigDecimal;
 
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
 import static io.swagger.assert4j.testengine.teststeps.ServerTestSteps.dataGenDataSource;
@@ -15,7 +12,6 @@ import static io.swagger.assert4j.testengine.teststeps.datasource.datagen.DataGe
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@Ignore
 public class RealNumberDataGenDataSourceTest {
 
     @Test
@@ -30,8 +26,8 @@ public class RealNumberDataGenDataSourceTest {
 
         RealNumberDataGenerator dataGenerator = (RealNumberDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Real"));
-        assertThat(dataGenerator.getMinimumValue(), is(new BigDecimal(1)));
-        assertThat(dataGenerator.getMaximumValue(), is(new BigDecimal(100)));
+        assertThat(dataGenerator.getMinimumValue(), is( (float)1));
+        assertThat(dataGenerator.getMaximumValue(), is((float)100));
         assertThat(dataGenerator.getGenerationMode(), is(RealNumberDataGenerator.GenerationModeEnum.RANDOM));
         assertThat(dataGenerator.getDecimalPlaces(), is(2));
     }
@@ -51,8 +47,8 @@ public class RealNumberDataGenDataSourceTest {
 
         RealNumberDataGenerator dataGenerator = (RealNumberDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Real"));
-        assertThat(dataGenerator.getMinimumValue(), is(new BigDecimal(11)));
-        assertThat(dataGenerator.getMaximumValue(), is(new BigDecimal(111)));
+        assertThat(dataGenerator.getMinimumValue(), is((float)11));
+        assertThat(dataGenerator.getMaximumValue(), is((float)111));
         assertThat(dataGenerator.getGenerationMode(), is(RealNumberDataGenerator.GenerationModeEnum.RANDOM));
         assertThat(dataGenerator.getDecimalPlaces(), is(4));
     }
@@ -71,7 +67,7 @@ public class RealNumberDataGenDataSourceTest {
         RealNumberDataGenerator dataGenerator = (RealNumberDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Real"));
         assertThat(dataGenerator.getGenerationMode(), is(RealNumberDataGenerator.GenerationModeEnum.SEQUENTIAL));
-        assertThat(dataGenerator.getIncrementBy(), is(BigDecimal.valueOf(1.3)));
+        assertThat(dataGenerator.getIncrementBy(), is(Float.valueOf((float) 1.3)));
     }
 
     private DataGenDataSource getDataGenDataSource(TestRecipe recipe) {

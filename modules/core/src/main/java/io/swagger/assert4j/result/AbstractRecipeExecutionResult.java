@@ -51,7 +51,7 @@ public abstract class AbstractRecipeExecutionResult implements RecipeExecutionRe
         List<String> result = new ArrayList<>();
 
         for (TestStepResult testStepResultReport : results) {
-            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
+            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAIL) {
                 result.addAll(testStepResultReport.getMessages());
             }
         }
@@ -79,7 +79,7 @@ public abstract class AbstractRecipeExecutionResult implements RecipeExecutionRe
         List<TestStepResult> result = new ArrayList<>();
 
         for (TestStepResult testStepResultReport : results) {
-            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
+            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAIL) {
                 result.add(testStepResultReport);
             }
         }
@@ -92,7 +92,7 @@ public abstract class AbstractRecipeExecutionResult implements RecipeExecutionRe
         List<TestStepResult> result = new ArrayList<>();
 
         for (TestStepResult testStepResultReport : results) {
-            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED &&
+            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAIL &&
                     testStepResultReport.getTestStepName().equalsIgnoreCase(testStepName)) {
                 result.add(testStepResultReport);
             }

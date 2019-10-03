@@ -27,7 +27,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-@Ignore
 public class DataSourceTestStepRecipeTest {
 
     private static final String EXECUTIONS_BASE_PATH = ServerDefaults.SERVICE_BASE_PATH + "/executions";
@@ -132,6 +131,7 @@ public class DataSourceTestStepRecipeTest {
     }
 
     @Test
+    @Ignore( "need to package excel file into zip with project")
     public void sendsRecipeWithExcelDataSource() throws Exception {
         final String dataSourceFilePath = getClass().getResource("/DataSource.xlsx").getPath();
 

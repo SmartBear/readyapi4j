@@ -921,6 +921,41 @@ components:
               description: The array of reports for test suites in the test job.
               items:
                 $ref: '#/components/schemas/TestSuiteResultReport'
+    TestStepResultReport:
+      type: object
+      description: Data structure for test step results in the report.
+      properties:
+        testStepName:
+          type: string
+          description: The name of the test step
+        testStepType:
+          type: string
+          description: The type of the test step
+        totalTestStepTime:
+          type: integer
+          description: Time taken (ms) to run the test step.
+          format: int64
+        assertionStatus:
+          type: string
+          description: Specifies if the assertions failed or succeeded.
+          enum:
+            - UNKNOWN
+            - PASS
+            - FAIL
+            - CANCELED
+        requestTimings:
+          $ref: '#/components/schemas/RequestTimings'
+        transactionId:
+          type: string
+          description: The transaction id to identify a particular test job of a test step.
+        transaction:
+          type: string
+          description: The path to the transaction
+        messages:
+          type: array
+          description: Error messages returned by the assertions.
+          items:
+            type: string
     RequestTimings:
       type: object
       description: Timings for a request withing a test step
@@ -949,6 +984,46 @@ components:
           type: integer
           description: Time when request started
           format: int64
+    TestCaseResultReport:
+      type: object
+      description: Data structure for the test results report of the test case test job.
+      required:
+        - testStepResultReports
+      properties:
+        testCaseName:
+          type: string
+          description: The name of the test case the report is for.
+        totalTestCaseTime:
+          type: integer
+          description: Time taken (ms) to run the test case.
+          format: int64
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+        testStepResultReports:
+          type: array
+          description: The array of test step result reports.
+          items:
+            $ref: '#/components/schemas/TestStepResultReport'
+    TestSuiteResultReport:
+      type: object
+      description: Results of a test suite test job.
+      required:
+        - testCaseResultReports
+      properties:
+        testSuiteName:
+          type: string
+          description: The test suite name.
+        totalTestSuiteTime:
+          type: integer
+          description: Time taken (ms) to run the test suite.
+          format: int64
+        testCaseResultReports:
+          type: array
+          description: An array of test case test job results.
+          items:
+            $ref: '#/components/schemas/TestCaseResultReport'
     User:
       description: >-
         User object containing the basic user information which will be returned
@@ -1445,35 +1520,6 @@ components:
                 Specifies if asterisks  (<code>*</code>) in expectedContent are
                 handled as wildcards.
               default: false
-    TestStepResultReport:
-      type: object
-      description: Data structure for test step results in the report.
-      properties:
-        testStepName:
-          type: string
-          description: The name of the test step
-        assertionStatus:
-          type: string
-          description: Specifies if the assertions failed or succeeded.
-          enum:
-            - UNKNOWN
-            - OK
-            - FAILED
-            - CANCELED
-        timeTaken:
-          type: integer
-          description: >-
-            The number of milliseconds it took the TestEngine to run the test
-            step.
-          format: int64
-        transactionId:
-          type: string
-          description: The transaction id to identify a particular execution of a test step.
-        messages:
-          type: array
-          description: Error messages returned by the assertions.
-          items:
-            type: string
     DataSource:
       type: object
       description: >-
@@ -1640,22 +1686,6 @@ components:
             Properties of the <a
             href="http://readyapi.smartbear.com/structure/assertions/compliance/http/invalid/start">Invalid
             HTTP Status Codes</a> assertion.
-    TestCaseResultReport:
-      type: object
-      description: Data structure for the test results report of the test case execution.
-      properties:
-        testCaseName:
-          type: string
-          description: The name of the test case the report is for.
-        properties:
-          type: object
-          additionalProperties:
-            type: string
-        testStepResultReports:
-          type: array
-          description: The array of test step result reports.
-          items:
-            $ref: '#/components/schemas/TestStepResultReport'
     RestParameter:
       type: object
       properties:
@@ -2381,18 +2411,6 @@ components:
               type: object
               additionalProperties:
                 type: string
-    TestSuiteResultReport:
-      type: object
-      description: Results of a test suite execution.
-      properties:
-        testSuiteName:
-          type: string
-          description: The test suite name.
-        testCaseResultReports:
-          type: array
-          description: An array of test case execution results.
-          items:
-            $ref: '#/components/schemas/TestCaseResultReport'
     ValidHttpStatusCodesAssertion:
       description: >-
         Data structure for the <a

@@ -1,13 +1,12 @@
 package io.swagger.assert4j.testengine.teststeps.datasource.datagen;
 
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.client.model.*;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 import org.hamcrest.CoreMatchers;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
@@ -19,7 +18,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
-@Ignore
 public class DateAndTimeDataGenDataSourceTest {
 
     @Test
@@ -35,7 +33,7 @@ public class DateAndTimeDataGenDataSourceTest {
         DateAndTimeDataGenerator dataGenerator = (DateAndTimeDataGenerator) getDataGenerator(recipe);
         assertThat(dataGenerator.getType(), is("Date and Time"));
         assertThat(dataGenerator.getDateTimeFormat(), is(HH_MM_AM_PM));
-        assertThat(dataGenerator.getMinimumValue(), is(new ISO8601DateFormat().parse("1984-02-12T17:26:20Z")));
+        assertThat(dataGenerator.getMinimumValue(), is(OffsetDateTime.parse("1984-02-12T17:26:20Z")));
         assertThat(dataGenerator.getMaximumValue(), is(not(CoreMatchers.<Date>nullValue())));
         assertThat(dataGenerator.getGenerationMode(), is(DateAndTimeDataGenerator.GenerationModeEnum.RANDOM));
         assertThat(dataGenerator.getIncrementValueDay(), is(1));
@@ -67,14 +65,14 @@ public class DateAndTimeDataGenDataSourceTest {
 
     @Test
     public void buildsRecipeWithDataSourceTestStepWithDateAndTimeDataGenDataSourceWithProvidedStartAndEndDates() throws Exception {
-        Date startDate = new ISO8601DateFormat().parse("2016-01-01T17:26:20Z");
-        Date endDate = new ISO8601DateFormat().parse("2020-11-21T15:16:40Z");
+        OffsetDateTime startDate = OffsetDateTime.parse("2016-01-01T17:26:20Z");
+        OffsetDateTime endDate = OffsetDateTime.parse("2020-11-21T15:16:40Z");
         TestRecipe recipe = newTestRecipe()
                 .addStep(dataGenDataSource()
                         .withProperty(
                                 sequentialDateAndTimeTypeProperty("property1")
-                                        .startingAt(startDate)
-                                        .endingAt(endDate)
+                                        .startingAt(Date.from(startDate.toInstant()))
+                                        .endingAt(Date.from(endDate.toInstant()))
                         )
                 )
                 .buildTestRecipe();

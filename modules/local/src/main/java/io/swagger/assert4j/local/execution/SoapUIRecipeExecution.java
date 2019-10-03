@@ -114,7 +114,7 @@ public class SoapUIRecipeExecution implements Execution {
         report.setTestStepName(result.getTestStep().getName());
         report.setMessages(Arrays.asList(result.getMessages()));
         report.setAssertionStatus(convertTestStepStatus(result.getStatus()));
-        report.setTimeTaken(result.getTimeTaken());
+        report.setTotalTestStepTime(result.getTimeTaken());
 
         if (result instanceof MessageExchangeTestStepResult) {
             messageExchangeMap.put(report, ((MessageExchangeTestStepResult) result).getMessageExchanges());
@@ -128,9 +128,9 @@ public class SoapUIRecipeExecution implements Execution {
             case UNKNOWN:
                 return TestStepResultReport.AssertionStatusEnum.UNKNOWN;
             case OK:
-                return TestStepResultReport.AssertionStatusEnum.OK;
+                return TestStepResultReport.AssertionStatusEnum.PASS;
             case FAILED:
-                return TestStepResultReport.AssertionStatusEnum.FAILED;
+                return TestStepResultReport.AssertionStatusEnum.FAIL;
             case CANCELED:
                 return TestStepResultReport.AssertionStatusEnum.CANCELED;
             default:

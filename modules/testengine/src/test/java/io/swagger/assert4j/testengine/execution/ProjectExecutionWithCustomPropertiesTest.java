@@ -2,13 +2,11 @@ package io.swagger.assert4j.testengine.execution;
 
 import io.swagger.assert4j.client.model.CustomProperties;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@Ignore
 public class ProjectExecutionWithCustomPropertiesTest {
     private static final String TEST_SUITE_NAME = "TestSuite-1";
 

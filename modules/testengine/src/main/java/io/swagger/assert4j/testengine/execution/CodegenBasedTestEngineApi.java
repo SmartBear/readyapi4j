@@ -30,7 +30,6 @@ public class CodegenBasedTestEngineApi implements TestEngineApi {
 
     private static final Logger logger = LoggerFactory.getLogger(CodegenBasedTestEngineApi.class);
     private static final String APPLICATION_JSON = "application/json";
-    private static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
     private ApiClientWrapper apiClient;
 
@@ -62,7 +61,7 @@ public class CodegenBasedTestEngineApi implements TestEngineApi {
         setAuthentication(auth);
 
         // create path and map variables
-        String path = (ServerDefaults.SERVICE_BASE_PATH + "/executions").replaceAll("\\{format\\}", "json");
+        String path = ServerDefaults.SERVICE_BASE_PATH + "/testjobs/recipe";
 
         // query params
         List<Pair> queryParams = new ArrayList<>();
@@ -248,17 +247,14 @@ public class CodegenBasedTestEngineApi implements TestEngineApi {
 
         List<Pair> queryParams = buildQueryParameters(executionRequest, async);
 
-        String path = ServerDefaults.SERVICE_BASE_PATH + "/executions";
+        String path = ServerDefaults.SERVICE_BASE_PATH + "/testjobs";
         String type = "application/xml";
 
         try {
             // composite project?
             if (projectFile.isDirectory()) {
                 projectFile = zipCompositeProject(projectFile);
-                path += "/composite";
                 type = "application/zip";
-            } else {
-                path += "/xml";
             }
 
             if (executionRequest.getCustomPropertiesMap().isEmpty()) {

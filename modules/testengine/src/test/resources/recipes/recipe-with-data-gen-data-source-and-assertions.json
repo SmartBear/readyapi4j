@@ -119,19 +119,6 @@
                 "Value2",
                 "Value3"
               ]
-            },
-            {
-              "type": "Date and Time",
-              "propertyName": "property19",
-              "duplicationFactor": 1,
-              "dateTimeFormat": "HH:MM (24-hour)",
-              "generationMode": "Sequential",
-              "minimumValue": "2012-02-12T17:26:20Z",
-              "maximumValue": "2016-02-12T17:26:20Z",
-              "incrementValueDay": 2,
-              "incrementValueHour": 3,
-              "incrementValueMinute": 4,
-              "incrementValueSecond": 5
             }
           ]
         }

@@ -40,13 +40,13 @@ public class RestRequestLiveServerTest {
     private static final String ENDPOINT_WITH_PATH = ENDPOINT + "/specs?specType=API&limit=10";
     private static final String ENDPOINT_NAME = "Default listing";
     private static final String ENDPOINT_DESCRIPTION = "Default registry listing";
-    private static final String TESTENGINE_URL = "http://testengine.readyapi.io:8080";
-    private static final String TESTENGINE_USER = "demoUser";
-    private static final String TESTENGINE_PASSWORD = "demoPassword";
+    private static final String TESTENGINE_URL = "http://localhost:8080";
+    private static final String TESTENGINE_USER = "admin";
+    private static final String TESTENGINE_PASSWORD = "testengine";
     private static final String REST_REQUEST_NAME = "swaggerhubrequest";
     private static final String SECOND_REST_REQUEST_NAME = "secondswaggerhubrequest";
 
-    private static final Duration LATCH_TIMEOUT = Duration.millis(5000);
+    private static final Duration LATCH_TIMEOUT = Duration.millis(10000);
     private final CountDownLatch waitForExecution = new CountDownLatch(2);
 
 

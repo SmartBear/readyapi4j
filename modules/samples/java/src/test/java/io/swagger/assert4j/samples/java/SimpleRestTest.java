@@ -20,7 +20,7 @@ public class SimpleRestTest {
                                 query("query", "testengine")
                         )
                         .withAssertions(
-                                json("$.totalCount", "4")
+                                json("$.totalCount", "2")
                         )
         );
 

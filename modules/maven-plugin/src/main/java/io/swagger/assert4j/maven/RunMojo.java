@@ -54,7 +54,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
 
-import static io.swagger.assert4j.client.model.TestStepResultReport.AssertionStatusEnum.FAILED;
+import static io.swagger.assert4j.client.model.TestStepResultReport.AssertionStatusEnum.FAIL;
 import static io.swagger.assert4j.testengine.execution.ProjectExecutionRequest.Builder.forProjectFile;
 
 @Mojo(name = "run")
@@ -326,7 +326,7 @@ public class RunMojo extends AbstractMojo {
                 .flatMap(Collection::stream) //converts List<List<TestCaseResultReport>> to List<TestCaseResultReport>
                 .map(TestCaseResultReport::getTestStepResultReports) // List<List<TestStepResultReport>>
                 .flatMap(Collection::stream) // flattens List<List<TestStepResultReport>> to List<TestStepResultReport>
-                .filter(testStepResult -> testStepResult.getAssertionStatus() == FAILED) //keep only failed tests
+                .filter(testStepResult -> testStepResult.getAssertionStatus() == FAIL) //keep only failed tests
                 .map(TestStepResultReport::getMessages) // creates List<List<String>>
                 .flatMap(Collection::stream) // flattens List<List<String>> to List<String>
                 .forEach(message -> { //process each message from List<String>

@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import io.swagger.assert4j.client.model.*;
 import io.swagger.assert4j.extractor.Extractor;
 import io.swagger.assert4j.extractor.ExtractorData;
@@ -73,11 +76,15 @@ public class TestRecipeBuilder {
 
     private static ObjectMapper getObjectMapper() {
         if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-            objectMapper.addMixIn(TestStep.class, TestStepMixin.class);
-            objectMapper.addMixIn(DataGenerator.class, DataGeneratorTypeMixin.class);
-            objectMapper.addMixIn(Assertion.class, AssertionMixin.class);
+            objectMapper = new ObjectMapper()
+                    .addMixIn(TestStep.class, TestStepMixin.class)
+                    .addMixIn(DataGenerator.class, DataGeneratorTypeMixin.class)
+                    .addMixIn(Assertion.class, AssertionMixin.class)
+                    .registerModule(new ParameterNamesModule())
+                    .registerModule(new Jdk8Module())
+                    .registerModule(new JavaTimeModule());
         }
+
         return objectMapper;
     }
 

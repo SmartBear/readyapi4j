@@ -22,7 +22,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
-@Ignore
 public class TransactionLogTest extends ProjectExecutionTestBase {
 
     private TestRecipe recipeToSubmit;

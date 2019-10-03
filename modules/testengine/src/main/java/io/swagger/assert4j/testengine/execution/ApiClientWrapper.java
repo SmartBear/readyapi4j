@@ -1,5 +1,6 @@
 package io.swagger.assert4j.testengine.execution;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -93,7 +94,8 @@ public class ApiClientWrapper extends ApiClient {
             } else if (requestBody instanceof FormDataMultiPart) {
                 response = builder.type(contentType).post(ClientResponse.class, requestBody);
             } else {
-                response = builder.type(contentType).post(ClientResponse.class, serialize(requestBody, contentType));
+                Object content = serialize(requestBody, contentType);
+                response = builder.type(contentType).post(ClientResponse.class, content);
             }
         } else if ("PUT".equals(method)) {
             if (requestBody == null) {
@@ -171,6 +173,11 @@ public class ApiClientWrapper extends ApiClient {
                 ObjectMapper mapper = getObjectMapper();
                 mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
                 mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+                mapper.setVisibility(mapper.getSerializationConfig().getDefaultVisibilityChecker()
+                        .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                        .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                        .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
+                        .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
                 return mapper.writeValueAsString(obj);
             } else {
                 return obj;

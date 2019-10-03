@@ -8,7 +8,6 @@ import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.execution.ExecutionListener;
 import io.swagger.assert4j.extractor.ExtractorData;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 
@@ -21,10 +20,7 @@ import static org.mockito.Mockito.*;
  * Unit tests for the TestEngineRecipeExecutor.
  */
 
-@Ignore
 public class TestEngineRequestExecutorTest extends ProjectExecutionTestBase {
-
-    private static final String CLIENT_CERTIFICATE_FILE_NAME = "ClientCertificate.cert";
 
     private TestRecipe recipeToSubmit;
 

@@ -10,7 +10,7 @@ mvn test -PRunSamples
 ```
 
 Some of the tests require remote execution since they use TestEngine-specific features, by default
-they will be executed on the public TestEngine instance at [http://testengine.readyapi.io/]. You 
+they will be executed on a local TestEngine instance at http://localhost:8080. You 
 can override the TestEngine endpoint with:
 
 ```

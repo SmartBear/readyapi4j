@@ -30,7 +30,7 @@ public abstract class AbstractTestStepResult implements TestStepResult {
 
     @Override
     public Long getTimeTaken() {
-        return testStepResultReport.getTimeTaken();
+        return testStepResultReport.getTotalTestStepTime();
     }
 
     @Override
@@ -42,10 +42,10 @@ public abstract class AbstractTestStepResult implements TestStepResult {
     public TestStepResultReport.AssertionStatusEnum getStatusForAssertion(String assertionName) {
         for (String message : testStepResultReport.getMessages()) {
             if (message.startsWith("[" + assertionName + "]")) {
-                return TestStepResultReport.AssertionStatusEnum.FAILED;
+                return TestStepResultReport.AssertionStatusEnum.FAIL;
             }
         }
-        return TestStepResultReport.AssertionStatusEnum.OK;
+        return TestStepResultReport.AssertionStatusEnum.PASS;
     }
 
     @Override

@@ -3,7 +3,6 @@ package io.swagger.assert4j.testengine.teststeps.datasource.datagen;
 import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.client.model.*;
 import io.swagger.assert4j.teststeps.TestStepTypes;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
@@ -12,7 +11,6 @@ import static io.swagger.assert4j.testengine.teststeps.datasource.datagen.DataGe
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@Ignore
 public class UKPostCodeDataGenDataSourceTest {
 
     @Test

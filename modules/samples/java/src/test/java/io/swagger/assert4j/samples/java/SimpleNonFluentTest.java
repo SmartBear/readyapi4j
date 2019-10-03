@@ -32,7 +32,7 @@ public class SimpleNonFluentTest {
 
         JsonPathContentAssertion assertion = new JsonPathContentAssertion();
         assertion.setJsonPath("$.totalCount");
-        assertion.setExpectedContent("4");
+        assertion.setExpectedContent("2");
         assertion.setType("JsonPath Match");
 
         restTestRequestStep.setAssertions(Arrays.<Assertion>asList(assertion));
