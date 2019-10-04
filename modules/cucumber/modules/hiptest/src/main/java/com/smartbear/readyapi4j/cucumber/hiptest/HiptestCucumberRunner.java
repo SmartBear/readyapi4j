@@ -19,8 +19,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 /**
- * Custom Cucumber Runner that adds the built in StepDefs to the invocation of
- * the cucumber.api.cli.Main class
+ * HipTest Cucumber Runner that reads scenarios from HipTest for execution
  */
 
 public class HiptestCucumberRunner {
@@ -45,8 +44,6 @@ public class HiptestCucumberRunner {
      */
 
     public static void main(String[] args) throws Throwable {
-        System.out.println("Swagger Assert4j Cucumber Runner");
-
         ArrayList<String> argsList = Lists.newArrayList(args);
 
         if (new File("hiptest.properties").exists()) {
@@ -80,8 +77,6 @@ public class HiptestCucumberRunner {
         String hiptestFolder = properties.getProperty(HIPTEST_FOLDER, System.getProperty(HIPTEST_FOLDER));
         if (Strings.isNullOrEmpty(hiptestFolder))
             return;
-
-
 
         String hipTestEndpoint = properties.getProperty(HIPTEST_ENDPOINT,
                 System.getProperty(HIPTEST_ENDPOINT, HIPTEST_DEFAULT_ENDPOINT));
