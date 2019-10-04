@@ -6,7 +6,7 @@ package io.swagger.assert4j.util.rest;
  * @param <L> The left part of the tuple
  * @param <R> The right part of the tuple
  */
-public class Pair<L,R> {
+public class Pair<L, R> {
 
     private final L left;
     private final R right;
@@ -14,7 +14,7 @@ public class Pair<L,R> {
     /**
      * Creates a tightly coupled pair with a left and a right part
      *
-     * @param left The left part of the pair
+     * @param left  The left part of the pair
      * @param right The rightpart of the pair
      */
     public Pair(L left, R right) {
@@ -22,11 +22,18 @@ public class Pair<L,R> {
         this.right = right;
     }
 
-    public L getLeft() { return left; }
-    public R getRight() { return right; }
+    public L getLeft() {
+        return left;
+    }
+
+    public R getRight() {
+        return right;
+    }
 
     @Override
-    public int hashCode() { return left.hashCode() ^ right.hashCode(); }
+    public int hashCode() {
+        return left.hashCode() ^ right.hashCode();
+    }
 
     @Override
     public boolean equals(Object o) {

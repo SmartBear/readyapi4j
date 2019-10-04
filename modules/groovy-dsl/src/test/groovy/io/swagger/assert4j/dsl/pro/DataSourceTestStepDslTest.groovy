@@ -1,10 +1,10 @@
 package io.swagger.assert4j.dsl.pro
 
+import io.swagger.assert4j.TestRecipe
 import io.swagger.assert4j.client.model.DataSourceTestStep
 import io.swagger.assert4j.client.model.ExcelDataSource
 import io.swagger.assert4j.client.model.FileDataSource
 import io.swagger.assert4j.client.model.RestTestRequestStep
-import io.swagger.assert4j.TestRecipe
 import org.junit.Test
 
 import static io.swagger.assert4j.dsl.ServerTestDsl.recipe

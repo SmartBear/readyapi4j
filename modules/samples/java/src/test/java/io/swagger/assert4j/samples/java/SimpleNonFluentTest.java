@@ -1,13 +1,7 @@
 package io.swagger.assert4j.samples.java;
 
-import io.swagger.assert4j.client.model.Assertion;
-import io.swagger.assert4j.client.model.JsonPathContentAssertion;
-import io.swagger.assert4j.client.model.RestParameter;
-import io.swagger.assert4j.client.model.RestTestRequestStep;
-import io.swagger.assert4j.client.model.TestCase;
-import io.swagger.assert4j.client.model.TestStep;
-import io.swagger.assert4j.client.model.ValidHttpStatusCodesAssertion;
 import io.swagger.assert4j.TestRecipe;
+import io.swagger.assert4j.client.model.*;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 import org.junit.Test;
 
@@ -32,13 +26,13 @@ public class SimpleNonFluentTest {
 
         RestParameter parameter = new RestParameter();
         parameter.setName("query");
-        parameter.setValue("testserver");
+        parameter.setValue("testengine");
         parameter.setType(RestParameter.TypeEnum.QUERY);
         restTestRequestStep.setParameters(Arrays.asList(parameter));
 
         JsonPathContentAssertion assertion = new JsonPathContentAssertion();
         assertion.setJsonPath("$.totalCount");
-        assertion.setExpectedContent("4");
+        assertion.setExpectedContent("2");
         assertion.setType("JsonPath Match");
 
         restTestRequestStep.setAssertions(Arrays.<Assertion>asList(assertion));

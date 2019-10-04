@@ -4,13 +4,10 @@ import io.swagger.assert4j.execution.Execution
 import io.swagger.assert4j.execution.RecipeExecutor
 import org.junit.Test
 
-import static io.swagger.assert4j.client.model.ProjectResultReport.StatusEnum.FINISHED
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipeOnServer
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.remoteRecipeExecutor
+import static io.swagger.assert4j.dsl.execution.RecipeExecution.*
 
 class SoapRequestTest {
-    private static final String TEST_SERVER_URL = 'http://testserver.readyapi.io:8080'
+    private static final String TEST_SERVER_URL = 'http://testengine.readyapi.io:8080'
     private static final String TEST_SERVER_USER = 'demoUser'
     private static final String TEST_SERVER_PASSWORD = 'demoPassword'
 
@@ -35,8 +32,8 @@ class SoapRequestTest {
     }
 
     @Test
-    void simpleSoapRequestRunUsingTestServer() throws Exception {
-        Execution execution = executeRecipeOnServer TEST_SERVER_URL, TEST_SERVER_USER, TEST_SERVER_PASSWORD, {
+    void simpleSoapRequestRunUsingTestEngine() throws Exception {
+        Execution execution = executeRecipeOnTestEngine TEST_SERVER_URL, TEST_SERVER_USER, TEST_SERVER_PASSWORD, {
             soapRequest {
                 wsdl = 'http://www.webservicex.com/globalweather.asmx?WSDL'
                 binding = 'GlobalWeatherSoap12'

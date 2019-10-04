@@ -1,16 +1,12 @@
 package io.swagger.assert4j.teststeps.jdbcrequest;
 
+import io.swagger.assert4j.assertions.AssertionBuilder;
 import io.swagger.assert4j.client.model.Assertion;
 import io.swagger.assert4j.client.model.JdbcRequestTestStep;
-import io.swagger.assert4j.assertions.AssertionBuilder;
 import io.swagger.assert4j.teststeps.TestStepBuilder;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static io.swagger.assert4j.assertions.Assertions.jdbcRequestStatusOk;
 import static io.swagger.assert4j.assertions.Assertions.jdbcRequestTimeout;
@@ -86,11 +82,11 @@ public class JdbcRequestTestStepBuilder implements TestStepBuilder<JdbcRequestTe
      * Assertion shortcuts
      */
 
-    public JdbcRequestTestStepBuilder assertTimeout(long timeout){
-        return addAssertion( jdbcRequestTimeout( timeout ));
+    public JdbcRequestTestStepBuilder assertTimeout(long timeout) {
+        return addAssertion(jdbcRequestTimeout(timeout));
     }
 
-    public JdbcRequestTestStepBuilder assertStatus(){
-        return addAssertion( jdbcRequestStatusOk());
+    public JdbcRequestTestStepBuilder assertStatus() {
+        return addAssertion(jdbcRequestStatusOk());
     }
 }

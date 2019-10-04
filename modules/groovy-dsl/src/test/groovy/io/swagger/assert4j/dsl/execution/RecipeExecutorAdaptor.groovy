@@ -1,28 +1,19 @@
 package io.swagger.assert4j.dsl.execution
 
 import io.swagger.assert4j.TestRecipe
-import io.swagger.assert4j.client.model.ProjectResultReport
-import io.swagger.assert4j.execution.Execution
-import io.swagger.assert4j.execution.ExecutionListener
-import io.swagger.assert4j.execution.ExecutionMode
-import io.swagger.assert4j.execution.RecipeExecutor
-import io.swagger.assert4j.execution.RecipeFilter
-import io.swagger.assert4j.testserver.execution.TestServerExecution
+import io.swagger.assert4j.client.model.TestJobReport
+import io.swagger.assert4j.execution.*
+import io.swagger.assert4j.testengine.execution.TestEngineExecution
 
 class RecipeExecutorAdaptor implements RecipeExecutor {
     @Override
     Execution submitRecipe(TestRecipe recipe) {
-        return new TestServerExecution(null, null, new ProjectResultReport())
+        return new TestEngineExecution(null, null, new TestJobReport())
     }
 
     @Override
     Execution executeRecipe(TestRecipe recipe) {
-        return new TestServerExecution(null, null, new ProjectResultReport())
-    }
-
-    @Override
-    List<Execution> getExecutions() {
-        return null
+        return new TestEngineExecution(null, null, new TestJobReport())
     }
 
     @Override

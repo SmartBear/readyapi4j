@@ -1,10 +1,6 @@
 package io.swagger.assert4j.result;
 
-import io.swagger.assert4j.client.model.HarContent;
-import io.swagger.assert4j.client.model.HarEntry;
-import io.swagger.assert4j.client.model.HarHeader;
-import io.swagger.assert4j.client.model.HarResponse;
-import io.swagger.assert4j.client.model.TestStepResultReport;
+import io.swagger.assert4j.client.model.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +30,7 @@ public abstract class AbstractTestStepResult implements TestStepResult {
 
     @Override
     public Long getTimeTaken() {
-        return testStepResultReport.getTimeTaken();
+        return testStepResultReport.getTotalTestStepTime();
     }
 
     @Override
@@ -46,10 +42,10 @@ public abstract class AbstractTestStepResult implements TestStepResult {
     public TestStepResultReport.AssertionStatusEnum getStatusForAssertion(String assertionName) {
         for (String message : testStepResultReport.getMessages()) {
             if (message.startsWith("[" + assertionName + "]")) {
-                return TestStepResultReport.AssertionStatusEnum.FAILED;
+                return TestStepResultReport.AssertionStatusEnum.FAIL;
             }
         }
-        return TestStepResultReport.AssertionStatusEnum.OK;
+        return TestStepResultReport.AssertionStatusEnum.PASS;
     }
 
     @Override

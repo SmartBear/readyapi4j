@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.smartbear.soapui</groupId>
             <artifactId>soapui-testserver-api</artifactId>
-            <version>5.3.1-RC</version>
+            <version>5.5.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>javafx</groupId>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.smartbear</groupId>
             <artifactId>har-java</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>

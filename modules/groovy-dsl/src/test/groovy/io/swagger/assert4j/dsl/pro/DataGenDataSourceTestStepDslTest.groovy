@@ -1,44 +1,26 @@
 package io.swagger.assert4j.dsl.pro
 
-import io.swagger.assert4j.client.model.BooleanDataGenerator
+import io.swagger.assert4j.TestRecipe
+import io.swagger.assert4j.client.model.*
 import io.swagger.assert4j.client.model.BooleanDataGenerator.FormatEnum
-import io.swagger.assert4j.client.model.ComputerAddressDataGenerator
-import io.swagger.assert4j.client.model.CustomStringDataGenerator
-import io.swagger.assert4j.client.model.DataGenDataSource
-import io.swagger.assert4j.client.model.DataGenerator
-import io.swagger.assert4j.client.model.DataSourceTestStep
-import io.swagger.assert4j.client.model.DateAndTimeDataGenerator
-import io.swagger.assert4j.client.model.IntegerDataGenerator
-import io.swagger.assert4j.client.model.NameDataGenerator
 import io.swagger.assert4j.client.model.NameDataGenerator.GenderEnum
 import io.swagger.assert4j.client.model.NameDataGenerator.NameTypeEnum
-import io.swagger.assert4j.client.model.PhoneNumberDataGenerator
-import io.swagger.assert4j.client.model.StateNameDataGenerator
-import io.swagger.assert4j.client.model.StringDataGenerator
-import io.swagger.assert4j.client.model.UKPostCodeDataGenerator
-import io.swagger.assert4j.client.model.USZIPCodeDataGenerator
-import io.swagger.assert4j.client.model.ValuesFromSetDataGenerator
-import io.swagger.assert4j.TestRecipe
+import org.junit.Ignore
 import org.junit.Test
 
-import static io.swagger.assert4j.client.model.BooleanDataGenerator.FormatEnum.TRUE_FALSE
-import static io.swagger.assert4j.client.model.BooleanDataGenerator.FormatEnum.YES_NO
-import static io.swagger.assert4j.client.model.BooleanDataGenerator.FormatEnum._1_0
+import static io.swagger.assert4j.client.model.BooleanDataGenerator.FormatEnum.*
 import static io.swagger.assert4j.client.model.ComputerAddressDataGenerator.AddressTypeEnum.IPV4
 import static io.swagger.assert4j.client.model.ComputerAddressDataGenerator.AddressTypeEnum.MAC48
 import static io.swagger.assert4j.client.model.DateAndTimeDataGenerator.DateTimeFormatEnum.YYYY_MM_DDTHH_MM_SSZ_ISO_8601_
-import static io.swagger.assert4j.client.model.NameDataGenerator.GenderEnum.ANY
-import static io.swagger.assert4j.client.model.NameDataGenerator.GenderEnum.FEMALE
-import static io.swagger.assert4j.client.model.NameDataGenerator.GenderEnum.MALE
-import static io.swagger.assert4j.client.model.NameDataGenerator.NameTypeEnum.FIRSTNAME
-import static io.swagger.assert4j.client.model.NameDataGenerator.NameTypeEnum.FULL
-import static io.swagger.assert4j.client.model.NameDataGenerator.NameTypeEnum.LASTNAME
+import static io.swagger.assert4j.client.model.NameDataGenerator.GenderEnum.*
+import static io.swagger.assert4j.client.model.NameDataGenerator.NameTypeEnum.*
 import static io.swagger.assert4j.client.model.UKPostCodeDataGenerator.CodeFormatEnum.AA99_9AA
 import static io.swagger.assert4j.client.model.USZIPCodeDataGenerator.CodeFormatEnum.XXXXX_XXXX
 import static io.swagger.assert4j.client.model.ValuesFromSetDataGenerator.GenerationModeEnum.RANDOM
 import static io.swagger.assert4j.client.model.ValuesFromSetDataGenerator.GenerationModeEnum.SEQUENTIAL
 import static io.swagger.assert4j.dsl.ServerTestDsl.recipe
 
+@Ignore
 class DataGenDataSourceTestStepDslTest {
     @Test
     void createsRecipeWithDataSourceTestStepWithBasicDataGenerators() throws Exception {

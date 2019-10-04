@@ -20,7 +20,7 @@
     </modules>
 
     <properties>
-        <cucumber.version>2.0.0</cucumber.version>
+        <cucumber.version>4.7.1</cucumber.version>
     </properties>
 
 </project>

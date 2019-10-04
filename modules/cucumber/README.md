@@ -75,7 +75,7 @@ java -jar swagger-assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-f
 ```
 
 Internally this will call the regular cucumber.api.cli.Main class with an added -g argument to the
-included glue-code, all other options are passed as usual, see https://cucumber.io/docs/reference/jvm#cli-runner.
+included glue-code, all other options are passed as usual, see https://cucumber.io/docs/cucumber/api/#from-the-command-line.
 
 (you will need java8 installed on your path)
 
@@ -100,15 +100,15 @@ If you add the `-Dswagger-assert4j.cucumber.logfolder=...` system property to yo
 generated JSON recipes to the specified folder before executing them, for example allowing you 
 to import them into ReadyAPI for load-testing, monitoring, etc.
 
-### Configuring execution with ReadyAPI TestServer
+### Configuring execution with ReadyAPI TestEngine
  
 The included Cucumber StepDefs (see below) by default execute test recipes using the local open-source execution engine of swagger-assert4j. 
-If you would like to execute your tests via [ReadyAPI TestServer](https://smartbear.com/product/ready-api/testserver/overview/) instead 
-you will need to download and install TestServer and specify the following system properties when running your tests:
+If you would like to execute your tests via [ReadyAPI TestEngine](https://smartbear.com/product/ready-api/testengine/overview/) instead 
+you will need to download and install TestEngine and specify the following system properties when running your tests:
 
-- testserver.endpoint=...url to your testserver installation...
-- testserver.user=...the configured user to use...
-- testserver.password=...the configured password for that user...
+- testengine.endpoint=...url to your testengine installation...
+- testengine.user=...the configured user to use...
+- testengine.password=...the configured password for that user...
 
 ### Building 
 

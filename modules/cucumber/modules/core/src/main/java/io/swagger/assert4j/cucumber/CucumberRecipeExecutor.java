@@ -35,7 +35,7 @@ public class CucumberRecipeExecutor {
      * Executes the specified TestCase and returns the Execution. If a scenario
      * is specified and the readyapi.cucumber.logfolder system property is set,
      * the generated recipe will be written to the specified folder.
-     *
+     * <p>
      * It is possible to temporarily "bypass" recipe execution by specifying
      * a readyapi.cucumber.silent property - in which case testcases will not be
      * submitted to the server, but still logged to the above folder.
@@ -52,16 +52,16 @@ public class CucumberRecipeExecutor {
             LOG.debug(testRecipe.toString());
         }
 
-        String logFolder = System.getProperty(RECIPE_LOG_FOLDER, System.getenv(RECIPE_LOG_FOLDER) );
-        if( scenario != null && logFolder != null ){
+        String logFolder = System.getProperty(RECIPE_LOG_FOLDER, System.getenv(RECIPE_LOG_FOLDER));
+        if (scenario != null && logFolder != null) {
             logScenarioToFile(testRecipe, scenario, logFolder);
         }
 
-        if( System.getProperty(SILENT_EXECUTION, System.getenv(SILENT_EXECUTION) ) != null ){
+        if (System.getProperty(SILENT_EXECUTION, System.getenv(SILENT_EXECUTION)) != null) {
             return null;
         }
 
-        return async ? executor.submitRecipe( testRecipe ) : executor.executeRecipe(testRecipe);
+        return async ? executor.submitRecipe(testRecipe) : executor.executeRecipe(testRecipe);
     }
 
     /**
@@ -69,16 +69,16 @@ public class CucumberRecipeExecutor {
      * specified scenario
      *
      * @param testRecipe the test recipe to log
-     * @param scenario the associated Cucumber scenario
-     * @param logFolder the root folder for generated folders and files
+     * @param scenario   the associated Cucumber scenario
+     * @param logFolder  the root folder for generated folders and files
      */
 
     protected void logScenarioToFile(TestRecipe testRecipe, Scenario scenario, String logFolder) {
         try {
-            File folder = new File( logFolder );
-            if( !folder.exists() || !folder.isDirectory()){
-                if( !folder.mkdirs()){
-                    LOG.warn( "Failed to created logFolder [" + logFolder + "]" );
+            File folder = new File(logFolder);
+            if (!folder.exists() || !folder.isDirectory()) {
+                if (!folder.mkdirs()) {
+                    LOG.warn("Failed to created logFolder [" + logFolder + "]");
                     return;
                 }
             }
@@ -87,11 +87,11 @@ public class CucumberRecipeExecutor {
             File scenarioFolder = folder;
             int fileIndex = 0;
 
-            if( pathSegments.length > 1 ) {
+            if (pathSegments.length > 1) {
                 scenarioFolder = new File(folder, pathSegments[0]);
                 if (scenarioFolder.exists() || !scenarioFolder.isDirectory()) {
-                    if( !scenarioFolder.mkdirs()){
-                        LOG.warn( "Failed to created scenarioFolder [" + scenarioFolder + "]" );
+                    if (!scenarioFolder.mkdirs()) {
+                        LOG.warn("Failed to created scenarioFolder [" + scenarioFolder + "]");
                         return;
                     }
                 }
@@ -99,25 +99,25 @@ public class CucumberRecipeExecutor {
                 fileIndex = 1;
             }
 
-            StringBuilder filenameBuilder = new StringBuilder( pathSegments[fileIndex] );
-            for( int c = fileIndex+1; c < pathSegments.length; c++ ){
+            StringBuilder filenameBuilder = new StringBuilder(pathSegments[fileIndex]);
+            for (int c = fileIndex + 1; c < pathSegments.length; c++) {
                 String segment = pathSegments[c].trim();
-                if( !StringUtils.isBlank( segment )){
-                    filenameBuilder.append( '_' ).append( segment );
+                if (!StringUtils.isBlank(segment)) {
+                    filenameBuilder.append('_').append(segment);
                 }
             }
 
-            filenameBuilder.append( ".json" );
-            File scenarioFile = new File( scenarioFolder, filenameBuilder.toString() );
+            filenameBuilder.append(".json");
+            File scenarioFile = new File(scenarioFolder, filenameBuilder.toString());
 
-            try( FileWriter writer = new FileWriter( scenarioFile )) {
+            try (FileWriter writer = new FileWriter(scenarioFile)) {
                 LOG.info("Writing recipe to " + folder.getName() + File.separatorChar + scenarioFolder.getName() +
-                    File.separatorChar + scenarioFile.getName());
+                        File.separatorChar + scenarioFile.getName());
 
                 writer.write(testRecipe.toString());
             }
         } catch (Exception e) {
-            LOG.error("Failed to write recipe to logFolder [" + logFolder + "]", e );
+            LOG.error("Failed to write recipe to logFolder [" + logFolder + "]", e);
         }
     }
 

@@ -2,8 +2,6 @@ package io.swagger.assert4j.execution;
 
 import io.swagger.assert4j.TestRecipe;
 
-import java.util.List;
-
 /**
  * Defines a class that can execute recipes
  */
@@ -29,7 +27,7 @@ public interface RecipeExecutor {
     /**
      * @return List of all the execution stored on server
      */
-    List<Execution> getExecutions();
+//    List<Execution> getExecutions();
 
     /**
      * Adds an execution listener, used when a recipe is submitted for asynchronous execution.
@@ -55,13 +53,14 @@ public interface RecipeExecutor {
 
     /**
      * Removes an existing recipe filter
+     *
      * @param recipeFilter
      */
 
     void removeRecipeFilter(RecipeFilter recipeFilter);
 
     /**
-     * @return executionMode <code>ExecutionMode.LOCAL</code> if running locally, <code>ExecutionMode.LOCAL</code> otherwise (when running on TestServer)
+     * @return executionMode <code>ExecutionMode.LOCAL</code> if running locally, <code>ExecutionMode.LOCAL</code> otherwise (when running on TestEngine)
      */
     ExecutionMode getExecutionMode();
 }

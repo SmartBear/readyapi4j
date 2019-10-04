@@ -32,7 +32,7 @@ public class JsonPathContentAssertionBuilder implements JsonPathAssertionBuilder
         return jsonPathContentAssertion;
     }
 
-    public final static JsonPathContentAssertion create(){
+    public final static JsonPathContentAssertion create() {
         JsonPathContentAssertion assertion = new JsonPathContentAssertion();
         assertion.setType(AssertionNames.JSON_PATH_MATCH);
         return assertion;

@@ -17,20 +17,20 @@ package io.swagger.assert4j.maven;
  */
 
 import com.google.common.collect.Lists;
-import io.swagger.assert4j.client.model.ProjectResultReport;
-import io.swagger.assert4j.client.model.TestCaseResultReport;
-import io.swagger.assert4j.client.model.TestStepResultReport;
-import io.swagger.assert4j.client.model.TestSuiteResultReport;
 import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.TestRecipeBuilder;
+import io.swagger.assert4j.client.model.TestCaseResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
+import io.swagger.assert4j.client.model.TestStepResultReport;
+import io.swagger.assert4j.client.model.TestSuiteResultReport;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.execution.RecipeExecutor;
 import io.swagger.assert4j.facade.execution.RecipeExecutorBuilder;
 import io.swagger.assert4j.junitreport.JUnitReport;
 import io.swagger.assert4j.junitreport.TestFailureException;
-import io.swagger.assert4j.testserver.execution.ProjectExecutionRequest;
-import io.swagger.assert4j.testserver.execution.ProjectExecutor;
-import io.swagger.assert4j.testserver.execution.TestServerClient;
+import io.swagger.assert4j.testengine.execution.ProjectExecutionRequest;
+import io.swagger.assert4j.testengine.execution.ProjectExecutor;
+import io.swagger.assert4j.testengine.execution.TestEngineClient;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.execution.MavenSession;
@@ -52,16 +52,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
-import static io.swagger.assert4j.client.model.TestStepResultReport.AssertionStatusEnum.FAILED;
-import static io.swagger.assert4j.testserver.execution.ProjectExecutionRequest.Builder.forProjectFile;
+import static io.swagger.assert4j.client.model.TestStepResultReport.AssertionStatusEnum.FAIL;
+import static io.swagger.assert4j.testengine.execution.ProjectExecutionRequest.Builder.forProjectFile;
 
 @Mojo(name = "run")
 public class RunMojo extends AbstractMojo {
@@ -92,13 +86,13 @@ public class RunMojo extends AbstractMojo {
     @Parameter(defaultValue = "true")
     private boolean failOnFailures;
 
-    @Parameter(required = false, property = "testserver.username")
+    @Parameter(required = false, property = "testengine.username")
     private String username;
 
-    @Parameter(required = false, property = "testserver.password")
+    @Parameter(required = false, property = "testengine.password")
     private String password;
 
-    @Parameter(required = false, property = "testserver.endpoint")
+    @Parameter(required = false, property = "testengine.endpoint")
     private String server;
 
     @Parameter(defaultValue = "${project.basedir}/src/test/resources/recipes", required = true)
@@ -160,7 +154,7 @@ public class RunMojo extends AbstractMojo {
             Result projectExecutionResult = runProjects(xmlProjectFiles, report);
 
 
-            getLog().info("ReadyAPI TestServer Maven Plugin");
+            getLog().info("ReadyAPI TestEngine Maven Plugin");
             getLog().info("--------------------------------------");
             getLog().info("Recipes run: " + recipeExecutionResult.executionCount);
             getLog().info("Projects run: " + projectExecutionResult.executionCount);
@@ -202,7 +196,7 @@ public class RunMojo extends AbstractMojo {
 
     private Result runProjects(List<String> xmlProjectFiles, JUnitReport report) throws MojoFailureException, IOException, MavenFilteringException {
         Result result = new Result();
-        ProjectResultReport response;
+        TestJobReport response;
         if (shouldRunProjects() && xmlProjectFiles != null) {
             for (String file : xmlProjectFiles) {
                 String fileName = file.toLowerCase();
@@ -227,7 +221,7 @@ public class RunMojo extends AbstractMojo {
 
     private Result runRecipes(List<String> recipeFiles, JUnitReport report) throws MojoFailureException, IOException, MavenFilteringException {
         Result result = new Result();
-        ProjectResultReport response;
+        TestJobReport response;
         if (shouldRunRecipes() && recipeFiles != null) {
             for (String file : recipeFiles) {
                 String fileName = file.toLowerCase();
@@ -306,24 +300,24 @@ public class RunMojo extends AbstractMojo {
         return Arrays.asList(fileSetManager.getIncludedFiles(fileSet));
     }
 
-    private void handleResponse(ProjectResultReport result, JUnitReport report, String recipeFileName) throws IOException, MojoFailureException {
+    private void handleResponse(TestJobReport result, JUnitReport report, String recipeFileName) throws IOException, MojoFailureException {
         getLog().debug("Response body:" + result.toString());
 
         if (report != null) {
-            if (result.getStatus() == ProjectResultReport.StatusEnum.FAILED) {
+            if (result.getStatus() == TestJobReport.StatusEnum.FAILED) {
 
                 String message = logErrorsToConsole(result);
-                report.addTestCaseWithFailure(recipeFileName, result.getTimeTaken(),
+                report.addTestCaseWithFailure(recipeFileName, result.getTotalTime(),
                         message, "<missing stacktrace>", new HashMap<String, String>(properties));
 
                 throw new MojoFailureException("Recipe failed, recipe file: " + recipeFileName);
             } else {
-                report.addTestCase(recipeFileName, result.getTimeTaken(), new HashMap<String, String>(properties));
+                report.addTestCase(recipeFileName, result.getTotalTime(), new HashMap<String, String>(properties));
             }
         }
     }
 
-    private String logErrorsToConsole(ProjectResultReport result) {
+    private String logErrorsToConsole(TestJobReport result) {
 
         List<String> messages = new ArrayList<>();
 
@@ -332,7 +326,7 @@ public class RunMojo extends AbstractMojo {
                 .flatMap(Collection::stream) //converts List<List<TestCaseResultReport>> to List<TestCaseResultReport>
                 .map(TestCaseResultReport::getTestStepResultReports) // List<List<TestStepResultReport>>
                 .flatMap(Collection::stream) // flattens List<List<TestStepResultReport>> to List<TestStepResultReport>
-                .filter(testStepResult -> testStepResult.getAssertionStatus() == FAILED) //keep only failed tests
+                .filter(testStepResult -> testStepResult.getAssertionStatus() == FAIL) //keep only failed tests
                 .map(TestStepResultReport::getMessages) // creates List<List<String>>
                 .flatMap(Collection::stream) // flattens List<List<String>> to List<String>
                 .forEach(message -> { //process each message from List<String>
@@ -342,16 +336,16 @@ public class RunMojo extends AbstractMojo {
         return Arrays.toString(messages.toArray());
     }
 
-    private ProjectResultReport runXmlProject(File file) throws IOException, MavenFilteringException, MojoFailureException {
+    private TestJobReport runXmlProject(File file) throws IOException, MavenFilteringException, MojoFailureException {
         if (StringUtils.isEmpty(server)) {
-            throw new MojoFailureException("Project execution is supported only with TestServer, not locally.");
+            throw new MojoFailureException("Project execution is supported only with TestEngine, not locally.");
         }
         getLog().info("Executing project " + file.getName());
 
         ProjectExecutionRequest executionRequest = forProjectFile(file)
                 .forEnvironment(environment)
                 .build();
-        TestServerClient testServerClient = TestServerClient.fromUrl(server);
+        TestEngineClient testServerClient = TestEngineClient.fromUrl(server);
         testServerClient.setCredentials(username, password);
         ProjectExecutor projectExecutor = testServerClient.createProjectExecutor();
         Execution execution = async ? projectExecutor.submitProject(executionRequest) :
@@ -359,7 +353,7 @@ public class RunMojo extends AbstractMojo {
         return execution.getCurrentReport();
     }
 
-    private ProjectResultReport runJsonRecipe(File file) throws IOException, MavenFilteringException, MojoFailureException {
+    private TestJobReport runJsonRecipe(File file) throws IOException, MavenFilteringException, MojoFailureException {
 
         if (!disableFiltering) {
             file = filterRecipe(file);

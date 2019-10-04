@@ -4,7 +4,7 @@ import io.swagger.assert4j.client.model.XPathContainsAssertion;
 
 import static io.swagger.assert4j.support.Validations.validateNotEmpty;
 
-public class XPathContainsAssertionBuilder  implements XPathAssertionBuilder {
+public class XPathContainsAssertionBuilder implements XPathAssertionBuilder {
     private XPathContainsAssertion xPathContainsAssertion = new XPathContainsAssertion();
 
     public XPathContainsAssertionBuilder(String xPath, String expectedContent) {

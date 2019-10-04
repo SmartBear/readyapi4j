@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -22,6 +23,12 @@
             <artifactId>swagger-assert4j-cucumber-stepdefs</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -38,15 +45,19 @@
                         </goals>
                         <configuration>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>io.swagger.assert4j.cucumber.CucumberRunner</mainClass>
                                 </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <!-- first remove the existing soapui-log4j.xml so we can add our own -->
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
                                     <resource>com/eviware/soapui/resources/conf/soapui-log4j.xml</resource>
                                 </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
                                     <resource>com/eviware/soapui/resources/conf/soapui-log4j.xml</resource>
                                     <file>src/docker/resources/soapui-log4j.xml</file>
                                 </transformer>
@@ -77,7 +88,7 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.20.0</version>
+                        <version>0.31.0</version>
                         <configuration>
                             <verbose>true</verbose>
                             <images>
@@ -85,7 +96,7 @@
                                     <alias>swagger-assert4j-cucumber</alias>
                                     <name>smartbear/swagger-assert4j-cucumber:latest</name>
                                     <build>
-                                        <from>java:8-jre</from>
+                                        <from>openjdk:11</from>
                                         <maintainer>ole.lensmar@smartbear.com</maintainer>
                                         <tags>
                                             <tag>latest</tag>

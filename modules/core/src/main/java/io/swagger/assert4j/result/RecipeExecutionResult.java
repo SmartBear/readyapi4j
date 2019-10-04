@@ -1,6 +1,6 @@
 package io.swagger.assert4j.result;
 
-import io.swagger.assert4j.client.model.ProjectResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +27,7 @@ public interface RecipeExecutionResult {
      * @return current status of the execution: INITIALIZED/RUNNING/PASSED/FAILED
      */
 
-    ProjectResultReport.StatusEnum getStatus();
+    TestJobReport.StatusEnum getStatus();
 
     /**
      * @return a list of collected error messages

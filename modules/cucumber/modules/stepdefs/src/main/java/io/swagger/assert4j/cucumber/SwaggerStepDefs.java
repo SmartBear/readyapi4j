@@ -2,16 +2,12 @@ package io.swagger.assert4j.cucumber;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import io.swagger.assert4j.client.model.RestParameter;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import io.swagger.models.HttpMethod;
-import io.swagger.models.Operation;
-import io.swagger.models.Path;
-import io.swagger.models.Response;
-import io.swagger.models.Swagger;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.swagger.assert4j.client.model.RestParameter;
+import io.swagger.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +37,7 @@ public class SwaggerStepDefs {
 
     @Given("^the OAS definition at (.*)$")
     public void theOASDefinitionAt(String swaggerUrl) {
-        theSwaggerDefinitionAt( swaggerUrl );
+        theSwaggerDefinitionAt(swaggerUrl);
     }
 
     @Given("^the Swagger definition at (.*)$")
@@ -109,7 +105,7 @@ public class SwaggerStepDefs {
                     String type = parameter.getIn();
                     if (PARAM_TYPES.contains(type)) {
                         restStepDefs.addParameter(
-                            new RestParameter().type(RestParameter.TypeEnum.valueOf(type.toUpperCase())).name(name).value( value));
+                                new RestParameter().type(RestParameter.TypeEnum.valueOf(type.toUpperCase())).name(name).value(value));
                     } else if (type.equals("body")) {
                         restStepDefs.setRequestBody(value);
                     }

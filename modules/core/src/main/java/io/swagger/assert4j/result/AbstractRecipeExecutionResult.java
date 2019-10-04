@@ -1,8 +1,8 @@
 package io.swagger.assert4j.result;
 
 import com.google.common.collect.Lists;
-import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.client.model.TestCaseResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.client.model.TestStepResultReport;
 import io.swagger.assert4j.client.model.TestSuiteResultReport;
 
@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractRecipeExecutionResult implements RecipeExecutionResult {
-    protected final ProjectResultReport report;
+    protected final TestJobReport report;
     protected final List<TestStepResult> results = new ArrayList<>();
 
-    public AbstractRecipeExecutionResult(ProjectResultReport currentReport, TestStepResultBuilder testStepResultBuilder) {
+    public AbstractRecipeExecutionResult(TestJobReport currentReport, TestStepResultBuilder testStepResultBuilder) {
         report = currentReport;
 
         for (TestSuiteResultReport testSuiteReport : report.getTestSuiteResultReports()) {
@@ -29,16 +29,16 @@ public abstract class AbstractRecipeExecutionResult implements RecipeExecutionRe
 
     @Override
     public long getTimeTaken() {
-        return report.getTimeTaken();
+        return report.getTotalTime();
     }
 
     @Override
     public String getExecutionId() {
-        return report.getExecutionID();
+        return report.getTestjobId();
     }
 
     @Override
-    public ProjectResultReport.StatusEnum getStatus() {
+    public TestJobReport.StatusEnum getStatus() {
         return report.getStatus();
     }
 
@@ -51,7 +51,7 @@ public abstract class AbstractRecipeExecutionResult implements RecipeExecutionRe
         List<String> result = new ArrayList<>();
 
         for (TestStepResult testStepResultReport : results) {
-            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
+            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAIL) {
                 result.addAll(testStepResultReport.getMessages());
             }
         }
@@ -79,7 +79,7 @@ public abstract class AbstractRecipeExecutionResult implements RecipeExecutionRe
         List<TestStepResult> result = new ArrayList<>();
 
         for (TestStepResult testStepResultReport : results) {
-            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED) {
+            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAIL) {
                 result.add(testStepResultReport);
             }
         }
@@ -92,7 +92,7 @@ public abstract class AbstractRecipeExecutionResult implements RecipeExecutionRe
         List<TestStepResult> result = new ArrayList<>();
 
         for (TestStepResult testStepResultReport : results) {
-            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAILED &&
+            if (testStepResultReport.getAssertionStatus() == TestStepResultReport.AssertionStatusEnum.FAIL &&
                     testStepResultReport.getTestStepName().equalsIgnoreCase(testStepName)) {
                 result.add(testStepResultReport);
             }

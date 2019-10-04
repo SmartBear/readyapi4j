@@ -7,7 +7,8 @@
     <version>1.0.0-SNAPSHOT</version>
     <modules>
         <module>modules/core</module>
-        <module>modules/testserver</module>
+        <module>modules/models</module>
+        <module>modules/testengine</module>
         <module>modules/local</module>
         <module>modules/facade</module>
         <module>modules/groovy-dsl</module>
@@ -66,8 +67,8 @@
     <properties>
         <jersey-version>1.19</jersey-version>
         <jodatime-version>2.3</jodatime-version>
-        <swagger-version>1.5.12</swagger-version>
-        <jackson-version>2.8.5</jackson-version>
+        <swagger-version>1.5.22</swagger-version>
+        <jackson-version>2.8.9</jackson-version>
         <junit-version>4.12</junit-version>
         <DoNotRunSamples>true</DoNotRunSamples>
         <swagger-parser.version>1.0.26</swagger-parser.version>
@@ -98,8 +99,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -118,7 +119,6 @@
                         <configuration>
                             <source>1.8</source>
                             <encoding>UTF-8</encoding>
-                            <additionalparam>-Xdoclint:none</additionalparam>
                             <sourcepath>
                                 modules/core/src/main/java:
                                 modules/cucumber/modules/core/src/main/java:
@@ -129,7 +129,7 @@
                                 modules/groovy-dsl/target/generated-sources/groovy-stubs/main:
                                 modules/local/src/main/java:
                                 modules/oas/src/main/java:
-                                modules/testserver/src/main/java:
+                                modules/testengine/src/main/java:
                             </sourcepath>
                             <excludePackageNames>
                                 io.swagger.assert4j.client.teststeps

@@ -1,13 +1,13 @@
 package io.swagger.assert4j.cucumber;
 
 import com.google.common.collect.Lists;
+import cucumber.api.Scenario;
+import cucumber.api.java.After;
+import cucumber.runtime.java.guice.ScenarioScoped;
 import io.swagger.assert4j.client.model.TestCase;
 import io.swagger.assert4j.client.model.TestStep;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.support.AssertionUtils;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
-import cucumber.runtime.java.guice.ScenarioScoped;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -43,7 +43,7 @@ public class CucumberRecipeBuilder {
 
     @After
     public void run(Scenario scenario) {
-        if( testSteps.isEmpty()){
+        if (testSteps.isEmpty()) {
             throw new CucumberExecutionException("Missing teststeps in scenario [" + scenario.getName() + "]");
         }
 
@@ -51,7 +51,7 @@ public class CucumberRecipeBuilder {
         testCase.setTestSteps(testSteps);
         Execution execution = executor.runTestCase(testCase, scenario);
 
-        if( execution != null && assertResult && !executor.isAsync() ) {
+        if (execution != null && assertResult && !executor.isAsync()) {
             AssertionUtils.assertExecution(execution);
         }
     }

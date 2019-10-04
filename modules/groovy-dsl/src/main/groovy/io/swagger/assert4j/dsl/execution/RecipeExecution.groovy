@@ -5,19 +5,19 @@ import io.swagger.assert4j.TestRecipeBuilder
 import io.swagger.assert4j.dsl.pro.ProDslDelegate
 import io.swagger.assert4j.execution.Execution
 import io.swagger.assert4j.execution.RecipeExecutor
-import io.swagger.assert4j.testserver.execution.TestServerClient
+import io.swagger.assert4j.testengine.execution.TestEngineClient
 
 class RecipeExecution {
 
     /**
-     * Creates an instance of TestServerClient for remote execution of recipes. Can be used in set-up methods in tests.
-     * @param testServerUrl https://<server hostname or ip> : <port>
+     * Creates an instance of TestEngineClient for remote execution of recipes. Can be used in set-up methods in tests.
+     * @param testEngineUrl https://<server hostname or ip> : <port>
      * @param username username
      * @param password password
-     * @return TestServerClient
+     * @return TestEngineClient
      */
-    static RecipeExecutor remoteRecipeExecutor(String testServerUrl, String username, String password) {
-        TestServerClient testServerClient = TestServerClient.fromUrl(testServerUrl)
+    static RecipeExecutor remoteRecipeExecutor(String testEngineUrl, String username, String password) {
+        TestEngineClient testServerClient = TestEngineClient.fromUrl(testEngineUrl)
         testServerClient.setCredentials(username, password)
         testServerClient.createRecipeExecutor()
     }
@@ -34,14 +34,14 @@ class RecipeExecution {
     }
 
     /**
-     * Executes recipe on TestServer and returns execution results
+     * Executes recipe on TestEngine and returns execution results
      * @param executor
      * @param recipeDefinition
      * @return Execution : containing the execution result
      */
-    static Execution executeRecipeOnServer(String testServerUrl, String username, String password,
-                                           @DelegatesTo(ProDslDelegate) recipeDefinition) {
-        return executeRecipe(remoteRecipeExecutor(testServerUrl, username, password), recipeDefinition)
+    static Execution executeRecipeOnTestEngine(String testEngineUrl, String username, String password,
+                                               @DelegatesTo(ProDslDelegate) recipeDefinition) {
+        return executeRecipe(remoteRecipeExecutor(testEngineUrl, username, password), recipeDefinition)
     }
 
     /**
@@ -56,14 +56,14 @@ class RecipeExecution {
     }
 
     /**
-     * Submits recipe to TestServer for asynchronous execution and returns current state of execution
+     * Submits recipe to TestEngine for asynchronous execution and returns current state of execution
      * @param executor
      * @param recipeDefinition
      * @return Execution : containing the execution result
      */
-    static Execution submitRecipeToServer(String testServerUrl, String username, String password,
-                                          @DelegatesTo(ProDslDelegate) recipeDefinition) {
-        return submitRecipe(remoteRecipeExecutor(testServerUrl, username, password), recipeDefinition)
+    static Execution submitRecipeToTestEngine(String testEngineUrl, String username, String password,
+                                              @DelegatesTo(ProDslDelegate) recipeDefinition) {
+        return submitRecipe(remoteRecipeExecutor(testEngineUrl, username, password), recipeDefinition)
     }
 
     /**

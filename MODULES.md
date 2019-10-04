@@ -14,4 +14,4 @@ Overview of included modules and how they fit together:
 | [maven-plugin-tester](modules/maven-plugin-tester) | Maven plugin tester  |
 | [oas](modules/oas) | OAS/Swagger-specific extensions to core recipe creation  |
 | [samples](modules/samples) | Java and Groovy examples for how to use swagger-assert4j  |
-| [testserver](samples/testserver) | Execution engine for executing JSON recipes and SoapUI projects remotely on TestServer  |
+| [testengine](samples/testengine) | Execution engine for executing JSON recipes and SoapUI projects remotely on TestEngine  |

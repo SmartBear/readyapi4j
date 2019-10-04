@@ -4,12 +4,7 @@ import com.eviware.soapui.model.iface.Attachment;
 import com.eviware.soapui.model.iface.MessageExchange;
 import com.eviware.soapui.model.iface.Request;
 import com.eviware.soapui.support.types.StringToStringsMap;
-import io.swagger.assert4j.client.model.HarContent;
-import io.swagger.assert4j.client.model.HarEntry;
-import io.swagger.assert4j.client.model.HarHeader;
-import io.swagger.assert4j.client.model.HarPostData;
-import io.swagger.assert4j.client.model.HarRequest;
-import io.swagger.assert4j.client.model.HarResponse;
+import io.swagger.assert4j.client.model.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;

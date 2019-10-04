@@ -2,12 +2,11 @@ package io.swagger.assert4j.support;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import io.swagger.assert4j.client.model.ProjectResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.client.model.TestSuiteResultReport;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.execution.ExecutionListener;
 import io.swagger.assert4j.result.TestStepResult;
-import io.swagger.util.Json;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +62,7 @@ public class ExecutionLogger implements ExecutionListener {
             }
 
             try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-                fileOutputStream.write(Json.pretty(entries).getBytes());
+                fileOutputStream.write(JsonUtils.pretty(entries).getBytes());
             }
         } catch (Exception e) {
             LOG.error("Failed to write response logs to file", e);
@@ -71,7 +70,7 @@ public class ExecutionLogger implements ExecutionListener {
     }
 
     private String createExecutionName(Execution execution) {
-        ProjectResultReport currentReport = execution.getCurrentReport();
+        TestJobReport currentReport = execution.getCurrentReport();
         String name = currentReport.getProjectName();
         List<TestSuiteResultReport> testSuiteResultReports = currentReport.getTestSuiteResultReports();
         if (testSuiteResultReports.size() == 1) {
@@ -82,7 +81,7 @@ public class ExecutionLogger implements ExecutionListener {
             }
         }
 
-        if (execution.getCurrentStatus() == ProjectResultReport.StatusEnum.FAILED) {
+        if (execution.getCurrentStatus() == TestJobReport.StatusEnum.FAILED) {
             name += "-" + execution.getCurrentStatus().name();
         }
 

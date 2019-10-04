@@ -3,7 +3,7 @@ package io.swagger.assert4j.util.rest.local;
 import com.google.gson.Gson;
 import spark.ResponseTransformer;
 
-public class LocalServerJsonTransformer implements ResponseTransformer{
+public class LocalServerJsonTransformer implements ResponseTransformer {
 
     private Gson gson = new Gson();
 

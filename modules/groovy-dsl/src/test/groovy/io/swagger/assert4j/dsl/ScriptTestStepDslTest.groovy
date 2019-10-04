@@ -1,11 +1,11 @@
 package io.swagger.assert4j.dsl
 
-import io.swagger.assert4j.client.model.GroovyScriptTestStep
 import io.swagger.assert4j.TestRecipe
+import io.swagger.assert4j.client.model.GroovyScriptTestStep
 import org.junit.Test
 
-import static io.swagger.assert4j.dsl.TestDsl.recipe
 import static DataExtractor.extractFirstTestStep
+import static io.swagger.assert4j.dsl.TestDsl.recipe
 
 class ScriptTestStepDslTest {
 

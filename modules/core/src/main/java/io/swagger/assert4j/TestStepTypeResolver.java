@@ -2,16 +2,7 @@ package io.swagger.assert4j;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import io.swagger.assert4j.client.model.DataSourceTestStep;
-import io.swagger.assert4j.client.model.DelayTestStep;
-import io.swagger.assert4j.client.model.GroovyScriptTestStep;
-import io.swagger.assert4j.client.model.JdbcRequestTestStep;
-import io.swagger.assert4j.client.model.PluginTestStep;
-import io.swagger.assert4j.client.model.PropertiesTestStep;
-import io.swagger.assert4j.client.model.PropertyTransferTestStep;
-import io.swagger.assert4j.client.model.RestTestRequestStep;
-import io.swagger.assert4j.client.model.SoapMockResponseTestStep;
-import io.swagger.assert4j.client.model.SoapRequestTestStep;
+import io.swagger.assert4j.client.model.*;
 
 /**
  * Jackson type resolver for parsing teststeps in JSON recipes into correct TestStep types

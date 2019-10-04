@@ -1,32 +1,14 @@
 package io.swagger.assert4j;
 
-import io.swagger.assert4j.client.model.Assertion;
-import io.swagger.assert4j.client.model.GroovyScriptAssertion;
-import io.swagger.assert4j.client.model.InvalidHttpStatusCodesAssertion;
-import io.swagger.assert4j.client.model.JsonPathContentAssertion;
-import io.swagger.assert4j.client.model.JsonPathCountAssertion;
-import io.swagger.assert4j.client.model.JsonPathExistenceAssertion;
-import io.swagger.assert4j.client.model.ResponseSLAAssertion;
-import io.swagger.assert4j.client.model.RestTestRequestStep;
-import io.swagger.assert4j.client.model.SimpleContainsAssertion;
-import io.swagger.assert4j.client.model.ValidHttpStatusCodesAssertion;
-import io.swagger.assert4j.client.model.XPathContainsAssertion;
-import io.swagger.assert4j.client.model.XQueryContainsAssertion;
 import io.swagger.assert4j.assertions.AssertionNames;
+import io.swagger.assert4j.client.model.*;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
-import static io.swagger.assert4j.assertions.Assertions.contains;
-import static io.swagger.assert4j.assertions.Assertions.invalidStatusCodes;
-import static io.swagger.assert4j.assertions.Assertions.maxResponseTime;
-import static io.swagger.assert4j.assertions.Assertions.notContains;
-import static io.swagger.assert4j.assertions.Assertions.script;
-import static io.swagger.assert4j.assertions.Assertions.validStatusCodes;
-import static io.swagger.assert4j.assertions.Assertions.xPathContains;
-import static io.swagger.assert4j.assertions.Assertions.xQueryContains;
+import static io.swagger.assert4j.assertions.Assertions.*;
 import static io.swagger.assert4j.teststeps.TestSteps.GET;
 import static io.swagger.assert4j.teststeps.TestSteps.restRequest;
 import static org.hamcrest.CoreMatchers.is;
@@ -47,7 +29,7 @@ public class RestRequestStepWithAssertionRecipeTest {
         assertThat(assertion.getType(), is("JsonPath Match"));
         assertThat(assertion.getJsonPath(), is("$.results[0].address_components[1].long_name"));
         assertThat(assertion.getExpectedContent(), is("Amphitheatre Parkway"));
-        assertThat(assertion.getAllowWildcards(), is(true));
+        assertThat(assertion.isAllowWildcards(), is(true));
     }
 
     @Test
@@ -62,7 +44,7 @@ public class RestRequestStepWithAssertionRecipeTest {
         assertThat(assertion.getType(), is("JsonPath Count"));
         assertThat(assertion.getJsonPath(), is("$.results[0].address_components[1].long_name"));
         assertThat(assertion.getExpectedCount(), is("1"));
-        assertThat(assertion.getAllowWildcards(), is(true));
+        assertThat(assertion.isAllowWildcards(), is(true));
     }
 
 
@@ -99,8 +81,8 @@ public class RestRequestStepWithAssertionRecipeTest {
         SimpleContainsAssertion assertion = (SimpleContainsAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
         assertThat(assertion.getType(), is("Contains"));
         assertThat(assertion.getToken(), is("bla bla"));
-        assertThat(assertion.getIgnoreCase(), is(true));
-        assertThat(assertion.getUseRegexp(), is(true));
+        assertThat(assertion.isIgnoreCase(), is(true));
+        assertThat(assertion.isUseRegexp(), is(true));
     }
 
     @Test
@@ -117,8 +99,8 @@ public class RestRequestStepWithAssertionRecipeTest {
         SimpleContainsAssertion assertion = (SimpleContainsAssertion) ((RestTestRequestStep) recipe.getTestCase().getTestSteps().get(0)).getAssertions().get(0);
         assertThat(assertion.getType(), is("Not Contains"));
         assertThat(assertion.getToken(), is("bla bla"));
-        assertThat(assertion.getIgnoreCase(), is(true));
-        assertThat(assertion.getUseRegexp(), is(true));
+        assertThat(assertion.isIgnoreCase(), is(true));
+        assertThat(assertion.isUseRegexp(), is(true));
     }
 
     @Test
@@ -198,9 +180,9 @@ public class RestRequestStepWithAssertionRecipeTest {
         assertThat(assertion.getType(), is("XPath Match"));
         assertThat(assertion.getXpath(), is("//Addresses/address[0]/name"));
         assertThat(assertion.getExpectedContent(), is("Stockholm"));
-        assertThat(assertion.getAllowWildcards(), is(true));
-        assertThat(assertion.getIgnoreComments(), is(true));
-        assertThat(assertion.getIgnoreNamespaces(), is(true));
+        assertThat(assertion.isAllowWildcards(), is(true));
+        assertThat(assertion.isIgnoreComments(), is(true));
+        assertThat(assertion.isIgnoreNamespaces(), is(true));
     }
 
     @Test
@@ -217,6 +199,6 @@ public class RestRequestStepWithAssertionRecipeTest {
         assertThat(assertion.getType(), is("XQuery Match"));
         assertThat(assertion.getXquery(), is("//Addresses/address[0]/name"));
         assertThat(assertion.getExpectedContent(), is("Stockholm"));
-        assertThat(assertion.getAllowWildcards(), is(true));
+        assertThat(assertion.isAllowWildcards(), is(true));
     }
 }

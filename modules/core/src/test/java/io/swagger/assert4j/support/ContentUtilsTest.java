@@ -8,28 +8,26 @@ import org.junit.Test;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class ContentUtilsTest {
     @Test
     public void serializeContent() throws Exception {
-        Map map = ImmutableMap.of( "test", "1", "test2", 2 );
+        Map map = ImmutableMap.of("test", "1", "test2", 2);
 
-        assertNull( ContentUtils.serializeContent(  null, null ));
-        assertNull( ContentUtils.serializeContent(  null, "application/json" ));
+        assertNull(ContentUtils.serializeContent(null, null));
+        assertNull(ContentUtils.serializeContent(null, "application/json"));
 
-        String content = ContentUtils.serializeContent( map, "application/json");
-        assertNotNull(Json.mapper().reader().readTree( content ));
+        String content = ContentUtils.serializeContent(map, "application/json");
+        assertNotNull(Json.mapper().reader().readTree(content));
 
-        content = ContentUtils.serializeContent( map, "application/yaml");
-        assertNotNull(Yaml.mapper().reader().readTree( content ));
+        content = ContentUtils.serializeContent(map, "application/yaml");
+        assertNotNull(Yaml.mapper().reader().readTree(content));
 
-        content = ContentUtils.serializeContent( map, "text/xml");
+        content = ContentUtils.serializeContent(map, "text/xml");
         assertNotNull(new XmlMapper().reader().readTree(content));
 
-        content = ContentUtils.serializeContent( map, "some/type");
-        assertEquals( content, map.toString());
+        content = ContentUtils.serializeContent(map, "some/type");
+        assertEquals(content, map.toString());
     }
 }

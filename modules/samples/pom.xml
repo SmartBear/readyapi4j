@@ -60,7 +60,7 @@
         <dependencies>
             <dependency>
                 <groupId>io.swagger.assert</groupId>
-                <artifactId>swagger-assert4j-testserver</artifactId>
+                <artifactId>swagger-assert4j-testengine</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>

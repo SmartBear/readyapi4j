@@ -1,14 +1,6 @@
 package io.swagger.assert4j;
 
-import io.swagger.assert4j.client.model.DelayTestStep;
-import io.swagger.assert4j.client.model.GroovyScriptTestStep;
-import io.swagger.assert4j.client.model.PropertiesTestStep;
-import io.swagger.assert4j.client.model.PropertyTransfer;
-import io.swagger.assert4j.client.model.PropertyTransferSource;
-import io.swagger.assert4j.client.model.PropertyTransferTarget;
-import io.swagger.assert4j.client.model.PropertyTransferTestStep;
-import io.swagger.assert4j.client.model.SoapMockResponseTestStep;
-import io.swagger.assert4j.client.model.TestStep;
+import io.swagger.assert4j.client.model.*;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 import io.swagger.assert4j.teststeps.propertytransfer.PathLanguage;
 import org.junit.Test;
@@ -20,16 +12,8 @@ import java.util.Map;
 
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
 import static io.swagger.assert4j.properties.Properties.property;
-import static io.swagger.assert4j.teststeps.TestSteps.GET;
-import static io.swagger.assert4j.teststeps.TestSteps.POST;
-import static io.swagger.assert4j.teststeps.TestSteps.delayStep;
-import static io.swagger.assert4j.teststeps.TestSteps.groovyScriptStep;
-import static io.swagger.assert4j.teststeps.TestSteps.properties;
-import static io.swagger.assert4j.teststeps.TestSteps.propertyTransfer;
-import static io.swagger.assert4j.teststeps.TestSteps.soapMockResponse;
-import static io.swagger.assert4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
-import static io.swagger.assert4j.teststeps.propertytransfer.PropertyTransferBuilder.fromPreviousResponse;
-import static io.swagger.assert4j.teststeps.propertytransfer.PropertyTransferBuilder.fromResponse;
+import static io.swagger.assert4j.teststeps.TestSteps.*;
+import static io.swagger.assert4j.teststeps.propertytransfer.PropertyTransferBuilder.*;
 import static io.swagger.assert4j.teststeps.propertytransfer.PropertyTransferSourceBuilder.aSource;
 import static io.swagger.assert4j.teststeps.propertytransfer.PropertyTransferTargetBuilder.aTarget;
 import static org.hamcrest.CoreMatchers.is;
@@ -258,9 +242,9 @@ public class TestRecipeBuilderTest {
     @Test
     public void buildsRecipeWithPropertiesTestStep() throws Exception {
         TestRecipe testRecipe = newTestRecipe(
-            properties()
-                .named("PropertiesStep")
-                .addProperty("property1", "value1")
+                properties()
+                        .named("PropertiesStep")
+                        .addProperty("property1", "value1")
         ).buildTestRecipe();
         PropertiesTestStep testStep = (PropertiesTestStep) testRecipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getType(), is(TestStepTypes.PROPERTIES.getName()));
@@ -270,10 +254,10 @@ public class TestRecipeBuilderTest {
     @Test
     public void buildsRecipeWithFluentPropertiesTestStep() throws Exception {
         TestRecipe testRecipe = newTestRecipe(
-            properties(
-                property( "property1", "value1")
-            )
-            .named("PropertiesStep")
+                properties(
+                        property("property1", "value1")
+                )
+                        .named("PropertiesStep")
         ).buildTestRecipe();
         PropertiesTestStep testStep = (PropertiesTestStep) testRecipe.getTestCase().getTestSteps().get(0);
         assertThat(testStep.getType(), is(TestStepTypes.PROPERTIES.getName()));

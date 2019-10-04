@@ -5,8 +5,7 @@ import org.junit.Test;
 
 import java.net.URL;
 
-import static io.swagger.assert4j.assertions.Assertions.notSoapFault;
-import static io.swagger.assert4j.assertions.Assertions.schemaCompliance;
+import static io.swagger.assert4j.assertions.Assertions.*;
 import static io.swagger.assert4j.extractor.Extractors.fromResponse;
 import static io.swagger.assert4j.facade.execution.RecipeExecutionFacade.executeRecipe;
 import static io.swagger.assert4j.support.AssertionUtils.assertExecutionResult;
@@ -17,15 +16,15 @@ public class SimpleSoapTest {
     @Test
     public void simpleSoapTest() throws Exception {
         RecipeExecutionResult result = executeRecipe("Simple SOAP Test",
-            soapRequest(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"))
-                .forBinding("GlobalWeatherSoap12")
-                .forOperation("GetWeather")
-                .withParameter("CountryName", "Sweden")
-                .withPathParameter("//*:CityName", "Stockholm")
-                .withAssertions(
-                    schemaCompliance(),
-                    notSoapFault()
-                )
+                soapRequest(new URL("http://www.dneonline.com/calculator.asmx?WSDL"))
+                        .forBinding("CalculatorSoap12")
+                        .forOperation("Add")
+                        .withParameter("intA", "2")
+                        .withPathParameter("//*:intB", "3")
+                        .withAssertions(
+                                schemaCompliance(),
+                                notSoapFault()
+                        )
         );
 
         assertExecutionResult(result);
@@ -34,21 +33,22 @@ public class SimpleSoapTest {
     @Test
     public void simpleSoapWithExtractorTest() throws Exception {
         RecipeExecutionResult result = executeRecipe("Simple SOAP Test",
-            soapRequest(new URL("http://www.webservicex.com/CurrencyConvertor.asmx?wsdl"))
-                .forBinding("CurrencyConvertorSoap")
-                .forOperation("ConversionRate")
-                .named( "GetConversionRate")
-                .withParameter("FromCurrency", "USD")
-                .withParameter("ToCurrency", "SEK")
-                .withAssertions(
-                    schemaCompliance(),
-                    notSoapFault()
-                )
-                .withExtractors(
-                    fromResponse( "//*:ConversionRateResult/text()", v -> {
-                        System.out.println( "Result is [" + v + "]" );
-                    })
-                )
+                soapRequest(new URL("http://www.dneonline.com/calculator.asmx?WSDL"))
+                        .forBinding("CalculatorSoap12")
+                        .forOperation("Add")
+                        .named( "Add")
+                        .withParameter("intA", "1")
+                        .withParameter("intB", "1")
+                        .withAssertions(
+                                schemaCompliance(),
+                                notSoapFault(),
+                                xPathContains("//*:AddResult/text()", "2")
+                        )
+                        .withExtractors(
+                                fromResponse("//*:AddResult/text()", v -> {
+                                    System.out.println("Result is [" + v + "]");
+                                })
+                        )
         );
 
         assertExecutionResult(result);

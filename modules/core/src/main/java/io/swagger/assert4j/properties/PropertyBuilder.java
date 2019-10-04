@@ -10,38 +10,38 @@ public class PropertyBuilder {
         private String value;
 
 
-        public String getKey(){
+        public String getKey() {
             return key;
         }
 
-        public String getValue(){
+        public String getValue() {
             return value;
         }
     }
 
     private Property property;
 
-    private PropertyBuilder(){
+    private PropertyBuilder() {
         property = new Property();
         property.key = "";
         property.value = "";
     }
 
-    public static PropertyBuilder getInstance(){
+    public static PropertyBuilder getInstance() {
         return new PropertyBuilder();
     }
 
-    public PropertyBuilder withKey(String key){
+    public PropertyBuilder withKey(String key) {
         property.key = key;
         return this;
     }
 
-    public PropertyBuilder withValue(String value){
+    public PropertyBuilder withValue(String value) {
         property.value = value;
         return this;
     }
 
-    public Property build(){
+    public Property build() {
         return property;
     }
 

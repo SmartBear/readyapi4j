@@ -1,11 +1,10 @@
 package io.swagger.assert4j.dsl
 
-import io.swagger.assert4j.client.model.PluginTestStep
 import io.swagger.assert4j.TestRecipe
+import io.swagger.assert4j.client.model.PluginTestStep
 import org.junit.Test
 
 import static io.swagger.assert4j.dsl.TestDsl.recipe
-
 
 class PluginTestStepDslTest {
 

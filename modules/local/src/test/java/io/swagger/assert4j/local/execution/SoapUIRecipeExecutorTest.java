@@ -3,7 +3,7 @@ package io.swagger.assert4j.local.execution;
 import com.google.gson.Gson;
 import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.client.model.HarResponse;
-import io.swagger.assert4j.client.model.ProjectResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.execution.ExecutionListener;
 import io.swagger.assert4j.extractor.ExtractorData;
@@ -16,27 +16,16 @@ import org.junit.Test;
 
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
 import static io.swagger.assert4j.extractor.Extractors.fromProperty;
-import static io.swagger.assert4j.teststeps.TestSteps.GET;
-import static io.swagger.assert4j.teststeps.TestSteps.POST;
-import static io.swagger.assert4j.teststeps.TestSteps.groovyScriptStep;
-import static io.swagger.assert4j.teststeps.TestSteps.propertyTransfer;
+import static io.swagger.assert4j.teststeps.TestSteps.*;
 import static io.swagger.assert4j.teststeps.propertytransfer.PropertyTransferBuilder.from;
 import static io.swagger.assert4j.teststeps.propertytransfer.PropertyTransferSourceBuilder.aSource;
 import static io.swagger.assert4j.teststeps.propertytransfer.PropertyTransferTargetBuilder.aTarget;
-import static io.swagger.assert4j.util.rest.local.LocalServerUtil.addGetToLocalServer;
-import static io.swagger.assert4j.util.rest.local.LocalServerUtil.addPostToLocalServer;
-import static io.swagger.assert4j.util.rest.local.LocalServerUtil.getPostedJsonTestObject;
-import static io.swagger.assert4j.util.rest.local.LocalServerUtil.startLocalServer;
-import static io.swagger.assert4j.util.rest.local.LocalServerUtil.stopLocalServer;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static io.swagger.assert4j.util.rest.local.LocalServerUtil.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class SoapUIRecipeExecutorTest {
     private static final String REST_SOURCE = "SourceStep";
@@ -88,7 +77,7 @@ public class SoapUIRecipeExecutorTest {
         ).buildTestRecipe();
         Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
-        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(execution.getCurrentStatus(), is(TestJobReport.StatusEnum.FINISHED));
     }
 
     @Test
@@ -100,7 +89,7 @@ public class SoapUIRecipeExecutorTest {
         ).buildTestRecipe();
         Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
-        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(execution.getCurrentStatus(), is(TestJobReport.StatusEnum.FINISHED));
 
         HarResponse harResponse = execution.getExecutionResult().getTestStepResult(0).getHarEntry().getResponse();
         assertThat(harResponse, is(not(nullValue())));
@@ -128,7 +117,7 @@ public class SoapUIRecipeExecutorTest {
         ).buildTestRecipe();
         Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
-        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(execution.getCurrentStatus(), is(TestJobReport.StatusEnum.FINISHED));
     }
 
     @Test
@@ -136,7 +125,7 @@ public class SoapUIRecipeExecutorTest {
         TestRecipe testRecipe = buildPropertyTransferWithJsonPathExtractionTestRecipe();
         Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
-        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(execution.getCurrentStatus(), is(TestJobReport.StatusEnum.FINISHED));
         assertThat(getPostedJsonTestObject(), is(testObject));
     }
 
@@ -148,10 +137,10 @@ public class SoapUIRecipeExecutorTest {
         executor.addExecutionListener(listenerMock);
         Execution execution = executor.submitRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
-        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.RUNNING));
+        assertThat(execution.getCurrentStatus(), is(TestJobReport.StatusEnum.RUNNING));
 
-        verify(listenerMock, timeout(1000).times(1)).executionStarted( any());
-        verify(listenerMock, timeout(20000).times(1)).executionFinished( any());
+        verify(listenerMock, timeout(1000).times(1)).executionStarted(any());
+        verify(listenerMock, timeout(20000).times(1)).executionFinished(any());
     }
 
     @Test
@@ -169,7 +158,7 @@ public class SoapUIRecipeExecutorTest {
         assertThat(recipe.getTestCase().getProperties().get(ExtractorData.EXTRACTOR_DATA_KEY), is(not(nullValue())));
 
         Execution execution = executor.executeRecipe(recipe);
-        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(execution.getCurrentStatus(), is(TestJobReport.StatusEnum.FINISHED));
         assertThat(extractedProperty[0], is(GOOGLE_ENDPOINT)); //Make sure property value is extracted after execution
     }
 

@@ -1,5 +1,6 @@
 package io.swagger.assert4j.teststeps.properties;
 
+import com.google.common.collect.Maps;
 import io.swagger.assert4j.client.model.PropertiesTestStep;
 import io.swagger.assert4j.teststeps.TestStepBuilder;
 import io.swagger.assert4j.teststeps.TestStepTypes;
@@ -10,6 +11,7 @@ public class PropertiesTestStepBuilder implements TestStepBuilder<PropertiesTest
     private final PropertiesTestStep propertiesTestStep = new PropertiesTestStep();
 
     public PropertiesTestStepBuilder() {
+        this(Maps.newConcurrentMap());
     }
 
     public PropertiesTestStepBuilder(Map<String, String> properties) {

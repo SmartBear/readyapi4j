@@ -1,6 +1,5 @@
 package io.swagger.assert4j.swagger;
 
-import io.swagger.assert4j.swagger.SwaggerTestStepBuilder;
 import io.swagger.assert4j.teststeps.TestSteps;
 import io.swagger.assert4j.teststeps.restrequest.RestRequestStepBuilder;
 import org.junit.BeforeClass;
@@ -16,7 +15,7 @@ public class SwaggerTestStepBuilderWithTargetEndpointTest {
     @BeforeClass
     public static void setup() {
         petstore = new SwaggerTestStepBuilder(
-            "src/test/resources/petstore-swagger.json", TARGET_ENDPOINT);
+                "src/test/resources/petstore-swagger.json", TARGET_ENDPOINT);
     }
 
     @Test

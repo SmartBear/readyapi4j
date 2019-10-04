@@ -2,14 +2,19 @@
   "testSteps": [
     {
       "type": "SOAP Request",
-      "wsdl": "http://www.webservicex.com/globalweather.asmx?WSDL",
-      "binding": "GlobalWeatherSoap",
-      "operation": "GetCitiesByCountry",
+      "wsdl": "http://www.dneonline.com/calculator.asmx?WSDL",
+      "binding": "CalculatorSoap12",
+      "operation": "Add",
       "parameters": [
         {
-          "name": "CountryName",
-          "value": "Sweden"
+          "name": "intA",
+          "value": "1"
+        },
+        {
+          "name": "intB",
+          "value": "1"
         }
+
       ]
     }
   ]

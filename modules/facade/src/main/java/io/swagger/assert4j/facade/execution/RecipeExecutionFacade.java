@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**
- * Utility for running recipes either locally or on a remote TestServer based on system/env property values<br/>
+ * Utility for running recipes either locally or on a remote TestEngine based on system/env property values<br/>
  * <p>
- * If a <code>testserver.endpoint</code> system or environment property is available and contains a valid URL
+ * If a <code>testengine.endpoint</code> system or environment property is available and contains a valid URL
  * remote execution will be used by the executeRecipe method. The values of
- * <code>testserver.user</code> and <code>testserver.password</code> properties/environment variables will be used to
- * authenticate on the TestServer.
+ * <code>testengine.user</code> and <code>testengine.password</code> properties/environment variables will be used to
+ * authenticate on the TestEngine.
  * If no valid server URL has been specified recipe execution will be local instead.</p>
  */
 
@@ -42,7 +42,7 @@ public class RecipeExecutionFacade {
      * Builds and executes a TestRecipe from the specified TestStepBuilders using either a local or remote
      * executor as configured. The recipe is always executed synchronously.
      *
-     * @param name the name of the recipe
+     * @param name             the name of the recipe
      * @param testStepBuilders the builds for the TestSteps to execute
      * @return the result for executed recipe
      */
@@ -74,8 +74,8 @@ public class RecipeExecutionFacade {
      * @param jsonRecipe the recipe to execute
      * @return the excution result
      */
-    public static RecipeExecutionResult executeRecipe( String jsonRecipe ) throws IOException {
-        return executeRecipe( TestRecipeBuilder.createFrom( jsonRecipe ));
+    public static RecipeExecutionResult executeRecipe(String jsonRecipe) throws IOException {
+        return executeRecipe(TestRecipeBuilder.createFrom(jsonRecipe));
     }
 
     /**
@@ -84,9 +84,9 @@ public class RecipeExecutionFacade {
      * @param recipeFile the recipe to execute
      * @return the execution result
      */
-    public static RecipeExecutionResult executeRecipe( File recipeFile ) throws IOException {
+    public static RecipeExecutionResult executeRecipe(File recipeFile) throws IOException {
         String jsonRecipe = Files.toString(recipeFile, Charset.defaultCharset());
-        return executeRecipe( TestRecipeBuilder.createFrom( jsonRecipe ));
+        return executeRecipe(TestRecipeBuilder.createFrom(jsonRecipe));
     }
 
     /**
@@ -105,7 +105,7 @@ public class RecipeExecutionFacade {
      * Builds and executes a TestRecipe from the specified TestStepBuilders using either a local or remote
      * executor as configured. The recipe is always executed asynchronously.
      *
-     * @param name the name of the recipe
+     * @param name             the name of the recipe
      * @param testStepBuilders the builds for the TestSteps to execute
      * @return the ongoing Execution for the TestRecipe
      */
@@ -137,8 +137,8 @@ public class RecipeExecutionFacade {
      * @param jsonRecipe the recipe to execute
      * @return the ongoing Execution for the TestRecipe
      */
-    public static Execution submitRecipe(String jsonRecipe ) throws IOException {
-        return submitRecipe( TestRecipeBuilder.createFrom( jsonRecipe ));
+    public static Execution submitRecipe(String jsonRecipe) throws IOException {
+        return submitRecipe(TestRecipeBuilder.createFrom(jsonRecipe));
     }
 
     /**
@@ -147,8 +147,8 @@ public class RecipeExecutionFacade {
      * @param recipeFile the recipe to execute
      * @return the ongoing Execution for the TestRecipe
      */
-    public static Execution submitRecipe(File recipeFile ) throws IOException {
+    public static Execution submitRecipe(File recipeFile) throws IOException {
         String jsonRecipe = Files.toString(recipeFile, Charset.defaultCharset());
-        return submitRecipe( TestRecipeBuilder.createFrom( jsonRecipe ));
+        return submitRecipe(TestRecipeBuilder.createFrom(jsonRecipe));
     }
 }

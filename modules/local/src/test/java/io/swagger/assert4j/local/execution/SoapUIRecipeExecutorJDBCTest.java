@@ -1,7 +1,7 @@
 package io.swagger.assert4j.local.execution;
 
-import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.TestRecipe;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.execution.Execution;
 import io.swagger.assert4j.teststeps.jdbcrequest.JdbcConnection;
 import org.junit.BeforeClass;
@@ -17,9 +17,7 @@ import java.sql.SQLException;
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
 import static io.swagger.assert4j.assertions.Assertions.contains;
 import static io.swagger.assert4j.teststeps.TestSteps.jdbcConnection;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class SoapUIRecipeExecutorJDBCTest {
@@ -78,6 +76,6 @@ public class SoapUIRecipeExecutorJDBCTest {
         ).buildTestRecipe();
         Execution execution = executor.executeRecipe(testRecipe);
         assertThat(execution.getId(), is(not(nullValue())));
-        assertThat(execution.getCurrentStatus(), is(ProjectResultReport.StatusEnum.FINISHED));
+        assertThat(execution.getCurrentStatus(), is(TestJobReport.StatusEnum.FINISHED));
     }
 }

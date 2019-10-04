@@ -49,7 +49,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 ## Execution modes
 
 No matter how you create JSON recipes - manually, via code, auto-generate, etc - they can be executed either locally
-using the Open-Source SoapUI execution engine - or remotely using the commercial ReadyAPI TestServer product. Recipes
+using the Open-Source SoapUI execution engine - or remotely using the commercial ReadyAPI TestEngine product. Recipes
 are executed by RecipeExecutors - which can be created for either local or remote execution.
 
 ### Local Execution
@@ -67,22 +67,22 @@ Read more about local execution in the [local module](modules/local).
 ## Remote Execution
 
 To get access to extended functionality like data-driven testing, centralized execution and reporting, etc, you 
-can execute your tests with [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) instead of running 
+can execute your tests with [ReadyAPI TestEngine](http://readyapi.smartbear.com/testengine/start) instead of running 
 them locally. 
 
-TestServer is a standalone server that exposes a REST API for executing API tests. The above test can be run executed remotely with
+TestEngine is a standalone server that exposes a REST API for executing API tests. The above test can be run executed remotely with
 
 ```java
-TestServerClient testServerClient = TestServerClient.fromUrl("...").withCredentials("...", "...");
-RecipeExecutor executor = testServerClient.createRecipeExecutor();
+TestEngineClient testEngineClient = TestEngineClient.fromUrl("...").withCredentials("...", "...");
+RecipeExecutor executor = testEngineClient.createRecipeExecutor();
 Execution execution = executor.executeRecipe(recipe);
 ```
 
 The result of executeRecipe is the same when executing remotely, so it can be handled in the same
 way as for local execution.
 
-TestServer also provides functionality for running existing ReadyAPI/SoapUI projects, logging, etc - read more in the
-[testserver module](modules/testserver)
+TestEngine also provides functionality for running existing ReadyAPI/SoapUI projects, logging, etc - read more in the
+[testengine module](modules/testengine)
 
 ## Execution Facade
 
@@ -97,9 +97,9 @@ The facade will by default use the local execution engine but switch to remote e
 system properties are set:
 
 ```
-testserver.endpoint=<testserver endpoint>
-testserver.user=<testserver user>
-testserver.password=<testserver password>
+testengine.endpoint=<testengine endpoint>
+testengine.user=<testengine user>
+testengine.password=<testengine password>
 ```
 
 The facade also provides a couple of utility methods for easily executing recipes in string or file format:

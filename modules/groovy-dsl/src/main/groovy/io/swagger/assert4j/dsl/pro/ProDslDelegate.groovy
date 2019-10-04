@@ -2,7 +2,7 @@ package io.swagger.assert4j.dsl.pro
 
 import io.swagger.assert4j.TestRecipeBuilder
 import io.swagger.assert4j.dsl.DslDelegate
-import io.swagger.assert4j.testserver.teststeps.datasource.GridDataSourceTestStepBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.GridDataSourceTestStepBuilder
 
 /**
  * The delegate responding to commands inside the "recipe" closure of ServerTestDsl.

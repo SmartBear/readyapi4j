@@ -36,7 +36,7 @@ public class ContentUtils {
         }
 
         String result = null;
-        String mediaTypeLowerCase= mediaType.toLowerCase();
+        String mediaTypeLowerCase = mediaType.toLowerCase();
         try {
             if (mediaTypeLowerCase.endsWith("json")) {
                 result = Json.mapper().writeValueAsString(content);

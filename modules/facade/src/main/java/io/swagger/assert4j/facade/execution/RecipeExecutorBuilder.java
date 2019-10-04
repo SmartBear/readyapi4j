@@ -6,7 +6,7 @@ import io.swagger.assert4j.execution.RecipeFilter;
 import io.swagger.assert4j.local.execution.SoapUIRecipeExecutor;
 import io.swagger.assert4j.support.ExecutionLogger;
 import io.swagger.assert4j.support.RecipeLogger;
-import io.swagger.assert4j.testserver.execution.TestServerClient;
+import io.swagger.assert4j.testengine.execution.TestEngineClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +18,9 @@ import java.util.Map;
 
 /**
  * Builder class for building a configured RecipeExecutor. The following env/system properties will be used if available:
- * - testserver.endpoint - endpoint to a TestServer installation
- * - testserver.user - used for TestServer authentication
- * - testserver.password - for TestServer authentication
+ * - testengine.endpoint - endpoint to a TestEngine installation
+ * - testengine.user - used for TestEngine authentication
+ * - testengine.password - for TestEngine authentication
  * - swagger-assert4j.log.executions.folder - all executions will be logged to this folder
  * - swagger-assert4j.log.recipes.folder - all recipes will be logged to this folder
  */
@@ -28,15 +28,15 @@ public class RecipeExecutorBuilder {
 
     private final static Logger LOG = LoggerFactory.getLogger(RecipeExecutorBuilder.class);
 
-    private static final String TESTSERVER_ENDPOINT_PROPERTY = "testserver.endpoint";
-    private static final String TESTSERVER_USER_PROPERTY = "testserver.user";
-    private static final String TESTSERVER_PASSWORD_PROPERTY = "testserver.password";
+    private static final String TESTENGINE_ENDPOINT_PROPERTY = "testengine.endpoint";
+    private static final String TESTENGINE_USER_PROPERTY = "testengine.user";
+    private static final String TESTENGINE_PASSWORD_PROPERTY = "testengine.password";
     private static final String EXECUTION_LOG_FOLDER_PROPERTY = "swagger-assert4j.log.executions.folder";
     private static final String RECIPE_LOG_FOLDER_PROPERTY = "swagger-assert4j.log.recipes.folder";
 
-    private String testServerUser;
-    private String testServerPassword;
-    private String testServerEndpoint;
+    private String testEngineUser;
+    private String testEnginePassword;
+    private String testEngineEndpoint;
 
     private List<RecipeFilter> filters = new ArrayList<>();
     private List<ExecutionListener> listeners = new ArrayList<>();
@@ -60,23 +60,23 @@ public class RecipeExecutorBuilder {
     /**
      * Builds a RecipeExecutor as configured; if an endpoint has been set this builder will
      * first attempt to build a remote executor using that endpoint. Second it will check for
-     * a testserver.endpoint env or system property to use for a remote executor - if neither is found
+     * a testengine.endpoint env or system property to use for a remote executor - if neither is found
      * a local executor will be built instead. If you want to force a local executor use the
      * buildLocal() method instead.
      *
      * @return the resulting RecipeExecutor
      */
     public RecipeExecutor build() {
-        if (testServerEndpoint != null) {
+        if (testEngineEndpoint != null) {
             try {
-                return buildRemote(testServerEndpoint);
+                return buildRemote(testEngineEndpoint);
             } catch (Exception e) {
                 LOG.error("Failed to build remote RecipeExecutor for", e);
             }
         }
 
         Map<String, String> env = System.getenv();
-        String endpoint = env.getOrDefault(TESTSERVER_ENDPOINT_PROPERTY, System.getProperty(TESTSERVER_ENDPOINT_PROPERTY));
+        String endpoint = env.getOrDefault(TESTENGINE_ENDPOINT_PROPERTY, System.getProperty(TESTENGINE_ENDPOINT_PROPERTY));
         if (endpoint != null) {
             try {
                 return buildRemote(endpoint);
@@ -111,26 +111,26 @@ public class RecipeExecutorBuilder {
     }
 
     /**
-     * @param testServerEndpoint the remote TestServer endpoint to use when building an executor
+     * @param testServerEndpoint the remote TestEngine endpoint to use when building an executor
      */
     public RecipeExecutorBuilder withEndpoint(String testServerEndpoint) {
-        this.testServerEndpoint = testServerEndpoint;
+        this.testEngineEndpoint = testServerEndpoint;
         return this;
     }
 
     /**
-     * @param testServerUser the remote TestServer user to use for authentication
+     * @param testServerUser the remote TestEngine user to use for authentication
      */
     public RecipeExecutorBuilder withUser(String testServerUser) {
-        this.testServerUser = testServerUser;
+        this.testEngineUser = testServerUser;
         return this;
     }
 
     /**
-     * @param testServerPassword the remote TestServer password to user
+     * @param testServerPassword the remote TestEngine password to user
      */
     public RecipeExecutorBuilder withPassword(String testServerPassword) {
-        this.testServerPassword = testServerPassword;
+        this.testEnginePassword = testServerPassword;
         return this;
     }
 
@@ -149,7 +149,7 @@ public class RecipeExecutorBuilder {
     }
 
     /**
-     * @return a local RecipeExecutor - ignores any TestServer related configurations
+     * @return a local RecipeExecutor - ignores any TestEngine related configurations
      */
     public RecipeExecutor buildLocal() {
         RecipeExecutor executor = new SoapUIRecipeExecutor();
@@ -158,7 +158,7 @@ public class RecipeExecutorBuilder {
 
     /**
      * Builds a remote executor with the configured username and password, if not set those will
-     * be taken from testserver.user and testserver.password env/system properties respectively.
+     * be taken from testengine.user and testengine.password env/system properties respectively.
      *
      * @param endpoint the remote endpoint to use
      * @return a remote RecipeExecutor
@@ -168,13 +168,13 @@ public class RecipeExecutorBuilder {
         Map<String, String> env = System.getenv();
 
         URL url = new URL(endpoint);
-        TestServerClient testServerClient = TestServerClient.fromUrl(url.toString());
+        TestEngineClient testServerClient = TestEngineClient.fromUrl(url.toString());
 
-        String user = testServerUser != null ? testServerUser :
-            env.getOrDefault(TESTSERVER_USER_PROPERTY, System.getProperty(TESTSERVER_USER_PROPERTY));
+        String user = testEngineUser != null ? testEngineUser :
+                env.getOrDefault(TESTENGINE_USER_PROPERTY, System.getProperty(TESTENGINE_USER_PROPERTY));
 
-        String password = testServerPassword != null ? testServerPassword :
-            env.getOrDefault(TESTSERVER_PASSWORD_PROPERTY, System.getProperty(TESTSERVER_PASSWORD_PROPERTY));
+        String password = testEnginePassword != null ? testEnginePassword :
+                env.getOrDefault(TESTENGINE_PASSWORD_PROPERTY, System.getProperty(TESTENGINE_PASSWORD_PROPERTY));
 
         testServerClient.setCredentials(user, password);
         RecipeExecutor executor = testServerClient.createRecipeExecutor();

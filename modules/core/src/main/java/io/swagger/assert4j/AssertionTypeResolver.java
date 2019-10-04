@@ -3,22 +3,7 @@ package io.swagger.assert4j;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import io.swagger.assert4j.assertions.AssertionNames;
-import io.swagger.assert4j.client.model.GroovyScriptAssertion;
-import io.swagger.assert4j.client.model.InvalidHttpStatusCodesAssertion;
-import io.swagger.assert4j.client.model.JdbcStatusAssertion;
-import io.swagger.assert4j.client.model.JdbcTimeoutAssertion;
-import io.swagger.assert4j.client.model.JsonPathContentAssertion;
-import io.swagger.assert4j.client.model.JsonPathCountAssertion;
-import io.swagger.assert4j.client.model.JsonPathExistenceAssertion;
-import io.swagger.assert4j.client.model.NotSoapFaultAssertion;
-import io.swagger.assert4j.client.model.ResponseSLAAssertion;
-import io.swagger.assert4j.client.model.SchemaComplianceAssertion;
-import io.swagger.assert4j.client.model.SimpleContainsAssertion;
-import io.swagger.assert4j.client.model.SimpleNotContainsAssertion;
-import io.swagger.assert4j.client.model.SoapFaultAssertion;
-import io.swagger.assert4j.client.model.ValidHttpStatusCodesAssertion;
-import io.swagger.assert4j.client.model.XPathContainsAssertion;
-import io.swagger.assert4j.client.model.XQueryContainsAssertion;
+import io.swagger.assert4j.client.model.*;
 
 /**
  * Jackson type resolver for parsing assertions in JSON recipes into correct Assertion types

@@ -15,6 +15,15 @@ Run them with
 mvn test
 ```
 
+or if you have TestEngine running locally with its default account:
+```
+mvn test -Dtestengine.user=admin -Dtestengine.password=testengine -Dtestengine.endpoint=http://localhost:8080
+```
+
+
+
+
+
 which will use JUnit to run them via the CucumberTest runner, output should be something in the line of
 ```gherkin
 [INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ swagger-assert4j-cucumber-samples ---

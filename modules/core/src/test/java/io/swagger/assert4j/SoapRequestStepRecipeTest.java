@@ -1,12 +1,11 @@
 package io.swagger.assert4j;
 
+import com.sun.jersey.core.util.Base64;
 import io.swagger.assert4j.client.model.RequestAttachment;
 import io.swagger.assert4j.client.model.SoapParameter;
 import io.swagger.assert4j.client.model.SoapRequestTestStep;
-import io.swagger.assert4j.TestRecipe;
 import io.swagger.assert4j.extractor.ExtractorData;
 import io.swagger.assert4j.teststeps.TestStepTypes;
-import com.sun.jersey.core.util.Base64;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -16,11 +15,9 @@ import java.net.URL;
 import java.util.List;
 
 import static io.swagger.assert4j.TestRecipeBuilder.newTestRecipe;
-import static io.swagger.assert4j.attachments.Attachments.byteArray;
-import static io.swagger.assert4j.attachments.Attachments.stream;
-import static io.swagger.assert4j.attachments.Attachments.string;
-import static io.swagger.assert4j.extractor.Extractors.fromResponse;
+import static io.swagger.assert4j.attachments.Attachments.*;
 import static io.swagger.assert4j.extractor.Extractors.fromProperty;
+import static io.swagger.assert4j.extractor.Extractors.fromResponse;
 import static io.swagger.assert4j.teststeps.TestSteps.soapRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -38,7 +35,7 @@ public class SoapRequestStepRecipeTest {
                         .withParameter("CountryName", "Sweden")
                         .withPathParameter("//*:CityName", "Stockholm")
 
-                )
+        )
                 .buildTestRecipe();
 
         SoapRequestTestStep testStep = (SoapRequestTestStep) recipe.getTestCase().getTestSteps().get(0);

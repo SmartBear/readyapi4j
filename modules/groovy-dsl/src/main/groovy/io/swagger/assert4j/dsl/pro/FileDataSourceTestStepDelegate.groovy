@@ -1,6 +1,6 @@
 package io.swagger.assert4j.dsl.pro
 
-import io.swagger.assert4j.testserver.teststeps.datasource.FileDataSourceTestStepBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.FileDataSourceTestStepBuilder
 
 /**
  * Delegate for the 'usingCsvFile' closure in 'recipe'

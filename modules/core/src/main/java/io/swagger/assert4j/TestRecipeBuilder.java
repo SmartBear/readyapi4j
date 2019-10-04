@@ -4,25 +4,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
-import io.swagger.assert4j.client.model.Assertion;
-import io.swagger.assert4j.client.model.BooleanDataGenerator;
-import io.swagger.assert4j.client.model.ComputerAddressDataGenerator;
-import io.swagger.assert4j.client.model.CustomStringDataGenerator;
-import io.swagger.assert4j.client.model.DataGenerator;
-import io.swagger.assert4j.client.model.DateAndTimeDataGenerator;
-import io.swagger.assert4j.client.model.IntegerDataGenerator;
-import io.swagger.assert4j.client.model.NameDataGenerator;
-import io.swagger.assert4j.client.model.PhoneNumberDataGenerator;
-import io.swagger.assert4j.client.model.PropertyTransfer;
-import io.swagger.assert4j.client.model.PropertyTransferTestStep;
-import io.swagger.assert4j.client.model.RealNumberDataGenerator;
-import io.swagger.assert4j.client.model.StateNameDataGenerator;
-import io.swagger.assert4j.client.model.StringDataGenerator;
-import io.swagger.assert4j.client.model.TestCase;
-import io.swagger.assert4j.client.model.TestStep;
-import io.swagger.assert4j.client.model.UKPostCodeDataGenerator;
-import io.swagger.assert4j.client.model.USZIPCodeDataGenerator;
-import io.swagger.assert4j.client.model.ValuesFromSetDataGenerator;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import io.swagger.assert4j.client.model.*;
 import io.swagger.assert4j.extractor.Extractor;
 import io.swagger.assert4j.extractor.ExtractorData;
 import io.swagger.assert4j.properties.PropertyBuilder;
@@ -35,11 +20,7 @@ import io.swagger.assert4j.teststeps.request.HttpRequestStepBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.swagger.assert4j.properties.Properties.property;
 
@@ -85,21 +66,25 @@ public class TestRecipeBuilder {
     /**
      * Builds a recipe for the specified TestStep builders
      *
-     * @param name the name of the recipe
+     * @param name     the name of the recipe
      * @param builders the TestStep builders
      * @return the resulting TestRecipe
      */
     public static TestRecipe buildRecipe(String name, TestStepBuilder... builders) {
-        return newTestRecipe(builders).named( name).buildTestRecipe();
+        return newTestRecipe(builders).named(name).buildTestRecipe();
     }
 
     private static ObjectMapper getObjectMapper() {
         if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-            objectMapper.addMixIn(TestStep.class, TestStepMixin.class);
-            objectMapper.addMixIn(DataGenerator.class, DataGeneratorTypeMixin.class);
-            objectMapper.addMixIn(Assertion.class, AssertionMixin.class);
+            objectMapper = new ObjectMapper()
+                    .addMixIn(TestStep.class, TestStepMixin.class)
+                    .addMixIn(DataGenerator.class, DataGeneratorTypeMixin.class)
+                    .addMixIn(Assertion.class, AssertionMixin.class)
+                    .registerModule(new ParameterNamesModule())
+                    .registerModule(new Jdk8Module())
+                    .registerModule(new JavaTimeModule());
         }
+
         return objectMapper;
     }
 
@@ -116,7 +101,7 @@ public class TestRecipeBuilder {
     }
 
     /**
-     * Certificate file can be added on the TestServer in allowedFilePath directory. Otherwise it should be provided by the client.
+     * Certificate file can be added on the TestEngine in allowedFilePath directory. Otherwise it should be provided by the client.
      * Client will throw an exception if file doesn't exist on client and on server.
      *
      * @param filePath Certificate file path on local computer or on server

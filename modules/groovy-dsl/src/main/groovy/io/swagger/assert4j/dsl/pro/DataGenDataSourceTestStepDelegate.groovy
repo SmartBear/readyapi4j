@@ -1,49 +1,18 @@
 package io.swagger.assert4j.dsl.pro
 
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.AbstractDataGeneratorBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.CustomStringDataGeneratorBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenDataSourceTestStepBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.DateAndTimeDataGeneratorBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.IntegerDataGeneratorBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.PhoneNumberDataGeneratorBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.StringDataGeneratorBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.UKPostCodeDataGeneratorBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.USZipDataGeneratorBuilder
-import io.swagger.assert4j.testserver.teststeps.datasource.datagen.ValuesFromSetDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.AbstractDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.CustomStringDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.DataGenDataSourceTestStepBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.DateAndTimeDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.IntegerDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.PhoneNumberDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.StringDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.UKPostCodeDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.USZipDataGeneratorBuilder
+import io.swagger.assert4j.testengine.teststeps.datasource.datagen.ValuesFromSetDataGeneratorBuilder
 
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.addressTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.anyGenderFirstNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.anyGenderFullNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.anyGenderLastNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.cityTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.countryTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.customStringTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.digitsBooleanTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.emailTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.femaleFirstNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.femaleFullNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.femaleLastNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.fullStateNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.guidTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.ipv4ComputerAddressTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.mac48ComputerAddressTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.maleFirstNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.maleFullNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.maleLastNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.phoneNumberTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.randomDateAndTimeTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.randomIntegerTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.randomValueFromSetTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.sequentialIntegerTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.sequentialValueFromSetTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.shortStateNameTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.ssnTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.stringTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.trueFalseBooleanTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.ukPostCodeTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.usZipCodeTypeProperty
-import static io.swagger.assert4j.testserver.teststeps.datasource.datagen.DataGenerators.yesNoBooleanTypeProperty
 import static groovy.lang.Closure.DELEGATE_FIRST
+import static io.swagger.assert4j.testengine.teststeps.datasource.datagen.DataGenerators.*
 
 class DataGenDataSourceTestStepDelegate extends DataSourceTestStepDelegate<DataGenDataSourceTestStepBuilder> {
     DataGenDataSourceTestStepDelegate(String testStepName) {

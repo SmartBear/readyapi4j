@@ -11,7 +11,7 @@ public class RestRequestStepWithBodyBuilder extends RestRequestStepBuilder<RestR
 
     public RestRequestStepWithBodyBuilder withRequestBody(Object requestBody) {
         getTestStep().setRequestBody(
-            ContentUtils.serializeContent(requestBody, getTestStep().getMediaType()));
+                ContentUtils.serializeContent(requestBody, getTestStep().getMediaType()));
 
         return this;
     }

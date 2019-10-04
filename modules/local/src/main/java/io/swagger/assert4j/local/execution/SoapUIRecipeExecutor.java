@@ -7,28 +7,18 @@ import com.eviware.soapui.model.testsuite.ProjectRunContext;
 import com.eviware.soapui.model.testsuite.ProjectRunner;
 import com.eviware.soapui.support.types.StringToObjectMap;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import com.smartbear.ready.recipe.JsonRecipeParser;
 import com.smartbear.ready.recipe.teststeps.TestCaseStruct;
 import io.swagger.assert4j.TestRecipe;
-import io.swagger.assert4j.client.model.ProjectResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.client.model.TestStep;
-import io.swagger.assert4j.execution.Execution;
-import io.swagger.assert4j.execution.ExecutionListener;
-import io.swagger.assert4j.execution.ExecutionMode;
-import io.swagger.assert4j.execution.RecipeExecutionException;
-import io.swagger.assert4j.execution.RecipeExecutor;
-import io.swagger.assert4j.execution.RecipeFilter;
-import io.swagger.assert4j.execution.UnsupportedTestStepException;
+import io.swagger.assert4j.execution.*;
 import io.swagger.assert4j.extractor.DataExtractors;
 import io.swagger.assert4j.teststeps.TestStepTypes;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -58,11 +48,6 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     public Execution executeRecipe(TestRecipe recipe) {
         applyRecipeFilters(recipe);
         return postRecipe(recipe, false);
-    }
-
-    @Override
-    public List<Execution> getExecutions() {
-        return Lists.newArrayList(executionsMap.values());
     }
 
     @Override
@@ -130,6 +115,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
             objectMapper = new ObjectMapper();
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+            objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
         }
         return objectMapper;
     }
@@ -170,7 +156,7 @@ public class SoapUIRecipeExecutor implements RecipeExecutor {
     }
 
     private void notifyExecutionFinished(TestRecipe testRecipe, Execution execution) {
-        ProjectResultReport projectResultReport = execution.getCurrentReport();
+        TestJobReport projectResultReport = execution.getCurrentReport();
         if (testRecipe.getExtractorData() != null) {
             DataExtractors.runDataExtractors(projectResultReport, Arrays.asList(testRecipe.getExtractorData()));
         }

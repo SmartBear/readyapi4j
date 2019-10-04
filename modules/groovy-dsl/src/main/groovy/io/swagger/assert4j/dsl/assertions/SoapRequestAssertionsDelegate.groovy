@@ -1,10 +1,6 @@
 package io.swagger.assert4j.dsl.assertions
 
-import io.swagger.assert4j.assertions.Assertions
-import io.swagger.assert4j.assertions.DefaultSchemaComplianceAssertionBuilder
-import io.swagger.assert4j.assertions.NotSoapFaultAssertionBuilder
-import io.swagger.assert4j.assertions.SchemaComplianceAssertionBuilder
-import io.swagger.assert4j.assertions.SoapFaultAssertionBuilder
+import io.swagger.assert4j.assertions.*
 
 /**
  * The delegate to respond to commands inside 'asserting' closure of SOAP request

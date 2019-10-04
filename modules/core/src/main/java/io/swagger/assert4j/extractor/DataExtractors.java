@@ -1,7 +1,7 @@
 package io.swagger.assert4j.extractor;
 
-import io.swagger.assert4j.client.model.ProjectResultReport;
 import io.swagger.assert4j.client.model.TestCaseResultReport;
+import io.swagger.assert4j.client.model.TestJobReport;
 import io.swagger.assert4j.client.model.TestSuiteResultReport;
 
 import java.util.Collection;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Utility class to execute the data extractions after recipe execution.
  */
 public class DataExtractors {
-    public static void runDataExtractors(ProjectResultReport executionStatus, List<ExtractorData> extractorDataList) {
+    public static void runDataExtractors(TestJobReport executionStatus, List<ExtractorData> extractorDataList) {
         List<String> extractorDataIdList = extractorDataList
                 .stream()
                 .map(ExtractorData::getExtractorDataId)
@@ -25,7 +25,8 @@ public class DataExtractors {
                 .map(TestSuiteResultReport::getTestCaseResultReports)
                 .flatMap(Collection::stream)
                 .filter(testCaseResultReport ->
-                        extractorDataIdList.contains(testCaseResultReport.getProperties().get(ExtractorData.EXTRACTOR_DATA_KEY)))
+                            testCaseResultReport.getProperties() != null &&
+                            extractorDataIdList.contains(testCaseResultReport.getProperties().get(ExtractorData.EXTRACTOR_DATA_KEY)))
                 .findAny();
 
         resultReport.ifPresent(testCaseResultReport -> {
