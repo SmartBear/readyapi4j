@@ -17,6 +17,7 @@
         <module>modules/runner</module>
         <module>modules/samples</module>
         <module>modules/codegen</module>
+        <module>modules/hiptest</module>
     </modules>
 
     <properties>
