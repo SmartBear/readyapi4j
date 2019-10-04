@@ -1,11 +1,11 @@
-# Swagger Assert4j OAS/Swagger support
+# ReadyAPI4j OAS/Swagger support
 
 This module extends the [core Java API](../core) with builders/classes for creating tests that test an API based on a 
 Swagger/OAS 2.0 definition. 
 
 ## Usage
 
-The [SwaggerTestStepBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/swagger/SwaggerTestStepBuilder.html)
+The [SwaggerTestStepBuilder](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/swagger/SwaggerTestStepBuilder.html)
 provides convenience methods for adding [REST Requests](../core/README.md#rest-requests) to a TestRecipe based on 
 metadata provided by a Swagger definition. 
 

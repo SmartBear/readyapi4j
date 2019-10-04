@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.swagger.assert</groupId>
-    <artifactId>swagger-assert4j</artifactId>
+    <groupId>com.smartbear.readyapi</groupId>
+    <artifactId>readyapi4j</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <modules>
         <module>modules/core</module>
@@ -20,9 +20,9 @@
         <module>modules/maven-plugin-tester</module>
     </modules>
     <packaging>pom</packaging>
-    <name>Swagger Assert4J</name>
+    <name>ReadyAPI4j</name>
     <description>Java library for testing APIs using either a local or remote execution engine</description>
-    <url>https://github.com/SmartBear/swagger-assert4j</url>
+    <url>https://github.com/SmartBear/readyapi4j</url>
     <developers>
         <developer>
             <name>Manne Fagerlind</name>
@@ -38,15 +38,15 @@
         </developer>
     </developers>
     <scm>
-        <url>https://github.com/SmartBear/swagger-assert4j</url>
-        <connection>scm:git:ssh://git@github.com/SmartBear/swagger-assert4j.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/SmartBear/swagger-assert4j.git
+        <url>https://github.com/SmartBear/readyapi4j</url>
+        <connection>scm:git:ssh://git@github.com/SmartBear/readyapi4j.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/SmartBear/readyapi4j.git
         </developerConnection>
     </scm>
 
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/SmartBear/swagger-assert4j/issues</url>
+        <url>https://github.com/SmartBear/readyapi4j/issues</url>
     </issueManagement>
 
     <licenses>
@@ -132,7 +132,7 @@
                                 modules/testengine/src/main/java:
                             </sourcepath>
                             <excludePackageNames>
-                                io.swagger.assert4j.client.teststeps
+                                com.smartbear.readyapi4j.client.teststeps
                             </excludePackageNames>
                             <reportOutputDirectory>apidocs</reportOutputDirectory>
                             <overview>modules/core/src/main/java/overview.html</overview>
@@ -202,7 +202,7 @@
                                     <mode>development</mode>
                                     <url>${project.url}</url>
                                     <implementation-version>${project.version}</implementation-version>
-                                    <package>io.swagger.assert.client</package>
+                                    <package>com.smartbear.readyapi.client</package>
                                 </manifestEntries>
                             </archive>
                         </configuration>

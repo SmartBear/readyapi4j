@@ -1,4 +1,4 @@
-# SOAP requests in Assert4J DSL
+# SOAP requests in ReadyAPI4j DSL
 
 To send a SOAP request from a DSL script, you need to call the ```soapRequest``` method and
 provide a URL to the WSDL. You also need to identify the binding and operation you want to call.
@@ -6,7 +6,7 @@ provide a URL to the WSDL. You also need to identify the binding and operation y
 Here's a simple example where no parameters are passed into the SOAP request:
 
 ```groovy
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
  executeRecipe {
     soapRequest {
@@ -26,7 +26,7 @@ Named parameter finds an XML element using the local name of the element.
 The following code passes the value "France" into the XML element:
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
   
   executeRecipe {
      soapRequest {
@@ -40,7 +40,7 @@ The following code passes the value "France" into the XML element:
 In some cases the local name will be ambiguous, however - the corresponding XML will have several elements with the same
 name. Using a ```pathParam``` with XPath will help resolve this:
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
   
   executeRecipe {
      soapRequest {
@@ -66,7 +66,7 @@ The [HTTP-specific assertions](Assertions.md#http-specific-assertions) are also 
 The following complete code example shows you three generic content and response time assertions:
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
     soapRequest {
@@ -89,7 +89,7 @@ The following code example demonstrates the use of the HTTP status assertion, an
 payload doesn't comply with the schema defined in the WSDL of the web service.
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
     soapRequest {

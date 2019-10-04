@@ -1,4 +1,4 @@
-# Swagger Assert4j TestEngine executor
+# ReadyAPI4j TestEngine executor
 
 The testengine module provides a test execution engine that utilizes a remote TestEngine instance for executing
 recipes.
@@ -8,7 +8,7 @@ the Java API.
 
 # TestEngine Extensions
 
-ReadyAPI TestEngine provides a number of additional features that are not available when using swagger-assert4j with the
+ReadyAPI TestEngine provides a number of additional features that are not available when using readyapi4j with the
 [local execution engine](../local), namely;
 
 * The possibility to execute tests in existing ReadyAPI/SoapUI projects
@@ -20,7 +20,7 @@ This module provides a Java API for these extensions, as described below
 
 ## Using the TestEngineClient
 
-The [TestEngineClient](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/TestEngineClient.html)
+The [TestEngineClient](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/testengine/execution/TestEngineClient.html)
 class is the main entry point to the additional features provided by TestEngine:
 
 ```java
@@ -29,12 +29,12 @@ TestEngineClient testEngineClient = TestEngineClient.fromUrl(TESTSERVER_URL)
 ```
 
 Executing TestRecipes on the server is done via the 
-[TestEngineRecipeExecutor](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/TestEngineRecipeExecutor.html) 
+[TestEngineRecipeExecutor](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/testengine/execution/TestEngineRecipeExecutor.html) 
 created with `TestEngineClient.createRecipeExecutor`, which is the same `Executor` created when using the [facade](../facade) for remote execution.
 
 ## Running existing projects
 
-Use the [ProjectExecutor](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/ProjectExecutor.html)
+Use the [ProjectExecutor](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/testengine/execution/ProjectExecutor.html)
 to execute existing SoapUI / ReadyAPI projects. 
 
 ```java
@@ -45,8 +45,8 @@ ProjectExecutor projectExecutor = testEngineClient.createProjectExecutor();
 ```
 
 Projects to be executed can reside either locally or remotely on the server (using the TestEngine Repository functionality), create and 
-pass corresponding instances of [ProjectExecutionRequest](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/ProjectExecutionRequest.html) 
-and [RepositoryProjectExecutionRequest](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/execution/RepositoryProjectExecutionRequest.html) to the execute/submitProject methods.
+pass corresponding instances of [ProjectExecutionRequest](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/testengine/execution/ProjectExecutionRequest.html) 
+and [RepositoryProjectExecutionRequest](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/testengine/execution/RepositoryProjectExecutionRequest.html) to the execute/submitProject methods.
 
 Before executing tests you can further narrow down which TestSuites/TestCases to run, specify tags, properties, endpoints, etc. by 
 setting the corresponding properties in either of these execution request classes.
@@ -70,9 +70,9 @@ projectExecutor.executeProject( request );
 The ReadyAPI TestEngine adds a number of constructs to the JSON Recipe format to allow for data-driven testing, similar to 
 what is possible with [Data Driven testing in SoapUI Pro](https://smartbear.com/product/ready-api/soapui/features/data-driven-tests/).
 
-A [ServerTestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/testengine/teststeps/ServerTestSteps.html) 
+A [ServerTestSteps](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/testengine/teststeps/ServerTestSteps.html) 
 class makes it easy to build the corresponding TestStep, matching the 
-[TestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/TestSteps.html) class in core.
+[TestSteps](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/teststeps/TestSteps.html) class in core.
 
 A quick example of what's possible with dataGen DataSources, taken from the samples module:
 

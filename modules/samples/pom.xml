@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>swagger-assert4j</artifactId>
-        <groupId>io.swagger.assert</groupId>
+        <artifactId>readyapi4j</artifactId>
+        <groupId>com.smartbear.readyapi</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>swagger-assert4j-samples</artifactId>
+    <artifactId>readyapi4j-samples</artifactId>
     <packaging>pom</packaging>
     <modules>
         <module>java</module>
@@ -59,20 +59,20 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.swagger.assert</groupId>
-                <artifactId>swagger-assert4j-testengine</artifactId>
+                <groupId>com.smartbear.readyapi</groupId>
+                <artifactId>readyapi4j-testengine</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>io.swagger.assert</groupId>
-                <artifactId>swagger-assert4j-groovy-dsl</artifactId>
+                <groupId>com.smartbear.readyapi</groupId>
+                <artifactId>readyapi4j-groovy-dsl</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>io.swagger.assert</groupId>
-                <artifactId>swagger-assert4j-facade</artifactId>
+                <groupId>com.smartbear.readyapi</groupId>
+                <artifactId>readyapi4j-facade</artifactId>
                 <version>${project.version}</version>
                 <scope>test</scope>
             </dependency>

@@ -1,12 +1,12 @@
-# REST requests in Assert4J DSL
+# REST requests in ReadyAPI4j DSL
 
 To send a REST request from a DSL script, you need to call one of the methods in the class 
-```io.swagger.assert4j.dsl.TestDsl```. For every HTTP verb, there's a corresponding method with a lower case
+```TestDsl```. For every HTTP verb, there's a corresponding method with a lower case
 name that you can call to send a request to a certain URI. In the case of POST and PUT, you can also
 add the body you want to send to the server as the second parameter.
 
  ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
  executeRecipe {
     get 'https://staging-server/customers/1?includeSSN=true'
@@ -24,7 +24,7 @@ parameter to one of the HTTP methods inside a set of curly braces. Here is an ex
 content type of a post and add a Set-Cookie header to the request:
  
  ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
      post 'https://staging-server/orders/1/status', {
@@ -43,7 +43,7 @@ In other words, you can insert Groovy code inside it. You can also add comments 
  
  ## Setting parameters and request headers
  
-Swagger Assert4J supports four different kinds of REST parameters, which can all be set inside a configuration block:
+ReadyAPI4j supports four different kinds of REST parameters, which can all be set inside a configuration block:
 * query parameters, set in the query string
 * path parameters, set in the resource path
 * matrix parameters, appended after the resource path proper
@@ -129,7 +129,7 @@ To tell a DSL script to go and fetch the page you've been redirected to, use the
 
 ## Adding assertions to the response
 
-The Assert4J DSL is a **Test** DSL, so you're really not putting it to good use unless you verify the responses you
+The ReadyAPI4j DSL is a **Test** DSL, so you're really not putting it to good use unless you verify the responses you
 get back. This is done in an ```asserting``` section in your configuration block.
 
 In addition to the general-purpose [assertions](Assertions.md) for things like simple content and the response
@@ -139,7 +139,7 @@ parts of the response (XPath is part of the generic assertion support).
 The following complete code example shows you both generic assertions and ones that are only applicable to REST and HTTP.
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
      post 'https://staging-server/orders/1/status', {

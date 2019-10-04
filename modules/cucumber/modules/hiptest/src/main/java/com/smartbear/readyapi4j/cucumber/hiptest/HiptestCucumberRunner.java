@@ -3,7 +3,7 @@ package com.smartbear.readyapi4j.cucumber.hiptest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import io.swagger.assert4j.cucumber.CucumberRunner;
+import com.smartbear.readyapi4j.cucumber.CucumberRunner;
 import io.swagger.util.Json;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

@@ -31,7 +31,7 @@ https://api-doc.hiptest.com/?http#get-feature-from-a-given-folder.
 Run the command-line runner without specifing a feature file but with regular Cucumber CLI arguments
 
 ```
-java -jar target/swagger-assert4j-cucumber-hiptest-runner-1.0.0-SNAPSHOT.jar -p pretty
+java -jar target/readyapi4j-cucumber-hiptest-runner-1.0.0-SNAPSHOT.jar -p pretty
 [main] INFO com.smartbear.readyapi4j.cucumber.hiptest.HiptestCucumberRunner - Reading Features from HipTest
 [main] INFO com.smartbear.readyapi4j.cucumber.hiptest.HiptestCucumberRunner - Cucumber feature(s) saved to temporary file target/scenarios/cucumber2105632627517087917.feature
 ReadyAPI4j Cucumber Runner

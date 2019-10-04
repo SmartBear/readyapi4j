@@ -2,16 +2,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>swagger-assert4j</artifactId>
-        <groupId>io.swagger.assert</groupId>
+        <artifactId>readyapi4j</artifactId>
+        <groupId>com.smartbear.readyapi</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>swagger-assert4j-maven-plugin</artifactId>
+    <artifactId>readyapi4j-maven-plugin</artifactId>
 
     <packaging>maven-plugin</packaging>
-    <name>Assert4J Maven Plugin</name>
+    <name>ReadyAPI4j Maven Plugin</name>
 
     <description>Maven plugin for executing test recipes locally or against ReadyAPI TestEngine</description>
 
@@ -34,13 +34,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.swagger.assert</groupId>
-            <artifactId>swagger-assert4j-facade</artifactId>
+            <groupId>com.smartbear.readyapi</groupId>
+            <artifactId>readyapi4j-facade</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.swagger.assert</groupId>
-            <artifactId>swagger-assert4j-junit-report</artifactId>
+            <groupId>com.smartbear.readyapi</groupId>
+            <artifactId>readyapi4j-junit-report</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
