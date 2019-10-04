@@ -1,4 +1,4 @@
-# Swagger Assert4j Samples
+# ReadyAPI4j Samples
 
 This module contains sample submodules showing to create/execute test recipes with [Groovy](groovy), 
 [Java](java) or the [Maven plugin](maven-plugin).

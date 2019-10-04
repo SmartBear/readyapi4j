@@ -1,4 +1,4 @@
-# Swagger Assert4j Facade
+# ReadyAPI4j Facade
 
 The facade module provides a common entry-point to executing test recipes using either the local or remote execution engines.
 

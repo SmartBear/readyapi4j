@@ -1,4 +1,4 @@
-# Swagger Assert4j Maven Plugin Samples
+# ReadyAPI4j Maven Plugin Samples
 
 This module contains [sample recipes](src/test/resources/recipes) in JSON format that are 
 executed via the Maven plugin as defined in the pom.xml using one of the RunSamplesLocally or 

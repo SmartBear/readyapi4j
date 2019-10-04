@@ -1,1 +1,1 @@
-# Swagger Assert4j Maven tester
+# ReadyAPI4j Maven tester

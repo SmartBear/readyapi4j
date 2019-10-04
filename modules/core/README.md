@@ -1,4 +1,4 @@
-# Swagger Assert4j Core 
+# ReadyAPI4j Core 
 
 This modules provides the core Java APIs for creating and executing Test recipes which can then be executed locally or
 remotely as described in the [Concepts](../../CONCEPTS.md) document. 
@@ -38,9 +38,9 @@ pojo approach.
 
 # Recipes
 
-Assert4j expresses tests as "recipes". A test recipe is an ordered list of steps that are executed sequentially when the 
+ReadyAPI4j expresses tests as "recipes". A test recipe is an ordered list of steps that are executed sequentially when the 
 test is run. The easiest way to build a recipe is to use the 
-[TestRecipeBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/TestRecipeBuilder.html)
+[TestRecipeBuilder](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/TestRecipeBuilder.html)
 class:
 
 ```java
@@ -56,7 +56,7 @@ RecipeExecutionResult result = RecipeExecutorBuilder.buildDefault().executeRecip
 # Test Steps
 
 Test steps represent the actual actions performed during the execution of a test, the 
-[TestSteps](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/TestSteps.html) class provides factory
+[TestSteps](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/teststeps/TestSteps.html) class provides factory
 methods for creating TestStepBuilders for each supported test step type, as you will see below. 
 
 ## REST Requests
@@ -118,7 +118,7 @@ the built in serialization support json, yaml and xml media types.
 ### Authentication
 
 If you need to add authentication to your request, then use one of the factory methods
-provided by the [Authentications](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/auth/Authentications.html) class.
+provided by the [Authentications](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/auth/Authentications.html) class.
 
 ```java
 TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
@@ -139,7 +139,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 
 If you'd like to attach a file to the body of a request instead of providing it as content as shown above, you can 
  use the `withAttachments(...)` method together with the factory methods in the 
-  [Attachments](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/attachments/Attachments.html) class
+  [Attachments](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/attachments/Attachments.html) class
 
 ```java
 TestRecipe recipe = TestRecipeBuilder.buildRecipe(  
@@ -205,7 +205,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 ```
 The example above uses XPath to extract the `id` property of the first item in the response to the `petId` path 
 parameter in the following request, using the `fromPreviousResponse` and `toNextRequest` convenience methods in the
-[PropertyTransferBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/propertytransfer/PropertyTransferBuilder.html) class.
+[PropertyTransferBuilder](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/teststeps/propertytransfer/PropertyTransferBuilder.html) class.
 
 ## Delay
 
@@ -241,7 +241,7 @@ for more info.
 Test recipes can contain JDBC requests to interact with relational databases as part of a test. This can be valuable for either 
 initializing data needed for a test, or for validating data that previous TestSteps are meant to create/modify. To use the JDBC
 TestStep make sure you have the corresponding JDBC driver in your classpath, then create a 
-[JdbcConnection](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/teststeps/jdbcrequest/JdbcConnection.html) 
+[JdbcConnection](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/teststeps/jdbcrequest/JdbcConnection.html) 
 object to the database which can be used to build the actual TestSteps:
 
 ```java
@@ -273,7 +273,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 # Assertions
 
 Assertions can be added to REST, SOAP and JDBC request teststeps via the `withAssertions(...)` method to assert the content of their respective responses.
-The [Assertions](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/assertions/Assertions.html)
+The [Assertions](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/assertions/Assertions.html)
 method contains factory methods that allow you to easily create any of the supported assertions, for example;
 
 ```java
@@ -404,11 +404,11 @@ RecipeExecutionFacade.executeRecipe( recipe );
 # Executing Recipes
 
 The [Concepts](../../CONCEPTS.md) document shows how to execute recipes using both the local and remote execution 
-engines via the [RecipeExecutionFacade](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/facade/execution/RecipeExecutionFacade.html) class. 
-Using the underlying [RecipeExecutorBuilder](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/facade/execution/RecipeExecutorBuilder.html) makes it possible to 
+engines via the [RecipeExecutionFacade](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/facade/execution/RecipeExecutionFacade.html) class. 
+Using the underlying [RecipeExecutorBuilder](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/facade/execution/RecipeExecutorBuilder.html) makes it possible to 
 augment execution using execution listeners and recipe filters as described below.
 
-The actual [Execution](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/execution/Execution.html)
+The actual [Execution](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/execution/Execution.html)
 object available for the execution of a recipe is useful for querying asynchronous test execution status:
 
 ```java
@@ -424,9 +424,9 @@ System.out.println( "Test finished with status: " + execution.getCurrentStatus()
 
 ## Execution Listeners
 
-[ExecutionListener](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/ExecutionListener.html)s 
+[ExecutionListener](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/ExecutionListener.html)s 
 get notified of specific events related to recipe execution - for example the provided 
-[ExecutionLogger](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/support/ExecutionLogger.html) 
+[ExecutionLogger](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/support/ExecutionLogger.html) 
 writes all execution transaction logs as HAR files to a specified folder:
 
 ```java
@@ -452,12 +452,12 @@ executor.executeRecipe( ... )
 
 ## Recipe Filters
 
-[RecipeFilter](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/execution/RecipeFilter.html)s
-can be used to augment the underlying [TestRecipe](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/TestRecipe.html)
+[RecipeFilter](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/execution/RecipeFilter.html)s
+can be used to augment the underlying [TestRecipe](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/TestRecipe.html)
 for a test before it is executed; for example it could add common authentication settings to all REST Requests, or 
 common property values to all TestSteps of a certain type.
 
-The included [RecipeLogger](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/support/RecipeLogger.html)
+The included [RecipeLogger](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/support/RecipeLogger.html)
 filter logs all generated recipes to a specified folder - which can be useful for debugging/logging purposes or if you want to repurpose
 these recipes as LoadTests in [LoadUI](https://smartbear.com/product/ready-api/loadui) or API monitors using [AlertSite](https://smartbear.com/product/alertsite/integrations/ready-api-and-soapui/) 
 
@@ -484,8 +484,8 @@ executor.executeRecipe( ... )
 # Execution Results
 
 When an execution finishes the `Execution` object exposes a 
-[RecipeExecutionResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/RecipeExecutionResult.html)
- that gives access to a [TestStepResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/TestStepResult.html) 
+[RecipeExecutionResult](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/result/RecipeExecutionResult.html)
+ that gives access to a [TestStepResult](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/result/TestStepResult.html) 
 for each executed TestStep. For example if you want to log the response content for all executed TestSteps you can do:
 
 ```java

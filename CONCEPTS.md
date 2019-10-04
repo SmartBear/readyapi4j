@@ -1,8 +1,8 @@
-# Swagger Assert4j Core Concepts
+# ReadyAPI4j Core Concepts
 
 ## JSON Recipes
 
-JSON recipes are the external representation used by swagger-assert4j to describe API tests which you either
+JSON recipes are the external representation used by readyapi4j to describe API tests which you either
 create manually or using one of our code libraries (see below). A very simple example:
 
 ````json
@@ -32,7 +32,7 @@ TestSteps, Assertions, etc.
 ## Creating recipes with code
 
 Creating elaborate recipes in JSON with many teststeps, assertions, transfers, etc can be tedious - which is
-why assert4j includes [java](modules/core), [groovy](modules/groovy-dsl) and [cucumber](modules/cucumber) libraries to make 
+why readyapi4j includes [java](modules/core), [groovy](modules/groovy-dsl) and [cucumber](modules/cucumber) libraries to make 
 recipe creation and execution more accessible. 
 
 For example, the above recipe can be created in java with:
@@ -119,8 +119,8 @@ Usage of the facade as in the above examples also enables logging of both genera
 of executed tests (in HAR file format). Adding the following two properties:
 
 ```
-swagger-assert4j.log.executions.folder=target/logs/executions
-swagger-assert4j.log.recipes.folder=target/logs/recipes
+readyapi4j.log.executions.folder=target/logs/executions
+readyapi4j.log.recipes.folder=target/logs/recipes
 ```
 
 will automatically result in the corresponding artifacts being written to the corresponding folders.
@@ -136,7 +136,7 @@ you can use `submitRecipe(TestRecipe)` instead; the returned Execution object wi
 
 In all instances above we got an Execution object when executing the recipe, use 
 `execution.getExecutionResult()` to get a  
-[RecipeExecutionResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/RecipeExecutionResult.html) 
+[RecipeExecutionResult](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/result/RecipeExecutionResult.html) 
 object that provides details on execution time, individual teststep results, etc. 
 
 In a unit testing scenario the provided AssertionUtils class can be used to assert the outcome of an Execution:

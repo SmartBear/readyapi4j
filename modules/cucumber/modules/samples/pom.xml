@@ -3,19 +3,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>swagger-assert4j-cucumber</artifactId>
-        <groupId>io.swagger.assert</groupId>
+        <artifactId>readyapi4j-cucumber</artifactId>
+        <groupId>com.smartbear.readyapi</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>swagger-assert4j-cucumber-samples</artifactId>
+    <artifactId>readyapi4j-cucumber-samples</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>io.swagger.assert</groupId>
-            <artifactId>swagger-assert4j-cucumber-stepdefs</artifactId>
+            <groupId>com.smartbear.readyapi</groupId>
+            <artifactId>readyapi4j-cucumber-stepdefs</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

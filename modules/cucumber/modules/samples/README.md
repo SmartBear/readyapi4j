@@ -1,4 +1,4 @@
-## Cucumber Samples for swagger-assert4j-cucumber
+## Cucumber Samples for readyapi4j-cucumber
 
 This project currently contains 3 example feature files in the 
 [src/test/resources/cucumber](src/test/resources/cucumber) folder.
@@ -26,7 +26,7 @@ mvn test -Dtestengine.user=admin -Dtestengine.password=testengine -Dtestengine.e
 
 which will use JUnit to run them via the CucumberTest runner, output should be something in the line of
 ```gherkin
-[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ swagger-assert4j-cucumber-samples ---
+[INFO] --- maven-surefire-plugin:2.19.1:test (default-test) @ readyapi4j-cucumber-samples ---
 
 -------------------------------------------------------
  T E S T S

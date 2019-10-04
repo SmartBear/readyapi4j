@@ -1,6 +1,6 @@
-# Database requests in Assert4J DSL
+# Database requests in ReadyAPI4j DSL
 
-The Assert4J DSL can access relational databases, and also some NoSQL databases. using JDBC - the standard Java API
+The ReadyAPI4j DSL can access relational databases, and also some NoSQL databases. using JDBC - the standard Java API
 for database access. To add a database request to a test recipe, you call the method ```jdbcRequest``` and specify
 parameters in a configuration block enclosed by curly braces – { and }.
 
@@ -9,7 +9,7 @@ Here's an example where you connect to a MySQL database on the server staging-se
 ```select * from customers```:
  
  ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
      jdbcRequest {
@@ -29,7 +29,7 @@ Because of the way in which JDBC handles stored procedures, you need to set an a
 executing a procedure:
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
      jdbcRequest {
@@ -59,7 +59,7 @@ The following complete code example shows you how to verify that you got a resul
 3 seconds:
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
      jdbcRequest {
@@ -91,7 +91,7 @@ following back:
 The following code will assert that the returned CustomerId value is "JonSnow":
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
   executeRecipe {
      jdbcRequest {
@@ -115,7 +115,7 @@ Asserts that no error was returned from the database. Fails if an error was retu
 
 **Example:** 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
   
    executeRecipe {
       jdbcRequest {
@@ -138,7 +138,7 @@ specified timeout.
 
 **Example:** 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
   
    executeRecipe {
       jdbcRequest {

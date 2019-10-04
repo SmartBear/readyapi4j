@@ -1,12 +1,12 @@
-# Swagger Assert4J TestEngine Maven Plugin
+# ReadyAPI4j TestEngine Maven Plugin
 
 A maven plugin that runs a set of Json recipes (locally or using a TestEngine) and ReadyAPI projects (only with TestEngine, not locally) - 
 configure it to run in whatever build phase you might find relevant, for example;
 
 ```
 <plugin>
-    <groupId>io.swagger.assert</groupId>
-    <artifactId>swagger-assert4j-maven-plugin</artifactId>
+    <groupId>com.smartbear.readyapi</groupId>
+    <artifactId>readyapi4j-maven-plugin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <configuration>
         <username>defaultUser</username>

@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>swagger-assert4j</artifactId>
-        <groupId>io.swagger.assert</groupId>
+        <artifactId>readyapi4j</artifactId>
+        <groupId>com.smartbear.readyapi</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>swagger-assert4j-models</artifactId>
+    <artifactId>readyapi4j-models</artifactId>
 
     <dependencies>
         <dependency>
@@ -138,8 +138,8 @@
 
                                                 <configOptions>
                                                     <output>${project.build.directory}/generated-sources</output>
-                                                    <modelPackage>io.swagger.assert4j.client.model</modelPackage>
-                                                    <apiPackage>io.swagger.assert4j.client.api</apiPackage>
+                                                    <modelPackage>com.smartbear.readyapi4j.client.model</modelPackage>
+                                                    <apiPackage>com.smartbear.readyapi4j.client.api</apiPackage>
                                                     <java8>true</java8>
                                                     <interfaceOnly>true</interfaceOnly>
                                                 </configOptions>
@@ -160,8 +160,8 @@
 
                             <configOptions>
                                 <output>${project.build.directory}/generated-sources</output>
-                                <modelPackage>io.swagger.assert4j.client.model</modelPackage>
-                                <apiPackage>io.swagger.assert4j.client.api</apiPackage>
+                                <modelPackage>com.smartbear.readyapi4j.client.model</modelPackage>
+                                <apiPackage>com.smartbear.readyapi4j.client.api</apiPackage>
                                 <java8>true</java8>
                                 <interfaceOnly>true</interfaceOnly>
                             </configOptions>

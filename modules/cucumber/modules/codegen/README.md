@@ -1,7 +1,7 @@
-# Swagger Assert4j Cucumber Feature Codegen 
+# ReadyAPI4j Cucumber Feature Codegen 
 
 Generates default Cucumber feature files from a OpenAPI Spec (OAS) definition using [Swagger CodeGen](https://github.com/swagger-api/swagger-codegen).
-The generated features use the precreated (Step definitions)[https://github.com/SmartBear/swagger-assert4j/blob/master/modules/cucumber/README.md#api-testing-vocabulary-reference]
+The generated features use the precreated (Step definitions)[https://github.com/SmartBear/readyapi4j/blob/master/modules/cucumber/README.md#api-testing-vocabulary-reference]
 
 
 The generated files are in many cases incomplete as many OAS definitions do not contain default 
@@ -39,7 +39,7 @@ mvn clean package
 Then you're all set to use it with 
 
 ```
-java -jar target/swagger-assert4j-cucumber-codegen-1.0.0.jar generate -l Assert4jCucumberFeatureGenerator 
+java -jar target/readyapi4j-cucumber-codegen-1.0.0.jar generate -l ReadyAPI4jCucumberFeatureGenerator 
     -i <url/path to Swagger definition> 
 ```
 
