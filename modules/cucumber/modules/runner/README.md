@@ -12,3 +12,6 @@ mvn clean install -Pdocker
 ```
 
 and use it as described in the [main README](../../README.md)
+
+## Using with HipTest
+
