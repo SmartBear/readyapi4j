@@ -117,7 +117,7 @@ public class HiptestCucumberRunner {
             throw new Exception("Missing data.attributes.feature node in HipTest JSON response");
         }
 
-        File targetFile = getTargetFile( properties );
+        File targetFile = getTargetFile( properties, hiptestProject, hiptestFolder );
         FileWriter fileWriter = new FileWriter(targetFile);
         fileWriter.write(feature.asText());
         fileWriter.close();
@@ -126,7 +126,7 @@ public class HiptestCucumberRunner {
         argsList.add(targetFile.toPath().toString());
     }
 
-    private static File getTargetFile(Properties properties) throws IOException {
+    private static File getTargetFile(Properties properties, String hiptestProject, String hiptestFolder) throws IOException {
         String hiptestTargetFolder = properties.getProperty(HIPTEST_TARGET_FOLDER, System.getProperty(HIPTEST_TARGET_FOLDER));
         if( !Strings.isNullOrEmpty(hiptestTargetFolder)){
             File targetFolder = new File( hiptestTargetFolder );
@@ -134,10 +134,10 @@ public class HiptestCucumberRunner {
                 targetFolder.mkdirs();
             }
 
-            return File.createTempFile("cucumber", ".feature", targetFolder);
+            return new File( targetFolder, "hiptest-" + hiptestProject + "-" + hiptestFolder + ".feature" );
         }
 
-        File targetFile = File.createTempFile("cucumber", ".feature");
+        File targetFile = File.createTempFile("hiptest", ".feature");
         targetFile.deleteOnExit();
         return targetFile;
     }
