@@ -167,13 +167,13 @@ in the same underlying JSON format that is also used in the test shown above. If
 running TestEngine instance. For example, if we add
 
 ```
-testengine.endpoint=http://testengine.readyapi.io:8080
-testengine.user=demoUser
-testengine.password=demoPassword
+testengine.endpoint=http://localhost:8080
+testengine.user=admin
+testengine.password=testengine
 ```
 	
 as either system/env properties to our execution and then rerun the above test - those tests will be executed by the 
-specified TestEngine instance available at http://testengine.readyapi.io.
+specified locally running TestEngine instance using the default credentials.
 
 ### Logging of Recipes and HTTP transactions
 
