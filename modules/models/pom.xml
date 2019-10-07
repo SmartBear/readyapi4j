@@ -71,7 +71,7 @@
         <swaggerhub.apis.host>https://api.swaggerhub.com/apis</swaggerhub.apis.host>
 
         <codegen.directory>${build.outputDirectory}/generated-sources/main/spec</codegen.directory>
-        <codegen.version>3.0.8</codegen.version>
+        <codegen.version>3.0.11</codegen.version>
 
         <swagger-annotations-version>1.5.22</swagger-annotations-version>
 
@@ -134,8 +134,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${codegen.directory}/${testserver.api.folder}/${testserver.api.swagger.file}
-                            </inputSpec>
+                            <inputSpec>${codegen.directory}/${testserver.api.folder}/${testserver.api.swagger.file}</inputSpec>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <generateApiTests>false</generateApiTests>
                             <language>spring</language>
@@ -156,7 +155,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/resources/testengine.yml</inputSpec>
+                            <inputSpec>${codegen.directory}/${testengine.api.folder}/${testengine.api.swagger.file}</inputSpec>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <generateApiTests>false</generateApiTests>
                             <language>spring</language>

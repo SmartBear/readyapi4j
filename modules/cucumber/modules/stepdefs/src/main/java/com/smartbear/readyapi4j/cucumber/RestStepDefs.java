@@ -54,23 +54,23 @@ public class RestStepDefs {
 
     @Given("^the oAuth2 token (.*)$")
     public void theOauth2Token(String token) {
-        this.token = token;
+        this.token = CucumberUtils.stripQuotes(token);
     }
 
     @Given("^the API running at (.*)$")
     public void theAPIRunningAt(String endpoint) {
-        this.endpoint = endpoint;
+        this.endpoint = CucumberUtils.stripQuotes(endpoint);
     }
 
     @When("^a (.*) request to ([^ ]*) is made$")
     public void aRequestToPathIsMade(String method, String path) {
-        this.method = method;
-        this.path = path;
+        this.method = CucumberUtils.stripQuotes(method);
+        this.path = CucumberUtils.stripQuotes(path);
     }
 
     @When("^a (.*) request is made$")
     public void aRequestIsMade(String method) {
-        this.method = method;
+        this.method = CucumberUtils.stripQuotes(method);
     }
 
     @Given("^the request body is$")
@@ -78,24 +78,27 @@ public class RestStepDefs {
         this.requestBody = requestBody;
     }
 
-    @Then("^a status code of (\\d+) is returned$")
-    public void aStatusCodeIsReturned(int statusCode) {
-        aResponseIsReturnedWithin(statusCode, 0);
+    @Then("^a status code of (.*) is returned$")
+    public void aStatusCodeIsReturned(String statusCode) {
+        aResponseIsReturnedWithin(statusCode,  "0");
     }
 
-    @Then("^a (\\d+) response is returned$")
-    public void aResponseIsReturned(int statusCode) {
-        aResponseIsReturnedWithin(statusCode, 0);
+    @Then("^a (.*) response is returned$")
+    public void aResponseIsReturned(String statusCode) {
+        aResponseIsReturnedWithin(statusCode, "0");
     }
 
-    @Then("^a (\\d+) response is returned within (\\d+)ms$")
-    public void aResponseIsReturnedWithin(int statusCode, int timeout) {
+    @Then("^a (.*) response is returned within (.*)ms$")
+    public void aResponseIsReturnedWithin(String statusCode, String timeoutString) {
+
+        int timeout = Integer.parseInt(CucumberUtils.stripQuotes(timeoutString));
 
         if (timeout > 0) {
             assertions.add(DefaultResponseSLAAssertionBuilder.create().maxResponseTime(String.valueOf(timeout)));
         }
 
-        addAssertion(ValidHttpStatusCodesAssertionBuilder.create().validStatusCodes(Arrays.asList(String.valueOf(statusCode))));
+        addAssertion(ValidHttpStatusCodesAssertionBuilder.create().validStatusCodes(
+                Arrays.asList(CucumberUtils.stripQuotes(statusCode))));
         pushRestRequest();
     }
 
@@ -112,6 +115,9 @@ public class RestStepDefs {
     @Given("^the (.*) parameter is (.*)$")
     public void theParameterIs(String name, String value) {
 
+        name = CucumberUtils.stripQuotes(name);
+        value = CucumberUtils.stripQuotes(value);
+
         ParameterBuilder parameterBuilder = (endpoint + path).contains("{" + name + "}") ?
                 ParameterBuilder.path(name, value) :
                 ParameterBuilder.query(name, value);
@@ -120,37 +126,37 @@ public class RestStepDefs {
 
     @Given("^the (.*) header is (.*)$")
     public void theHeaderIs(String name, String value) {
-        parameters.add(ParameterBuilder.header(name, value).build());
+        parameters.add(ParameterBuilder.header(CucumberUtils.stripQuotes(name), CucumberUtils.stripQuotes(value)).build());
     }
 
     @Given("^the type is (.*)$")
     public void theTypeIs(String type) {
-        this.mediaType = type;
+        this.mediaType = CucumberUtils.stripQuotes(type);
     }
 
     @Given("^the request expects (.*)")
     public void theRequestExpects(String format) {
-        theHeaderIs("Accept", ContentUtils.expandContentType(format));
+        theHeaderIs("Accept", ContentUtils.expandContentType(CucumberUtils.stripQuotes(format)));
     }
 
     @Then("^the response type is (.*)$")
     public void theResponseTypeIs(String format) {
-        addAssertion(Assertions.contentType(format).build());
+        addAssertion(Assertions.contentType(CucumberUtils.stripQuotes(format)).build());
     }
 
     @Then("^the response contains a (.*) header$")
     public void theResponseContainsHeader(String header) {
-        addAssertion(Assertions.headerExists(header).build());
+        addAssertion(Assertions.headerExists(CucumberUtils.stripQuotes(header)).build());
     }
 
     @Then("^the response (.*) header is (.*)$")
     public void theResponseHeaderIs(String header, String value) {
-        addAssertion(Assertions.headerValue(header, value).build());
+        addAssertion(Assertions.headerValue(CucumberUtils.stripQuotes(header), CucumberUtils.stripQuotes(value)).build());
     }
 
     @Then("^the response body contains (.*)$")
     public void theResponseBodyContains2(String content) throws Throwable {
-        theResponseBodyContains(content);
+        theResponseBodyContains(CucumberUtils.stripQuotes(content));
     }
 
     public RestTestRequestStep pushRestRequest() {

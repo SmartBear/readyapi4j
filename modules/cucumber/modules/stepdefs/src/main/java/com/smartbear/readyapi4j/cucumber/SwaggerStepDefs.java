@@ -3,6 +3,7 @@ package com.smartbear.readyapi4j.cucumber;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.smartbear.readyapi4j.client.model.RestParameter;
+import cucumber.runtime.CucumberException;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -37,13 +38,16 @@ public class SwaggerStepDefs {
 
     @Given("^the OAS definition at (.*)$")
     public void theOASDefinitionAt(String swaggerUrl) {
-        theSwaggerDefinitionAt(swaggerUrl);
+        theSwaggerDefinitionAt(CucumberUtils.stripQuotes(swaggerUrl));
     }
 
     @Given("^the Swagger definition at (.*)$")
     public void theSwaggerDefinitionAt(String swaggerUrl) {
 
-        swagger = swaggerCache.getSwagger(swaggerUrl);
+        swagger = swaggerCache.getSwagger(CucumberUtils.stripQuotes(swaggerUrl));
+        if( swagger == null ){
+            throw new CucumberException( "Failed to read Swagger definition at [" + swaggerUrl + "]");
+        }
 
         if (swagger.getHost() != null) {
             restStepDefs.setEndpoint(swagger.getSchemes().get(0).name().toLowerCase() + "://" + swagger.getHost());
@@ -58,6 +62,8 @@ public class SwaggerStepDefs {
         if (swagger == null) {
             throw new CucumberExecutionException("Missing Swagger definition");
         }
+
+        operationId = CucumberUtils.stripQuotes(operationId);
 
         if (!findSwaggerOperation(operationId)) {
             throw new CucumberExecutionException("Could not find operation [" + operationId + "] in Swagger definition");
@@ -88,10 +94,12 @@ public class SwaggerStepDefs {
             throw new CucumberExecutionException("missing swagger operation for request");
         }
 
+        responseDescription = CucumberUtils.stripQuotes(responseDescription);
+
         for (String responseCode : swaggerOperation.getResponses().keySet()) {
             Response response = swaggerOperation.getResponses().get(responseCode);
             if (responseDescription.equalsIgnoreCase(response.getDescription())) {
-                restStepDefs.aResponseIsReturned(Integer.parseInt(responseCode));
+                restStepDefs.aResponseIsReturned(responseCode);
             }
         }
     }
@@ -100,6 +108,10 @@ public class SwaggerStepDefs {
     public void parameterIs(String name, String value) {
 
         if (swaggerOperation != null) {
+
+            name = CucumberUtils.stripQuotes(name);
+            value = CucumberUtils.stripQuotes(value);
+
             for (io.swagger.models.parameters.Parameter parameter : swaggerOperation.getParameters()) {
                 if (parameter.getName().equalsIgnoreCase(name)) {
                     String type = parameter.getIn();
