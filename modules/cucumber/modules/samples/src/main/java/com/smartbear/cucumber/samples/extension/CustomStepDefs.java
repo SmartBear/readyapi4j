@@ -2,8 +2,8 @@ package com.smartbear.cucumber.samples.extension;
 
 import com.smartbear.readyapi4j.cucumber.CucumberRecipeBuilder;
 import com.smartbear.readyapi4j.cucumber.RestStepDefs;
-import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Given;
 
 import javax.inject.Inject;
 

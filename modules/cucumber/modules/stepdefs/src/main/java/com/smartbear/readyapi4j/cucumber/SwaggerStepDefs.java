@@ -100,8 +100,11 @@ public class SwaggerStepDefs {
             Response response = swaggerOperation.getResponses().get(responseCode);
             if (responseDescription.equalsIgnoreCase(response.getDescription())) {
                 restStepDefs.aResponseIsReturned(responseCode);
+                return;
             }
         }
+
+        throw new CucumberExecutionException("missing response match for [" + responseDescription + "]");
     }
 
     @Given("^([^ ]*) is (.*)$")
