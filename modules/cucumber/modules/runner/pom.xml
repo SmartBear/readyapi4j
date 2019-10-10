@@ -90,7 +90,7 @@
                                     <alias>readyapi4j-cucumber</alias>
                                     <name>smartbear/readyapi4j-cucumber:latest</name>
                                     <build>
-                                        <from>openjdk:11</from>
+                                        <from>openjdk:8</from>
                                         <maintainer>ole.lensmar@smartbear.com</maintainer>
                                         <tags>
                                             <tag>latest</tag>
