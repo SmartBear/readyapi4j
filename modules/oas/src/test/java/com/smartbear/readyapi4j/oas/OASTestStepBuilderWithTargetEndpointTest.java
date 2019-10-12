@@ -1,4 +1,4 @@
-package com.smartbear.readyapi4j.swagger;
+package com.smartbear.readyapi4j.oas;
 
 import com.smartbear.readyapi4j.teststeps.TestSteps;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder;
@@ -7,14 +7,14 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class SwaggerTestStepBuilderWithTargetEndpointTest {
+public class OASTestStepBuilderWithTargetEndpointTest {
 
     public static final String TARGET_ENDPOINT = "http://api.myhost.com";
-    private static SwaggerTestStepBuilder petstore;
+    private static OASTestStepBuilder petstore;
 
     @BeforeClass
     public static void setup() {
-        petstore = new SwaggerTestStepBuilder(
+        petstore = new OASTestStepBuilder(
                 "src/test/resources/petstore-swagger.json", TARGET_ENDPOINT);
     }
 
@@ -23,7 +23,7 @@ public class SwaggerTestStepBuilderWithTargetEndpointTest {
         RestRequestStepBuilder<? extends RestRequestStepBuilder> builder = petstore.operation("addPet");
 
         assertEquals(builder.build().getMethod(), "POST");
-        assertEquals(builder.build().getURI(), TARGET_ENDPOINT + "/v2/pet");
+        assertEquals(builder.build().getURI(), TARGET_ENDPOINT + "/pet");
     }
 
     @Test
@@ -31,6 +31,6 @@ public class SwaggerTestStepBuilderWithTargetEndpointTest {
         RestRequestStepBuilder<? extends RestRequestStepBuilder> builder = petstore.request("/some/endpoint", TestSteps.HttpMethod.GET);
 
         assertEquals(builder.build().getMethod(), "GET");
-        assertEquals(builder.build().getURI(), TARGET_ENDPOINT + "/v2/some/endpoint");
+        assertEquals(builder.build().getURI(), TARGET_ENDPOINT + "/some/endpoint");
     }
 }

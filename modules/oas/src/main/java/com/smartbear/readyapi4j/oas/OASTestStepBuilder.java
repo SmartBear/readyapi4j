@@ -1,17 +1,16 @@
-package com.smartbear.readyapi4j.swagger;
+package com.smartbear.readyapi4j.oas;
 
+import com.google.common.collect.Lists;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepBuilder;
 import com.smartbear.readyapi4j.teststeps.restrequest.RestRequestStepWithBodyBuilder;
-import io.swagger.models.HttpMethod;
-import io.swagger.models.Operation;
-import io.swagger.models.Path;
-import io.swagger.models.Swagger;
-import io.swagger.models.parameters.BodyParameter;
-import io.swagger.models.parameters.Parameter;
-import io.swagger.models.parameters.RefParameter;
-import io.swagger.parser.SwaggerParser;
-import io.swagger.parser.util.SwaggerDeserializationResult;
+import io.swagger.parser.OpenAPIParser;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.parser.core.models.ParseOptions;
+import io.swagger.v3.parser.core.models.SwaggerParseResult;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -26,11 +25,11 @@ import java.util.Map;
  * Utility class for building RestRequestStepBuilders for operations in a Swagger/OAS 2.0 definition
  */
 
-public class SwaggerTestStepBuilder {
+public class OASTestStepBuilder {
 
     private static final Collection<TestSteps.HttpMethod> HTTP_METHODS_WITH_BODY =
             EnumSet.of(TestSteps.HttpMethod.POST, TestSteps.HttpMethod.PUT, TestSteps.HttpMethod.PATCH);
-    private final Swagger swagger;
+    private OpenAPI openAPI;
     private String targetEndpoint;
     private String targetBasePath;
 
@@ -41,8 +40,8 @@ public class SwaggerTestStepBuilder {
      * @param targetEndpoint where the target API under test running
      * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
      */
-    public SwaggerTestStepBuilder(String swaggerUrl, String targetEndpoint) throws IllegalArgumentException {
-        this.swagger = parseSwagger(swaggerUrl);
+    public OASTestStepBuilder(String swaggerUrl, String targetEndpoint) throws IllegalArgumentException {
+        this.openAPI = parseOAS(swaggerUrl);
         setTargetEndpoint(targetEndpoint);
     }
 
@@ -53,7 +52,7 @@ public class SwaggerTestStepBuilder {
      * @param swaggerUrl endpoint to the Swagger definition to use
      * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
      */
-    public SwaggerTestStepBuilder(String swaggerUrl) throws IllegalArgumentException {
+    public OASTestStepBuilder(String swaggerUrl) throws IllegalArgumentException {
         this(swaggerUrl, null);
     }
 
@@ -65,8 +64,8 @@ public class SwaggerTestStepBuilder {
      * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
      * @throws IOException              if the Swagger definition can not be read
      */
-    public SwaggerTestStepBuilder(InputStream swaggerInputStream, String targetEndpoint) throws IllegalArgumentException, IOException {
-        this.swagger = parseSwagger(swaggerInputStream);
+    public OASTestStepBuilder(InputStream swaggerInputStream, String targetEndpoint) throws IllegalArgumentException, IOException {
+        this.openAPI = parseOAS(swaggerInputStream);
         setTargetEndpoint(targetEndpoint);
     }
 
@@ -78,29 +77,32 @@ public class SwaggerTestStepBuilder {
      * @throws IllegalArgumentException if the specified Swagger definition can not be parsed
      * @throws IOException              if the Swagger definition can not be read
      */
-    public SwaggerTestStepBuilder(InputStream swaggerInputStream) throws IllegalArgumentException, IOException {
+    public OASTestStepBuilder(InputStream swaggerInputStream) throws IllegalArgumentException, IOException {
         this(swaggerInputStream, null);
     }
 
-    private Swagger parseSwagger(String swaggerUrl) throws IllegalArgumentException {
-        SwaggerDeserializationResult result = new SwaggerParser().readWithInfo(swaggerUrl, null, true);
-        Swagger swagger = result.getSwagger();
-        if (swagger == null) {
-            throw new IllegalArgumentException("Failed to parse Swagger definition at [" + swaggerUrl + "]; " +
+    private OpenAPI parseOAS(String oasUrl) throws IllegalArgumentException {
+        SwaggerParseResult result = new OpenAPIParser().readLocation(oasUrl, Lists.newArrayList(), new ParseOptions());
+        openAPI = result.getOpenAPI();
+
+        if (openAPI == null) {
+            throw new IllegalArgumentException("Failed to parse Swagger definition at [" + oasUrl + "]; " +
                     Arrays.toString(result.getMessages().toArray()));
         }
-        return swagger;
+        return openAPI;
     }
 
-    private Swagger parseSwagger(InputStream swaggerInputStream) throws IllegalArgumentException, IOException {
+    private OpenAPI parseOAS(InputStream swaggerInputStream) throws IllegalArgumentException, IOException {
         String swaggerAsString = IOUtils.toString(swaggerInputStream, StandardCharsets.UTF_8);
-        SwaggerDeserializationResult result = new SwaggerParser().readWithInfo(swaggerAsString);
-        Swagger swagger = result.getSwagger();
-        if (swagger == null) {
+        SwaggerParseResult result = new OpenAPIParser().readContents(swaggerAsString, Lists.newArrayList(), new ParseOptions());
+        openAPI = result.getOpenAPI();
+
+        if (openAPI == null) {
             throw new IllegalArgumentException("Failed to parse Swagger definition; " +
                     Arrays.toString(result.getMessages().toArray()));
         }
-        return swagger;
+
+        return openAPI;
     }
 
     /**
@@ -111,11 +113,11 @@ public class SwaggerTestStepBuilder {
      * @throws IllegalArgumentException if the operationId is not found in the Swagger definition
      */
     public RestRequestStepBuilder<RestRequestStepBuilder> operation(String operationId) {
-        for (String path : swagger.getPaths().keySet()) {
-            Path swaggerPath = swagger.getPaths().get(path);
+        for (String path : openAPI.getPaths().keySet()) {
+            PathItem swaggerPath = openAPI.getPaths().get(path);
 
-            for (HttpMethod method : swaggerPath.getOperationMap().keySet()) {
-                Operation swaggerOperation = swaggerPath.getOperationMap().get(method);
+            for (PathItem.HttpMethod method : swaggerPath.readOperationsMap().keySet()) {
+                Operation swaggerOperation = swaggerPath.readOperationsMap().get(method);
                 if (operationId.equalsIgnoreCase(swaggerOperation.getOperationId())) {
                     return new RestRequestStepBuilder<>(targetBasePath + path, toHttpMethod(method));
                 }
@@ -133,10 +135,10 @@ public class SwaggerTestStepBuilder {
      * @throws IllegalArgumentException if the operationId is not found in the Swagger definition
      */
     public RestRequestStepWithBodyBuilder operationWithBody(String operationId) {
-        for (Map.Entry<String, Path> path : swagger.getPaths().entrySet()) {
+        for (Map.Entry<String, PathItem> path : openAPI.getPaths().entrySet()) {
 
-            for (Map.Entry<HttpMethod, Operation> method : path.getValue().getOperationMap().entrySet()) {
-                Operation swaggerOperation = method.getValue();
+            for (Map.Entry<PathItem.HttpMethod, io.swagger.v3.oas.models.Operation> method : path.getValue().readOperationsMap().entrySet()) {
+                io.swagger.v3.oas.models.Operation swaggerOperation = method.getValue();
                 if (!operationId.equalsIgnoreCase(swaggerOperation.getOperationId())) {
                     continue;
                 }
@@ -175,22 +177,12 @@ public class SwaggerTestStepBuilder {
     }
 
     private void ensureBodyParameter(Operation operation) {
-        for (Parameter param : operation.getParameters()) {
-            if (param instanceof BodyParameter) {
-                return;
-            } else if (param instanceof RefParameter) {
-                final Parameter unboxedParam = unboxRefParameter((RefParameter) param);
-                if (unboxedParam instanceof BodyParameter) {
-                    return;
-                }
-            }
-        }
-        throw new IllegalArgumentException(
-                "Body parameter is not defined for the [" + operation.getOperationId() + "] operation");
-    }
+        RequestBody requestBody = operation.getRequestBody();
 
-    private Parameter unboxRefParameter(RefParameter param) {
-        return swagger.getParameter(param.getSimpleRef());
+        if( requestBody == null || requestBody.getContent().isEmpty() ) {
+            throw new IllegalArgumentException(
+                    "RequestBody is not defined for the [" + operation.getOperationId() + "] operation");
+        }
     }
 
     private void ensureHttpMethodWithBody(TestSteps.HttpMethod method) {
@@ -200,15 +192,15 @@ public class SwaggerTestStepBuilder {
         }
     }
 
-    private TestSteps.HttpMethod toHttpMethod(HttpMethod swaggerMethod) {
+    private TestSteps.HttpMethod toHttpMethod(PathItem.HttpMethod swaggerMethod) {
         return TestSteps.HttpMethod.valueOf(swaggerMethod.name().toUpperCase());
     }
 
     /**
      * @return the parsed Swagger definition object
      */
-    public Swagger getSwagger() {
-        return swagger;
+    public OpenAPI getOpenAPI() {
+        return openAPI;
     }
 
     /**
@@ -222,22 +214,16 @@ public class SwaggerTestStepBuilder {
      * @param targetEndpoint the target endpoint of the API under test
      */
     public void setTargetEndpoint(String targetEndpoint) {
-        final String endpoint;
-        if (targetEndpoint == null) {
-            endpoint = swagger.getSchemes().isEmpty() ? "http" : swagger.getSchemes().get(0).toValue().toLowerCase() + "://" + swagger.getHost();
+        String endpoint = null;
+        if (targetEndpoint == null ) {
+            if( openAPI.getServers() != null && !openAPI.getServers().isEmpty() ) {
+                endpoint = openAPI.getServers().get(0).getUrl();
+            }
         } else {
             endpoint = targetEndpoint;
         }
 
         this.targetEndpoint = endpoint;
-
-        final String basePath = swagger.getBasePath();
-        if (basePath == null) {
-            this.targetBasePath = endpoint;
-        } else if (basePath.endsWith("/")) {
-            this.targetBasePath = endpoint + basePath.substring(0, basePath.length() - 1);
-        } else {
-            this.targetBasePath = endpoint + basePath;
-        }
+        this.targetBasePath = endpoint;
     }
 }
