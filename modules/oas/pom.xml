@@ -20,7 +20,7 @@
         <dependency>
             <groupId>io.swagger.parser.v3</groupId>
             <artifactId>swagger-parser</artifactId>
-            <version>2.0.14</version>
+            <version>${swagger-v3-parser.version}</version>
         </dependency>
     </dependencies>
 </project>

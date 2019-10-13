@@ -82,14 +82,14 @@ public class OASTestStepBuilderTest {
     }
 
     @Test
-    public void testParseSwaggerFromInputStream() throws IOException {
+    public void testParseOASFromInputStream() throws IOException {
         final InputStream is = OASTestStepBuilderTest.class.getResourceAsStream("/petstore-swagger.json");
         final OASTestStepBuilder OASTestStepBuilder = new OASTestStepBuilder(is);
         assertEquals("http://petstore.swagger.io/v2", OASTestStepBuilder.getOpenAPI().getServers().get(0).getUrl());
     }
 
     @Test
-    public void testParseSwaggerFromInputStreamWithTargetEndpoint() throws IOException {
+    public void testParseOASFromInputStreamWithTargetEndpoint() throws IOException {
         final InputStream is = OASTestStepBuilderTest.class.getResourceAsStream("/petstore-swagger.json");
         final OASTestStepBuilder OASTestStepBuilder = new OASTestStepBuilder(is, "http://apan.com");
         assertEquals("http://apan.com", OASTestStepBuilder.getTargetEndpoint());

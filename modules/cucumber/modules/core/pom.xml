@@ -62,9 +62,22 @@
         </dependency>
 
         <dependency>
-            <groupId>io.swagger</groupId>
+            <groupId>io.swagger.parser.v3</groupId>
             <artifactId>swagger-parser</artifactId>
-            <version>${swagger-parser.version}</version>
+            <version>${swagger-v3-parser.version}</version>
+            <exclusions>
+                <!-- excluded because of clash with httpclient in soapui dependency in facade module -->
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+
     </dependencies>
 </project>

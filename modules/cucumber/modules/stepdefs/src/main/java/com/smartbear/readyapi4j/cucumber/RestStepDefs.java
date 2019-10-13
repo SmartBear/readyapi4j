@@ -155,7 +155,7 @@ public class RestStepDefs {
     }
 
     @Then("^the response body contains (.*)$")
-    public void theResponseBodyContains2(String content) throws Throwable {
+    public void theResponseBodyContains2(String content) {
         theResponseBodyContains(CucumberUtils.stripQuotes(content));
     }
 
