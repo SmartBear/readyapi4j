@@ -1,4 +1,4 @@
 /**
  * Swagger-related extensions to core API.
  */
-package com.smartbear.readyapi4j.swagger;
+package com.smartbear.readyapi4j.oas;

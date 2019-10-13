@@ -8,31 +8,37 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.swagger.models.*;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
- * Additional StepDefs for simplifying testing of Swagger-defined REST APIs
+ * Additional StepDefs for simplifying testing of OAS/Swagger-defined REST APIs
  */
 
 @ScenarioScoped
-public class SwaggerStepDefs {
+public class OASStepDefs {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SwaggerStepDefs.class);
+    private final static Logger LOG = LoggerFactory.getLogger(OASStepDefs.class);
 
     private static final ArrayList<String> PARAM_TYPES = Lists.newArrayList("query", "path", "header");
 
-    private final SwaggerCache swaggerCache;
+    private final OASCache oasCache;
     private final RestStepDefs restStepDefs;
-    private Swagger swagger;
-    private Operation swaggerOperation;
+    private OpenAPI oas;
+    private Operation oasOperation;
 
     @Inject
-    public SwaggerStepDefs(SwaggerCache swaggerCache, RestStepDefs restStepDefs) {
-        this.swaggerCache = swaggerCache;
+    public OASStepDefs(OASCache oasCache, RestStepDefs restStepDefs) {
+        this.oasCache = oasCache;
         this.restStepDefs = restStepDefs;
     }
 
@@ -44,60 +50,62 @@ public class SwaggerStepDefs {
     @Given("^the Swagger definition at (.*)$")
     public void theSwaggerDefinitionAt(String swaggerUrl) {
 
-        swagger = swaggerCache.getSwagger(CucumberUtils.stripQuotes(swaggerUrl));
-        if( swagger == null ){
-            throw new CucumberException( "Failed to read Swagger definition at [" + swaggerUrl + "]");
+        oas = oasCache.getOAS(CucumberUtils.stripQuotes(swaggerUrl));
+        if( oas == null ){
+            throw new CucumberException( "Failed to read OAS/Swagger definition at [" + swaggerUrl + "]");
         }
 
-        if (swagger.getHost() != null) {
-            restStepDefs.setEndpoint(swagger.getSchemes().get(0).name().toLowerCase() + "://" + swagger.getHost());
-            if (swagger.getBasePath() != null) {
-                restStepDefs.setEndpoint(restStepDefs.getEndpoint() + swagger.getBasePath());
+        if (oas.getServers() != null && !oas.getServers().isEmpty()) {
+            String url = oas.getServers().get(0).getUrl();
+            if( url.endsWith("/")){
+                url = url.substring(0, url.length()-1);
             }
+            restStepDefs.setEndpoint(url);
         }
     }
 
     @When("^a request to ([^ ]*) is made$")
     public void aRequestToOperationIsMade(String operationId) throws Throwable {
-        if (swagger == null) {
-            throw new CucumberExecutionException("Missing Swagger definition");
+        if (oas == null) {
+            throw new CucumberExecutionException("Missing OAS/Swagger definition");
         }
 
         operationId = CucumberUtils.stripQuotes(operationId);
 
-        if (!findSwaggerOperation(operationId)) {
-            throw new CucumberExecutionException("Could not find operation [" + operationId + "] in Swagger definition");
+        if (!findOASOperation(operationId)) {
+            throw new CucumberExecutionException("Could not find operation [" + operationId + "] in OAS/Swagger definition");
         }
     }
 
-    private boolean findSwaggerOperation(String operationId) {
-        swaggerOperation = null;
+    private boolean findOASOperation(String operationId) {
+        oasOperation = null;
 
-        for (String resourcePath : swagger.getPaths().keySet()) {
-            Path path = swagger.getPath(resourcePath);
-            for (HttpMethod httpMethod : path.getOperationMap().keySet()) {
-                Operation operation = path.getOperationMap().get(httpMethod);
+        Paths paths = oas.getPaths();
+        for (String path : paths.keySet()) {
+            Map<PathItem.HttpMethod, Operation> operations = paths.get(path).readOperationsMap();
+            for (PathItem.HttpMethod httpMethod : operations.keySet()) {
+                Operation operation = operations.get(httpMethod);
                 if (operationId.equalsIgnoreCase(operation.getOperationId())) {
                     restStepDefs.setMethod(httpMethod.name().toUpperCase());
-                    restStepDefs.setPath(resourcePath);
-                    swaggerOperation = operation;
+                    restStepDefs.setPath(path);
+                    oasOperation = operation;
                 }
             }
         }
 
-        return swaggerOperation != null;
+        return oasOperation != null;
     }
 
     @Then("^the response is (.*)$")
     public void theResponseIs(String responseDescription) {
-        if (swaggerOperation == null) {
-            throw new CucumberExecutionException("missing swagger operation for request");
+        if (oasOperation == null) {
+            throw new CucumberExecutionException("missing OAS/Swagger operation for request");
         }
 
         responseDescription = CucumberUtils.stripQuotes(responseDescription);
 
-        for (String responseCode : swaggerOperation.getResponses().keySet()) {
-            Response response = swaggerOperation.getResponses().get(responseCode);
+        for (String responseCode : oasOperation.getResponses().keySet()) {
+            ApiResponse response = oasOperation.getResponses().get(responseCode);
             if (responseDescription.equalsIgnoreCase(response.getDescription())) {
                 restStepDefs.aResponseIsReturned(responseCode);
                 return;
@@ -110,12 +118,12 @@ public class SwaggerStepDefs {
     @Given("^([^ ]*) is (.*)$")
     public void parameterIs(String name, String value) {
 
-        if (swaggerOperation != null) {
+        if (oasOperation != null) {
 
             name = CucumberUtils.stripQuotes(name);
             value = CucumberUtils.stripQuotes(value);
 
-            for (io.swagger.models.parameters.Parameter parameter : swaggerOperation.getParameters()) {
+            for ( Parameter parameter : oasOperation.getParameters()) {
                 if (parameter.getName().equalsIgnoreCase(name)) {
                     String type = parameter.getIn();
                     if (PARAM_TYPES.contains(type)) {

@@ -1,4 +1,4 @@
-package com.smartbear.readyapi4j.swagger;
+package com.smartbear.readyapi4j.oas;
 
 import com.smartbear.readyapi4j.client.model.RestTestRequestStep;
 import com.smartbear.readyapi4j.teststeps.TestSteps;
@@ -16,25 +16,25 @@ import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 
-public class SwaggerTestStepBuilderTest {
+public class OASTestStepBuilderTest {
 
-    private static SwaggerTestStepBuilder petstore;
+    private static OASTestStepBuilder petstore;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @BeforeClass
     public static void setup() throws Exception {
-        final URL url = SwaggerTestStepBuilderTest.class.getResource("/petstore-swagger.json");
-        petstore = new SwaggerTestStepBuilder(Paths.get(url.toURI()).toString());
+        final URL url = OASTestStepBuilderTest.class.getResource("/petstore-swagger.json");
+        petstore = new OASTestStepBuilder(Paths.get(url.toURI()).toString());
     }
 
     @Test
     public void testExistingOperation() throws Exception {
         RestRequestStepBuilder<? extends RestRequestStepBuilder> builder = petstore.operation("addPet");
 
-        assertEquals(builder.build().getMethod(), "POST");
-        assertEquals(builder.build().getURI(), "http://petstore.swagger.io/v2/pet");
+        assertEquals("POST", builder.build().getMethod());
+        assertEquals("http://petstore.swagger.io/v2/pet", builder.build().getURI());
     }
 
     @Test
@@ -60,13 +60,6 @@ public class SwaggerTestStepBuilderTest {
     }
 
     @Test
-    public void testOperationWithoutBody() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Body parameter is not defined for the [updatePetWithForm] operation");
-        petstore.operationWithBody("updatePetWithForm");
-    }
-
-    @Test
     public void testRequest() throws Exception {
         RestRequestStepBuilder<? extends RestRequestStepBuilder> builder = petstore.request("/some/endpoint", TestSteps.HttpMethod.GET);
 
@@ -89,23 +82,16 @@ public class SwaggerTestStepBuilderTest {
     }
 
     @Test
-    public void testParseSwaggerFromInputStream() throws IOException {
-        final InputStream is = SwaggerTestStepBuilderTest.class.getResourceAsStream("/petstore-swagger.json");
-        final SwaggerTestStepBuilder swaggerTestStepBuilder = new SwaggerTestStepBuilder(is);
-        assertEquals("petstore.swagger.io", swaggerTestStepBuilder.getSwagger().getHost());
+    public void testParseOASFromInputStream() throws IOException {
+        final InputStream is = OASTestStepBuilderTest.class.getResourceAsStream("/petstore-swagger.json");
+        final OASTestStepBuilder OASTestStepBuilder = new OASTestStepBuilder(is);
+        assertEquals("http://petstore.swagger.io/v2", OASTestStepBuilder.getOpenAPI().getServers().get(0).getUrl());
     }
 
     @Test
-    public void testParseSwaggerFromInputStreamWithTargetEndpoint() throws IOException {
-        final InputStream is = SwaggerTestStepBuilderTest.class.getResourceAsStream("/petstore-swagger.json");
-        final SwaggerTestStepBuilder swaggerTestStepBuilder = new SwaggerTestStepBuilder(is, "http://apan.com");
-        assertEquals("http://apan.com", swaggerTestStepBuilder.getTargetEndpoint());
-    }
-
-    @Test
-    public void refParameterCanBeBodyParameter() throws IOException {
-        final InputStream is = SwaggerTestStepBuilderTest.class.getResourceAsStream("/test-swagger.json");
-        final SwaggerTestStepBuilder swaggerTestStepBuilder = new SwaggerTestStepBuilder(is, "http://apan.com");
-        swaggerTestStepBuilder.operationWithBody("testBodyParam").withRequestBody("{}");
+    public void testParseOASFromInputStreamWithTargetEndpoint() throws IOException {
+        final InputStream is = OASTestStepBuilderTest.class.getResourceAsStream("/petstore-swagger.json");
+        final OASTestStepBuilder OASTestStepBuilder = new OASTestStepBuilder(is, "http://apan.com");
+        assertEquals("http://apan.com", OASTestStepBuilder.getTargetEndpoint());
     }
 }
