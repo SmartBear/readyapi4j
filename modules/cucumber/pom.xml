@@ -18,6 +18,7 @@
         <module>modules/samples</module>
         <module>modules/codegen</module>
         <module>modules/hiptest</module>
+        <module>modules/bdd4oas</module>
     </modules>
 
     <properties>
