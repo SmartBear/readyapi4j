@@ -1,4 +1,4 @@
-# Swagger Assert4j Modules
+# ReadyAPI4j Modules
 
 Overview of included modules and how they fit together:
 
@@ -13,5 +13,5 @@ Overview of included modules and how they fit together:
 | [maven-plugin](modules/maven-plugin) | Maven plugin for executing JSON recipes either locally or remotely  |
 | [maven-plugin-tester](modules/maven-plugin-tester) | Maven plugin tester  |
 | [oas](modules/oas) | OAS/Swagger-specific extensions to core recipe creation  |
-| [samples](modules/samples) | Java and Groovy examples for how to use swagger-assert4j  |
-| [testserver](samples/testserver) | Execution engine for executing JSON recipes and SoapUI projects remotely on TestServer  |
+| [samples](modules/samples) | Java and Groovy examples for how to use readyapi4j  |
+| [testengine](samples/testengine) | Execution engine for executing JSON recipes and SoapUI projects remotely on TestEngine  |

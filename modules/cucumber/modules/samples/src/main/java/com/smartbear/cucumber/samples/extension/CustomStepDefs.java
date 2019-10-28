@@ -1,9 +1,9 @@
 package com.smartbear.cucumber.samples.extension;
 
-import io.swagger.assert4j.cucumber.CucumberRecipeBuilder;
-import io.swagger.assert4j.cucumber.RestStepDefs;
-import cucumber.api.java.en.Given;
+import com.smartbear.readyapi4j.cucumber.CucumberRecipeBuilder;
+import com.smartbear.readyapi4j.cucumber.RestStepDefs;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Given;
 
 import javax.inject.Inject;
 
@@ -18,13 +18,13 @@ public class CustomStepDefs {
     private final RestStepDefs restStepDefs;
 
     @Inject
-    public CustomStepDefs(CucumberRecipeBuilder recipeBuilder, RestStepDefs restStepDefs ){
+    public CustomStepDefs(CucumberRecipeBuilder recipeBuilder, RestStepDefs restStepDefs) {
         this.recipeBuilder = recipeBuilder;
         this.restStepDefs = restStepDefs;
     }
 
     @Given("^an endpoint of (.*)$")
-    public void anEndpointOf( String endpoint ) {
-        restStepDefs.setEndpoint( endpoint );
+    public void anEndpointOf(String endpoint) {
+        restStepDefs.setEndpoint(endpoint);
     }
 }

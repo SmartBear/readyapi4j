@@ -1,7 +1,7 @@
 # Domain-specific language (DSL) for tests
 
-We've created Swagger Assert4J to make the full functionality of SoapUI and ReadyApi 
-TestServer accessible to coders. However, we also had a more ambitious vision: to let testers and 
+We've created ReadyAPI4j to make the full functionality of SoapUI and ReadyApi 
+TestEngine accessible to coders. However, we also had a more ambitious vision: to let testers and 
 other people with limited coding skills understand or even write API tests.
 
 We're trying to achieve this both with the [Cucumber functionality](../cucumber/README.md), and with our **Domain-specific language for tests**.
@@ -12,9 +12,9 @@ While most programming languages are general-purpose, a domain-specific language
 In our case, the scope is to create API test and other integration tests. A DSL usually
 has simpler syntax and is more similar to a natural language, such as English.
 
-## The Assert4J DSL
+## The ReadyAPI4j DSL
 
-The Assert4J DSL is a so-called [internal DSL](https://martinfowler.com/bliki/InternalDslStyle.html), based on Groovy. 
+The ReadyAPI4j DSL is a so-called [internal DSL](https://martinfowler.com/bliki/InternalDslStyle.html), based on Groovy. 
 In other words the DSL scripts are Groovy code, which can be run inside any Groovy class or script, but we're trying hard 
 to make that code as similar to plain English as possible.
 
@@ -55,10 +55,10 @@ something slightly more interesting, introducing the concepts of *assertions* an
  3. Send a GET to the URL ```https://staging-server/orders?filter=JonSnow``` and verify
     + that the request returned 200 OK
     + that the response contains the text PROCESSED
- 4. After running the recipe, either locally or on a TestServer, use a standard Groovy assert to check that the requests completed, 
+ 4. After running the recipe, either locally or on a TestEngine, use a standard Groovy assert to check that the requests completed, 
  and that the HTTP status and response met our expectations. 
  
-Although we hope that these two examples got you interested in the Assert4J DSL, we've really only
+Although we hope that these two examples got you interested in the ReadyAPI4j DSL, we've really only
 scratched the surface of what you can do with it. In addition to REST requests, content transfer and a wide range of assertions,
 the DSL can e.g. send SOAP requests with a minimum of code, execute database queries using JDBC, read test data from
 Excel and CSV files and generate random test data values (such as ZIP codes).
@@ -74,25 +74,25 @@ For detailed descriptions of the DSL features, click on the links below, or chec
 
 ## How to use the DSL in your build
 
-To compile and run tests using the Assert4J DSL in a Maven build, simply add this dependency (assuming that you are using
+To compile and run tests using the ReadyAPI4j DSL in a Maven build, simply add this dependency (assuming that you are using
 version 1.0.0-SNAPSHOT; if not just enter the version you use into the ```version``` element):
 
 ```xml
 <dependency>
-    <groupId>io.swagger.assert</groupId>
-    <artifactId>swagger-assert4j-groovy-dsl</artifactId>
+    <groupId>com.smartbear.readyapi</groupId>
+    <artifactId>readyapi4j-groovy-dsl</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
  ```
 
-Generally ```test``` is the scope you want to us. If you don't the Assert4J DSL and its dependencies may be shipped with
+Generally ```test``` is the scope you want to us. If you don't the ReadyAPI4j DSL and its dependencies may be shipped with
 your production code.
 
 To do the same thing in Gradle, add this line to the ```dependencies``` block:
 
 ```groovy
-testCompile group: 'io.swagger.assert', name: 'swagger-assert4j-groovy-dsl', version: '1.0.0-SNAPSHOT', ext: 'jar'
+testCompile group: 'com.smartbear.readyapi', name: 'readyapi4j-groovy-dsl', version: '1.0.0-SNAPSHOT', ext: 'jar'
 ```
 
 ## Tell us what's missing!

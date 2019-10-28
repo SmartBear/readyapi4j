@@ -3,19 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>swagger-assert4j-samples</artifactId>
-        <groupId>io.swagger.assert</groupId>
+        <artifactId>readyapi4j-samples</artifactId>
+        <groupId>com.smartbear.readyapi</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>swagger-assert4j-maven-plugin-samples</artifactId>
+    <artifactId>readyapi4j-maven-plugin-samples</artifactId>
 
     <properties>
-        <testserver.user>demoUser</testserver.user>
-        <testserver.password>demoPassword</testserver.password>
-        <testserver.host>http://testserver.readyapi.io:8080</testserver.host>
+        <testengine.user>admin</testengine.user>
+        <testengine.password>testengine</testengine.password>
+        <testengine.host>http://localhost:8080</testengine.host>
     </properties>
 
     <profiles>
@@ -24,13 +24,13 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>io.swagger.assert</groupId>
-                        <artifactId>swagger-assert4j-maven-plugin</artifactId>
+                        <groupId>com.smartbear.readyapi</groupId>
+                        <artifactId>readyapi4j-maven-plugin</artifactId>
                         <version>${project.version}</version>
                         <configuration>
-                            <username>${testserver.user}</username>
-                            <password>${testserver.password}</password>
-                            <server>${testserver.host}</server>
+                            <username>${testengine.user}</username>
+                            <password>${testengine.password}</password>
+                            <server>${testengine.host}</server>
 
                             <properties>
                                 <apitest.host>https://api.swaggerhub.com</apitest.host>
@@ -62,8 +62,8 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>io.swagger.assert</groupId>
-                        <artifactId>swagger-assert4j-maven-plugin</artifactId>
+                        <groupId>com.smartbear.readyapi</groupId>
+                        <artifactId>readyapi4j-maven-plugin</artifactId>
                         <version>${project.version}</version>
                         <configuration>
                             <properties>

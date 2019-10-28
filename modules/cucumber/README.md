@@ -1,6 +1,6 @@
 ## Cucumber/BDD testing for REST APIs
 
-This module provides a generic Cucumber vocabulary for testing APIs with swagger-assert4j
+This module provides a generic Cucumber vocabulary for testing APIs with readyapi4j
 with dedicated support for OAS/Swagger 2.0 to remove some of the technicalities required to define scenarios. 
 
 A quick example for the Petstore API at http://petstore.swagger.io, testing of the 
@@ -42,8 +42,8 @@ dependency to your pom:
 
 ```xml
 <dependency>
-    <groupId>io.swagger.assert</groupId>
-    <artifactId>swagger-assert4j-cucumber-stepdefs</artifactId>
+    <groupId>com.smartbear.readyapi</groupId>
+    <artifactId>readyapi4j-cucumber-stepdefs</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
@@ -51,7 +51,7 @@ dependency to your pom:
 
 (This library has transient dependencies on cucumber-jvm 2.0.0, so no other dependencies are required)
 
-Then create a JUnit runner class that uses Cucumber, add the swagger-assert4j glue/stepdefs, and point 
+Then create a JUnit runner class that uses Cucumber, add the readyapi4j glue/stepdefs, and point 
 it to your feature files, for example:
  
 ```java
@@ -59,7 +59,7 @@ it to your feature files, for example:
 @CucumberOptions(
     plugin = {"pretty", "html:target/cucumber"},
     features = {"src/test/resources/cucumber"},
-    glue = {"io.swagger.assert4j.cucumber" })
+    glue = {"com.smartbear.readyapi4j.cucumber" })
 public class CucumberTest {
 }
 ```
@@ -67,28 +67,28 @@ public class CucumberTest {
 ### Running from the command-line
 
 If you don't want to run your tests as part of a java/maven/etc-build or simply want to run them from the command-line you 
-can use swagger-assert4j-cucumber-runner.jar (from the [runner module](modules/runner)) which includes all required libraries including the Cucumber
+can use readyapi4j-cucumber-runner.jar (from the [runner module](modules/runner)) which includes all required libraries including the Cucumber
 runtime. Run tests with:
 
 ```
-java -jar swagger-assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-files> -p pretty
+java -jar readyapi4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-files> -p pretty
 ```
 
 Internally this will call the regular cucumber.api.cli.Main class with an added -g argument to the
-included glue-code, all other options are passed as usual, see https://cucumber.io/docs/reference/jvm#cli-runner.
+included glue-code, all other options are passed as usual, see https://cucumber.io/docs/cucumber/api/#from-the-command-line.
 
 (you will need java8 installed on your path)
 
 ### Running with Docker
 
 If the above two options are too much of a Java hassle for you, you can use the prepackaged docker image 
-available at https://hub.docker.com/r/smartbear/swagger-assert4j-cucumber instead - it packages the above runner and makes it
+available at https://hub.docker.com/r/smartbear/readyapi4j-cucumber instead - it packages the above runner and makes it
 super-easy to run feature files for your APIs without having to install anything (except Docker of course).
 
 For example:
 
 ```
-docker run -v /Users/Ole/cucumber:/features smartbear/swagger-assert4j-cucumber -p pretty /features
+docker run -v /Users/Ole/cucumber:/features smartbear/readyapi4j-cucumber -p pretty /features
 ```
 
 Here we mounted a local folder containing feature files into a volume named "/features" in the container - and then 
@@ -96,19 +96,19 @@ specify that volume as the source for feature files for the Cucumber Runner, tog
 
 ### Recipe logging
 
-If you add the `-Dswagger-assert4j.cucumber.logfolder=...` system property to your command line invocation the runner will write 
+If you add the `-Dreadyapi4j.cucumber.logfolder=...` system property to your command line invocation the runner will write 
 generated JSON recipes to the specified folder before executing them, for example allowing you 
 to import them into ReadyAPI for load-testing, monitoring, etc.
 
-### Configuring execution with ReadyAPI TestServer
+### Configuring execution with ReadyAPI TestEngine
  
-The included Cucumber StepDefs (see below) by default execute test recipes using the local open-source execution engine of swagger-assert4j. 
-If you would like to execute your tests via [ReadyAPI TestServer](https://smartbear.com/product/ready-api/testserver/overview/) instead 
-you will need to download and install TestServer and specify the following system properties when running your tests:
+The included Cucumber StepDefs (see below) by default execute test recipes using the local open-source execution engine of readyapi4j. 
+If you would like to execute your tests via [ReadyAPI TestEngine](https://smartbear.com/product/ready-api/testengine/overview/) instead 
+you will need to download and install TestEngine and specify the following system properties when running your tests:
 
-- testserver.endpoint=...url to your testserver installation...
-- testserver.user=...the configured user to use...
-- testserver.password=...the configured password for that user...
+- testengine.endpoint=...url to your testengine installation...
+- testengine.user=...the configured user to use...
+- testengine.password=...the configured password for that user...
 
 ### Building 
 
@@ -266,7 +266,7 @@ Feature: SwaggerHub REST API
 
 ## Extending the vocabulary
 
-You can extend the included REST API testing vocabulary by providing custom StepDefs that tie into the underlying swagger-assert4j
+You can extend the included REST API testing vocabulary by providing custom StepDefs that tie into the underlying readyapi4j
 recipe generation. Do this as follows (a complete example is shown below):
  
 1. Create a Custom StepDefs class which you annotate with @ScenarioScoped
@@ -278,7 +278,7 @@ Internally the actual recipe gets created and sent to the execution engine first
 If you want to delegate some of your custom vocabulary to the existing RestStepDefs you can inject them 
 into your custom StepDefs constructor also and then use it as needed.
 
-The below class shows all the above concepts (this class is in the [samples module](modules/samples/src/main/java/io/swagger/assert4j/cucumber/samples/extension/CustomStepDefs.java)):
+The below class shows all the above concepts (this class is in the [samples module](modules/samples/src/main/java/com/smartbear/readyapi4j/cucumber/samples/extension/CustomStepDefs.java)):
 
 ```java
 package com.smartbear.cucumber.samples.extension;
@@ -322,9 +322,9 @@ To get this used during execution you will need to
 For example (line-breaks and comments added for readability):
 
 ```
-java -cp modules/samples/target/swagger-assert4j-cucumber-samples-1.0.0-SNAPSHOT.jar: // the extension jar
-   modules/runner/target/swagger-assert4j-cucumber-runner-1.0.0-SNAPSHOT.jar          // the runner jar  
-   io.swagger.assert4j.cucumber.CucumberRunner                                        // the runner class 
+java -cp modules/samples/target/readyapi4j-cucumber-samples-1.0.0-SNAPSHOT.jar: // the extension jar
+   modules/runner/target/readyapi4j-cucumber-runner-1.0.0-SNAPSHOT.jar          // the runner jar  
+   com.smartbear.readyapi4j.cucumber.CucumberRunner                                        // the runner class 
    -g com.smartbear.cucumber.samples.extension                                        // the extension package argument
    modules/samples/src/test/resources/cucumber                                        // the features folder
 ```

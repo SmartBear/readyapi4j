@@ -1,14 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>swagger-assert4j-cucumber</artifactId>
-        <groupId>io.swagger.assert</groupId>
+        <artifactId>readyapi4j-cucumber</artifactId>
+        <groupId>com.smartbear.readyapi</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>swagger-assert4j-cucumber-core</artifactId>
+    <artifactId>readyapi4j-cucumber-core</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -43,8 +44,8 @@
         </dependency>
 
         <dependency>
-            <groupId>io.swagger.assert</groupId>
-            <artifactId>swagger-assert4j-facade</artifactId>
+            <groupId>com.smartbear.readyapi</groupId>
+            <artifactId>readyapi4j-facade</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -61,9 +62,22 @@
         </dependency>
 
         <dependency>
-            <groupId>io.swagger</groupId>
+            <groupId>io.swagger.parser.v3</groupId>
             <artifactId>swagger-parser</artifactId>
-            <version>${swagger-parser.version}</version>
+            <version>${swagger-v3-parser.version}</version>
+            <exclusions>
+                <!-- excluded because of clash with httpclient in soapui dependency in facade module -->
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+
     </dependencies>
 </project>

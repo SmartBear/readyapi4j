@@ -3,23 +3,23 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>swagger-assert4j</artifactId>
-        <groupId>io.swagger.assert</groupId>
+        <artifactId>readyapi4j</artifactId>
+        <groupId>com.smartbear.readyapi</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>swagger-assert4j-local</artifactId>
+    <artifactId>readyapi4j-local</artifactId>
     <dependencies>
         <dependency>
-            <groupId>io.swagger.assert</groupId>
-            <artifactId>swagger-assert4j-core</artifactId>
+            <groupId>com.smartbear.readyapi</groupId>
+            <artifactId>readyapi4j-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.smartbear.soapui</groupId>
             <artifactId>soapui-testserver-api</artifactId>
-            <version>5.3.1-RC</version>
+            <version>5.5.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>javafx</groupId>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.smartbear</groupId>
             <artifactId>har-java</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
@@ -46,6 +46,25 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.193</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.ws</groupId>
+            <artifactId>jaxws-api</artifactId>
+            <version>2.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.ws</groupId>
+            <artifactId>jaxws-api</artifactId>
+            <version>2.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-ri</artifactId>
+            <version>2.3.2</version>
+            <type>pom</type>
             <scope>test</scope>
         </dependency>
     </dependencies>

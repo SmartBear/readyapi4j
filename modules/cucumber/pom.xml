@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>swagger-assert4j</artifactId>
-        <groupId>io.swagger.assert</groupId>
+        <artifactId>readyapi4j</artifactId>
+        <groupId>com.smartbear.readyapi</groupId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>swagger-assert4j-cucumber</artifactId>
+    <artifactId>readyapi4j-cucumber</artifactId>
     <packaging>pom</packaging>
 
     <modules>
@@ -17,10 +17,11 @@
         <module>modules/runner</module>
         <module>modules/samples</module>
         <module>modules/codegen</module>
+        <module>modules/hiptest</module>
     </modules>
 
     <properties>
-        <cucumber.version>2.0.0</cucumber.version>
+        <cucumber.version>4.7.1</cucumber.version>
     </properties>
 
 </project>

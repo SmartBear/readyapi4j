@@ -1,17 +1,17 @@
-# Swagger Assert4J TestServer Maven Plugin
+# ReadyAPI4j TestEngine Maven Plugin
 
-A maven plugin that runs a set of Json recipes (locally or using a TestServer) and ReadyAPI projects (only with TestServer, not locally) - 
+A maven plugin that runs a set of Json recipes (locally or using a TestEngine) and ReadyAPI projects (only with TestEngine, not locally) - 
 configure it to run in whatever build phase you might find relevant, for example;
 
 ```
 <plugin>
-    <groupId>io.swagger.assert</groupId>
-    <artifactId>swagger-assert4j-maven-plugin</artifactId>
+    <groupId>com.smartbear.readyapi</groupId>
+    <artifactId>readyapi4j-maven-plugin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <configuration>
         <username>defaultUser</username>
         <password>defaultPassword</password>
-        <server>...Ready!API TestServer endpoint...</server>
+        <server>...Ready!API TestEngine endpoint...</server>
     </configuration>
     <executions>
         <execution>
@@ -28,7 +28,7 @@ configure it to run in whatever build phase you might find relevant, for example
 The only goal exposed by the plugin is "run" - you can invoke it as above or directly from the command-line, for example
 
 ```
-mvn testserver:run 
+mvn testengine:run 
 ```
 
 The plugin will look for files with either json or xml extensions.
@@ -37,9 +37,9 @@ The plugin will look for files with either json or xml extensions.
 
 Configuration parameters are:
 
-* username (required) : the TestServer username to use for authentication
-* password (required) : the TestServer password to use for authentication
-* server (required) : endpoint of the TestServer (no trailing slash!)
+* username (required) : the TestEngine username to use for authentication
+* password (required) : the TestEngine password to use for authentication
+* server (required) : endpoint of the TestEngine (no trailing slash!)
 * recipeDirectory : the folder to scan recursively for recipes/projects, defaults to ${project.basedir}/src/test/resources/recipes
 * targetDirectory : the folder to which filtered recipes will be copied before executing, defaults
 to ${project.basedir}/target/test-recipes
@@ -52,7 +52,7 @@ the surefire plugin), defaults to ${basedir}/target/surefire-reports
 to target
 * async : toggle if tests should be executed asynchronously - default is false which will wait for tests to finish 
  to be able to create test-reports. Setting this to true will disable reporting functionality, but allow you 
-to specify an optional callback that will be called by the TestServer with test results when they are finished.
+to specify an optional callback that will be called by the TestEngine with test results when they are finished.
 * callback : an optional url to call with finished test results if async is set to true 
 
 Specifying a skipApiTests system property will bypass this plugin altogether.
@@ -98,7 +98,7 @@ actually executed.
 
 ## Error reporting
 
-Currently the plugin simple fails the build if any tests fail and dumps the Ready!API TestServer 
+Currently the plugin simple fails the build if any tests fail and dumps the Ready!API TestEngine 
 response to the console. A surefire xml file is generated for inclusion in generated reports.
 
 ## Building the plugin

@@ -1,4 +1,4 @@
-# Property transfers - Transferring content in Assert4J DSL
+# Property transfers - Transferring content in ReadyAPI4j DSL
 
 One of the most powerful features of [SoapUI](https://www.soapui.org) is the ability to easily transfer values from one test step
 to another one. This feature is known as ***Property transfer***. It is most often used to extract some part of it 
@@ -8,7 +8,7 @@ Here's a simple example where we use JSONPath to replace the value ```WILL_BE_RE
 extracted from the last response.
 
 ```groovy
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
  executeRecipe {
     get 'https://staging-server/customers/1'
@@ -28,7 +28,7 @@ the POST request is named ```createOrder```, and this name is used by the two pr
 the correct parts of the posts are modified.
 
 ```groovy
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
  executeRecipe {
     get 'https://staging-server/customers/1'
@@ -52,7 +52,7 @@ if you have a basic understanding of how test steps and their properties interac
 This code snippet demonstrates how to insert values into the Username and Password properties of the 
 next request:
 ```groovy
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
  executeRecipe {
     get 'https://staging-server/customers/1/credentials'
@@ -78,7 +78,7 @@ transfer '$.password' to step: 'findOrder', property: 'userName'
 
 This is a good way of transfering content into HTTP headers, as demonstrated in this code sample:
 ```groovy
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
  executeRecipe {
     get 'https://staging-server/session_cookies/1'
@@ -100,7 +100,7 @@ and property you are transferring content. The syntax for this is similar to spe
 for technical reasons you need to put the source and property parameters in parentheses.
 
 ```groovy
-import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
  executeRecipe {
     post 'https://staging-server/orders', {

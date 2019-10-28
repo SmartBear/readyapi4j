@@ -1,55 +1,55 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "description": "This is a simple API",
-        "version": "1.0.0",
-        "title": "Simple Inventory API",
-        "contact": {
-            "email": "you@your-company.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a simple API",
+    "version": "1.0.0",
+    "title": "Simple Inventory API",
+    "contact": {
+      "email": "you@your-company.com"
     },
-    "basePath": "/v1",
-    "tags": [
-        {
-            "name": "admins",
-            "description": "Secured Admin-only calls"
-        }
-    ],
-    "schemes": [
-        "https"
-    ],
-    "paths": {
-        "/bodyparam": {
-            "post": {
-                "summary": "tests a ref:ed body parameter",
-                "operationId": "testBodyParam",
-                "description": "Adds an item to the system",
-                "parameters": [
-                    {
-                        "$ref": "#/parameters/bodyparam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok"
-                    }
-                }
-            }
-        }
-    },
-    "parameters": {
-        "bodyparam": {
-            "name": "bodyparam",
-            "in": "body",
-            "description": "example body param",
-            "required": true,
-            "schema": {
-                "type": "string"
-            }
-        }
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
+  },
+  "basePath": "/v1",
+  "tags": [
+    {
+      "name": "admins",
+      "description": "Secured Admin-only calls"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/bodyparam": {
+      "post": {
+        "summary": "tests a ref:ed body parameter",
+        "operationId": "testBodyParam",
+        "description": "Adds an item to the system",
+        "parameters": [
+          {
+            "$ref": "#/parameters/bodyparam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "bodyparam": {
+      "name": "bodyparam",
+      "in": "body",
+      "description": "example body param",
+      "required": true,
+      "schema": {
+        "type": "string"
+      }
+    }
+  }
 }

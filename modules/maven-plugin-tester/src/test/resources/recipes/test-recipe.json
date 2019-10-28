@@ -8,7 +8,7 @@
         {
           "type": "QUERY",
           "name": "query",
-          "value": "testserver"
+          "value": "testengine"
         }
       ],
       "assertions": [

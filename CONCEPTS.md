@@ -1,8 +1,8 @@
-# Swagger Assert4j Core Concepts
+# ReadyAPI4j Core Concepts
 
 ## JSON Recipes
 
-JSON recipes are the external representation used by swagger-assert4j to describe API tests which you either
+JSON recipes are the external representation used by readyapi4j to describe API tests which you either
 create manually or using one of our code libraries (see below). A very simple example:
 
 ````json
@@ -32,7 +32,7 @@ TestSteps, Assertions, etc.
 ## Creating recipes with code
 
 Creating elaborate recipes in JSON with many teststeps, assertions, transfers, etc can be tedious - which is
-why assert4j includes [java](modules/core), [groovy](modules/groovy-dsl) and [cucumber](modules/cucumber) libraries to make 
+why readyapi4j includes [java](modules/core), [groovy](modules/groovy-dsl) and [cucumber](modules/cucumber) libraries to make 
 recipe creation and execution more accessible. 
 
 For example, the above recipe can be created in java with:
@@ -49,7 +49,7 @@ TestRecipe recipe = TestRecipeBuilder.buildRecipe(
 ## Execution modes
 
 No matter how you create JSON recipes - manually, via code, auto-generate, etc - they can be executed either locally
-using the Open-Source SoapUI execution engine - or remotely using the commercial ReadyAPI TestServer product. Recipes
+using the Open-Source SoapUI execution engine - or remotely using the commercial ReadyAPI TestEngine product. Recipes
 are executed by RecipeExecutors - which can be created for either local or remote execution.
 
 ### Local Execution
@@ -67,22 +67,22 @@ Read more about local execution in the [local module](modules/local).
 ## Remote Execution
 
 To get access to extended functionality like data-driven testing, centralized execution and reporting, etc, you 
-can execute your tests with [ReadyAPI TestServer](http://readyapi.smartbear.com/testserver/start) instead of running 
+can execute your tests with [ReadyAPI TestEngine](http://readyapi.smartbear.com/testengine/start) instead of running 
 them locally. 
 
-TestServer is a standalone server that exposes a REST API for executing API tests. The above test can be run executed remotely with
+TestEngine is a standalone server that exposes a REST API for executing API tests. The above test can be run executed remotely with
 
 ```java
-TestServerClient testServerClient = TestServerClient.fromUrl("...").withCredentials("...", "...");
-RecipeExecutor executor = testServerClient.createRecipeExecutor();
+TestEngineClient testEngineClient = TestEngineClient.fromUrl("...").withCredentials("...", "...");
+RecipeExecutor executor = testEngineClient.createRecipeExecutor();
 Execution execution = executor.executeRecipe(recipe);
 ```
 
 The result of executeRecipe is the same when executing remotely, so it can be handled in the same
 way as for local execution.
 
-TestServer also provides functionality for running existing ReadyAPI/SoapUI projects, logging, etc - read more in the
-[testserver module](modules/testserver)
+TestEngine also provides functionality for running existing ReadyAPI/SoapUI projects, logging, etc - read more in the
+[testengine module](modules/testengine)
 
 ## Execution Facade
 
@@ -97,9 +97,9 @@ The facade will by default use the local execution engine but switch to remote e
 system properties are set:
 
 ```
-testserver.endpoint=<testserver endpoint>
-testserver.user=<testserver user>
-testserver.password=<testserver password>
+testengine.endpoint=<testengine endpoint>
+testengine.user=<testengine user>
+testengine.password=<testengine password>
 ```
 
 The facade also provides a couple of utility methods for easily executing recipes in string or file format:
@@ -119,8 +119,8 @@ Usage of the facade as in the above examples also enables logging of both genera
 of executed tests (in HAR file format). Adding the following two properties:
 
 ```
-swagger-assert4j.log.executions.folder=target/logs/executions
-swagger-assert4j.log.recipes.folder=target/logs/recipes
+readyapi4j.log.executions.folder=target/logs/executions
+readyapi4j.log.recipes.folder=target/logs/recipes
 ```
 
 will automatically result in the corresponding artifacts being written to the corresponding folders.
@@ -136,7 +136,7 @@ you can use `submitRecipe(TestRecipe)` instead; the returned Execution object wi
 
 In all instances above we got an Execution object when executing the recipe, use 
 `execution.getExecutionResult()` to get a  
-[RecipeExecutionResult](https://smartbear.github.io/swagger-assert4j/apidocs/index.html?io/swagger/assert4j/result/RecipeExecutionResult.html) 
+[RecipeExecutionResult](https://smartbear.github.io/readyapi4j/apidocs/index.html?com/smartbear/readyapi4j/result/RecipeExecutionResult.html) 
 object that provides details on execution time, individual teststep results, etc. 
 
 In a unit testing scenario the provided AssertionUtils class can be used to assert the outcome of an Execution:

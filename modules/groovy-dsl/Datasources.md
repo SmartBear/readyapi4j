@@ -4,7 +4,7 @@ Arguably, Datasources are the most powerful feature in the DSL.
 Datasources allow you to easily make your test data-driven and thus much more relevant and to generate test data if you don't have
 it. Read on to learn the basic concepts and syntax of DataSources.
 
-***NOTE:*** Datasources are only available for TestServer executions, not for local executions. In other words you need a ReadyApi TestServer 
+***NOTE:*** Datasources are only available for TestEngine executions, not for local executions. In other words you need a ReadyApi TestEngine 
 to be able to use them. The most straightforward way to do this is to use the method ```executeRecipeOnServer``` -
 see the code samples below.
 
@@ -27,9 +27,9 @@ For instance, assume that you have an Excel file called ```cities.xls``` with th
 We're now going to use this data to execute the same test (two test steps) once for every row in the Excel sheet:
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
-  executeRecipeOnServer 'https://testserver_host:8080/', 'user', 'pwd', {
+  executeRecipeOnServer 'https://testengine_host:8080/', 'user', 'pwd', {
     /* Loop over all the rows in the Excel file. */
     usingExcelFile 'cities.xls', {
     
@@ -61,7 +61,7 @@ We're now going to use this data to execute the same test (two test steps) once 
 The somewhat cryptic strings ```${ExcelFile#Country}``` and ```${ExcelFile#City}``` are **property expansions**, which
 retrieve the current values of the columns ```Country``` and ```City``` for every row.
 
-In addition to Excel data sources, the following data sources can be created from the Assert4J Test DSL:
+In addition to Excel data sources, the following data sources can be created from the ReadyAPI4j Test DSL:
 * Grid data sources
 * CSV data sources
 
@@ -86,10 +86,10 @@ the data that we saw in the Excel example above:
 ```
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
   def data = [Country: ['France', 'Sweden', 'Italy'], City: ['Paris', 'Stockholm', 'Rome']]
-  executeRecipeOnServer 'https://testserver_host:8080/', 'user', 'pwd', {
+  executeRecipeOnServer 'https://testengine_host:8080/', 'user', 'pwd', {
     /* Loop over all the rows in the data. */
     usingData data, {
     
@@ -132,9 +132,9 @@ Italy,Rome
 The following code will then execute the same tests as the Excel example above:
 
 ```groovy
- import static io.swagger.assert4j.dsl.execution.RecipeExecution.executeRecipe
+ import static com.smartbear.readyapi4j.dsl.execution.RecipeExecution.executeRecipe
  
-  executeRecipeOnServer 'https://testserver_host:8080/', 'user', 'pwd', {
+  executeRecipeOnServer 'https://testengine_host:8080/', 'user', 'pwd', {
     /* Loop over all the rows in the Excel file. */
     usingCsvFile 'cities.xls', {
     
