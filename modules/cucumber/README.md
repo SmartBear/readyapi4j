@@ -125,97 +125,99 @@ target folder.
  
 The included [StepDefs](modules/stepdefs) for API testing adds the following vocabulary:
 
-##### Given statements
+#### Given statements
 
-- "the OAS definition at &lt;swagger endpoint&gt;"
-    - The specified endpoint must reference a valid OAS/Swagger 2.0 definition
-    - Example: "the OAS definition at http://petstore.swagger.io/v2/swagger.json"
+- `the OAS definition at <swagger endpoint>`
+    - The specified endpoint must reference a valid OAS/Swagger 2.0/3.0 definition
+    - Example: `the OAS definition at http://petstore.swagger.io/v2/swagger.json`
 
-- "the API running at &lt;API endpoint&gt;"
-    - Example: "the API running at http://petstore.swagger.io/v2"
+- `the API running at <API endpoint>`
+    - Example: `the API running at http://petstore.swagger.io/v2`
 
-- "the oAuth2 token &lt;token&gt;"
-    - Example: "the oAuth2 token 18273827aefef123"
+- `the oAuth2 token <token>`
     - Adds an OAuth 2.0 Bearer token to requests
+    - Example: `the oAuth2 token 18273827aefef123`
 
+#### When/And statements
 
-##### When/And statements
-
-- "a &lt;HTTP Method&gt; request to &lt;path&gt; is made"
-    - Example: "a GET request to /test/search is made"
+- `a <HTTP Method> request to <path>`
+    - Example: `a GET request to /test/search is made`
     
-- "a request to &lt;Swagger OperationID&gt; is made"
-    - will fail if no Swagger definition has been Given
-    - Example: "a request to findPetById is made"
+- `a request to <OAS OperationID> is made`
+    - will fail if no OAS definition has been Given
+    - Example: `a request to findPetById is made`
 
-- "the request body is" &lt;text block&gt;
-    - Example: "the request body is
+- `the request body is <text block>`
+    - Example: 
     ```
+  the request body is
     """
     { "id" : "123" }
     """
-    ```"
+    ```
     
-- "the &lt;parameter name&gt; parameter is &lt;parameter value&gt;"
+- `the <parameter name> parameter is <parameter value>`
     - adds the specified parameter as a query parameter
-    - Example: "the query parameter is miles davis"
+    - Example: `the query parameter is miles davis`
     
-- "the &lt;http header&gt; is &lt;header value&gt;
-    - Example: "the Encoding header is UTF-8"
+- `the <http header> is <header value>`
+    - Example: `the Encoding header is UTF-8`
     
-- "the type is &lt;content-type&gt;
-    - single word types will be expanded to "application/&lt;content-type&gt;"
-    - Example: "the type is json"
+- `the type is <content-type>`
+    - single word types will be expanded to `application/<content-type>`
+    - Example: `the type is json`
 
-- "&lt;parameter name&gt; is &lt;parameter value&gt;"
+- `<parameter name> is <parameter value>`
     - if a valid OperationId has been given the type of parameter will be deduced from its list of parameters
     - if no OperationId has been given this will be added to a map of values that will be sent as the request body
-    - Example: "name is John"
+    - Example: `name is John`
     - will work for both inline or multi-line values
     
-- "&lt;the request expects &lt;content-type&gt;"
+- `the request expects <content-type>`
     - adds an Accept header
-    - Example "the request expects yaml"
+    - Example `the request expects yaml`
 
-##### Then/And statements:
+#### Then/And statements:
 
-- "a &lt;HTTP Status code&gt; response is returned"
-    - Example: "a 200 response is returned"
+- `a <HTTP Status code> response is returned`
+    - Example: `a 200 response is returned`
     
-- "a &lt;HTTP Status code&gt; response is returned within &lt;number&gt;ms"
-    - Example: "a 404 response is returned within 10ms"
+- `a <HTTP Status code> response is returned within <number>ms`
+    - Example: `a 404 response is returned within 10ms`
 
-- "the response is &lt;a valid Swagger Response description for the specified operationId&gt;"
+- `the response is <a valid OAS Response description for the specified operationId>`
     - Requires that a valid OperationId has been Given
-    - Example: "the response is a list of people"
+    - Example: `the response is a list of people`
 
-- "the response body contains" &lt;text block&gt;
-    - Example: "the response body contains
+- `the response body contains <text block>`
+    - Example: 
     ```
+    the response body contains
     """
     "id" : "123"
     """
-    ```"
-
-- "the response body matches" &lt;regex text block&gt;
-    - Example: "the response body matches
     ```
+
+- `the response body matches <regex text block>`
+    - Example: 
+    ```
+    the response body matches
     """
     .*testing.*
     """
-    ```"
+    ```
 
-- "the response type is &lt;content-type&gt;"
-    - Example: "the response type is application/yaml"
+- `the response type is <content-type>`
+    - Example: `the response type is application/yaml`
 
-- "the response contains a &lt;http-header name&gt; header"
-    - Example: "the response contains a Cache-Control header"
+- `the response contains a <http-header name> header`
+    - Example: `the response contains a Cache-Control header`
 
-- "the response &lt;http header name&gt; is &lt;http header value&gt;"
-    - Example: "the response Cache-Control header is None"
+- `the response <http header name> is <http header value>`
+    - Example: `the response Cache-Control header is None`
 
-- "the response body contains &lt;text token&gt;"
-    - Example: "the response body contains Testing text"
+- `the response body contains <text token>`
+    - Example: `the response body contains Testing text`
 
 ### Complete Example:
 
