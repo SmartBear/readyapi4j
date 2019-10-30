@@ -1,32 +1,30 @@
 package cucumber.runtime;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.java.JavaBackend;
 import cucumber.runtime.snippets.FunctionNameGenerator;
 import gherkin.pickles.PickleStep;
 import io.cucumber.stepexpression.Argument;
 import io.cucumber.stepexpression.TypeRegistry;
-import io.swagger.parser.OpenAPIParser;
-import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.responses.ApiResponse;
-import io.swagger.v3.parser.core.models.ParseOptions;
-import io.swagger.v3.parser.core.models.SwaggerParseResult;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+
+/**
+ * Custom Backend that reads OAS BDD extensions and translates them to the readyapi4j OAS StepDefs
+ */
 
 public class OASBackend implements Backend {
 
     private JavaBackend javaBackend;
     private List<StepDefinitionWrapper> wrapperList = Lists.newArrayList();
+    private OASWrapper oasWrapper;
 
     public OASBackend(ResourceLoader resourceLoader, TypeRegistry typeRegistry) {
         javaBackend = new JavaBackend(resourceLoader, typeRegistry);
@@ -38,79 +36,11 @@ public class OASBackend implements Backend {
 
         try {
             glueList.add( new URI("classpath:com/smartbear/readyapi4j/cucumber" ));
-            glueList.add( new URI("classpath:com/smartbear/cucumber/samples/extension" ));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         GlueWrapper glueWrapper = new GlueWrapper(glue);
         javaBackend.loadGlue(glueWrapper, glueList);
-
-        String oas = System.getProperty("readyapi4j.oas");
-        if( oas == null || oas.isEmpty()){
-            return;
-        }
-
-        System.out.println( "Loading OAS definition from " + oas);
-
-        OpenAPIParser parser = new OpenAPIParser();
-        SwaggerParseResult result = parser.readLocation(oas, null, new ParseOptions());
-        OpenAPI openAPI = result.getOpenAPI();
-        if( openAPI == null ){
-            System.err.println( "Failed to read OAS definition from [" + oas + "]; " + Arrays.toString( result.getMessages().toArray()));
-            return;
-        }
-
-        for( PathItem pathItem : openAPI.getPaths().values()){
-            for( Operation operation : pathItem.readOperations()){
-                Map<String, Object> extensions = operation.getExtensions();
-                if( extensions != null ){
-                    Object bddWhen = extensions.get( "x-bdd-when" );
-                    if( bddWhen instanceof List ){
-                        List<Object> bddWhens = (List<Object>) bddWhen;
-                        bddWhens.forEach( i -> addWhenARequestToAnOperation( glueWrapper, i.toString(), operation.getOperationId()));
-                    }
-                    else if( bddWhen instanceof String ){
-                        addWhenARequestToAnOperation( glueWrapper, bddWhen.toString(), operation.getOperationId() );
-                    }
-                }
-
-                for( ApiResponse  apiResponse : operation.getResponses().values() ){
-                    extensions = apiResponse.getExtensions();
-                    if( extensions != null ){
-                        Object bddThen = extensions.get( "x-bdd-then" );
-                        if( bddThen instanceof List ){
-                            List<Object> bddThens = (List<Object>) bddThen;
-                            bddThens.forEach( i -> addThenAResponseIs( glueWrapper, i.toString(), operation.getOperationId()));
-                        }
-                        else if( bddThen instanceof String ){
-                            addThenAResponseIs( glueWrapper, bddThen.toString(), apiResponse.getDescription() );
-                        }
-                    }
-                }
-            }
-        }
-
-        System.out.println( "Added " + wrapperList.size() + " wrappers");
-    }
-
-    private void addThenAResponseIs(GlueWrapper glueWrapper, String bddThen, String operationId) {
-        StepDefinition stepDefinition = glueWrapper.definitionMap.get("^the response is (.*)$");
-        if( stepDefinition != null ) {
-            StepDefinitionWrapper stepWrapper = new StepDefinitionWrapper(stepDefinition, "^" + bddThen + "$",
-                    Lists.newArrayList( new StringArgument(operationId)));
-            glueWrapper.glue.addStepDefinition(stepWrapper);
-            wrapperList.add(stepWrapper);
-        }
-    }
-
-    private void addWhenARequestToAnOperation(GlueWrapper glueWrapper, String bddWhen, String operationId) {
-        StepDefinition stepDefinition = glueWrapper.definitionMap.get("^a request to ([^ ]*) is made$");
-        if( stepDefinition != null ) {
-            StepDefinitionWrapper stepWrapper = new StepDefinitionWrapper(stepDefinition, "^" + bddWhen + "$",
-                    Lists.newArrayList( new StringArgument(operationId)));
-            glueWrapper.glue.addStepDefinition(stepWrapper);
-            wrapperList.add(stepWrapper);
-        }
     }
 
     @Override
@@ -128,9 +58,12 @@ public class OASBackend implements Backend {
         return javaBackend.getSnippet( pickleStep, s, functionNameGenerator);
     }
 
+    /**
+     * Glue wrapper so we can wrap step definitions for runtime interception
+     */
+
     private class GlueWrapper implements Glue {
         private Glue glue;
-        private Map<String,StepDefinition> definitionMap = Maps.newHashMap();
 
         public GlueWrapper(Glue glue) {
             this.glue = glue;
@@ -138,8 +71,7 @@ public class OASBackend implements Backend {
 
         @Override
         public void addStepDefinition(StepDefinition stepDefinition) throws DuplicateStepDefinitionException {
-            definitionMap.put( stepDefinition.getPattern(), stepDefinition );
-            glue.addStepDefinition(stepDefinition);
+            glue.addStepDefinition(new StepDefinitionWrapper(stepDefinition));
         }
 
         @Override
@@ -168,21 +100,48 @@ public class OASBackend implements Backend {
         }
     }
 
+    /**
+     * StepDefinition Wrapper that allows us to intercept custom bdd statements defined in OAS extensions and translate
+     * them to defined StepDefs
+     */
+
     private class StepDefinitionWrapper implements StepDefinition {
 
         private final StepDefinition stepDefinition;
-        private final String pattern;
-        private List<Argument> arguments;
 
-        StepDefinitionWrapper(StepDefinition stepDefinition, String pattern, List<Argument> arguments ){
+        StepDefinitionWrapper( StepDefinition stepDefinition ){
             this.stepDefinition = stepDefinition;
-            this.pattern = pattern;
-            this.arguments = arguments;
         }
 
         @Override
         public List<Argument> matchedArguments(PickleStep pickleStep) {
-            return pickleStep.getText().matches( pattern ) ? arguments : null;
+            if( pickleStep.getText().startsWith( "the OAS definition at ")){
+                String oas = pickleStep.getText().substring("the OAS definition at ".length());
+                if( oasWrapper == null ) {
+                    oasWrapper = new OASWrapper(oas);
+                }
+                else {
+                    oasWrapper.loadDefinition( oas );
+                }
+            }
+            else if( stepDefinition.getPattern().equalsIgnoreCase("^a request to ([^ ]*) is made$")){
+                if( oasWrapper != null ){
+                    Operation operation = oasWrapper.getWhen( pickleStep.getText());
+                    if( operation != null ){
+                        return Collections.singletonList(new StringArgument(operation.getOperationId()));
+                    }
+                }
+            }
+            else if( stepDefinition.getPattern().equalsIgnoreCase("^the response is (.*)$")){
+                if( oasWrapper != null ){
+                    ApiResponse response = oasWrapper.getThen( pickleStep.getText());
+                    if( response != null ){
+                        return Collections.singletonList(new StringArgument(response.getDescription()));
+                    }
+                }
+            }
+
+            return stepDefinition.matchedArguments( pickleStep );
         }
 
         @Override
@@ -207,7 +166,7 @@ public class OASBackend implements Backend {
 
         @Override
         public String getPattern() {
-            return pattern;
+            return stepDefinition.getPattern();
         }
 
         @Override

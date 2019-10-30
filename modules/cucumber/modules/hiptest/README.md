@@ -23,7 +23,7 @@ https://app.hiptest.com/projects/141233/test-plan/folders/1040071
 
 would result in project 141233 and folder 1040071.
 
-The tokens and clientid can get generated from your [HipTest profile page](https://app.hiptest.com/profile)
+The tokens and clientid are generated from your [HipTest profile page](https://app.hiptest.com/profile)
 
 The underlying API call made to the [HipTest API](https://api-doc.hiptest.com/) is described at 
 https://api-doc.hiptest.com/?http#get-feature-from-a-given-folder.

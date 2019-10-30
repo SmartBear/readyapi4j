@@ -17,8 +17,10 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Additional StepDefs for simplifying testing of OAS/Swagger-defined REST APIs
@@ -61,6 +63,25 @@ public class OASStepDefs {
                 url = url.substring(0, url.length()-1);
             }
             restStepDefs.setEndpoint(url);
+        }
+    }
+
+    @When("^a request to ([^ ]*) with parameters$")
+    public void aRequestToOperationWithParametersIsMade(String operationId, String parameters) throws Throwable {
+        if (oas == null) {
+            throw new CucumberExecutionException("Missing OAS/Swagger definition");
+        }
+
+        operationId = CucumberUtils.stripQuotes(operationId);
+
+        if (!findOASOperation(operationId)) {
+            throw new CucumberExecutionException("Could not find operation [" + operationId + "] in OAS/Swagger definition");
+        }
+
+        Properties properties = new Properties();
+        properties.load( new StringReader( parameters ));
+        for( String name : properties.stringPropertyNames()){
+            parameterIs( name, properties.getProperty( name ));
         }
     }
 

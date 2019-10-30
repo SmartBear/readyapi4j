@@ -15,9 +15,11 @@ Feature: SwaggerHub REST API
     Then the response is a list of APIs in APIs.json format
 
   Scenario: API Version Listing
-    When a request to getApiVersions is made
-    And owner is swagger-hub
-    And api is registry-api
+    When a request to getApiVersions with parameters
+    """
+    owner = swagger-hub
+    api = registry-api
+    """
     Then the response is a list of API versions in APIs.json format
     And the response body contains /apis/swagger-hub/registry-api
 
