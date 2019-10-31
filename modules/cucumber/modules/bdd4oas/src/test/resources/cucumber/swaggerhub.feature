@@ -10,9 +10,8 @@ Feature: SwaggerHub REST API
     Then a search result is returned
 
   Scenario: Owner API Listing
-    When a request to getOwnerApis is made
-    And owner is swagger-hub
-    Then the response is a list of APIs in APIs.json format
+    When a search for swaggerhub apis is made
+    Then a search result is returned
 
   Scenario: API Version Listing
     When a request to getApiVersions with parameters
@@ -30,10 +29,8 @@ Feature: SwaggerHub REST API
     And version is <version>
     Then a 200 response is returned within 2000ms
     And the response type is application/json
-    And the response body contains
-    """
-    "description":"<description>"
-    """
+    And the path "$..description" exists
+    And the path "$..description[0]" matches "The registry API for SwaggerHub"
     Examples:
     | owner       | api          | version  | description                       |
     | swagger-hub | registry-api | 1.0.10   | The registry API for SwaggerHub   |

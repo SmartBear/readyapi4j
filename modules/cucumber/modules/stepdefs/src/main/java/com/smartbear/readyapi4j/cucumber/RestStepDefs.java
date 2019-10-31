@@ -149,6 +149,36 @@ public class RestStepDefs {
         addAssertion(Assertions.headerExists(CucumberUtils.stripQuotes(header)).build());
     }
 
+    @Then("^the path (.*) matches (.*)$")
+    public void thePathMatches(String path, String content) {
+        addAssertion(Assertions.json(CucumberUtils.stripQuotes(path), CucumberUtils.stripQuotes(content)).build());
+    }
+
+    @Then("^the path (.*) matches$")
+    public void thePathMatchesContent(String path, String content) {
+        thePathMatches( path, content );
+    }
+
+    @Then("^the path (.*) finds (.*) items?$")
+    public void thePathFinds(String path, String count) {
+        addAssertion(Assertions.jsonCount(CucumberUtils.stripQuotes(path), CucumberUtils.stripQuotes(count)).build());
+    }
+
+    @Then("^the path (.*) exists$")
+    public void thePathExists(String path) {
+        addAssertion(Assertions.jsonExists(CucumberUtils.stripQuotes(path)).build());
+    }
+
+    @Then("^the xpath (.*) matches (.*)$")
+    public void theXPathMatches(String path, String content) {
+        addAssertion(Assertions.xPathContains(CucumberUtils.stripQuotes(path), CucumberUtils.stripQuotes(content)).build());
+    }
+
+    @Then("^the xpath (.*) matches$")
+    public void theXPathMatchesContent(String path, String content) {
+        theXPathMatches( path, content );
+    }
+
     @Then("^the response (.*) header is (.*)$")
     public void theResponseHeaderIs(String header, String value) {
         addAssertion(Assertions.headerValue(CucumberUtils.stripQuotes(header), CucumberUtils.stripQuotes(value)).build());

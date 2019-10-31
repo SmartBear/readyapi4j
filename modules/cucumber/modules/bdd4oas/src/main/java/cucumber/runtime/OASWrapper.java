@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class OASWrapper {
 
-    private Map<String,Operation> whenMap = Maps.newConcurrentMap();
-    private Map<String,ApiResponse> thenMap = Maps.newConcurrentMap();
+    private Map<String, WhenOperationWrapper> whenMap = Maps.newConcurrentMap();
+    private Map<String, ThenResponseWrapper> thenMap = Maps.newConcurrentMap();
     private String oas;
 
     public OASWrapper(String oas) {
@@ -41,40 +41,106 @@ public class OASWrapper {
 
         for( PathItem pathItem : openAPI.getPaths().values()){
             for( Operation operation : pathItem.readOperations()){
-                Map<String, Object> extensions = operation.getExtensions();
-                if( extensions != null ){
-                    Object bddWhen = extensions.get( "x-bdd-when" );
-                    if( bddWhen instanceof List){
-                        List<Object> bddWhens = (List<Object>) bddWhen;
-                        bddWhens.forEach( i -> whenMap.put( i.toString(), operation ));
-                    }
-                    else if( bddWhen instanceof String ){
-                        whenMap.put( bddWhen.toString(), operation );
-                    }
-                }
+                extractWhenExtensions(operation);
+                extractThenExtensions(operation);
+            }
+        }
+    }
 
-                for( ApiResponse apiResponse : operation.getResponses().values() ){
-                    extensions = apiResponse.getExtensions();
-                    if( extensions != null ){
-                        Object bddThen = extensions.get( "x-bdd-then" );
-                        if( bddThen instanceof List ){
-                            List<Object> bddThens = (List<Object>) bddThen;
-                            bddThens.forEach( i -> thenMap.put( i.toString(), apiResponse ));
+    private void extractThenExtensions(Operation operation) {
+        for( ApiResponse apiResponse : operation.getResponses().values() ){
+            Map<String, Object> extensions = apiResponse.getExtensions();
+            if( extensions != null ){
+                Object bddThen = extensions.get( "x-bdd-then" );
+                if( bddThen instanceof List){
+                    List<Object> bddThens = (List<Object>) bddThen;
+                    bddThens.forEach( i -> {
+                        if( i instanceof String ) {
+                            thenMap.put(i.toString(), new ThenResponseWrapper(apiResponse, null));
                         }
-                        else if( bddThen instanceof String ){
-                            thenMap.put( bddThen.toString(), apiResponse );
+                        else if( i instanceof Map ){
+                            Map<String,Object> thens = (Map)i;
+                            if( thens.containsKey("then")) {
+                                thenMap.put(thens.get("then").toString(), new ThenResponseWrapper(apiResponse, (Map<String, String>) thens.get("assertions")));
+                            }
                         }
-                    }
+                    } );
+                }
+                else if( bddThen instanceof String ){
+                    thenMap.put( bddThen.toString(), new ThenResponseWrapper( apiResponse, null ));
                 }
             }
         }
     }
 
-    public Operation getWhen(String text) {
+    private void extractWhenExtensions(Operation operation) {
+        Map<String, Object> extensions = operation.getExtensions();
+        if( extensions != null ){
+            Object bddWhen = extensions.get( "x-bdd-when" );
+            if( bddWhen instanceof List){
+                List<Object> bddWhens = (List<Object>) bddWhen;
+                bddWhens.forEach( i -> {
+                    if( i instanceof String ){
+                        whenMap.put( i.toString(), new WhenOperationWrapper( operation, null ));
+                    }
+                    else if( i instanceof Map ){
+                        Map<String,Object> whens = (Map)i;
+                        if( whens.containsKey("when")) {
+                            whenMap.put(whens.get("when").toString(), new WhenOperationWrapper(operation, (Map<String, String>) whens.get("parameters")));
+                        }
+                    }
+                });
+            }
+            else if( bddWhen instanceof String ){
+                whenMap.put( bddWhen.toString(), new WhenOperationWrapper(operation, null) );
+            }
+        }
+    }
+
+    public static class ThenResponseWrapper {
+
+        private ApiResponse apiResponse;
+        private Map<String, String> assertions;
+
+        public ThenResponseWrapper(ApiResponse apiResponse, Map<String, String> assertions) {
+
+            this.apiResponse = apiResponse;
+            this.assertions = assertions;
+        }
+
+        public ApiResponse getApiResponse() {
+            return apiResponse;
+        }
+
+        public Map<String, String> getAssertions() {
+            return assertions;
+        }
+    }
+
+    public static class WhenOperationWrapper
+    {
+        private Operation operation;
+        private Map<String, String> parameters;
+
+        public WhenOperationWrapper(Operation operation, Map<String,String> parameters) {
+            this.operation = operation;
+            this.parameters = parameters;
+        }
+
+        public Operation getOperation() {
+            return operation;
+        }
+
+        public Map<String, String> getParameters() {
+            return parameters;
+        }
+    }
+
+    public WhenOperationWrapper getWhen(String text) {
         return whenMap.get(text);
     }
 
-    public ApiResponse getThen(String text) {
+    public ThenResponseWrapper getThen(String text) {
         return thenMap.get(text);
     }
 }

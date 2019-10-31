@@ -1,20 +1,21 @@
 package cucumber.runtime;
 
 import com.google.common.collect.Lists;
+import com.smartbear.readyapi4j.cucumber.RestStepDefs;
+import cucumber.api.java.ObjectFactory;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.java.JavaBackend;
 import cucumber.runtime.snippets.FunctionNameGenerator;
 import gherkin.pickles.PickleStep;
 import io.cucumber.stepexpression.Argument;
 import io.cucumber.stepexpression.TypeRegistry;
-import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.responses.ApiResponse;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Custom Backend that reads OAS BDD extensions and translates them to the readyapi4j OAS StepDefs
@@ -124,24 +125,40 @@ public class OASBackend implements Backend {
                     oasWrapper.loadDefinition( oas );
                 }
             }
-            else if( stepDefinition.getPattern().equalsIgnoreCase("^a request to ([^ ]*) is made$")){
+            else if( stepDefinition.getPattern().equalsIgnoreCase("^a request to ([^ ]*) with parameters$")){
                 if( oasWrapper != null ){
-                    Operation operation = oasWrapper.getWhen( pickleStep.getText());
-                    if( operation != null ){
-                        return Collections.singletonList(new StringArgument(operation.getOperationId()));
+                    OASWrapper.WhenOperationWrapper operationWrapper = oasWrapper.getWhen( pickleStep.getText());
+                    if( operationWrapper != null ){
+                        return extractOperationArguments(operationWrapper);
                     }
                 }
             }
             else if( stepDefinition.getPattern().equalsIgnoreCase("^the response is (.*)$")){
                 if( oasWrapper != null ){
-                    ApiResponse response = oasWrapper.getThen( pickleStep.getText());
-                    if( response != null ){
-                        return Collections.singletonList(new StringArgument(response.getDescription()));
+                    OASWrapper.ThenResponseWrapper responseWrapper = oasWrapper.getThen( pickleStep.getText());
+                    if( responseWrapper != null ){
+                        return Lists.newArrayList( new ApiResponseArgument(responseWrapper));
                     }
                 }
             }
 
             return stepDefinition.matchedArguments( pickleStep );
+        }
+
+        private List<Argument> extractOperationArguments(OASWrapper.WhenOperationWrapper operation) {
+            Map<String, String> parameters = operation.getParameters();
+            if( parameters != null && !parameters.isEmpty()){
+                StringBuilder builder = new StringBuilder();
+                for( String name : parameters.keySet()){
+                    builder.append(name).append('=').append(parameters.get(name)).append('\n');
+                }
+                return Lists.newArrayList(new StringArgument(operation.getOperation().getOperationId()),
+                        new StringArgument(builder.toString()));
+            }
+            else {
+                return Lists.newArrayList(new StringArgument(operation.getOperation().getOperationId()),
+                        new StringArgument(""));
+            }
         }
 
         @Override
@@ -156,7 +173,18 @@ public class OASBackend implements Backend {
 
         @Override
         public void execute(Object[] objects) throws Throwable {
-            stepDefinition.execute(objects);
+            if( objects.length == 1 && objects[0] instanceof OASWrapper.ThenResponseWrapper) {
+                OASWrapper.ThenResponseWrapper argument = (OASWrapper.ThenResponseWrapper) objects[0];
+                stepDefinition.execute( new Object[]{ argument.getApiResponse().getDescription() });
+
+                if( argument.getAssertions() != null ) {
+                    ObjectFactory objectFactory = (ObjectFactory) FieldUtils.readField(stepDefinition, "objectFactory", true);
+                    RestStepDefs stepDefs = objectFactory.getInstance(RestStepDefs.class);
+                }
+            }
+            else {
+                stepDefinition.execute(objects);
+            }
         }
 
         @Override
@@ -185,7 +213,21 @@ public class OASBackend implements Backend {
         }
 
         @Override
-        public Object getValue() {
+        public String getValue() {
+            return value;
+        }
+    }
+
+    private class ApiResponseArgument implements Argument {
+
+        private final OASWrapper.ThenResponseWrapper value;
+
+        ApiResponseArgument(OASWrapper.ThenResponseWrapper apiResponse ){
+            this.value = apiResponse;
+        }
+
+        @Override
+        public OASWrapper.ThenResponseWrapper getValue() {
             return value;
         }
     }

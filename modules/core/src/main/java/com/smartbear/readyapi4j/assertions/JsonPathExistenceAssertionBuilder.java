@@ -40,7 +40,6 @@ public class JsonPathExistenceAssertionBuilder implements JsonPathAssertionBuild
      */
     @Override
     public JsonPathAssertionBuilder allowWildcards() {
-        jsonPathExistenceAssertion.allowWildcards(true);
         return this;
     }
 

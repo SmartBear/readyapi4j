@@ -85,6 +85,21 @@ public class OASStepDefs {
         }
     }
 
+    @When("^a request to ([^ ]*) with content")
+    public void aRequestToOperationWithContentIsMade(String operationId, String content) throws Throwable {
+        if (oas == null) {
+            throw new CucumberExecutionException("Missing OAS/Swagger definition");
+        }
+
+        operationId = CucumberUtils.stripQuotes(operationId);
+
+        if (!findOASOperation(operationId)) {
+            throw new CucumberExecutionException("Could not find operation [" + operationId + "] in OAS/Swagger definition");
+        }
+
+       restStepDefs.setRequestBody( content );
+    }
+
     @When("^a request to ([^ ]*) is made$")
     public void aRequestToOperationIsMade(String operationId) throws Throwable {
         if (oas == null) {
