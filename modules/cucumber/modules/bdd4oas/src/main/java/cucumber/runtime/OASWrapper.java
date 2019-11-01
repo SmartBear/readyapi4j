@@ -61,7 +61,7 @@ public class OASWrapper {
                         else if( i instanceof Map ){
                             Map<String,Object> thens = (Map)i;
                             if( thens.containsKey("then")) {
-                                thenMap.put(thens.get("then").toString(), new ThenResponseWrapper(apiResponse, (Map<String, String>) thens.get("assertions")));
+                                thenMap.put(thens.get("then").toString(), new ThenResponseWrapper(apiResponse, (List<Map<String,Object>>) thens.get("assertions")));
                             }
                         }
                     } );
@@ -100,9 +100,9 @@ public class OASWrapper {
     public static class ThenResponseWrapper {
 
         private ApiResponse apiResponse;
-        private Map<String, String> assertions;
+        private List<Map<String,Object>> assertions;
 
-        public ThenResponseWrapper(ApiResponse apiResponse, Map<String, String> assertions) {
+        public ThenResponseWrapper(ApiResponse apiResponse, List<Map<String,Object>> assertions) {
 
             this.apiResponse = apiResponse;
             this.assertions = assertions;
@@ -112,7 +112,7 @@ public class OASWrapper {
             return apiResponse;
         }
 
-        public Map<String, String> getAssertions() {
+        public List<Map<String,Object>> getAssertions() {
             return assertions;
         }
     }

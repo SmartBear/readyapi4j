@@ -92,6 +92,12 @@ public class Assertions {
                 "assert messageExchange.responseHeaders[\"" + header + "\"].contains( \"" + value + "\")");
     }
 
+    public static GroovyScriptAssertionBuilder headerMatches(String header, String regex) {
+        return new DefaultGroovyScriptAssertionBuilder(
+                "assert messageExchange.responseHeaders[\"" + header + "\"].matches( \"" + regex + "\")");
+    }
+
+
     public static GroovyScriptAssertionBuilder script(String script) {
         return new DefaultGroovyScriptAssertionBuilder(script);
     }

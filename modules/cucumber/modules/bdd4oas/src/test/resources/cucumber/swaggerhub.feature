@@ -1,13 +1,13 @@
 Feature: SwaggerHub REST API
 
   Background:
-    Given the OAS definition at https://api.swaggerhub.com/apis/olensmar/registry-api-bdd/1.0.47
+    Given the OAS definition at src/test/resources/swaggerhub.yaml
 
   Scenario: Default API Listing
 #    When a request to searchApis is made
     When a search for apis is made
 #    Then the response is 303 response
-    Then a search result is returned
+    Then more than 10 items are returned
 
   Scenario: Owner API Listing
     When a search for swaggerhub apis is made

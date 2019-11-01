@@ -184,6 +184,11 @@ public class RestStepDefs {
         addAssertion(Assertions.headerValue(CucumberUtils.stripQuotes(header), CucumberUtils.stripQuotes(value)).build());
     }
 
+    @Then("^the response (.*) header matches (.*)$")
+    public void theResponseHeaderMatches(String header, String regex) {
+        addAssertion(Assertions.headerMatches(CucumberUtils.stripQuotes(header), CucumberUtils.stripQuotes(regex)).build());
+    }
+
     @Then("^the response body contains (.*)$")
     public void theResponseBodyContains2(String content) {
         theResponseBodyContains(CucumberUtils.stripQuotes(content));

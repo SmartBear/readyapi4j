@@ -178,8 +178,14 @@ public class OASBackend implements Backend {
                 stepDefinition.execute( new Object[]{ argument.getApiResponse().getDescription() });
 
                 if( argument.getAssertions() != null ) {
-                    ObjectFactory objectFactory = (ObjectFactory) FieldUtils.readField(stepDefinition, "objectFactory", true);
-                    RestStepDefs stepDefs = objectFactory.getInstance(RestStepDefs.class);
+                    try {
+                        ObjectFactory objectFactory = (ObjectFactory) FieldUtils.readField(stepDefinition, "objectFactory", true);
+                        RestStepDefs stepDefs = objectFactory.getInstance(RestStepDefs.class);
+
+                        addAssertions( argument.getAssertions(), stepDefs );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             else {
@@ -201,6 +207,87 @@ public class OASBackend implements Backend {
         @Deprecated
         public boolean isScenarioScoped() {
             return stepDefinition.isScenarioScoped();
+        }
+    }
+
+    private void addAssertions(List<Map<String, Object>> assertions, RestStepDefs stepDefs) {
+        assertions.forEach( assertion -> {
+            String type = (String) assertion.get("type");
+            if( "json".equalsIgnoreCase( type )){
+                extractJsonPathAssertion(stepDefs, assertion);
+            }
+            else if( "header".equalsIgnoreCase( type )){
+                extractHeaderAssertion(stepDefs, assertion);
+            }
+            else if( "contains".equalsIgnoreCase( type )){
+                extractContainsAssertion(stepDefs, assertion);
+            }
+            else if( "status".equalsIgnoreCase( type )){
+                String code = String.valueOf(assertion.get( "code"));
+                if( code != null ){
+                    stepDefs.aResponseIsReturned( code );
+                }
+            }
+            else if( "xpath".equalsIgnoreCase( type )){
+                extractXPathAssertion(stepDefs, assertion);
+            }
+        });
+    }
+
+    private void extractContainsAssertion(RestStepDefs stepDefs, Map<String, Object> assertion) {
+        String value = (String) assertion.get( "content");
+        if( value != null ){
+            stepDefs.theResponseBodyContains( value );
+        }
+        else {
+            String regex = (String) assertion.get("regex");
+            if (regex != null) {
+                stepDefs.theResponseBodyMatches(regex);
+            }
+        }
+    }
+
+    private void extractHeaderAssertion(RestStepDefs stepDefs, Map<String, Object> assertion) {
+        String name = (String) assertion.get( "name");
+        if( name != null ){
+            String value = (String) assertion.get( "value");
+            if( value != null ){
+                stepDefs.theResponseHeaderIs( name, value );
+            }
+            else {
+                String regex = (String) assertion.get("regex");
+                if (regex != null) {
+                    stepDefs.theResponseHeaderMatches(name, regex);
+                }
+                else {
+                    stepDefs.theResponseContainsHeader(name);
+                }
+            }
+        }
+    }
+
+    private void extractJsonPathAssertion(RestStepDefs stepDefs, Map<String, Object> assertion) {
+        String path = (String) assertion.get( "path");
+        if( path != null ){
+            String value = (String) assertion.get( "value");
+            String count = String.valueOf(assertion.get( "count"));
+            if( value != null ) {
+                stepDefs.thePathMatches(path, value);
+            }
+            else if( !count.equals("null") ){
+                stepDefs.thePathFinds( path, count );
+            }
+            else {
+                stepDefs.thePathExists( path );
+            }
+        }
+    }
+
+    private void extractXPathAssertion(RestStepDefs stepDefs, Map<String, Object> assertion) {
+        String path = (String) assertion.get( "path");
+        String value = (String) assertion.get( "value");
+        if( path != null && value != null ) {
+           stepDefs.theXPathMatches(path, value);
         }
     }
 
