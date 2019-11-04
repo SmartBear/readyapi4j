@@ -222,12 +222,6 @@ public class OASBackend implements Backend {
             else if( "contains".equalsIgnoreCase( type )){
                 extractContainsAssertion(stepDefs, assertion);
             }
-            else if( "status".equalsIgnoreCase( type )){
-                String code = String.valueOf(assertion.get( "code"));
-                if( code != null ){
-                    stepDefs.aResponseIsReturned( code );
-                }
-            }
             else if( "xpath".equalsIgnoreCase( type )){
                 extractXPathAssertion(stepDefs, assertion);
             }
@@ -269,7 +263,7 @@ public class OASBackend implements Backend {
     private void extractJsonPathAssertion(RestStepDefs stepDefs, Map<String, Object> assertion) {
         String path = (String) assertion.get( "path");
         if( path != null ){
-            String value = (String) assertion.get( "value");
+            String value = assertion.containsKey( "value") ? String.valueOf( assertion.get( "value")) : null;
             String count = String.valueOf(assertion.get( "count"));
             if( value != null ) {
                 stepDefs.thePathMatches(path, value);

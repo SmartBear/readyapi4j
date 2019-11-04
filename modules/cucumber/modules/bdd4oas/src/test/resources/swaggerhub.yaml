@@ -134,9 +134,8 @@ paths:
           - then: more than 10 items are returned
             assertions:
             - type: json
-              path: $..apis
-            - type: status
-              code: "200"
+              path: $.apis.length()
+              value: 10
       security:
       - TokenSecured: []
       x-bdd-when:

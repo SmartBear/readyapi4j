@@ -4,9 +4,7 @@ Feature: SwaggerHub REST API
     Given the OAS definition at src/test/resources/swaggerhub.yaml
 
   Scenario: Default API Listing
-#    When a request to searchApis is made
     When a search for apis is made
-#    Then the response is 303 response
     Then more than 10 items are returned
 
   Scenario: Owner API Listing
