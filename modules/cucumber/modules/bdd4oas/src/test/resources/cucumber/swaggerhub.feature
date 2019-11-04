@@ -28,7 +28,8 @@ Feature: SwaggerHub REST API
     Then a 200 response is returned within 2000ms
     And the response type is application/json
     And the path "$..description" exists
-    And the path "$..description[0]" matches "The registry API for SwaggerHub"
+    And the path "$..description[0]" equals "The registry API for SwaggerHub"
+    And the path "$..description[0]" matches "The registry API for (.*)"
     Examples:
     | owner       | api          | version  | description                       |
     | swagger-hub | registry-api | 1.0.10   | The registry API for SwaggerHub   |

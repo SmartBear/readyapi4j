@@ -100,11 +100,11 @@ public class RestRequestStepBuilder<RestRequestBuilderType extends RestRequestSt
     }
 
     public RestRequestBuilderType assertJsonContent(String jsonPath, String expectedContent) {
-        return addAssertion(jsonContent(jsonPath, expectedContent).allowWildcards());
+        return addAssertion(json(jsonPath, expectedContent).allowWildcards());
     }
 
     public RestRequestBuilderType assertJsonCount(String jsonPath, int expectedCount) {
-        return addAssertion(jsonCount(jsonPath, expectedCount).allowWildcards());
+        return addAssertion(jsonCount(jsonPath, expectedCount));
     }
 
     public RestRequestBuilderType assertJsonPathExists(String jsonPath) {

@@ -264,9 +264,13 @@ public class OASBackend implements Backend {
         String path = (String) assertion.get( "path");
         if( path != null ){
             String value = assertion.containsKey( "value") ? String.valueOf( assertion.get( "value")) : null;
+            String regex = assertion.containsKey( "regex") ? String.valueOf( assertion.get( "regex")) : null;
             String count = String.valueOf(assertion.get( "count"));
             if( value != null ) {
-                stepDefs.thePathMatches(path, value);
+                stepDefs.thePathEquals(path, value);
+            }
+            else if( regex != null ){
+                stepDefs.thePathMatches( path, regex );
             }
             else if( !count.equals("null") ){
                 stepDefs.thePathFinds( path, count );

@@ -18,7 +18,6 @@ public class JsonPathContentAssertionBuilder implements JsonPathAssertionBuilder
         return this;
     }
 
-    @Override
     public JsonPathAssertionBuilder allowWildcards() {
         jsonPathContentAssertion.setAllowWildcards(true);
         return this;

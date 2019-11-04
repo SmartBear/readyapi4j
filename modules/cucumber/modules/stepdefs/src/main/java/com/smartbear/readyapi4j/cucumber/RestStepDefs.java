@@ -149,9 +149,19 @@ public class RestStepDefs {
         addAssertion(Assertions.headerExists(CucumberUtils.stripQuotes(header)).build());
     }
 
+    @Then("^the path (.*) equals (.*)$")
+    public void thePathEquals(String path, String content) {
+        addAssertion(Assertions.json(CucumberUtils.stripQuotes(path), CucumberUtils.stripQuotes(content)).build());
+    }
+
+    @Then("^the path (.*) equals")
+    public void thePathEqualsContent(String path, String content) {
+        thePathMatches( path, content );
+    }
+
     @Then("^the path (.*) matches (.*)$")
     public void thePathMatches(String path, String content) {
-        addAssertion(Assertions.json(CucumberUtils.stripQuotes(path), CucumberUtils.stripQuotes(content)).build());
+        addAssertion(Assertions.jsonRegEx(CucumberUtils.stripQuotes(path), CucumberUtils.stripQuotes(content)).build());
     }
 
     @Then("^the path (.*) matches$")

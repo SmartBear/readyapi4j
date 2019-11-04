@@ -31,8 +31,12 @@ public class Assertions {
         return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
     }
 
-    public static JsonPathAssertionBuilder json(String jsonPath, String expectedContent) {
+    public static JsonPathContentAssertionBuilder json(String jsonPath, String expectedContent) {
         return new JsonPathContentAssertionBuilder(jsonPath, expectedContent);
+    }
+
+    public static JsonPathRegExAssertionBuilder jsonRegEx(String jsonPath, String regEx) {
+        return new JsonPathRegExAssertionBuilder(jsonPath, regEx);
     }
 
     public static JsonPathAssertionBuilder jsonCount(String jsonPath, int expectedCount) {
