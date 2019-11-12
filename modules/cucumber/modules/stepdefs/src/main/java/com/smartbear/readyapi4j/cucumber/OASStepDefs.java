@@ -3,6 +3,7 @@ package com.smartbear.readyapi4j.cucumber;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.smartbear.readyapi4j.client.model.RestParameter;
+import com.smartbear.readyapi4j.cucumber.hiptest.ActionWord;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
@@ -45,11 +46,13 @@ public class OASStepDefs {
     }
 
     @Given("^the OAS definition at (.*)$")
+    @ActionWord( "the OAS definition at \"oas-url\"")
     public void theOASDefinitionAt(String swaggerUrl) {
         theSwaggerDefinitionAt(CucumberUtils.stripQuotes(swaggerUrl));
     }
 
     @Given("^the Swagger definition at (.*)$")
+    @ActionWord( "the Swagger definition at \"swagger-url\"")
     public void theSwaggerDefinitionAt(String swaggerUrl) {
 
         oas = oasCache.getOAS(CucumberUtils.stripQuotes(swaggerUrl));
@@ -67,6 +70,7 @@ public class OASStepDefs {
     }
 
     @When("^a request to ([^ ]*) with parameters$")
+    @ActionWord( value = "a request to \"operation-id\" with parameters", addFreetext = true)
     public void aRequestToOperationWithParametersIsMade(String operationId, String parameters) throws Throwable {
         if (oas == null) {
             throw new CucumberExecutionException("Missing OAS/Swagger definition");
@@ -86,6 +90,7 @@ public class OASStepDefs {
     }
 
     @When("^a request to ([^ ]*) with content")
+    @ActionWord( value = "a request to \"operation-id\" with content", addFreetext = true)
     public void aRequestToOperationWithContentIsMade(String operationId, String content) throws Throwable {
         if (oas == null) {
             throw new CucumberExecutionException("Missing OAS/Swagger definition");
@@ -101,6 +106,7 @@ public class OASStepDefs {
     }
 
     @When("^a request to ([^ ]*) is made$")
+    @ActionWord( "a request to \"operation-id\" is made")
     public void aRequestToOperationIsMade(String operationId) throws Throwable {
         if (oas == null) {
             throw new CucumberExecutionException("Missing OAS/Swagger definition");
@@ -133,6 +139,7 @@ public class OASStepDefs {
     }
 
     @Then("^the response is (.*)$")
+    @ActionWord( "the response is \"response-description\"")
     public void theResponseIs(String responseDescription) {
         if (oasOperation == null) {
             throw new CucumberExecutionException("missing OAS/Swagger operation for request");
@@ -152,6 +159,7 @@ public class OASStepDefs {
     }
 
     @Given("^([^ ]*) is (.*)$")
+    @ActionWord( "\"parameter-name\" is \"parameter-value\"")
     public void parameterIs(String name, String value) {
 
         if (oasOperation != null) {
@@ -178,6 +186,7 @@ public class OASStepDefs {
     }
 
     @Given("^([^ ]*) is$")
+    @ActionWord( value = "\"parameter-name\" is", addFreetext = true)
     public void parameterIsBlob(String name, String value) throws Throwable {
         parameterIs(name, value);
     }

@@ -9,6 +9,8 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.parser.core.models.ParseOptions;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +21,16 @@ public class OASWrapper {
     private Map<String, ThenResponseWrapper> thenMap = Maps.newConcurrentMap();
     private String oas;
 
-    public OASWrapper(String oas) {
+    public OASWrapper(String oas) throws IOException {
         loadDefinition(oas);
     }
 
-    public void loadDefinition(String oas) {
+    public void loadDefinition(String oas) throws IOException {
+        File file = new File( oas );
+        if( file.exists()){
+            oas = file.toURI().toURL().toString();
+        }
+
         if( oas.equalsIgnoreCase(this.oas)){
             return;
         }
@@ -35,8 +42,7 @@ public class OASWrapper {
         SwaggerParseResult result = parser.readLocation(oas, null, new ParseOptions());
         OpenAPI openAPI = result.getOpenAPI();
         if( openAPI == null ){
-            System.err.println( "Failed to read OAS definition from [" + oas + "]; " + Arrays.toString( result.getMessages().toArray()));
-            return;
+            throw new IOException( "Failed to read OAS definition from [" + oas + "]; " + Arrays.toString( result.getMessages().toArray()));
         }
 
         for( PathItem pathItem : openAPI.getPaths().values()){
@@ -95,6 +101,14 @@ public class OASWrapper {
                 whenMap.put( bddWhen.toString(), new WhenOperationWrapper(operation, null) );
             }
         }
+    }
+
+    public Map<String, ThenResponseWrapper> getThens() {
+        return thenMap;
+    }
+
+    public Map<String, WhenOperationWrapper> getWhens() {
+        return whenMap;
     }
 
     public static class ThenResponseWrapper {

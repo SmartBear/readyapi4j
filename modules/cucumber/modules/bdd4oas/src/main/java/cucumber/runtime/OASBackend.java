@@ -11,6 +11,7 @@ import io.cucumber.stepexpression.Argument;
 import io.cucumber.stepexpression.TypeRegistry;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -117,12 +118,16 @@ public class OASBackend implements Backend {
         @Override
         public List<Argument> matchedArguments(PickleStep pickleStep) {
             if( pickleStep.getText().startsWith( "the OAS definition at ")){
-                String oas = pickleStep.getText().substring("the OAS definition at ".length());
-                if( oasWrapper == null ) {
-                    oasWrapper = new OASWrapper(oas);
-                }
-                else {
-                    oasWrapper.loadDefinition( oas );
+                try {
+                    String oas = pickleStep.getText().substring("the OAS definition at ".length());
+                    if( oasWrapper == null ) {
+                        oasWrapper = new OASWrapper(oas);
+                    }
+                    else {
+                        oasWrapper.loadDefinition( oas );
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
             else if( stepDefinition.getPattern().equalsIgnoreCase("^a request to ([^ ]*) with parameters$")){

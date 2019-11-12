@@ -36,7 +36,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.smartbear.readyapi4j.cucumber.OASCucumberRunner</mainClass>
+                                    <mainClass>com.smartbear.readyapi4j.cucumber.CucumberRunner</mainClass>
                                 </transformer>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
@@ -68,5 +68,57 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.31.0</version>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <images>
+                                <image>
+                                    <alias>readyapi4j-bdd4oas</alias>
+                                    <name>smartbear/readyapi4j-bdd4oas:latest</name>
+                                    <build>
+                                        <from>openjdk:8</from>
+                                        <maintainer>ole.lensmar@smartbear.com</maintainer>
+                                        <tags>
+                                            <tag>latest</tag>
+                                        </tags>
+                                        <assembly>
+                                            <basedir>/maven</basedir>
+                                            <descriptor>/src/docker/resources/assembly.xml</descriptor>
+                                        </assembly>
+                                        <volumes>
+                                            <volume>/cucumber</volume>
+                                        </volumes>
+                                        <entryPoint>
+                                            <exec>
+                                                <args>/maven/entry-point.sh</args>
+                                            </exec>
+                                        </entryPoint>
+                                    </build>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>package</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
