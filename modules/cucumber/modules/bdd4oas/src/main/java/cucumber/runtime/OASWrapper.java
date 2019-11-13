@@ -1,6 +1,7 @@
 package cucumber.runtime;
 
 import com.google.common.collect.Maps;
+import com.smartbear.readyapi4j.cucumber.OASCache;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -39,7 +40,7 @@ public class OASWrapper {
         }
 
         OpenAPIParser parser = new OpenAPIParser();
-        SwaggerParseResult result = parser.readLocation(oas, null, new ParseOptions());
+        SwaggerParseResult result = parser.readLocation(oas, OASCache.getSystemAuthorizationValues(), new ParseOptions());
         OpenAPI openAPI = result.getOpenAPI();
         if( openAPI == null ){
             throw new IOException( "Failed to read OAS definition from [" + oas + "]; " + Arrays.toString( result.getMessages().toArray()));
