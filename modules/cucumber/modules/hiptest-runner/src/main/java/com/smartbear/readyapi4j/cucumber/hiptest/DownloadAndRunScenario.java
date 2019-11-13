@@ -3,7 +3,6 @@ package com.smartbear.readyapi4j.cucumber.hiptest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.smartbear.readyapi4j.cucumber.CucumberRunner;
 import io.swagger.util.Json;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -14,14 +13,16 @@ import picocli.CommandLine;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
-@CommandLine.Command( name = "run", description = "Downloads and runs a HipTest scenario")
+@CommandLine.Command( name = "download", description = "Downloads and runs a HipTest scenario")
 public class DownloadAndRunScenario extends CommandBase {
     private static final Logger LOG = LoggerFactory.getLogger(DownloadAndRunScenario.class);
 
-    @CommandLine.Parameters(description = "Cucumber CLI arguments")
-    String[] args;
+    @CommandLine.Option(names = "-run", parameterConsumer = RunParameterConsumer.class)
+    List<String> args = new ArrayList<>();
 
     @CommandLine.Option(names = {"-p", "--project"}, required = true, description = "a hiptest project id")
     String hiptestProject;
@@ -36,17 +37,32 @@ public class DownloadAndRunScenario extends CommandBase {
     public void run() {
         try {
             String featureFile = getFeatureFile();
-            List<String> argsList = Lists.newArrayList(args);
+            List<String> argsList = Lists.newArrayList();
+            if( args != null && !args.isEmpty() ){
+                argsList.addAll(args);
+            }
             argsList.add(featureFile);
 
-            CucumberRunner.main(argsList.toArray(new String[argsList.size()]));
+            io.cucumber.core.cli.Main.main(argsList.toArray(new String[argsList.size()]));
         } catch (Throwable t) {
             t.printStackTrace();
         }
     }
 
-    private String getFeatureFile() throws Exception {
+    /**
+     * Used to extract all arguments that need to be passed on to the cucumber runner
+     */
 
+    static class RunParameterConsumer implements CommandLine.IParameterConsumer {
+        public void consumeParameters(Stack<String> args, CommandLine.Model.ArgSpec argSpec, CommandLine.Model.CommandSpec commandSpec) {
+            List<String> list = argSpec.getValue();
+            while (!args.isEmpty()) {
+                list.add(args.pop());
+            }
+        }
+    }
+
+    private String getFeatureFile() throws Exception {
         LOG.info("Reading Features from HipTest");
         Request request = buildHiptestRequest(new Request.Builder().url(hipTestEndpoint + "projects/" + hiptestProject + "/folders/"
                 + hiptestFolder + "/feature").get());

@@ -47,17 +47,10 @@ public class OASStepDefs {
 
     @Given("^the OAS definition at (.*)$")
     @ActionWord( "the OAS definition at \"oas-url\"")
-    public void theOASDefinitionAt(String swaggerUrl) {
-        theSwaggerDefinitionAt(CucumberUtils.stripQuotes(swaggerUrl));
-    }
-
-    @Given("^the Swagger definition at (.*)$")
-    @ActionWord( "the Swagger definition at \"swagger-url\"")
-    public void theSwaggerDefinitionAt(String swaggerUrl) {
-
-        oas = oasCache.getOAS(CucumberUtils.stripQuotes(swaggerUrl));
+    public void theOASDefinitionAt(String oasUrl) {
+        oas = oasCache.getOAS(CucumberUtils.stripQuotes(oasUrl));
         if( oas == null ){
-            throw new CucumberException( "Failed to read OAS/Swagger definition at [" + swaggerUrl + "]");
+            throw new CucumberException( "Failed to read OAS/Swagger definition at [" + oasUrl + "]");
         }
 
         if (oas.getServers() != null && !oas.getServers().isEmpty()) {

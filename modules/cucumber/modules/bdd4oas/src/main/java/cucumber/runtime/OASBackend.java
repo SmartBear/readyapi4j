@@ -1,6 +1,7 @@
 package cucumber.runtime;
 
 import com.google.common.collect.Lists;
+import com.smartbear.readyapi4j.cucumber.CucumberUtils;
 import com.smartbear.readyapi4j.cucumber.RestStepDefs;
 import cucumber.api.java.ObjectFactory;
 import cucumber.runtime.io.ResourceLoader;
@@ -120,6 +121,7 @@ public class OASBackend implements Backend {
             if( pickleStep.getText().startsWith( "the OAS definition at ")){
                 try {
                     String oas = pickleStep.getText().substring("the OAS definition at ".length());
+                    oas = CucumberUtils.stripQuotes( oas );
                     if( oasWrapper == null ) {
                         oasWrapper = new OASWrapper(oas);
                     }
