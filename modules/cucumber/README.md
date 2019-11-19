@@ -121,101 +121,106 @@ mvn clean install
 To build and install the artifacts in your local maven repository - the packaged jar is created in the root
 target folder.
 
-## API Testing Vocabulary Reference
+## API StepDefs Reference
  
 The included [StepDefs](modules/stepdefs) for API testing adds the following vocabulary:
 
-##### Given statements
+#### Given statements
 
-- "the OAS definition at &lt;swagger endpoint&gt;"
-    - The specified endpoint must reference a valid OAS/Swagger 2.0 definition
-    - Example: "the OAS definition at http://petstore.swagger.io/v2/swagger.json"
+`the OAS definition at <swagger endpoint>`
+* The specified endpoint must reference a valid OAS 2.0/3.0 definition
+* Specifying an OAS definition allows for the use of OAS-specific StepDefs below
+* Example: `Given the OAS definition at http://petstore.swagger.io/v2/swagger.json`
 
-- "the API running at &lt;API endpoint&gt;"
-    - Example: "the API running at http://petstore.swagger.io/v2"
+`the API running at <API endpoint>`
+* Example: `Given the API running at http://petstore.swagger.io/v2`
 
-- "the oAuth2 token &lt;token&gt;"
-    - Example: "the oAuth2 token 18273827aefef123"
-    - Adds an OAuth 2.0 Bearer token to requests
+`the oAuth2 token <token>`
+* Adds an OAuth 2.0 Bearer token to requests
+* Example: `Given the oAuth2 token 18273827aefef123`
 
+#### When/And statements
 
-##### When/And statements
-
-- "a &lt;HTTP Method&gt; request to &lt;path&gt; is made"
-    - Example: "a GET request to /test/search is made"
+`a <HTTP Method> request to <path> is made`
+* Example: `When a GET request to /test/search is made`
     
-- "a request to &lt;Swagger OperationID&gt; is made"
-    - will fail if no Swagger definition has been Given
-    - Example: "a request to findPetById is made"
+`a request to <OAS OperationID> is made`
+* prepares a request to the specified operationId
+* will fail if no OAS definition has been Given
+* Example: `When a request to findPetById is made`
 
-- "the request body is" &lt;text block&gt;
-    - Example: "the request body is
-    ```
+`the request body is <text block>`
+* Example: 
+    ```gherkin
+    And the request body is
     """
     { "id" : "123" }
     """
-    ```"
+    ```
     
-- "the &lt;parameter name&gt; parameter is &lt;parameter value&gt;"
-    - adds the specified parameter as a query parameter
-    - Example: "the query parameter is miles davis"
+`the <parameter name> parameter is <parameter value>`
+* adds the specified parameter as a query parameter
+* Example: `the search parameter is miles`
     
-- "the &lt;http header&gt; is &lt;header value&gt;
-    - Example: "the Encoding header is UTF-8"
+`the <http header> header is <header value>`
+* Example: `And the Encoding header is UTF-8`
     
-- "the type is &lt;content-type&gt;
-    - single word types will be expanded to "application/&lt;content-type&gt;"
-    - Example: "the type is json"
+`the type is <content-type>`
+* single word types will be expanded to `application/<content-type>`
+* Example: `the type is json`
 
-- "&lt;parameter name&gt; is &lt;parameter value&gt;"
-    - if a valid OperationId has been given the type of parameter will be deduced from its list of parameters
-    - if no OperationId has been given this will be added to a map of values that will be sent as the request body
-    - Example: "name is John"
-    - will work for both inline or multi-line values
+`<parameter name> is <parameter value>`
+* if a valid operationId has been given with the `a request to <operationId> is made` statement above, 
+the type of parameter will be deduced from its list of parameters
+* if no operationId has been given this will be added to a map of values that will be sent as the request body
+* will work for both inline or multi-line values
+* Example: `name is John`
     
-- "&lt;the request expects &lt;content-type&gt;"
-    - adds an Accept header
-    - Example "the request expects yaml"
+* `the request expects <content-type>`
+* adds an Accept header, single word types will be expanded to `application/<content-type>`
+* Example: `the request expects yaml
 
 ##### Then/And statements:
 
-- "a &lt;HTTP Status code&gt; response is returned"
-    - Example: "a 200 response is returned"
+`a <HTTP Status code> response is returned`
+* Example: `Then a 200 response is returned`
     
-- "a &lt;HTTP Status code&gt; response is returned within &lt;number&gt;ms"
-    - Example: "a 404 response is returned within 10ms"
+`a <HTTP Status code> response is returned within <number>ms`
+* Example: `Then a 404 response is returned within 10ms`
 
-- "the response is &lt;a valid Swagger Response description for the specified operationId&gt;"
-    - Requires that a valid OperationId has been Given
-    - Example: "the response is a list of people"
+`the response is <a valid response description for the specified operationId>`
+* Requires that a valid OperationId has been Given
+* Example: `Then the response is a list of people`
 
-- "the response body contains" &lt;text block&gt;
-    - Example: "the response body contains
+`the response body contains <text block>`
+* Example: 
     ```
+   And the response body contains
     """
     "id" : "123"
     """
-    ```"
-
-- "the response body matches" &lt;regex text block&gt;
-    - Example: "the response body matches
     ```
+
+`the response body matches <regex text block>`
+* Example: 
+    ```
+   And the response body matches
     """
     .*testing.*
     """
-    ```"
+    ```
 
-- "the response type is &lt;content-type&gt;"
-    - Example: "the response type is application/yaml"
+`the response type is <content-type>`
+* Example: `And the response type is application/yaml`
 
-- "the response contains a &lt;http-header name&gt; header"
-    - Example: "the response contains a Cache-Control header"
+`the response contains a <http-header name> header`
+* Example: `And the response contains a Cache-Control header`
 
-- "the response &lt;http header name&gt; is &lt;http header value&gt;"
-    - Example: "the response Cache-Control header is None"
+`the response <http header name> is <http header value>`
+* Example: `And the response Cache-Control header is None`
 
-- "the response body contains &lt;text token&gt;"
-    - Example: "the response body contains Testing text"
+`the response body contains <text token>`
+* Example: `And the response body contains Testing text`
 
 ### Complete Example:
 

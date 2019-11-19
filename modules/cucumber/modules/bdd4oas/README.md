@@ -1,9 +1,20 @@
 ## BDD4OAS ReadyAPI4j module
 
-This module allows for inline definitions of when / then vocabularies inside an OAS definition, which 
-can then be used to write and execute Cucumber scenarios without any further requirement for writing
+This module allows for inline definitions of when / then vocabularies inside an OAS definition using OAS extensions, 
+which  can then be used to write and execute Cucumber scenarios without any further requirement for writing
 any StepDef code. The vocabularies are added using custom OAS extensions and dynamically processed when
 executing corresponding scenarios using the runner in this module.
+
+Contents:
+* [A simple example](#a-simple-example)
+* [Adding parameters and assertions](#adding-parameters-and-assertions)
+* [Using the standard OAS / REST Vocabulary](#using-the-standard-rest--oas-vocabularies)
+* Assertion Reference
+  * [JSON Assertion](#json-assertion)
+  * [Content Assertion](#content-assertion)
+  * [Header Assertion](#header-assertion)
+  * [XML Assertion](#xml-assertion)
+* [Using the OASBackend](#using-the-oasbackend)
 
 ### A simple example
 
@@ -112,7 +123,7 @@ Feature: SwaggerHub REST API
 Using our extensions the running can now dynamically map our gherkin vocabulary to the corresponding operation 
 and expected result - making the REST API call to the host specified in the OAS definition.
 
-### Adding parameters and assertions to x-bdd-then vocabularies
+### Adding parameters and assertions
 
 It's pretty common to want to assert an API response for specific values or content, which is
 traditionally done in code/tooling using an assertion mechanism. Fortunately this is possible here
@@ -192,7 +203,7 @@ Feature: SwaggerHub REST API
 
 ### Using the standard REST / OAS vocabularies
 
-The default vocabularies for testing REST APIs provided by ReadyAPI4j are still at your disposal
+The [default vocabularies](../../README.md#api-stepdefs-reference) for testing REST APIs provided by ReadyAPI4j are still at your disposal
 when writing your scenarios - so you can intermix these with your custom definitions provided 
 via x-bdd extensions. For example we could have written the above Feature using these stepdefs 
 entirely without the need for any bdd extensions:
@@ -246,12 +257,78 @@ As you can see this calls the existing step definitions defined in the OASStepDe
 
 ## Assertion reference
 
+As shown in the example above it is possible to add assertions to x-bdd-then extensions. The following assertions are currently available:
 
+### json assertion
 
-### json assertions
+The following properties are available for the json assertion
+* type = "json" (required)
+* path = a json-path expression to apply to the response body (mandatory)
+* one of the following
+  * value = an expected value returned by the json-path expression
+  * regex = a regular expression that must match the value returned by the json-path expression
+  * count = the expected number of items returned by the json-path expression
+* if none of these three is specified the assertion checks that any value for the json-path expression exists
 
+### content assertion
 
-### xml assertions
+The following properties are available for the content assertion
+* type = "contains" (required)
+* one of the following
+  * content = an expected value contained in the response
+  * regex = a regular expression that must match the entire response
 
+### header assertion
 
-### content assertions
+The following properties are available for the header assertion
+* type = "header" (required)
+* name = the name of the header to assert
+* optionally one of the following
+  * value = the expected value of the header
+  * regex = a regular expression that must match the header value
+* if neither of these is specified the assertion checks that the header exists in the response, ignoring its value
+
+### xml assertion
+
+The following properties are available for the xml assertion
+* type = "xpath" (mandatory)
+* path = an xpath expression to apply to the response body (required)
+* value = the expected value to be returned by the xpath expression (required)
+
+## Using the OASBackend
+
+As shown above the OASBackend can be run either via its docker image available on dockerhub at 
+https://hub.docker.com/repository/docker/smartbear/readyapi4j-bdd4oas or via the jar file built by module.
+
+Running the docker image requires one to map a local volume containing feature file(s) into a volume of the container 
+and then specifying that volume (or a file in it) as the feature-file argument to the cucumber runtime. Since the 
+docker image simple runs the existing cCcumber CLI all corresponding command-line options apply.
+
+The jar file can be used similarly (without the requirement to map a volume of course). It's main class is set to the 
+Cucumber CLI - for example the last above command could be run with:
+
+```shell script
+java -jar target/readyapi4j-bdd4oas-1.0.0-SNAPSHOT.jar /Users/olensmar/features/swaggerhub-sample2.feature -p pretty
+Feature: SwaggerHub REST API
+
+  Background:                                                                                          # /Users/olensmar/features/swaggerhub-sample2.feature:3
+    Given the OAS definition at https://api.swaggerhub.com/apis/olensmar/registry-api-bdd/bdd4oas-demo # OASStepDefs.theOASDefinitionAt(String)
+
+  Scenario: Default Specs Listing                  # /Users/olensmar/features/swaggerhub-sample2.feature:6
+    When a request to searchApisAndDomains is made # OASStepDefs.aRequestToOperationIsMade(String)
+    Then a 200 response is returned                # RestStepDefs.aResponseIsReturned(String)
+    And the path $.apis.length() equals 10         # RestStepDefs.thePathEquals(String,String)
+
+  Background:                                                                                          # /Users/olensmar/features/swaggerhub-sample2.feature:3
+    Given the OAS definition at https://api.swaggerhub.com/apis/olensmar/registry-api-bdd/bdd4oas-demo # OASStepDefs.theOASDefinitionAt(String)
+
+  Scenario: SwaggerHub API listing                 # /Users/olensmar/features/swaggerhub-sample2.feature:11
+    When a request to searchApisAndDomains is made # OASStepDefs.aRequestToOperationIsMade(String)
+    And type is API                                # OASStepDefs.parameterIs(String,String)
+    And owner is SwaggerHub                        # OASStepDefs.parameterIs(String,String)
+    Then a 200 response is returned                # RestStepDefs.aResponseIsReturned(String)
+
+2 Scenarios (2 passed)
+9 Steps (9 passed)
+0m4.121s
+```
