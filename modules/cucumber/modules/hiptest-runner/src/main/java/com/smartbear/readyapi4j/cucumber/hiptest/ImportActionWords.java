@@ -9,7 +9,7 @@ import com.google.common.collect.Sets;
 import com.jayway.jsonpath.JsonPath;
 import com.smartbear.readyapi4j.cucumber.OASStepDefs;
 import com.smartbear.readyapi4j.cucumber.RestStepDefs;
-import cucumber.runtime.OASWrapper;
+import cucumber.runtime.oas.OASWrapper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

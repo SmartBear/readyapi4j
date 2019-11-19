@@ -1,4 +1,4 @@
-package cucumber.runtime;
+package cucumber.runtime.oas;
 
 import com.google.common.collect.Maps;
 import com.smartbear.readyapi4j.cucumber.OASCache;

@@ -103,7 +103,7 @@
                             <images>
                                 <image>
                                     <alias>readyapi4j-cucumber</alias>
-                                    <name>smartbear/readyapi4j-hiptest:latest</name>
+                                    <name>smartbear/readyapi4j-hiptest-runner:latest</name>
                                     <build>
                                         <from>openjdk:8</from>
                                         <maintainer>ole.lensmar@smartbear.com</maintainer>
