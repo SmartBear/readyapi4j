@@ -34,7 +34,7 @@
     </logger>
 
     <root>
-        <priority value="ERROR"/>
+        <priority value="DEBUG"/>
         <appender-ref ref="CONSOLE"/>
     </root>
 

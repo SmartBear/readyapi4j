@@ -86,8 +86,8 @@ paths:
            - a search result is returned
 ``` 
 
-As you can see - a x-bdd-when extension has been added to the operation, and a corresponding 
-x-bdd-then extension has been added to the default response. 
+As you can see - a `x-bdd-when` extension has been added to the operation, and a corresponding 
+`x-bdd-then` extension has been added to the default response. 
 
 Now all we have to do is add a given statement pointing to the modified OAS definition:
 
@@ -120,8 +120,8 @@ Feature: SwaggerHub REST API
 0m5.706s
 ```
 
-Using our extensions the running can now dynamically map our gherkin vocabulary to the corresponding operation 
-and expected result - making the REST API call to the host specified in the OAS definition.
+Using our extensions the runner can now dynamically map our gherkin vocabulary to the corresponding operation 
+and expected result - making the REST API call to the host specified in the OAS definition. No coding required!
 
 ### Adding parameters and assertions
 
@@ -200,6 +200,47 @@ Feature: SwaggerHub REST API
 6 Steps (6 passed)
 0m7.974s
 ```
+
+### Parameterizing x-bdd-when statements
+
+In our example we had hard-coded the owner in the x-bdd-when statement to "swaggerhub" - but what if we want the writer
+of the scenario to define that value themselves? We can do this by adding arguments to our x-bdd-when statements:
+
+```yaml
+paths:
+  /specs:
+    get:
+      x-bdd-when:
+      - perform a default search
+      - when: searching for {owner} apis
+        parameters:
+          specType: API
+     ...
+```
+
+Using the curly-bracket syntax with an existing parameter name we can now specify any owner in our scenario - which will
+be used as the value for the owner parameter in the underlying request.
+
+```gherkin
+Feature: SwaggerHub REST API
+  
+  Background:
+    Given the OAS definition at https://api.swaggerhub.com/apis/olensmar/registry-api-bdd/bdd4oas-demo
+
+  Scenario: Default Specs Listing
+    When performing a default search
+    Then at least 10 items are returned
+
+  Scenario: SwaggerHub API listing
+    When searching for swaggerhub apis
+    Then a search result is returned
+
+  Scenario: SmartBear API listing
+    When searching for smartbear apis
+    Then a search result is returned
+```
+
+Surround values with spaces with quotes (escape quotes with a backslash) if needed.
 
 ### Using the standard REST / OAS vocabularies
 

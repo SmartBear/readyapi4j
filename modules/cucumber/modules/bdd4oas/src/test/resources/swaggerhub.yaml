@@ -144,6 +144,9 @@ paths:
         parameters:
           specType: API
           owner: swaggerhub
+      - when: a search for {owner} domains is made
+        parameters:
+          specType: DOMAIN
   /apis:
     get:
       tags:

@@ -11,6 +11,10 @@ Feature: SwaggerHub REST API
     When a search for swaggerhub apis is made
     Then a search result is returned
 
+  Scenario: Owner Domain Listing
+    When a search for swaggerhub domains is made
+    Then a search result is returned
+
   Scenario: API Version Listing
     When a request to getApiVersions with parameters
     """

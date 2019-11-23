@@ -10,6 +10,8 @@ import com.jayway.jsonpath.JsonPath;
 import com.smartbear.readyapi4j.cucumber.OASStepDefs;
 import com.smartbear.readyapi4j.cucumber.RestStepDefs;
 import cucumber.runtime.oas.OASWrapper;
+import cucumber.runtime.oas.ThenResponseWrapper;
+import cucumber.runtime.oas.WhenOperationWrapper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -157,7 +159,7 @@ public class ImportActionWords extends CommandBase {
 
     private void addOasWhensAndThensActionWords(String oasUrl, Set<String> existingWords) throws IOException {
         OASWrapper oasWrapper = new OASWrapper(oasUrl);
-        Map<String, OASWrapper.ThenResponseWrapper> thens = oasWrapper.getThens();
+        Map<String, ThenResponseWrapper> thens = oasWrapper.getThens();
         thens.keySet().forEach(key -> {
             if (!existingWords.contains(key)) {
                 try {
@@ -168,16 +170,18 @@ public class ImportActionWords extends CommandBase {
             }
         });
 
-        Map<String, OASWrapper.WhenOperationWrapper> whens = oasWrapper.getWhens();
-        whens.keySet().forEach(key -> {
+        List<WhenOperationWrapper> whens = oasWrapper.getWhens();
+        for (WhenOperationWrapper wrapper : whens) {
+            String key = wrapper.getWhen();
             if (!existingWords.contains(key)) {
                 try {
-                    addActionWord( "Operation: " + whens.get(key).getOperation().getOperationId(), key, false, null);
+                    addActionWord("Operation: " + wrapper.getOperation().getOperationId(), key, false, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        });
+        }
+        ;
     }
 
     @NotNull

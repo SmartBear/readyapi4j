@@ -12,13 +12,11 @@ import io.swagger.v3.parser.core.models.SwaggerParseResult;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OASWrapper {
 
-    private Map<String, WhenOperationWrapper> whenMap = Maps.newConcurrentMap();
+    private List<WhenOperationWrapper> whens = new ArrayList<>();
     private Map<String, ThenResponseWrapper> thenMap = Maps.newConcurrentMap();
     private String oas;
 
@@ -88,71 +86,37 @@ public class OASWrapper {
                 List<Object> bddWhens = (List<Object>) bddWhen;
                 bddWhens.forEach( i -> {
                     if( i instanceof String ){
-                        whenMap.put( i.toString(), new WhenOperationWrapper( operation, null ));
+                        whens.add(new WhenOperationWrapper(i.toString(), operation, null));
                     }
-                    else if( i instanceof Map ){
-                        Map<String,Object> whens = (Map)i;
-                        if( whens.containsKey("when")) {
-                            whenMap.put(whens.get("when").toString(), new WhenOperationWrapper(operation, (Map<String, String>) whens.get("parameters")));
+                    else if( i instanceof Map ) {
+                        Map<String, Object> whenMap = (Map) i;
+                        if (whenMap.containsKey("when")) {
+                            whens.add(new WhenOperationWrapper(whenMap.get("when").toString(), operation, (Map<String, String>) whenMap.get("parameters")));
                         }
                     }
                 });
-            }
-            else if( bddWhen instanceof String ){
-                whenMap.put( bddWhen.toString(), new WhenOperationWrapper(operation, null) );
+            } else if (bddWhen instanceof String) {
+                whens.add(new WhenOperationWrapper(bddWhen.toString(), operation, null));
             }
         }
     }
 
     public Map<String, ThenResponseWrapper> getThens() {
-        return thenMap;
+        return Collections.unmodifiableMap(thenMap);
     }
 
-    public Map<String, WhenOperationWrapper> getWhens() {
-        return whenMap;
-    }
-
-    public static class ThenResponseWrapper {
-
-        private ApiResponse apiResponse;
-        private List<Map<String,Object>> assertions;
-
-        public ThenResponseWrapper(ApiResponse apiResponse, List<Map<String,Object>> assertions) {
-
-            this.apiResponse = apiResponse;
-            this.assertions = assertions;
-        }
-
-        public ApiResponse getApiResponse() {
-            return apiResponse;
-        }
-
-        public List<Map<String,Object>> getAssertions() {
-            return assertions;
-        }
-    }
-
-    public static class WhenOperationWrapper
-    {
-        private Operation operation;
-        private Map<String, String> parameters;
-
-        public WhenOperationWrapper(Operation operation, Map<String,String> parameters) {
-            this.operation = operation;
-            this.parameters = parameters;
-        }
-
-        public Operation getOperation() {
-            return operation;
-        }
-
-        public Map<String, String> getParameters() {
-            return parameters;
-        }
+    public List<WhenOperationWrapper> getWhens() {
+        return Collections.unmodifiableList(whens);
     }
 
     public WhenOperationWrapper getWhen(String text) {
-        return whenMap.get(text);
+        for (WhenOperationWrapper wrapper : whens) {
+            if (wrapper.matches(text)) {
+                return wrapper;
+            }
+        }
+
+        return null;
     }
 
     public ThenResponseWrapper getThen(String text) {
