@@ -2,7 +2,6 @@ package com.smartbear.readyapi4j.cucumber.hiptest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import io.swagger.util.Json;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -21,7 +20,7 @@ import java.util.Stack;
 public class DownloadAndRunScenario extends CommandBase {
     private static final Logger LOG = LoggerFactory.getLogger(DownloadAndRunScenario.class);
 
-    @CommandLine.Option(names = "-run", parameterConsumer = RunParameterConsumer.class)
+    @CommandLine.Option(names = "-args", parameterConsumer = RunParameterConsumer.class)
     List<String> args = new ArrayList<>();
 
     @CommandLine.Option(names = {"-p", "--project"}, required = true, description = "a hiptest project id")
@@ -36,14 +35,9 @@ public class DownloadAndRunScenario extends CommandBase {
     @Override
     public void run() {
         try {
-            String featureFile = getFeatureFile();
-            List<String> argsList = Lists.newArrayList();
-            if( args != null && !args.isEmpty() ){
-                argsList.addAll(args);
-            }
-            argsList.add(featureFile);
-
-            io.cucumber.core.cli.Main.main(argsList.toArray(new String[argsList.size()]));
+            String featureFile = downloadFeatureFile();
+            args.add( featureFile );
+            io.cucumber.core.cli.Main.main(args.toArray(new String[args.size()]));
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -62,7 +56,7 @@ public class DownloadAndRunScenario extends CommandBase {
         }
     }
 
-    private String getFeatureFile() throws Exception {
+    private String downloadFeatureFile() throws Exception {
         LOG.info("Reading Features from HipTest");
         Request request = buildHiptestRequest(new Request.Builder().url(hipTestEndpoint + "projects/" + hiptestProject + "/folders/"
                 + hiptestFolder + "/feature").get());
@@ -94,7 +88,7 @@ public class DownloadAndRunScenario extends CommandBase {
         fileWriter.write(feature.asText());
         fileWriter.close();
 
-        LOG.info("Cucumber feature(s) saved to temporary file " + targetFile.toPath().toString());
+        LOG.info("Cucumber feature(s) saved to file " + targetFile.toPath().toString());
         return targetFile.toPath().toString();
     }
 

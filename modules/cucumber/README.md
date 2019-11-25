@@ -3,6 +3,24 @@
 This module provides a generic Cucumber vocabulary for testing APIs with readyapi4j
 with dedicated support for OAS/Swagger 2.0 to remove some of the technicalities required to define scenarios. 
 
+Furthermore, OAS extensions for specifying When/Then vocabularies directly within an OAS definitions without
+requiring any coding are in the [BDD4OAS module](modules/bdd4oas). 
+
+* [Getting Started](#getting_started)
+* [Using with Maven/JUnit](#usage-with-mavenjunit)
+* [Running from the command-line](#running-from-the-command-line)
+* [Running with Docker](#running-with-docker)
+* [Recipe logging](#recipe-logging)
+* [Configuring Execution with TestEngine](#configuring-execution-with-readyapi-testengine)
+* [Building](#building)
+* [API StepDefs Reference](#api-stepdefs-reference)
+  * [Given Statements](#given-statements)
+  * [When/And Statements](#whenand-statements)
+  * [Complete Example](#complete-example)
+* [What's next](#whats-next)
+
+### Getting Started
+
 A quick example for the Petstore API at http://petstore.swagger.io, testing of the 
 /pet/findByTags resource could be defined withe following Scenario:
 
@@ -49,7 +67,7 @@ dependency to your pom:
 </dependency>
 ```
 
-(This library has transient dependencies on cucumber-jvm 2.0.0, so no other dependencies are required)
+(This library has transient dependencies on cucumber-jvm 4.7.0, so no other dependencies are required)
 
 Then create a JUnit runner class that uses Cucumber, add the readyapi4j glue/stepdefs, and point 
 it to your feature files, for example:
@@ -70,7 +88,7 @@ If you don't want to run your tests as part of a java/maven/etc-build or simply 
 can use readyapi4j-cucumber-runner.jar (from the [runner module](modules/runner)) which includes all required libraries including the Cucumber
 runtime. Run tests with:
 
-```
+```shell script
 java -jar readyapi4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-files> -p pretty
 ```
 
@@ -87,7 +105,7 @@ super-easy to run feature files for your APIs without having to install anything
 
 For example:
 
-```
+```shell script
 docker run -v /Users/Ole/cucumber:/features smartbear/readyapi4j-cucumber -p pretty /features
 ```
 
@@ -114,7 +132,7 @@ you will need to download and install TestEngine and specify the following syste
 
 Clone this project and and run
  
-```
+```shell script
 mvn clean install 
 ```
 
@@ -194,7 +212,7 @@ the type of parameter will be deduced from its list of parameters
 
 `the response body contains <text block>`
 * Example: 
-    ```
+    ```gherkin
    And the response body contains
     """
     "id" : "123"
@@ -203,7 +221,7 @@ the type of parameter will be deduced from its list of parameters
 
 `the response body matches <regex text block>`
 * Example: 
-    ```
+    ```gherkin
    And the response body matches
     """
     .*testing.*
@@ -326,7 +344,7 @@ To get this used during execution you will need to
 
 For example (line-breaks and comments added for readability):
 
-```
+```shell script
 java -cp modules/samples/target/readyapi4j-cucumber-samples-1.0.0-SNAPSHOT.jar: // the extension jar
    modules/runner/target/readyapi4j-cucumber-runner-1.0.0-SNAPSHOT.jar          // the runner jar  
    com.smartbear.readyapi4j.cucumber.CucumberRunner                                        // the runner class 

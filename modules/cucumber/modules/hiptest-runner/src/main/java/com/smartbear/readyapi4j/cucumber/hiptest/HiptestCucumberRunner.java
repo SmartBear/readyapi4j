@@ -13,6 +13,7 @@ import java.util.Properties;
  */
 
 @CommandLine.Command(subcommands = {
+        ClearActionWords.class,
         ImportActionWords.class,
         DownloadAndRunScenario.class,
         CommandLine.HelpCommand.class

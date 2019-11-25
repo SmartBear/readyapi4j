@@ -42,24 +42,18 @@ public class ImportActionWords extends CommandBase {
     @CommandLine.Option(names = {"-p", "--project"}, description = "a HipTest project id")
     String hiptestProject;
 
-    @CommandLine.Option(names = {"-d", "--default"}, required = false, description = "if import should include readyapi4j REST/OAS StepDefs")
+    @CommandLine.Option(names = {"-d", "--default"}, required = false, description = "if import should include ReadyAPI4j REST/OAS StepDefs")
     boolean importDefault;
 
-    @CommandLine.Option(names = {"-l", "--list"}, required = false, description = "if import should only list found ActionWords instead of importing them. Will ignore project-id option.")
+    @CommandLine.Option(names = {"-l", "--list"}, required = false, description = "only list found ActionWords - do not import them (will ignore project-id option). " +
+            "Helpful during debugging.")
     boolean listOnly;
-
-    @CommandLine.Option(names = {"-c", "--clear"}, required = false, description = "clear existing ActionWords")
-    boolean clearExisting;
 
     private String oasActionWordId;
 
     @Override
     public void run() {
         try {
-            if( clearExisting && hiptestProject != null ){
-                clearExistingActionWords();
-            }
-
             if( oasUrl == null && !importDefault ){
                 System.err.println("Nothing to import!");
                 return;
@@ -82,7 +76,7 @@ public class ImportActionWords extends CommandBase {
                 addStepDefsActionWordsFromAnnotations(existingWords, OASStepDefs.class);
                 addStepDefsActionWordsFromAnnotations(existingWords, RestStepDefs.class);
             }
-            else if( oasUrl != null ){
+            else if( oasUrl != null && !listOnly ){
                 ensureTheOasDefinitionAt();
             }
         } catch (IOException e) {
@@ -119,26 +113,6 @@ public class ImportActionWords extends CommandBase {
         response.close();
     }
 
-    private void clearExistingActionWords() throws IOException {
-        System.out.println( "Loading ActionWords");
-        String content = loadActionWords();
-        JSONArray ids = JsonPath.read(content, "$.data[*].id");
-
-        System.out.println( "Clearing " + ids.size() + " ActionWord" + ((ids.size() == 1 ) ? "" : "s"));
-        for( int c = 0; c < ids.size(); c++ ){
-            String id = ids.get(c ).toString();
-
-            System.out.print( ".");
-            Request request = buildHiptestRequest(new Request.Builder().url(hipTestEndpoint + "projects/" + hiptestProject + "/actionwords/" + id ).delete());
-            Response response = client.newCall(request).execute();
-            if (!response.isSuccessful()){
-                System.err.println("Unexpected code " + response + " deleting actionword with id " + id );
-            }
-            response.close();
-        }
-        System.out.println("");
-    }
-
     private void addStepDefsActionWordsFromAnnotations(Set<String> existingWords, Class<?> stepDefsClass) {
         List<Method> methods = MethodUtils.getMethodsListWithAnnotation(stepDefsClass, ActionWord.class);
         methods.stream()
@@ -173,6 +147,8 @@ public class ImportActionWords extends CommandBase {
         List<WhenOperationWrapper> whens = oasWrapper.getWhens();
         for (WhenOperationWrapper wrapper : whens) {
             String key = wrapper.getWhen();
+            key = transformXBddWhenToActionWord( key );
+
             if (!existingWords.contains(key)) {
                 try {
                     addActionWord("Operation: " + wrapper.getOperation().getOperationId(), key, false, null);
@@ -181,12 +157,16 @@ public class ImportActionWords extends CommandBase {
                 }
             }
         }
-        ;
+    }
+
+    private String transformXBddWhenToActionWord(String key) {
+        // brute force for now..
+        return key.replace('{', '"').replace('}','"');
     }
 
     @NotNull
     private Set<String> getExistingActionWords() throws IOException {
-        String content = loadActionWords();
+        String content = loadActionWords( hiptestProject );
         JSONArray words = JsonPath.read(content, "$.data[*]");
         Set<String> existingWords = Sets.newHashSet();
 
@@ -204,16 +184,6 @@ public class ImportActionWords extends CommandBase {
 
         LOG.info("Found " + existingWords.size() + " actionswords in project");
         return existingWords;
-    }
-
-    @NotNull
-    private String loadActionWords() throws IOException {
-        Request request = buildHiptestRequest(new Request.Builder().url(hipTestEndpoint + "projects/" + hiptestProject + "/actionwords").get());
-
-        Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response + " getting actionwords");
-
-        return response.body().string();
     }
 
     private String addActionWord(String from, String key, boolean hasFreetext, String description) throws IOException {

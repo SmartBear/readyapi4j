@@ -10,7 +10,7 @@ Contents:
 * [Adding parameters and assertions](#adding-parameters-and-assertions)
 * [Parameterizing x-bdd-when statements](#parameterizing-x-bdd-when-statements)
 * [Using the standard OAS / REST Vocabulary](#using-the-standard-rest--oas-vocabularies)
-* Assertion Reference
+* [Assertion Reference](#assertion-reference)
   * [JSON Assertion](#json-assertion)
   * [Content Assertion](#content-assertion)
   * [Header Assertion](#header-assertion)
