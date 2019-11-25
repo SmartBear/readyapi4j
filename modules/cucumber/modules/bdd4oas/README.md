@@ -65,7 +65,7 @@ paths:
   /specs:
     get:
       x-bdd-when:
-      - doing a default search
+      - performing a default search
       operationId: searchApisAndDomains
       parameters:
       - name: specType
@@ -135,7 +135,7 @@ paths:
   /specs:
     get:
       x-bdd-when:
-      - perform a default search
+      - performing a default search
       - when: searching for swaggerhub apis
         parameters:
           specType: API
@@ -212,7 +212,7 @@ paths:
   /specs:
     get:
       x-bdd-when:
-      - perform a default search
+      - performing a default search
       - when: searching for {owner} apis
         parameters:
           specType: API
