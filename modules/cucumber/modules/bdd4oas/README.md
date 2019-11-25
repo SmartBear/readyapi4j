@@ -8,6 +8,7 @@ executing corresponding scenarios using the runner in this module.
 Contents:
 * [A simple example](#a-simple-example)
 * [Adding parameters and assertions](#adding-parameters-and-assertions)
+* [Parameterizing x-bdd-when statements](#parameterizing-x-bdd-when-statements)
 * [Using the standard OAS / REST Vocabulary](#using-the-standard-rest--oas-vocabularies)
 * Assertion Reference
   * [JSON Assertion](#json-assertion)
@@ -346,7 +347,7 @@ and then specifying that volume (or a file in it) as the feature-file argument t
 docker image simple runs the existing cCcumber CLI all corresponding command-line options apply.
 
 The jar file can be used similarly (without the requirement to map a volume of course). It's main class is set to the 
-Cucumber CLI - for example the last above command could be run with:
+Cucumber CLI (io.cucumber.core.cli.Main) - for example the last above command could be run with:
 
 ```shell script
 java -jar target/readyapi4j-bdd4oas-1.0.0-SNAPSHOT.jar /Users/olensmar/features/swaggerhub-sample2.feature -p pretty
