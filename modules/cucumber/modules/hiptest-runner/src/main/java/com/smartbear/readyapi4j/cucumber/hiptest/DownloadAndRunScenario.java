@@ -5,8 +5,6 @@ import com.google.common.base.Strings;
 import io.swagger.util.Json;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -18,8 +16,6 @@ import java.util.Stack;
 
 @CommandLine.Command( name = "download", description = "Downloads and runs a HipTest scenario")
 public class DownloadAndRunScenario extends CommandBase {
-    private static final Logger LOG = LoggerFactory.getLogger(DownloadAndRunScenario.class);
-
     @CommandLine.Option(names = "-args", parameterConsumer = RunParameterConsumer.class)
     List<String> args = new ArrayList<>();
 
@@ -57,14 +53,12 @@ public class DownloadAndRunScenario extends CommandBase {
     }
 
     private String downloadFeatureFile() throws Exception {
-        LOG.info("Reading Features from HipTest");
+        System.out.println("Reading Features from HipTest");
         Request request = buildHiptestRequest(new Request.Builder().url(hipTestEndpoint + "projects/" + hiptestProject + "/folders/"
                 + hiptestFolder + "/feature").get());
 
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response + " getting feature file");
-
-        LOG.debug("Got JSON response from HipTest: " + response.body());
 
         JsonNode tree = Json.mapper().readTree(response.body().string());
         if (tree == null) {
@@ -88,7 +82,7 @@ public class DownloadAndRunScenario extends CommandBase {
         fileWriter.write(feature.asText());
         fileWriter.close();
 
-        LOG.info("Cucumber feature(s) saved to file " + targetFile.toPath().toString());
+        System.out.println("Cucumber feature(s) saved to file " + targetFile.toPath().toString());
         return targetFile.toPath().toString();
     }
 

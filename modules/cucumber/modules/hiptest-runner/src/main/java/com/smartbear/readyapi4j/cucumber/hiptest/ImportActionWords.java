@@ -21,8 +21,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
 import java.io.IOException;
@@ -33,8 +31,6 @@ import java.util.Set;
 
 @CommandLine.Command(name = "import", description = "Imports HipTest ActionWords from OAS x-bdd extensions and REST StepDefs")
 public class ImportActionWords extends CommandBase {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ImportActionWords.class);
 
     @CommandLine.Parameters(arity = "0..1", description = "a valid path or URL to an OAS 2.0/3.0 definition")
     String oasUrl;
@@ -108,7 +104,7 @@ public class ImportActionWords extends CommandBase {
 
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) {
-            throw new IOException("Unexpected code " + response + " updating OAS actionword definition\n" + response.body().string());
+            throw new IOException("Unexpected code " + response + " updating OAS ActionWord definition\n" + response.body().string());
         }
         response.close();
     }
@@ -182,17 +178,17 @@ public class ImportActionWords extends CommandBase {
             }
         }
 
-        LOG.info("Found " + existingWords.size() + " actionswords in project");
+        System.out.println("Found " + existingWords.size() + " existing ActionWords in HipTest project");
         return existingWords;
     }
 
     private String addActionWord(String from, String key, boolean hasFreetext, String description) throws IOException {
         if( listOnly ){
-            LOG.info("Found actionword '" + key + "' for " + from);
+            System.out.println("Found ActionWord '" + key + "' for " + from);
             return null;
         }
 
-        LOG.info("Adding actionword '" + key + "' from " + from);
+        System.out.println("Adding ActionWord '" + key + "' from " + from);
 
         Map<String, Object> attributes = Maps.newHashMap();
         attributes.put("name", key);
@@ -212,7 +208,7 @@ public class ImportActionWords extends CommandBase {
 
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) {
-            throw new IOException("Unexpected code " + response + " creating actionword");
+            throw new IOException("Unexpected code " + response + " creating ActionWord");
         }
 
         JsonNode node = mapper.readTree(response.body().string());
@@ -243,7 +239,7 @@ public class ImportActionWords extends CommandBase {
 
             response = client.newCall(request).execute();
             if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response + " updating actionword definition\n" + response.body().string());
+                throw new IOException("Unexpected code " + response + " updating ActionWord definition\n" + response.body().string());
             }
             response.close();
         }
