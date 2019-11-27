@@ -6,7 +6,7 @@ any StepDef code. The vocabularies are added using custom OAS extensions and dyn
 executing corresponding scenarios using the runner in this module.
 
 Contents:
-* [A simple example](#a-simple-example)
+* [A simple x-bdd-when/x-bdd-then example](#a-simple-x-bdd-whenx-bdd-then-example)
 * [Adding parameters and assertions](#adding-parameters-and-assertions)
 * [Parameterizing x-bdd-when statements](#parameterizing-x-bdd-when-statements)
 * [Using the standard OAS / REST Vocabulary](#using-the-standard-rest--oas-vocabularies)
@@ -17,7 +17,7 @@ Contents:
   * [XML Assertion](#xml-assertion)
 * [Using the OASBackend](#using-the-oasbackend)
 
-### A simple example
+### A simple x-bdd-when/x-bdd-then example
 
 A quick example - consider the following search operation from the SwaggerHub public REST API 
 (greatly abbreviated for the sake of this example) OAS 2.0 definition - hosted on SwaggerHub at 

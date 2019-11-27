@@ -73,14 +73,14 @@ corresponds to project-id 141233 and folder 1040072 (used in the examples above)
 The underlying API call made to the [HipTest API](https://api-doc.hiptest.com/) is described at 
 https://api-doc.hiptest.com/?http#get-feature-from-a-given-folder.
 
-Since the runner uses the OASBackend internally - all related functionality (x-bdd extensions, default stepdefs)
+Since the runner uses the [OASBackend](../bdd4oas) internally - all related functionality (x-bdd extensions, default stepdefs)
 is available for your scenarios.
 
 ## Importing ActionWords
 
-This command will create HipTest ActionWords both for the default REST vocabulary and from x-bdd extensions in a specified 
-OAS definition - helping you write correct scenarios in HipTest from the start. The command will only add ActionWords that do not
-already exist - so you can safely run it several times to add new ActionWords as you go along.
+This command will create HipTest ActionWords both for the [default ReadyAPI4j REST vocabulary](../../README.md#api-stepdefs-reference) 
+and from [x-bdd extensions](../bdd4oas/README.md) in a specified OAS definition - helping you write correct scenarios in HipTest from the start. 
+The command will only add ActionWords that do not already exist - so you can safely run it several times to add new ActionWords as you go along.
 
 Run the provided jar file with the `import [options] <oas-url>` command and the following options:
 * `-p` (required, string) - the HipTest project-id
@@ -140,7 +140,7 @@ Found ActionWord 'the response body contains "value"' for com.smartbear.readyapi
 Found ActionWord 'a "status-code" response is returned' for com.smartbear.readyapi4j.cucumber.RestStepDefs$aResponseIsReturned
 ```
 
-Create an empty project in HipTest and provide it's project-id without the -l option to import the ActionWords:
+For the actual import, create an empty project in HipTest and provide it's project-id without the -l option to import the ActionWords:
 
 ```shell script
 java -jar target/readyapi4j-cucumber-hiptest-runner-1.0.0-SNAPSHOT.jar import -p 149337 https://api.swaggerhub.com/apis/olensmar/registry-api-bdd/bdd4oas-demo
@@ -154,7 +154,7 @@ Adding ActionWord 'the OAS definition at "oas-url"' from OAS definition
 ```
 
 As you can see the importer automatically adds a `the OAS definition at...` ActionWord in this case since it is required for
-the other ActionWords to work.
+the other ActionWords to work, the default value for the `oas-url` parameter is set to the oas-url argument value. 
 
 
 
