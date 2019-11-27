@@ -39,6 +39,6 @@ public class ClearActionWords extends CommandBase {
             }
             response.close();
         }
-        System.out.println("");
+        System.out.println("\nFinished!");
     }
 }

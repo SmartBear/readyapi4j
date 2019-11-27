@@ -5,6 +5,7 @@ This module provides a command-line utility for integrating [HipTest](https://ww
 It currently provides commands for
 * [Downloading and running feature files](#downloading-and-running-feature-files) from HipTest 
 * [Creating/updating HipTest ActionWords](#importing-actionwords) for default StepDefs and from BDD4OAS x-bdd extensions in an OAS definition
+* [Clearing existing ActionWords]() from a HipTest project
 
 ## hiptest.properties
 
@@ -156,6 +157,20 @@ Adding ActionWord 'the OAS definition at "oas-url"' from OAS definition
 As you can see the importer automatically adds a `the OAS definition at...` ActionWord in this case since it is required for
 the other ActionWords to work, the default value for the `oas-url` parameter is set to the oas-url argument value. 
 
+## Clearing ActionWords
+
+This is provided for convenience since HipTest does not allow you to remove all ActionWords from a project with one command.
+Use it carefully since any Scenarios in HipTest using any of the removed ActionWords will become invalid.
+
+Run by providing the `clear` command together with the project-id (-p):
+
+```shell script
+java -jar target/readyapi4j-cucumber-hiptest-runner-1.0.0-SNAPSHOT.jar clear -p 149337                                                                       
+Loading ActionWords
+Clearing 5 ActionWords
+.....
+Finished!
+```
 
 
 
