@@ -3,6 +3,24 @@
 This module provides a generic Cucumber vocabulary for testing APIs with readyapi4j
 with dedicated support for OAS/Swagger 2.0 to remove some of the technicalities required to define scenarios. 
 
+Furthermore, OAS extensions for specifying When/Then vocabularies directly within an OAS definitions without
+requiring any coding are in the [BDD4OAS module](modules/bdd4oas). 
+
+* [Getting Started](#getting_started)
+* [Using with Maven/JUnit](#usage-with-mavenjunit)
+* [Running from the command-line](#running-from-the-command-line)
+* [Running with Docker](#running-with-docker)
+* [Recipe logging](#recipe-logging)
+* [Configuring Execution with TestEngine](#configuring-execution-with-readyapi-testengine)
+* [Building](#building)
+* [API StepDefs Reference](#api-stepdefs-reference)
+  * [Given Statements](#given-statements)
+  * [When/And Statements](#whenand-statements)
+  * [Complete Example](#complete-example)
+* [What's next](#whats-next)
+
+### Getting Started
+
 A quick example for the Petstore API at http://petstore.swagger.io, testing of the 
 /pet/findByTags resource could be defined withe following Scenario:
 
@@ -49,7 +67,7 @@ dependency to your pom:
 </dependency>
 ```
 
-(This library has transient dependencies on cucumber-jvm 2.0.0, so no other dependencies are required)
+(This library has transient dependencies on cucumber-jvm 4.7.0, so no other dependencies are required)
 
 Then create a JUnit runner class that uses Cucumber, add the readyapi4j glue/stepdefs, and point 
 it to your feature files, for example:
@@ -70,7 +88,7 @@ If you don't want to run your tests as part of a java/maven/etc-build or simply 
 can use readyapi4j-cucumber-runner.jar (from the [runner module](modules/runner)) which includes all required libraries including the Cucumber
 runtime. Run tests with:
 
-```
+```shell script
 java -jar readyapi4j-cucumber-runner-1.0.0-SNAPSHOT.jar <path to feature-files> -p pretty
 ```
 
@@ -87,7 +105,7 @@ super-easy to run feature files for your APIs without having to install anything
 
 For example:
 
-```
+```shell script
 docker run -v /Users/Ole/cucumber:/features smartbear/readyapi4j-cucumber -p pretty /features
 ```
 
@@ -114,110 +132,113 @@ you will need to download and install TestEngine and specify the following syste
 
 Clone this project and and run
  
-```
+```shell script
 mvn clean install 
 ```
 
 To build and install the artifacts in your local maven repository - the packaged jar is created in the root
 target folder.
 
-## API Testing Vocabulary Reference
+## API StepDefs Reference
  
 The included [StepDefs](modules/stepdefs) for API testing adds the following vocabulary:
 
 #### Given statements
 
-- `the OAS definition at <swagger endpoint>`
-    - The specified endpoint must reference a valid OAS/Swagger 2.0/3.0 definition
-    - Example: `the OAS definition at http://petstore.swagger.io/v2/swagger.json`
+`the OAS definition at <swagger endpoint>`
+* The specified endpoint must reference a valid OAS 2.0/3.0 definition
+* Specifying an OAS definition allows for the use of OAS-specific StepDefs below
+* Example: `Given the OAS definition at http://petstore.swagger.io/v2/swagger.json`
 
-- `the API running at <API endpoint>`
-    - Example: `the API running at http://petstore.swagger.io/v2`
+`the API running at <API endpoint>`
+* Example: `Given the API running at http://petstore.swagger.io/v2`
 
-- `the oAuth2 token <token>`
-    - Adds an OAuth 2.0 Bearer token to requests
-    - Example: `the oAuth2 token 18273827aefef123`
+`the oAuth2 token <token>`
+* Adds an OAuth 2.0 Bearer token to requests
+* Example: `Given the oAuth2 token 18273827aefef123`
 
 #### When/And statements
 
-- `a <HTTP Method> request to <path>`
-    - Example: `a GET request to /test/search is made`
+`a <HTTP Method> request to <path> is made`
+* Example: `When a GET request to /test/search is made`
     
-- `a request to <OAS OperationID> is made`
-    - will fail if no OAS definition has been Given
-    - Example: `a request to findPetById is made`
+`a request to <OAS OperationID> is made`
+* prepares a request to the specified operationId
+* will fail if no OAS definition has been Given
+* Example: `When a request to findPetById is made`
 
-- `the request body is <text block>`
-    - Example: 
-    ```
-  the request body is
+`the request body is <text block>`
+* Example: 
+    ```gherkin
+    And the request body is
     """
     { "id" : "123" }
     """
     ```
     
-- `the <parameter name> parameter is <parameter value>`
-    - adds the specified parameter as a query parameter
-    - Example: `the query parameter is miles davis`
+`the <parameter name> parameter is <parameter value>`
+* adds the specified parameter as a query parameter
+* Example: `the search parameter is miles`
     
-- `the <http header> is <header value>`
-    - Example: `the Encoding header is UTF-8`
+`the <http header> header is <header value>`
+* Example: `And the Encoding header is UTF-8`
     
-- `the type is <content-type>`
-    - single word types will be expanded to `application/<content-type>`
-    - Example: `the type is json`
+`the type is <content-type>`
+* single word types will be expanded to `application/<content-type>`
+* Example: `the type is json`
 
-- `<parameter name> is <parameter value>`
-    - if a valid OperationId has been given the type of parameter will be deduced from its list of parameters
-    - if no OperationId has been given this will be added to a map of values that will be sent as the request body
-    - Example: `name is John`
-    - will work for both inline or multi-line values
+`<parameter name> is <parameter value>`
+* if a valid operationId has been given with the `a request to <operationId> is made` statement above, 
+the type of parameter will be deduced from its list of parameters
+* if no operationId has been given this will be added to a map of values that will be sent as the request body
+* will work for both inline or multi-line values
+* Example: `name is John`
     
-- `the request expects <content-type>`
-    - adds an Accept header
-    - Example `the request expects yaml`
+* `the request expects <content-type>`
+* adds an Accept header, single word types will be expanded to `application/<content-type>`
+* Example: `the request expects yaml
 
-#### Then/And statements:
+##### Then/And statements:
 
-- `a <HTTP Status code> response is returned`
-    - Example: `a 200 response is returned`
+`a <HTTP Status code> response is returned`
+* Example: `Then a 200 response is returned`
     
-- `a <HTTP Status code> response is returned within <number>ms`
-    - Example: `a 404 response is returned within 10ms`
+`a <HTTP Status code> response is returned within <number>ms`
+* Example: `Then a 404 response is returned within 10ms`
 
-- `the response is <a valid OAS Response description for the specified operationId>`
-    - Requires that a valid OperationId has been Given
-    - Example: `the response is a list of people`
+`the response is <a valid response description for the specified operationId>`
+* Requires that a valid OperationId has been Given
+* Example: `Then the response is a list of people`
 
-- `the response body contains <text block>`
-    - Example: 
-    ```
-    the response body contains
+`the response body contains <text block>`
+* Example: 
+    ```gherkin
+   And the response body contains
     """
     "id" : "123"
     """
     ```
 
-- `the response body matches <regex text block>`
-    - Example: 
-    ```
-    the response body matches
+`the response body matches <regex text block>`
+* Example: 
+    ```gherkin
+   And the response body matches
     """
     .*testing.*
     """
     ```
 
-- `the response type is <content-type>`
-    - Example: `the response type is application/yaml`
+`the response type is <content-type>`
+* Example: `And the response type is application/yaml`
 
-- `the response contains a <http-header name> header`
-    - Example: `the response contains a Cache-Control header`
+`the response contains a <http-header name> header`
+* Example: `And the response contains a Cache-Control header`
 
-- `the response <http header name> is <http header value>`
-    - Example: `the response Cache-Control header is None`
+`the response <http header name> is <http header value>`
+* Example: `And the response Cache-Control header is None`
 
-- `the response body contains <text token>`
-    - Example: `the response body contains Testing text`
+`the response body contains <text token>`
+* Example: `And the response body contains Testing text`
 
 ### Complete Example:
 
@@ -323,7 +344,7 @@ To get this used during execution you will need to
 
 For example (line-breaks and comments added for readability):
 
-```
+```shell script
 java -cp modules/samples/target/readyapi4j-cucumber-samples-1.0.0-SNAPSHOT.jar: // the extension jar
    modules/runner/target/readyapi4j-cucumber-runner-1.0.0-SNAPSHOT.jar          // the runner jar  
    com.smartbear.readyapi4j.cucumber.CucumberRunner                                        // the runner class 

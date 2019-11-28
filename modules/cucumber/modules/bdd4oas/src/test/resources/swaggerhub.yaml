@@ -1,0 +1,1430 @@
+---
+swagger: "2.0"
+info:
+  description: |
+    # Introduction
+    This is the registry API for SwaggerHub. It allows you to access, manage, and update your APIs and Domains in SwaggerHub bypassing the Web application.
+
+    # Authentication
+    Use your personal API Key: you can find it by visiting the [API Key page](https://app.swaggerhub.com/settings/apiKey).
+  version: 1.0.47
+  title: SwaggerHub Registry API
+  contact:
+    name: SwaggerHub
+    url: https://swaggerhub.com
+    email: info@swaggerhub.com
+host: api.swaggerhub.com
+tags:
+- name: APIs
+  description: Operations for APIs
+- name: Domains
+  description: Operations for Domains
+schemes:
+- https
+produces:
+- application/json
+paths:
+  /specs:
+    get:
+      tags:
+      - APIs
+      - Domains
+      summary: Retrieves a list of currently defined APIs and Domains in APIs.json format
+      description: ""
+      operationId: searchApisAndDomains
+      parameters:
+      - name: specType
+        in: query
+        description: |
+          Type of Swagger specs to search:
+          * API - APIs only
+          * DOMAIN - Domains only
+          * ANY - Both APIs and Domains
+        required: false
+        type: string
+        default: ANY
+        enum:
+        - API
+        - DOMAIN
+        - ANY
+      - name: visibility
+        in: query
+        description: |
+          The visibility of a spec in SwaggerHub:
+          * PUBLIC - can be viewed by anyone
+          * PRIVATE - can only be viewed by you or your Org and those that you are collaborating with or have shared it with
+          * ANY - either PUBLIC or PRIVATE
+        required: false
+        type: string
+        default: ANY
+        enum:
+        - PUBLIC
+        - PRIVATE
+        - ANY
+      - name: state
+        in: query
+        description: |
+          Matches against published state of the spec:
+          * UNPUBLISHED - spec is a draft, a work in progress
+          * PUBLISHED - spec is a stable version ready for consuming from client applications
+          * ANY - either PUBLISHED or UNPUBLISHED
+        required: false
+        type: string
+        default: ALL
+        enum:
+        - ALL
+        - PUBLISHED
+        - UNPUBLISHED
+      - name: owner
+        in: query
+        description: API or Domain owner identifier. Can be username or organization name
+        required: false
+        type: string
+      - name: query
+        in: query
+        description: Free text query to match
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: Page to return
+        required: false
+        type: integer
+        default: 0
+        format: int32
+      - name: limit
+        in: query
+        description: Number of results per page
+        required: false
+        type: integer
+        default: 10
+        format: int32
+      - name: sort
+        in: query
+        description: |
+          Sort criteria or result set:
+          * NAME
+          * UPATED
+          * CREATED
+          * OWNER
+        required: false
+        type: string
+        default: NAME
+        enum:
+        - NAME
+        - UPDATED
+        - CREATED
+        - OWNER
+      - name: order
+        in: query
+        description: Sort order
+        required: false
+        type: string
+        default: ASC
+        enum:
+        - ASC
+        - DESC
+      responses:
+        200:
+          description: A list of APIs and Domains in APIs.json format
+          schema:
+            $ref: '#/definitions/ApisJson'
+          x-bdd-then:
+          - a search result is returned
+          - then: more than 10 items are returned
+            assertions:
+            - type: json
+              path: $.apis.length()
+              value: 10
+      security:
+      - TokenSecured: []
+      x-bdd-when:
+      - a search for apis is made
+      - when: a search for swaggerhub apis is made
+        parameters:
+          specType: API
+          owner: swaggerhub
+      - when: a search for {owner} domains is made
+        parameters:
+          specType: DOMAIN
+  /apis:
+    get:
+      tags:
+      - APIs
+      summary: Retrieves a list of currently defined APIs in APIs.json format.
+      description: ""
+      operationId: searchApis
+      parameters:
+      - name: query
+        in: query
+        description: Free text query to match
+        required: false
+        type: string
+      - name: state
+        in: query
+        description: |
+          Matches against published state of the spec:
+          * UNPUBLISHED - spec is a draft, a work in progress
+          * PUBLISHED - spec is a stable version ready for consuming from client applications
+          * ANY - either PUBLISHED or UNPUBLISHED
+        required: false
+        type: string
+        default: ALL
+        enum:
+        - ALL
+        - PUBLISHED
+        - UNPUBLISHED
+      - name: tag
+        in: query
+        description: Matches against tags associated with an API
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: page
+        in: query
+        description: Page to return
+        required: false
+        type: integer
+        default: 0
+        format: int32
+      - name: limit
+        in: query
+        description: Number of results per page
+        required: false
+        type: integer
+        default: 10
+        format: int32
+      - name: sort
+        in: query
+        description: |
+          Sort criteria or result set:
+          * NAME
+          * UPATED
+          * CREATED
+          * OWNER
+        required: false
+        type: string
+        default: NAME
+        enum:
+        - NAME
+        - UPDATED
+        - CREATED
+        - OWNER
+      - name: order
+        in: query
+        description: Sort order
+        required: false
+        type: string
+        default: ASC
+        enum:
+        - ASC
+        - DESC
+      responses:
+        303:
+          description: 303 response
+          headers:
+            Location:
+              type: string
+          x-bdd-then: things have moved
+      security:
+      - TokenSecured: []
+  /apis/{owner}:
+    get:
+      tags:
+      - APIs
+      summary: Retrieves an APIs.json listing of all APIs defined for this owner
+      description: ""
+      operationId: getOwnerApis
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: page
+        in: query
+        description: Page to return
+        required: false
+        type: integer
+        default: 0
+        format: int32
+      - name: limit
+        in: query
+        description: Number of results per page
+        required: false
+        type: integer
+        default: 10
+        format: int32
+      - name: sort
+        in: query
+        description: |
+          Sort criteria or result set:
+          * NAME
+          * UPATED
+          * CREATED
+          * OWNER
+        required: false
+        type: string
+        default: NAME
+        enum:
+        - NAME
+        - UPDATED
+        - CREATED
+        - OWNER
+      - name: order
+        in: query
+        description: Sort order
+        required: false
+        type: string
+        default: ASC
+        enum:
+        - ASC
+        - DESC
+      responses:
+        200:
+          description: A list of APIs in APIs.json format
+          schema:
+            $ref: '#/definitions/ApisJson'
+          x-bdd-then:
+          - a list of APIs is returned
+      security:
+      - TokenSecured: []
+  /apis/{owner}/{api}:
+    get:
+      tags:
+      - APIs
+      summary: Retrieves an APIs.json listing for all API versions for this owner and API
+      operationId: getApiVersions
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: A list of API versions in APIs.json format
+          schema:
+            $ref: '#/definitions/ApisJson'
+      security:
+      - TokenSecured: []
+    post:
+      tags:
+      - APIs
+      summary: Saves the provided Swagger definition
+      description: Saves the provided Swagger definition; the owner must match the token owner. The version will be extracted from the Swagger definition itself.
+      operationId: saveDefinition
+      consumes:
+      - application/json
+      - application/yaml
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      - name: isPrivate
+        in: query
+        description: Defines whether the API has to be private
+        required: false
+        type: boolean
+        default: false
+      - name: version
+        in: query
+        description: API version
+        required: false
+        type: string
+      - name: oas
+        in: query
+        description: |
+          The OpenApi Specification (OAS)
+            version.
+          * 2.0 - For OAS2 (aka 'Swagger 2.0')
+          * 3.0.X - For OAS3
+        required: false
+        type: string
+        default: "2.0"
+        enum:
+        - "2.0"
+        - 3.0.0
+        - 3.0.1
+      - in: body
+        name: definition
+        description: The Swagger definition of this API
+        required: true
+        schema:
+          type: string
+      - name: force
+        in: query
+        description: Force update
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: The API was successfully saved
+        201:
+          description: New API was successfully saved
+        205:
+          description: The API was successfully saved and should be reloaded
+        400:
+          description: The Swagger definition was invalid
+        403:
+          description: Maximum number of APIs reached
+        409:
+          description: Cannot overwrite a published API version
+        415:
+          description: Invalid content type
+      security:
+      - TokenSecured: []
+    delete:
+      tags:
+      - APIs
+      summary: Deletes the specified API
+      description: ""
+      operationId: deleteApi
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: The API was successfully deleted
+        403:
+          description: Access denied
+        404:
+          description: The specified API not found
+        409:
+          description: The API has published versions and cannot be deleted
+      security:
+      - TokenSecured: []
+  /apis/{owner}/{api}/.collaboration:
+    get:
+      tags:
+      - APIs
+      summary: Gets API's collaboration
+      operationId: getCollaboration
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      - name: expandTeams
+        in: query
+        required: false
+        type: boolean
+        default: false
+      responses:
+        200:
+          description: The existing collaboration on an API
+          schema:
+            $ref: '#/definitions/Collaboration'
+      security:
+      - TokenSecured: []
+    put:
+      tags:
+      - APIs
+      summary: Updates API's collaboration
+      operationId: updateCollaboration
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: '#/definitions/Collaboration'
+      responses:
+        default:
+          description: Successfully updated API collaboration
+      security:
+      - TokenSecured: []
+    delete:
+      tags:
+      - APIs
+      summary: Deletes API's collaboration
+      operationId: deleteCollaboration
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      responses:
+        default:
+          description: Successfully deleted a collaboration
+      security:
+      - TokenSecured: []
+  /apis/{owner}/{api}/{version}:
+    get:
+      tags:
+      - APIs
+      summary: Retrieves the Swagger definition for the specified API and version
+      description: ""
+      operationId: getDefinition
+      produces:
+      - application/json
+      - application/yaml
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: The Swagger API in requested format
+          schema:
+            type: object
+        404:
+          description: The specified API not found
+      security:
+      - TokenSecured: []
+    delete:
+      tags:
+      - APIs
+      summary: Deletes a particular version of the specified API
+      description: ""
+      operationId: deleteApiVersion
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: The API version was successfully deleted
+        403:
+          description: Access denied
+        404:
+          description: The specified API was not found
+        409:
+          description: The API version is published and cannot be deleted or it is the only version of this API
+      security:
+      - TokenSecured: []
+  /apis/{owner}/{api}/{version}/swagger.json:
+    get:
+      tags:
+      - APIs
+      summary: Retrieves the Swagger definition for the specified API and version in JSON format
+      description: ""
+      operationId: getJsonDefinition
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: The Swagger API in JSON format
+          schema:
+            type: object
+        404:
+          description: The specified API was not found
+      security:
+      - TokenSecured: []
+  /apis/{owner}/{api}/{version}/swagger.yaml:
+    get:
+      tags:
+      - APIs
+      summary: Retrieves the Swagger definition for the specified API and version in YAML format
+      description: ""
+      operationId: getYamlDefinition
+      produces:
+      - application/yaml
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: The Swagger API in YAML format
+          schema:
+            type: object
+        404:
+          description: The specified API was not found
+      security:
+      - TokenSecured: []
+  /apis/{owner}/{api}/{version}/.comment:
+    get:
+      tags:
+      - APIs
+      summary: Returns comments for the specified API version
+      description: |
+        Returns all the comments and replies added by collaborators in the specified API version.
+      operationId: getApiComments
+      parameters:
+      - name: owner
+        in: path
+        description: API owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: api
+        in: path
+        description: API name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: A list of comments for the specified API version
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ClosableComment'
+        204:
+          description: No comments were found for the specified API version
+        401:
+          description: The access token is missing or invalid
+        403:
+          description: Access denied (insufficient user permissions)
+        404:
+          description: The specified API or version was not found
+      security:
+      - TokenSecured: []
+  /domains:
+    get:
+      tags:
+      - Domains
+      summary: Retrieves a list of currently defined domains in APIs.json format
+      operationId: searchDomains
+      parameters:
+      - name: query
+        in: query
+        description: Free text query to match
+        required: false
+        type: string
+      - name: state
+        in: query
+        description: |
+          Matches against published state of the spec:
+          * UNPUBLISHED - spec is a draft, a work in progress
+          * PUBLISHED - spec is a stable version ready for consuming from client applications
+          * ANY - either PUBLISHED or UNPUBLISHED
+        required: false
+        type: string
+        default: ALL
+        enum:
+        - ALL
+        - PUBLISHED
+        - UNPUBLISHED
+      - name: tag
+        in: query
+        description: Matches against tags associated with a domain
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: page
+        in: query
+        description: Page to return
+        required: false
+        type: integer
+        default: 0
+        format: int32
+      - name: limit
+        in: query
+        description: Number of results per page
+        required: false
+        type: integer
+        default: 10
+        format: int32
+      - name: sort
+        in: query
+        description: |
+          Sort criteria or result set:
+          * NAME
+          * UPATED
+          * CREATED
+          * OWNER
+        required: false
+        type: string
+        default: NAME
+        enum:
+        - NAME
+        - UPDATED
+        - CREATED
+        - OWNER
+      - name: order
+        in: query
+        description: Sort order
+        required: false
+        type: string
+        default: ASC
+        enum:
+        - ASC
+        - DESC
+      responses:
+        303:
+          description: 303 response
+          headers:
+            Location:
+              type: string
+      security:
+      - TokenSecured: []
+  /domains/{owner}:
+    get:
+      tags:
+      - Domains
+      summary: Retrieves an APIs.json listing of all domains defined for this owner
+      operationId: getOwnerDomains
+      parameters:
+      - name: owner
+        in: path
+        description: Domain owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: page
+        in: query
+        description: Page to return
+        required: false
+        type: integer
+        default: 0
+        format: int32
+      - name: limit
+        in: query
+        description: Number of results per page
+        required: false
+        type: integer
+        default: 10
+        format: int32
+      - name: sort
+        in: query
+        description: |
+          Sort criteria or result set:
+          * NAME
+          * UPATED
+          * CREATED
+          * OWNER
+        required: false
+        type: string
+        default: NAME
+        enum:
+        - NAME
+        - UPDATED
+        - CREATED
+        - OWNER
+      - name: order
+        in: query
+        description: Sort order
+        required: false
+        type: string
+        default: ASC
+        enum:
+        - ASC
+        - DESC
+      responses:
+        200:
+          description: A list of domains in APIs.json format
+          schema:
+            $ref: '#/definitions/ApisJson'
+      security:
+      - TokenSecured: []
+  /domains/{owner}/{domain}:
+    get:
+      tags:
+      - Domains
+      summary: Retrieves an APIs.json listing for all domain versions for this owner and domain
+      operationId: getDomainVersions
+      parameters:
+      - name: owner
+        in: path
+        description: Domain owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: domain
+        in: path
+        description: Domain name (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: A list of domain versions in APIs.json format
+          schema:
+            $ref: '#/definitions/ApisJson'
+      security:
+      - TokenSecured: []
+    post:
+      tags:
+      - Domains
+      summary: Saves the provided Swagger definition of a domain
+      operationId: saveDomainDefinition
+      consumes:
+      - application/json
+      - application/yaml
+      parameters:
+      - name: owner
+        in: path
+        description: Domain owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: domain
+        in: path
+        description: Domain name (case-sensitive)
+        required: true
+        type: string
+      - name: isPrivate
+        in: query
+        description: Specifies whether the domain has to be private
+        required: false
+        type: boolean
+        default: false
+      - name: version
+        in: query
+        description: Domain version
+        required: true
+        type: string
+      - in: body
+        name: definition
+        description: The Swagger definition of this domain
+        required: false
+        schema:
+          type: string
+      - name: force
+        in: query
+        description: Force update
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: The domain was successfully saved
+        201:
+          description: New domain was successfully saved
+        205:
+          description: The domain was successfully saved and should be reloaded
+        403:
+          description: Maximum number of domains reached
+        409:
+          description: Cannot overwrite a published domain version
+        415:
+          description: Invalid content type
+      security:
+      - TokenSecured: []
+    delete:
+      tags:
+      - Domains
+      summary: Deletes the specified domain
+      operationId: deleteDomain
+      parameters:
+      - name: owner
+        in: path
+        description: Domain owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: domain
+        in: path
+        description: Domain name (case-sensitive)
+        required: true
+        type: string
+      - name: force
+        in: query
+        description: Force update
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: The domain was successfully deleted
+        403:
+          description: Access denied
+        404:
+          description: The specified domain not found
+        409:
+          description: The domain has published versions and can not be deleted
+        424:
+          description: Cannot delete because there are some dependencies for domain
+          schema:
+            $ref: '#/definitions/Page'
+      security:
+      - TokenSecured: []
+  /domains/{owner}/{domain}/{version}:
+    get:
+      tags:
+      - Domains
+      summary: Retrieves the Swagger definition for the specified domain and version
+      operationId: getDomainDefinition
+      produces:
+      - application/json
+      - application/yaml
+      parameters:
+      - name: owner
+        in: path
+        description: Domain owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: domain
+        in: path
+        description: Domain name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: The Swagger domain in requested format
+          schema:
+            type: object
+        404:
+          description: The specified domain was not found
+      security:
+      - TokenSecured: []
+    delete:
+      tags:
+      - Domains
+      summary: Deletes a particular version of the specified domain
+      operationId: deleteDomainVersion
+      parameters:
+      - name: owner
+        in: path
+        description: Domain owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: domain
+        in: path
+        description: Domain name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      - name: force
+        in: query
+        description: Force update
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: The domain version was successfully deleted
+        403:
+          description: Access denied
+        404:
+          description: The specified domain was not found
+        409:
+          description: The domain version is published and can not be deleted or it is the only version of this API
+        424:
+          description: Cannot delete because there are some dependencies for domain
+          schema:
+            $ref: '#/definitions/Page'
+      security:
+      - TokenSecured: []
+  /domains/{owner}/{domain}/{version}/domain.json:
+    get:
+      tags:
+      - Domains
+      summary: Retrieves the definition for the specified domain and version in JSON format
+      operationId: getDomainJsonDefinition
+      parameters:
+      - name: owner
+        in: path
+        description: Domain owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: domain
+        in: path
+        description: Domain name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: Definition in JSON format
+          schema:
+            type: object
+        404:
+          description: The specified domain was not found
+      security:
+      - TokenSecured: []
+  /domains/{owner}/{domain}/{version}/domain.yaml:
+    get:
+      tags:
+      - Domains
+      summary: Retrieves the definition for the specified domain and version in YAML format
+      operationId: getDomainYamlDefinition
+      produces:
+      - application/yaml
+      parameters:
+      - name: owner
+        in: path
+        description: Domain owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: domain
+        in: path
+        description: Domain name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: Definition in YAML format
+          schema:
+            type: object
+        404:
+          description: The specified domain was not found
+      security:
+      - TokenSecured: []
+  /domains/{owner}/{domain}/{version}/.comment:
+    get:
+      tags:
+      - Domains
+      summary: Returns comments for the specified domain version
+      description: |
+        Returns all the comments and replies added by collaborators in the specified domain version.
+      operationId: getDomainComments
+      parameters:
+      - name: owner
+        in: path
+        description: Domain owner (user or organization, case-sensitive)
+        required: true
+        type: string
+      - name: domain
+        in: path
+        description: Domain name (case-sensitive)
+        required: true
+        type: string
+      - name: version
+        in: path
+        description: Version identifier (case-sensitive)
+        required: true
+        type: string
+      responses:
+        200:
+          description: Comments for the specified domain
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ClosableComment'
+        204:
+          description: No comments were found for the specified domain version
+        401:
+          description: The access token is missing or invalid
+        403:
+          description: Access denied (insufficient user permissions)
+        404:
+          description: The specified domain or version was not found
+      security:
+      - TokenSecured: []
+securityDefinitions:
+  TokenSecured:
+    description: Specify your SwaggerHub API key found in https://app.swaggerhub.com/settings/apiKey.
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  ApisJsonProperty:
+    type: object
+    properties:
+      type:
+        type: string
+    description: an API property
+  ApisJson:
+    type: object
+    properties:
+      name:
+        type: string
+        example: Default listing
+      description:
+        type: string
+        example: Default registry listing
+      url:
+        type: string
+      created:
+        type: string
+        format: date-time
+      modified:
+        type: string
+        format: date-time
+      specificationVersion:
+        type: string
+      offset:
+        type: integer
+        format: int32
+      totalCount:
+        type: integer
+        format: int64
+      apis:
+        type: array
+        items:
+          $ref: '#/definitions/ApisJsonApi'
+  ApisJsonApi:
+    type: object
+    properties:
+      name:
+        type: string
+        example: petstore
+      description:
+        type: string
+        example: This is a sample Petstore server.
+      tags:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+      properties:
+        type: array
+        example:
+        - type: Swagger
+          url: https://api.swaggerhub.com/apis/username/petstore/1.1
+        - type: X-Version
+          value: "1.1"
+        - type: X-Created
+          value: 2017-01-16T13:39:06Z
+        - type: X-Modified
+          value: 2017-01-25T11:48:13Z
+        - type: X-Published
+          value: "true"
+        - type: X-Versions
+          value: 1.0,*1.1,1.1-oas3
+        - type: X-Private
+          value: "false"
+        - type: X-Notifications
+          value: "true"
+        items:
+          $ref: '#/definitions/ApisJsonProperty'
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+        example: alex
+        description: User name
+      active:
+        type: boolean
+        description: |
+          `true` means an existing user, `false` means the user is inactive (for example, deleted)
+    description: The user who added a comment
+  Comment:
+    type: object
+    required:
+    - body
+    - created
+    - id
+    - user
+    properties:
+      id:
+        type: string
+        example: 141b0adb-f26a-438b-be78-906445c91a36
+        description: The unique ID of the comment
+      user:
+        $ref: '#/definitions/User'
+      created:
+        type: string
+        format: date-time
+        description: The UTC date and time when the comment was added
+      modified:
+        type: string
+        format: date-time
+        description: The UTC date and time the when the comment was last edited
+      body:
+        type: string
+        description: Markdown contents of the comment
+  ClosableComment:
+    allOf:
+    - $ref: '#/definitions/Comment'
+    - type: object
+      properties:
+        position:
+          type: integer
+          format: int32
+          description: |
+            The line number (zero-based) the comment is associated with. For example, if the comment is on line 7 in the editor, `position`=6.
+        status:
+          type: string
+          description: Comment status
+          enum:
+          - OPEN
+          - RESOLVED
+        replies:
+          type: array
+          description: A list of replies to this comment
+          items:
+            $ref: '#/definitions/Comment'
+  Collaboration:
+    type: object
+    required:
+    - hint
+    properties:
+      owner:
+        type: string
+        readOnly: true
+      owners:
+        type: array
+        items:
+          type: string
+      hint:
+        $ref: '#/definitions/CollaborationHint'
+      members:
+        type: array
+        items:
+          $ref: '#/definitions/CollaborationMembership'
+      pendingMembers:
+        type: array
+        items:
+          $ref: '#/definitions/CollaborationMembership'
+      teams:
+        type: array
+        items:
+          $ref: '#/definitions/CollaborationTeamMembership'
+  CollaborationTeamMembership:
+    allOf:
+    - $ref: '#/definitions/CollaborationMembership'
+    - type: object
+      properties:
+        members:
+          type: array
+          items:
+            $ref: '#/definitions/CollaborationMember'
+  CollaborationHint:
+    type: object
+    required:
+    - type
+    properties:
+      type:
+        type: string
+        format: uuid
+        description: type identifier of the managed entity
+  CollaborationMembership:
+    allOf:
+    - $ref: '#/definitions/CollaborationMember'
+    - type: object
+      required:
+      - roles
+      properties:
+        roles:
+          type: array
+          items:
+            type: string
+            enum:
+            - EDIT
+            - COMMENT
+            - VIEW
+        donotdisturb:
+          type: boolean
+          readOnly: true
+        blocked:
+          type: boolean
+          readOnly: true
+  CollaborationMember:
+    type: object
+    required:
+    - name
+    properties:
+      uuid:
+        type: string
+        readOnly: true
+      name:
+        type: string
+      title:
+        type: string
+        readOnly: true
+      startTime:
+        type: string
+        format: date-time
+        readOnly: true
+  Page:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int32
+      total:
+        type: integer
+        format: int64
+      items:
+        type: array
+        items:
+          type: object
+          properties: {}
+parameters:
+  apiOwner:
+    name: owner
+    in: path
+    description: API owner (user or organization, case-sensitive)
+    required: true
+    type: string
+  domainOwner:
+    name: owner
+    in: path
+    description: Domain owner (user or organization, case-sensitive)
+    required: true
+    type: string
+  api:
+    name: api
+    in: path
+    description: API name (case-sensitive)
+    required: true
+    type: string
+  domain:
+    name: domain
+    in: path
+    description: Domain name (case-sensitive)
+    required: true
+    type: string
+  version:
+    name: version
+    in: path
+    description: Version identifier (case-sensitive)
+    required: true
+    type: string
+  query:
+    name: query
+    in: query
+    description: Free text query to match
+    required: false
+    type: string
+  state:
+    name: state
+    in: query
+    description: |
+      Matches against published state of the spec:
+      * UNPUBLISHED - spec is a draft, a work in progress
+      * PUBLISHED - spec is a stable version ready for consuming from client applications
+      * ANY - either PUBLISHED or UNPUBLISHED
+    required: false
+    type: string
+    default: ALL
+    enum:
+    - ALL
+    - PUBLISHED
+    - UNPUBLISHED
+  page:
+    name: page
+    in: query
+    description: Page to return
+    required: false
+    type: integer
+    default: 0
+    format: int32
+  limit:
+    name: limit
+    in: query
+    description: Number of results per page
+    required: false
+    type: integer
+    default: 10
+    format: int32
+  sort:
+    name: sort
+    in: query
+    description: |
+      Sort criteria or result set:
+      * NAME
+      * UPATED
+      * CREATED
+      * OWNER
+    required: false
+    type: string
+    default: NAME
+    enum:
+    - NAME
+    - UPDATED
+    - CREATED
+    - OWNER
+  order:
+    name: order
+    in: query
+    description: Sort order
+    required: false
+    type: string
+    default: ASC
+    enum:
+    - ASC
+    - DESC

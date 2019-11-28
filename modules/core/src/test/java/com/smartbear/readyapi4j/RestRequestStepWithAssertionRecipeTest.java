@@ -44,7 +44,6 @@ public class RestRequestStepWithAssertionRecipeTest {
         assertThat(assertion.getType(), is("JsonPath Count"));
         assertThat(assertion.getJsonPath(), is("$.results[0].address_components[1].long_name"));
         assertThat(assertion.getExpectedCount(), is("1"));
-        assertThat(assertion.isAllowWildcards(), is(true));
     }
 
 

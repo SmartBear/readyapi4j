@@ -1,7 +1,7 @@
 Feature: Petstore API
 
   Scenario: Find pet by status
-    Given the Swagger definition at http://petstore.swagger.io/v2/swagger.json
+    Given the OAS definition at http://petstore.swagger.io/v2/swagger.json
     When a request to findPetsByStatus is made
     And status is test
     And the request expects json

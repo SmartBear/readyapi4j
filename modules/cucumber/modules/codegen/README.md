@@ -1,7 +1,7 @@
 # ReadyAPI4j Cucumber Feature Codegen 
 
 Generates default Cucumber feature files from a OpenAPI Spec (OAS) definition using [Swagger CodeGen](https://github.com/swagger-api/swagger-codegen).
-The generated features use the precreated (Step definitions)[https://github.com/SmartBear/readyapi4j/blob/master/modules/cucumber/README.md#api-testing-vocabulary-reference]
+The generated features use the existing (Step definitions)[https://github.com/SmartBear/readyapi4j/blob/master/modules/cucumber/README.md#api-testing-vocabulary-reference]
 
 
 The generated files are in many cases incomplete as many OAS definitions do not contain default 
