@@ -1,4 +1,4 @@
-## BDD4OAS ReadyAPI4j module
+## BDD OAS/Swagger Extensions
 
 This module allows for inline definitions of when / then vocabularies inside an OAS definition using OAS extensions, 
 which  can then be used to write and execute Cucumber scenarios without any further requirement for writing
@@ -339,6 +339,11 @@ The following properties are available for the xml assertion
 
 ## Using the OASBackend
 
+Internally this module provides a custom [cucumber-jvm](https://github.com/cucumber/cucumber-jvm) Backend that:
+- Loads the [default REST StepDefs](../../README.md#api-stepdefs-reference) provided by ReadyAPI4j
+- Dynamically maps the x-bdd-when/then statements in a given OAS definition to the default StepDefs
+- Loads any other StepDefs provided to the cucumber runtime as normal
+ 
 As shown above the OASBackend can be run either via its docker image available on dockerhub at 
 https://hub.docker.com/repository/docker/smartbear/readyapi4j-bdd4oas or via the jar file built by module.
 
