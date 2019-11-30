@@ -12,4 +12,4 @@ while read -r ITEM; do
     OPTS+=("${ITEM}")
 done < <(env | grep -E "^JVM_OPT_[^=]+=" | sed -r "s/^[^=]+=//")
 
-java "${OPTS[@]}" -Dsoapui.log4j.config=/maven/soapui-log4j.xml -jar "${JAR}" "$@"
+java "${OPTS[@]}" -Dsoapui.log4j.config=/maven/soapui-log4j.xml -Dsoapui.browser.disabled=true -jar "${JAR}" "$@"

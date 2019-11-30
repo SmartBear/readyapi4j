@@ -29,7 +29,7 @@
     <!-- =============== -->
 
     <logger name="com.smartbear.readyapi4j.cucumber">
-        <level value="INFO"/>
+        <level value="ERROR"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
 

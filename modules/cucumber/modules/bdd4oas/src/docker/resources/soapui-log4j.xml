@@ -29,12 +29,12 @@
     <!-- =============== -->
 
     <logger name="com.smartbear.readyapi4j.cucumber">
-        <level value="INFO"/>
+        <level value="ERROR"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
 
     <root>
-        <priority value="DEBUG"/>
+        <priority value="ERROR"/>
         <appender-ref ref="CONSOLE"/>
     </root>
 
