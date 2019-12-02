@@ -301,7 +301,7 @@ As you can see this calls the existing step definitions defined in the OASStepDe
 
 ## x-bdd-when reference
 
-`x-bdd-when` statements can be one of the following:
+`x-bdd-when` must be provided for a specific operation and can be one of the following:
 * a single string value that can optionally contain parameterizations (see above)
 * an array containing single string values or `when` objects containing the following properties
   * a `when` single string value optionally containing parameterizations
@@ -312,7 +312,7 @@ See examples of both of these under [Adding Parameters and Assertions](#adding-p
 
 ## x-bdd-then reference 
 
-`x-bdd-then` statements can be one of the following:
+`x-bdd-then` must be provided for a specific response and can be one of the following:
 * a single string value 
 * an array containing single string values or `then` objects containing the following properties
   * a `then` single string value
