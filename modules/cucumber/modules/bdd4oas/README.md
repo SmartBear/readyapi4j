@@ -10,6 +10,8 @@ Contents:
 * [Adding parameters and assertions](#adding-parameters-and-assertions)
 * [Parameterizing x-bdd-when statements](#parameterizing-x-bdd-when-statements)
 * [Using the standard OAS / REST Vocabulary](#using-the-standard-rest--oas-vocabularies)
+* [x-bdd-when refernece](#x-bdd-when-reference)
+* [x-bdd-then refernece](#x-bdd-then-reference)
 * [Assertion Reference](#assertion-reference)
   * [JSON Assertion](#json-assertion)
   * [Content Assertion](#content-assertion)
@@ -297,45 +299,67 @@ Feature: SwaggerHub REST API
 ```
 As you can see this calls the existing step definitions defined in the OASStepDefs/RestStepDefs classes (as did the above examples).
 
+## x-bdd-when reference
+
+`x-bdd-when` statements can be one of the following:
+* a single string value that can optionally contain parameterizations (see above)
+* an array containing single string values or `when` objects containing the following properties
+  * a `when` single string value optionally containing parameterizations
+  * a `parameters` map containing `name:value` pairs where name is the name of an existing parameter for the containing 
+    operation and value is the value it should be assigned 
+
+See examples of both of these under [Adding Parameters and Assertions](#adding-parameters-and-assertions) above.
+
+## x-bdd-then reference 
+
+`x-bdd-then` statements can be one of the following:
+* a single string value 
+* an array containing single string values or `then` objects containing the following properties
+  * a `then` single string value
+  * an `assertions` array containing `assertion` objects as described below
+
+See examples of both of these under [Adding Parameters and Assertions](#adding-parameters-and-assertions) above.
+
 ## Assertion reference
 
-As shown in the example above it is possible to add assertions to x-bdd-then extensions. The following assertions are currently available:
+As described above it is possible to add assertions to `x-bdd-then` extensions, the below assertions are 
+currently available. All assertions require a `type` property as described below.
 
 ### json assertion
 
 The following properties are available for the json assertion
-* type = "json" (required)
-* path = a json-path expression to apply to the response body (mandatory)
+* `type: json` 
+* `path`: a json-path expression to apply to the response body (mandatory)
 * one of the following
-  * value = an expected value returned by the json-path expression
-  * regex = a regular expression that must match the value returned by the json-path expression
-  * count = the expected number of items returned by the json-path expression
+  * `value`: an expected value returned by the json-path expression
+  * `regex`: a regular expression that must match the value returned by the json-path expression
+  * `count`: the expected number of items returned by the json-path expression
 * if none of these three is specified the assertion checks that any value for the json-path expression exists
 
 ### content assertion
 
 The following properties are available for the content assertion
-* type = "contains" (required)
+* `type: contains`
 * one of the following
-  * content = an expected value contained in the response
-  * regex = a regular expression that must match the entire response
+  * `content`: an expected value contained in the response
+  * `regex`: a regular expression that must match the entire response
 
 ### header assertion
 
 The following properties are available for the header assertion
-* type = "header" (required)
-* name = the name of the header to assert
+* `type: header` 
+* `name`: the name of the header to assert
 * optionally one of the following
-  * value = the expected value of the header
-  * regex = a regular expression that must match the header value
+  * `value`: the expected value of the header
+  * `regex`: a regular expression that must match the header value
 * if neither of these is specified the assertion checks that the header exists in the response, ignoring its value
 
 ### xml assertion
 
 The following properties are available for the xml assertion
-* type = "xpath" (mandatory)
-* path = an xpath expression to apply to the response body (required)
-* value = the expected value to be returned by the xpath expression (required)
+* `type: xpath` 
+* `path`: an xpath expression to apply to the response body (required)
+* `value`: the expected value to be returned by the xpath expression (required)
 
 ## Using the OASBackend
 
