@@ -295,7 +295,7 @@ Feature: SwaggerHub REST API
 9 Steps (9 passed)
 0m5.658s
 ```
-As you can see this calls the existing step definitions defined in the OASStepDefs class.
+As you can see this calls the existing step definitions defined in the OASStepDefs/RestStepDefs classes (as did the above examples).
 
 ## Assertion reference
 
