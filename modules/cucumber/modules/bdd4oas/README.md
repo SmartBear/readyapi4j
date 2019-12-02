@@ -143,14 +143,14 @@ paths:
      ...
       responses:
         200:
-           ...
-           x-bdd-then:
-           - a search result is returned
+          ...
+          x-bdd-then:
+          - a search result is returned
           - then: at least 10 items are returned
             assertions:
-            - type: json
-              path: $.apis.length()
-              value: 10
+           - type: json
+             path: $.apis.length()
+             value: 10
 ```
 
 Here we've extended both the x-bdd-when and x-bdd-then definitions:
@@ -176,7 +176,7 @@ Feature: SwaggerHub REST API
     Then a search result is returned
 ```
 
-Once again no coding required - just run this feature as we did above and Bdd4OAS will dynamically make the 
+Once again no coding required - just run this feature as we did above and BDD4OAS will dynamically make the 
 corresponding calls and assert the responses.
 
 ```shell script
@@ -349,7 +349,7 @@ https://hub.docker.com/repository/docker/smartbear/readyapi4j-bdd4oas or via the
 
 Running the docker image requires one to map a local volume containing feature file(s) into a volume of the container 
 and then specifying that volume (or a file in it) as the feature-file argument to the cucumber runtime. Since the 
-docker image simple runs the existing cCcumber CLI all corresponding command-line options apply.
+docker image simple runs the existing Cucumber CLI all corresponding command-line options apply.
 
 The jar file can be used similarly (without the requirement to map a volume of course). It's main class is set to the 
 Cucumber CLI (io.cucumber.core.cli.Main) - for example the last above command could be run with:
