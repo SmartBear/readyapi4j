@@ -27,6 +27,8 @@ class AssertionTypeResolver extends AbstractTypeIdResolver {
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, XQueryContainsAssertion.class);
             case AssertionNames.JSON_PATH_MATCH:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, JsonPathContentAssertion.class);
+            case AssertionNames.JSON_PATH_REGEX:
+                return TypeFactory.defaultInstance().constructSpecializedType(baseType, JsonPathRegExAssertion.class);
             case AssertionNames.JSON_PATH_COUNT:
                 return TypeFactory.defaultInstance().constructSpecializedType(baseType, JsonPathCountAssertion.class);
             case AssertionNames.JSON_EXISTENCE:

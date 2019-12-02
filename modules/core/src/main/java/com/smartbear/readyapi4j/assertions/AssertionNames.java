@@ -12,6 +12,7 @@ public class AssertionNames {
     public static final String XPATH_MATCH = "XPath Match";
     public static final String XQUERY_MATCH = "XQuery Match";
     public static final String JSON_PATH_MATCH = "JsonPath Match";
+    public static final String JSON_PATH_REGEX = "JsonPath RegEx Match";
     public static final String JSON_PATH_COUNT = "JsonPath Count";
     public static final String GROOVY_SCRIPT = "Script Assertion";
     public static final String RESPONSE_SLA = "Response SLA";

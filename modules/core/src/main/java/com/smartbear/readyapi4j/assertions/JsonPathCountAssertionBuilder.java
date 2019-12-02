@@ -23,7 +23,6 @@ public class JsonPathCountAssertionBuilder implements JsonPathAssertionBuilder<J
         return this;
     }
 
-    @Override
     public JsonPathCountAssertionBuilder allowWildcards() {
         jsonPathCountAssertion.setAllowWildcards(true);
         return this;

@@ -18,6 +18,11 @@
             <artifactId>readyapi4j-cucumber-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.smartbear.readyapi</groupId>
+            <artifactId>readyapi4j-cucumber-hiptest-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

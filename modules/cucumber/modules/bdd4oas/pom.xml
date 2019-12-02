@@ -9,19 +9,14 @@
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>readyapi4j-cucumber-hiptest-runner</artifactId>
+    <artifactId>readyapi4j-bdd4oas</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
-            <artifactId>readyapi4j-cucumber-runner</artifactId>
+            <artifactId>readyapi4j-cucumber-stepdefs</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.2.0</version>
         </dependency>
     </dependencies>
 
@@ -30,7 +25,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>2.4.3</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -41,7 +36,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.smartbear.readyapi4j.cucumber.hiptest.HiptestCucumberRunner</mainClass>
+                                    <mainClass>io.cucumber.core.cli.Main</mainClass>
                                 </transformer>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
@@ -49,6 +44,11 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
                                     <resource>com/eviware/soapui/resources/conf/soapui-log4j.xml</resource>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                                    <resource>com/eviware/soapui/resources/conf/soapui-log4j.xml</resource>
+                                    <file>src/docker/resources/soapui-log4j.xml</file>
                                 </transformer>
                             </transformers>
                             <filters>
@@ -82,8 +82,8 @@
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <alias>readyapi4j-cucumber</alias>
-                                    <name>smartbear/readyapi4j-hiptest:latest</name>
+                                    <alias>readyapi4j-bdd4oas</alias>
+                                    <name>smartbear/readyapi4j-bdd4oas:latest</name>
                                     <build>
                                         <from>openjdk:8</from>
                                         <maintainer>ole.lensmar@smartbear.com</maintainer>
@@ -120,4 +120,5 @@
             </build>
         </profile>
     </profiles>
+
 </project>
