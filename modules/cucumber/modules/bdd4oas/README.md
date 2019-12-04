@@ -474,7 +474,7 @@ mvn test -P run-bdd4oas
 ## Running with JUnit
 
 Since the OASBackend is discovered by the Cucumber runtime you can run your tests as usual with JUnit. First
-add the this dependency to your maven project:
+add the this dependency to your maven project (it includes the cucumber-jvm 4.7.x runtime):
 
 ```xml
 ...
