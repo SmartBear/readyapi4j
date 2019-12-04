@@ -119,6 +119,51 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>run-bdd4oas</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.31.0</version>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <images>
+                                <image>
+                                    <alias>readyapi4j-bdd4oas</alias>
+                                    <name>smartbear/readyapi4j-bdd4oas:latest</name>
+                                    <run>
+                                        <volumes>
+                                            <bind>
+                                                <volume>${project.basedir}/src/test/features:/features</volume>
+                                            </bind>
+                                        </volumes>
+                                        <cmd>/features -p pretty</cmd>
+                                        <log>
+                                            <color>blue</color>
+                                        </log>
+                                        <wait>
+                                            <exit>0</exit>
+                                        </wait>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>package</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 </project>

@@ -67,9 +67,10 @@ public class OASBackend implements Backend {
 
     @Override
     public void loadGlue(Glue glue, List<URI> list) {
-        ArrayList<URI> glueList = Lists.newArrayList(list);
+        ArrayList<URI> glueList = Lists.newArrayList();
 
         try {
+            // only pass on readyapi4j stepdefs - the regular JavaBackend will pick up any other stepdefs
             glueList.add(new URI("classpath:com/smartbear/readyapi4j/cucumber"));
         } catch (URISyntaxException e) {
             e.printStackTrace();
