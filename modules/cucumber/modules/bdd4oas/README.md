@@ -433,7 +433,7 @@ The following build profile executes the features in the src/test/features folde
                                     <!-- map features folder to /features in the container -->
                                     <volumes>
                                         <bind>
-                                            <volume>${project.basedir}/src/features:/features</volume>
+                                            <volume>${project.basedir}/src/test/features:/features</volume>
                                         </bind>
                                     </volumes>
                                     <!-- run all features in mapped volume with pretty printing -->
