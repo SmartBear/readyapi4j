@@ -18,6 +18,8 @@ Contents:
   * [Header Assertion](#header-assertion)
   * [XML Assertion](#xml-assertion)
 * [Using the OASBackend](#using-the-oasbackend)
+* [Running with Docker and Maven](#running-with-docker-and-maven)
+* [Running with JUnit](#running-with-junit)
 
 ### A simple x-bdd-when/x-bdd-then example
 
@@ -403,3 +405,104 @@ Feature: SwaggerHub REST API
 9 Steps (9 passed)
 0m4.121s
 ```
+
+## Running with Docker and Maven
+
+You can use the [fabric8 maven docker plugin](https://dmp.fabric8.io/) to run your feature files with maven and the above
+mentioned docker image (you'll need to have docker installed in this setup). 
+
+The following build profile executes the features in the src/test/features folder for the `test` maven build step. 
+
+```xml
+...
+    <profile>
+        <id>run-bdd4oas</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.31.0</version>
+                    <configuration>
+                        <verbose>true</verbose>
+                        <images>
+                            <image>
+                                <alias>readyapi4j-bdd4oas</alias>
+                                <name>smartbear/readyapi4j-bdd4oas:latest</name>
+                                <run>
+                                    <!-- map features folder to /features in the container -->
+                                    <volumes>
+                                        <bind>
+                                            <volume>${project.basedir}/src/features:/features</volume>
+                                        </bind>
+                                    </volumes>
+                                    <!-- run all features in mapped volume with pretty printing -->
+                                    <cmd>/features -p pretty</cmd>
+                                    <log>
+                                        <color>blue</color>
+                                    </log>
+                                    <!-- expect tests to pass -->
+                                    <wait>
+                                        <exit>0</exit>
+                                    </wait>
+                                </run>
+                            </image>
+                        </images>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>package</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>start</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>
+...
+```
+
+Simply run this with (this sample is included in this module)
+
+```
+mvn test -P run-bdd4oas
+```
+
+## Running with JUnit
+
+Since the OASBackend is discovered by the Cucumber runtime you can run your tests as usual with JUnit. First
+add the this dependency to your maven project:
+
+```xml
+...
+    <dependency>
+        <groupId>com.smartbear.readyapi</groupId>
+        <artifactId>readyapi4j-bdd4oas</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+...
+```
+
+and create your JUnit/Cucumber runner class:
+
+```java
+package com.smartbear.readyapi4j.cucumber.samples;
+
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+import org.junit.runner.RunWith;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(
+        plugin = {"pretty", "html:target/cucumber"},
+        features = {"src/test/resources/cucumber"}
+        )
+public class CucumberTest {
+}
+```
+
+This will run all features found in the src/test/resources/cucumber folder using the OASBackend. 
+
