@@ -6,6 +6,9 @@ with dedicated support for OAS/Swagger 2.0 to remove some of the technicalities 
 Furthermore, OAS extensions for specifying When/Then vocabularies directly within an OAS definitions without
 requiring any coding are in the [BDD4OAS module](modules/bdd4oas). 
 
+If you use HipTest for your BDD workflow then the [HipTest Runner](modules/hiptest-runner) provides utilities for
+integrating HipTest with ReadyApi4j.
+
 * [Getting Started](#getting_started)
 * [Using with Maven/JUnit](#usage-with-mavenjunit)
 * [Running from the command-line](#running-from-the-command-line)
