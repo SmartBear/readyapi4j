@@ -10,7 +10,7 @@ import com.smartbear.readyapi4j.client.model.Assertion;
 import com.smartbear.readyapi4j.client.model.Authentication;
 import com.smartbear.readyapi4j.client.model.RestParameter;
 import com.smartbear.readyapi4j.client.model.RestTestRequestStep;
-import com.smartbear.readyapi4j.cucumber.hiptest.ActionWord;
+import com.smartbear.readyapi4j.cucumber.studio.ActionWord;
 import com.smartbear.readyapi4j.support.ContentUtils;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder;

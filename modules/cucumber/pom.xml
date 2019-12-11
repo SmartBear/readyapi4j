@@ -17,8 +17,8 @@
         <module>modules/runner</module>
         <module>modules/samples</module>
         <module>modules/codegen</module>
-        <module>modules/hiptest-commons</module>
-        <module>modules/hiptest-runner</module>
+        <module>modules/studio-commons</module>
+        <module>modules/studio-runner</module>
         <module>modules/bdd4oas</module>
     </modules>
 
