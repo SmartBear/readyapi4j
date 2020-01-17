@@ -21,6 +21,30 @@ studio.accept=<optional Cucumber Studio Accept header - defaults to "application
 
 The tokens and clientid are generated from your [Cucumber Studio profile page](https://studio.cucumber.io/profile). 
 
+## Running with Docker
+
+The utility is available on DockerHub as [readyapi4j-cucumber-studio-runner](https://hub.docker.com/repository/docker/smartbear/readyapi4j-cucumber-studio-runner) and 
+can be used for all the below commands. You will need to map the folder containing the above properties file into the container and
+specify an env variable to its path so the runner can find it - for example:
+
+```shell script
+docker run -v /Users/olensmar/IdeaProjects/readyapi4j/modules/cucumber/modules/studio-runner:/properties -e studio.properties=/properties/studio.properties smartbear/readyapi4j-cucumber-studio-runner  
+Reading properties from /properties/studio.properties
+Usage: <main class> [-hV] [COMMAND]
+Cucumber Studio Command-line Interface
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and exit.
+Commands:
+  clear     Clears Cucumber Studio ActionWords from specified project
+  import    Imports Cucumber Studio ActionWords from OAS x-bdd extensions and
+              REST StepDefs
+  download  Downloads and runs a Cucumber Studio Scenario
+  help      Displays help information about the specified command
+  main      Cucumber Studio CLI
+```
+
+Not or incorrectly specifying the properties file will result in an error.
+
 ## Downloading and Running Feature files
 
 Run the provided jar file with the `download [options]` command:
