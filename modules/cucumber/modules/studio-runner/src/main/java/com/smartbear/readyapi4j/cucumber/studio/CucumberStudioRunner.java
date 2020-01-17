@@ -25,8 +25,13 @@ public class CucumberStudioRunner extends CommandBase {
     @CommandLine.Command(description = "Cucumber Studio CLI")
     public static void main(String[] args) throws Throwable {
 
-        if (new File("studio.properties").exists()) {
-            loadProperties();
+        String propertiesPath = System.getenv("studio.properties" );
+        if( propertiesPath == null ){
+            propertiesPath = "studio.properties";
+        }
+
+        if (new File(propertiesPath ).exists()) {
+            loadProperties( propertiesPath );
         }
 
         if (studioToken == null) {
@@ -59,9 +64,10 @@ public class CucumberStudioRunner extends CommandBase {
         System.exit(exitCode);
     }
 
-    private static void loadProperties() throws Exception {
+    private static void loadProperties(String propertiesPath) throws Exception {
         Properties properties = new Properties();
-        properties.load(new FileReader("studio.properties"));
+        properties.load(new FileReader(propertiesPath));
+        System.out.println( "Reading properties from " + propertiesPath);
 
         studioToken = properties.getProperty(STUDIO_TOKEN, System.getProperty(STUDIO_TOKEN));
         studioClientId = properties.getProperty(STUDIO_CLIENTID, System.getProperty(STUDIO_CLIENTID));

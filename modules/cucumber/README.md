@@ -42,9 +42,9 @@ Using the integrated OAS/Swagger support this can be shortened to
 ```gherkin
   Scenario: Find pet by tags
     Given the OAS definition at http://petstore.swagger.io/v2/swagger.json
-    # deducts path and method from Swagger definition by operationId
+    # deducts path and method from OAS definition by operationId
     When a request to findPetsByTags is made
-    # deducts type of "tags" parameter (query/path/parameter/body) from Swagger definition
+    # deducts type of "tags" parameter (query/path/parameter/body) from OAS definition
     And tags is test
     And the request expects json
     Then a 200 response is returned within 500ms
@@ -148,7 +148,7 @@ The included [StepDefs](modules/stepdefs) for API testing adds the following voc
 
 #### Given statements
 
-`the OAS definition at <swagger endpoint>`
+`the OAS definition at <endpoint>`
 * The specified endpoint must reference a valid OAS 2.0/3.0 definition
 * Specifying an OAS definition allows for the use of OAS-specific StepDefs below
 * Example: `Given the OAS definition at http://petstore.swagger.io/v2/swagger.json`

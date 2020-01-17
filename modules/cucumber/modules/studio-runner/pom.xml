@@ -102,7 +102,7 @@
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <alias>readyapi4j-cucumber</alias>
+                                    <alias>readyapi4j-cucumber-studio-runner</alias>
                                     <name>smartbear/readyapi4j-cucumber-studio-runner:latest</name>
                                     <build>
                                         <from>openjdk:8</from>

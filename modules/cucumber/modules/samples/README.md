@@ -6,9 +6,9 @@ This project currently contains 3 example feature files in the
 - [petstore-imperative.feature](src/test/resources/cucumber/petstore-imperative.feature) - "bare-bones" feature for defining 
 the peststore API
 - [petstore-swagger.feature](src/test/resources/cucumber/petstore-imperative.feature) - same feature for defining 
-the peststore API using some of the Swagger-specific vocabulary
+the peststore API using some of the OAS/Swagger-specific vocabulary
 - [swaggerhub.feature](src/test/resources/cucumber/petstore-imperative.feature) - feature for the SwaggerHub
-REST API showing usage of Swagger constructs and Examples tables.
+REST API showing usage of OAS/Swagger constructs and Examples tables.
 
 Run them with 
 ```

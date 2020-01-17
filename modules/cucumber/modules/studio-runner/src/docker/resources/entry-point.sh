@@ -4,7 +4,7 @@
 #
 
 # find jar to run
-JAR=$(find -name "*readyapi4j-cucumber-studio*.jar" -type f)
+JAR=$(find /maven -name "*readyapi4j-cucumber-studio*.jar" -type f)
 
 # extract additional JVM options from ENV vars
 OPTS=()
