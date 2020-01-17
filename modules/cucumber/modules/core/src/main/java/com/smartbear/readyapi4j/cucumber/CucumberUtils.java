@@ -3,7 +3,7 @@ package com.smartbear.readyapi4j.cucumber;
 public class CucumberUtils {
 
     /**
-     * Applied to all step parameters for HipTest compatibility - removes surrounding quotes from specified string if
+     * Applied to all step parameters for Cucumber Studio compatibility - removes surrounding quotes from specified string if
      * available.
      */
 

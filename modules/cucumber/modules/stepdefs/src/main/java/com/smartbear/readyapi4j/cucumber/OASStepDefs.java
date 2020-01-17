@@ -3,7 +3,7 @@ package com.smartbear.readyapi4j.cucumber;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.smartbear.readyapi4j.client.model.RestParameter;
-import com.smartbear.readyapi4j.cucumber.hiptest.ActionWord;
+import com.smartbear.readyapi4j.cucumber.studio.ActionWord;
 import cucumber.runtime.CucumberException;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
