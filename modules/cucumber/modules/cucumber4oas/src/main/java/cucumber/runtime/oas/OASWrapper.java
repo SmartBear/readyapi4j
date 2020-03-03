@@ -12,7 +12,11 @@ import io.swagger.v3.parser.core.models.SwaggerParseResult;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class OASWrapper {
 
@@ -56,10 +60,10 @@ public class OASWrapper {
         for( ApiResponse apiResponse : operation.getResponses().values() ){
             Map<String, Object> extensions = apiResponse.getExtensions();
             if( extensions != null ){
-                Object bddThen = extensions.get( "x-bdd-then" );
-                if( bddThen instanceof List){
-                    List<Object> bddThens = (List<Object>) bddThen;
-                    bddThens.forEach( i -> {
+                Object cucumberThen = extensions.get( "x-cucumber-then" );
+                if( cucumberThen instanceof List){
+                    List<Object> cucumberThens = (List<Object>) cucumberThen;
+                    cucumberThens.forEach( i -> {
                         if( i instanceof String ) {
                             thenMap.put(i.toString(), new ThenResponseWrapper(apiResponse, null));
                         }
@@ -71,8 +75,8 @@ public class OASWrapper {
                         }
                     } );
                 }
-                else if( bddThen instanceof String ){
-                    thenMap.put( bddThen.toString(), new ThenResponseWrapper( apiResponse, null ));
+                else if( cucumberThen instanceof String ){
+                    thenMap.put( cucumberThen.toString(), new ThenResponseWrapper( apiResponse, null ));
                 }
             }
         }
@@ -81,10 +85,10 @@ public class OASWrapper {
     private void extractWhenExtensions(Operation operation) {
         Map<String, Object> extensions = operation.getExtensions();
         if( extensions != null ){
-            Object bddWhen = extensions.get( "x-bdd-when" );
-            if( bddWhen instanceof List){
-                List<Object> bddWhens = (List<Object>) bddWhen;
-                bddWhens.forEach( i -> {
+            Object cucumberWhen = extensions.get( "x-cucumber-when" );
+            if( cucumberWhen instanceof List){
+                List<Object> cucumberWhens = (List<Object>) cucumberWhen;
+                cucumberWhens.forEach( i -> {
                     if( i instanceof String ){
                         whens.add(new WhenOperationWrapper(i.toString(), operation, null));
                     }
@@ -95,8 +99,8 @@ public class OASWrapper {
                         }
                     }
                 });
-            } else if (bddWhen instanceof String) {
-                whens.add(new WhenOperationWrapper(bddWhen.toString(), operation, null));
+            } else if (cucumberWhen instanceof String) {
+                whens.add(new WhenOperationWrapper(cucumberWhen.toString(), operation, null));
             }
         }
     }

@@ -4,7 +4,7 @@ This module provides a command-line utility for integrating [Cucumber Studio](ht
 
 It currently provides commands for
 * [Downloading and running feature files](#downloading-and-running-feature-files) from Cucumber Studio 
-* [Creating/updating ActionWords](#importing-actionwords) for default StepDefs and from BDD4OAS x-bdd extensions in an OAS definition
+* [Creating/updating ActionWords](#importing-actionwords) for default StepDefs and from cucumber4oas x-cucumber extensions in an OAS definition
 * [Clearing existing ActionWords]() from a Cucumber Studio project
 
 ## studio.properties
@@ -36,7 +36,7 @@ Cucumber Studio Command-line Interface
   -V, --version   Print version information and exit.
 Commands:
   clear     Clears Cucumber Studio ActionWords from specified project
-  import    Imports Cucumber Studio ActionWords from OAS x-bdd extensions and
+  import    Imports Cucumber Studio ActionWords from OAS x-cucumber extensions and
               REST StepDefs
   download  Downloads and runs a Cucumber Studio Scenario
   help      Displays help information about the specified command
@@ -98,25 +98,25 @@ corresponds to project-id 141233 and folder 1040072 (used in the examples above)
 The underlying API call made to the [Cucumber Studio API](https://studio-api.cucumber.io/) is described at 
 https://studio-api.cucumber.io/?http#get-feature-from-a-given-folder.
 
-Since the runner uses the [OASBackend](../bdd4oas) internally - all related functionality (x-bdd extensions, default stepdefs)
+Since the runner uses the [OASBackend](../cucumber4oas) internally - all related functionality (x-cucumber extensions, default stepdefs)
 is available for your scenarios.
 
 ## Importing ActionWords
 
 This command will create Cucumber Studio ActionWords both for the [default ReadyAPI4j REST vocabulary](../../README.md#api-stepdefs-reference) 
-and from [x-bdd extensions](../bdd4oas/README.md) in a specified OAS definition - helping you write correct BDD scenarios from the start. 
+and from [x-cucumber extensions](../cucumber4oas/README.md) in a specified OAS definition - helping you write correct Cucumber scenarios from the start. 
 The command will only add ActionWords that do not already exist - so you can safely run it several times to add new ActionWords as you go along.
 
 Run the provided jar file with the `import [options] <oas-url>` command and the following options:
 * `-p` (required, string) - the Cucumber Studio project-id
 * `-d` (optional, boolean) - create ActionWords for default ReadyAPI4j StepDefs 
 * `-l` (optional, boolean) - list ActionWords to console instead of importing (for debugging purposes), ignores the -p options
-* `oas-url` (optional) - url/path to OAS 2.0/3.X definition that contains x-bdd-when/then extension to import as ActionWords 
+* `oas-url` (optional) - url/path to OAS 2.0/3.X definition that contains x-cucumber-when/then extension to import as ActionWords 
 
 For example - listing the ActionWords that would be imported from an OAS definition:
 
 ```shell script
-java -jar target/readyapi4j-cucumber-studio-runner-1.0.0-SNAPSHOT.jar import -l https://api.swaggerhub.com/apis/olensmar/registry-api-bdd/bdd4oas-demo
+java -jar target/readyapi4j-cucumber-studio-runner-1.0.0-SNAPSHOT.jar import -l https://api.swaggerhub.com/apis/olensmar/registry-api-cucumber/cucumber4oas-demo
 Listing ActionWords only - skipping import
 Found ActionWord 'at least 10 items are returned' for ApiResponse: a search result
 Found ActionWord 'a search result is returned' for ApiResponse: a search result
@@ -168,7 +168,7 @@ Found ActionWord 'a "status-code" response is returned' for com.smartbear.readya
 For the actual import, create an empty project in Cucumber Studio and provide it's project-id without the -l option to import the ActionWords:
 
 ```shell script
-java -jar target/readyapi4j-cucumber-studio-runner-1.0.0-SNAPSHOT.jar import -p 149337 https://api.swaggerhub.com/apis/olensmar/registry-api-bdd/bdd4oas-demo
+java -jar target/readyapi4j-cucumber-studio-runner-1.0.0-SNAPSHOT.jar import -p 149337 https://api.swaggerhub.com/apis/olensmar/registry-api-cucumber/cucumber4oas-demo
 Found 0 existing ActionWords in Cucumber Studio project
 Adding ActionWord 'at least 10 items are returned' from ApiResponse: a search result
 Adding ActionWord 'a search result is returned' from ApiResponse: a search result
@@ -184,7 +184,7 @@ the other ActionWords to work, the default value for the `oas-url` parameter is 
 ## Clearing ActionWords
 
 This is provided for convenience since Cucumber Studio does not allow you to remove all ActionWords from a project with one command.
-Use it carefully since any BDD scenarios using any of the removed ActionWords will become invalid.
+Use it carefully since any Cucumber scenarios using any of the removed ActionWords will become invalid.
 
 Run by providing the `clear` command together with the project-id (-p):
 

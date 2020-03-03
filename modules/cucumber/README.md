@@ -1,12 +1,12 @@
-## Cucumber/BDD testing for REST APIs
+## Cucumber testing for REST APIs
 
 This module provides a generic Cucumber vocabulary for testing APIs with readyapi4j
 with dedicated support for OAS/Swagger 2.0 to remove some of the technicalities required to define scenarios. 
 
 Furthermore, OAS extensions for specifying When/Then vocabularies directly within an OAS definitions without
-requiring any coding are in the [BDD4OAS module](modules/bdd4oas). 
+requiring any coding are in the [cucumber4oas module](modules/cucumber4oas). 
 
-If you use Cucumber Studio for your BDD workflow then the [Cucumber Studio Runner](modules/studio-runner) provides utilities for
+If you use Cucumber Studio for your Cucumber workflow then the [Cucumber Studio Runner](modules/studio-runner) provides utilities for
 integrating Cucumber Studio with ReadyApi4j.
 
 * [Getting Started](#getting_started)

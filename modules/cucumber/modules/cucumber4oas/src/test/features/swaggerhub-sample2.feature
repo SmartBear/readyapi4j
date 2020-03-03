@@ -1,7 +1,7 @@
 Feature: SwaggerHub REST API
 
   Background:
-    Given the OAS definition at https://api.swaggerhub.com/apis/olensmar/registry-api-bdd/bdd4oas-demo
+    Given the OAS definition at https://api.swaggerhub.com/apis/olensmar/registry-api-cucumber/cucumber4oas-demo
 
   Scenario: Default Specs Listing
     When a request to searchApisAndDomains is made

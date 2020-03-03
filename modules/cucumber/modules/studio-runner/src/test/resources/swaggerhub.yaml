@@ -129,7 +129,7 @@ paths:
           description: A list of APIs and Domains in APIs.json format
           schema:
             $ref: '#/definitions/ApisJson'
-          x-bdd-then:
+          x-cucumber-then:
           - a search result is returned
           - then: more than 10 items are returned
             assertions:
@@ -138,7 +138,7 @@ paths:
               value: 10
       security:
       - TokenSecured: []
-      x-bdd-when:
+      x-cucumber-when:
       - a search for apis is made
       - when: a search for swaggerhub apis is made
         parameters:
@@ -224,7 +224,7 @@ paths:
           headers:
             Location:
               type: string
-          x-bdd-then: things have moved
+          x-cucumber-then: things have moved
       security:
       - TokenSecured: []
   /apis/{owner}:
@@ -284,7 +284,7 @@ paths:
           description: A list of APIs in APIs.json format
           schema:
             $ref: '#/definitions/ApisJson'
-          x-bdd-then:
+          x-cucumber-then:
           - a list of APIs is returned
       security:
       - TokenSecured: []

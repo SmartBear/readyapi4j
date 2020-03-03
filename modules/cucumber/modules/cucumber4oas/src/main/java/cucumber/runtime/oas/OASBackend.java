@@ -5,7 +5,11 @@ import com.smartbear.readyapi4j.cucumber.CucumberUtils;
 import com.smartbear.readyapi4j.cucumber.OASStepDefs;
 import com.smartbear.readyapi4j.cucumber.RestStepDefs;
 import cucumber.api.java.ObjectFactory;
-import cucumber.runtime.*;
+import cucumber.runtime.Backend;
+import cucumber.runtime.DuplicateStepDefinitionException;
+import cucumber.runtime.Glue;
+import cucumber.runtime.HookDefinition;
+import cucumber.runtime.StepDefinition;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.java.JavaBackend;
 import cucumber.runtime.snippets.FunctionNameGenerator;
@@ -25,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Custom Backend that reads OAS BDD extensions and translates them to the readyapi4j OAS StepDefs
+ * Custom Backend that reads Swagger/OAS Cucumber extensions and translates them to the readyapi4j OAS StepDefs
  */
 
 public class OASBackend implements Backend {
@@ -137,7 +141,7 @@ public class OASBackend implements Backend {
     }
 
     /**
-     * StepDefinition Wrapper that allows us to intercept custom bdd statements defined in OAS extensions and translate
+     * StepDefinition Wrapper that allows us to intercept custom cucumber statements defined in OAS extensions and translate
      * them to defined StepDefs
      */
 

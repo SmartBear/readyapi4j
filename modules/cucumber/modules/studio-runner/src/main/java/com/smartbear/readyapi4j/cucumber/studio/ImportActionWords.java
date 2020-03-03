@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@CommandLine.Command(name = "import", description = "Imports Cucumber Studio ActionWords from OAS x-bdd extensions and REST StepDefs")
+@CommandLine.Command(name = "import", description = "Imports Cucumber Studio ActionWords from OAS x-cucumber extensions and REST StepDefs")
 public class ImportActionWords extends CommandBase {
 
     @CommandLine.Parameters(arity = "0..1", description = "a valid path or URL to an OAS 2.0/3.0 definition")
@@ -143,7 +143,7 @@ public class ImportActionWords extends CommandBase {
         List<WhenOperationWrapper> whens = oasWrapper.getWhens();
         for (WhenOperationWrapper wrapper : whens) {
             String key = wrapper.getWhen();
-            key = transformXBddWhenToActionWord( key );
+            key = transformXCucumberWhenToActionWord( key );
 
             if (!existingWords.contains(key)) {
                 try {
@@ -155,7 +155,7 @@ public class ImportActionWords extends CommandBase {
         }
     }
 
-    private String transformXBddWhenToActionWord(String key) {
+    private String transformXCucumberWhenToActionWord(String key) {
         // brute force for now..
         return key.replace('{', '"').replace('}','"');
     }

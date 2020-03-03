@@ -19,7 +19,7 @@
         <module>modules/codegen</module>
         <module>modules/studio-commons</module>
         <module>modules/studio-runner</module>
-        <module>modules/bdd4oas</module>
+        <module>modules/cucumber4oas</module>
     </modules>
 
     <properties>
