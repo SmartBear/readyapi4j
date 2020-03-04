@@ -6,7 +6,7 @@
             <useProjectArtifact>true</useProjectArtifact>
             <fileMode>444</fileMode>
             <includes>
-                <include>com.smartbear.readyapi:readyapi4j-bdd4oas</include>
+                <include>com.smartbear.readyapi:readyapi4j-cucumber4oas</include>
             </includes>
             <outputDirectory>.</outputDirectory>
         </dependencySet>

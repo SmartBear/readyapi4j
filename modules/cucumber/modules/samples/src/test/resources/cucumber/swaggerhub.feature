@@ -1,7 +1,7 @@
 Feature: SwaggerHub REST API
 
   Background:
-    Given the OAS definition at https://api.swaggerhub.com/apis/olensmar/registry-api-bdd/1.0.47
+    Given the OAS definition at https://api.swaggerhub.com/apis/olensmar/registry-api-cucumber/1.0.47
 
   Scenario: Default API Listing
     When a request to searchApis is made

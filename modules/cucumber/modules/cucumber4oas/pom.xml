@@ -9,7 +9,7 @@
         <relativePath>../..</relativePath>
     </parent>
 
-    <artifactId>readyapi4j-bdd4oas</artifactId>
+    <artifactId>readyapi4j-cucumber4oas</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -82,8 +82,8 @@
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <alias>readyapi4j-bdd4oas</alias>
-                                    <name>smartbear/readyapi4j-bdd4oas:latest</name>
+                                    <alias>readyapi4j-cucumber4oas</alias>
+                                    <name>smartbear/readyapi4j-cucumber4oas:latest</name>
                                     <build>
                                         <from>openjdk:8</from>
                                         <maintainer>ole.lensmar@smartbear.com</maintainer>
@@ -121,7 +121,7 @@
         </profile>
 
         <profile>
-            <id>run-bdd4oas</id>
+            <id>run-cucumber4oas</id>
             <build>
                 <plugins>
                     <plugin>
@@ -132,8 +132,8 @@
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <alias>readyapi4j-bdd4oas</alias>
-                                    <name>smartbear/readyapi4j-bdd4oas:latest</name>
+                                    <alias>readyapi4j-cucumber4oas</alias>
+                                    <name>smartbear/readyapi4j-cucumber4oas:latest</name>
                                     <run>
                                         <volumes>
                                             <bind>

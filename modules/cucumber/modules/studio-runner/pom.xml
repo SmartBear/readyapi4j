@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.smartbear.readyapi</groupId>
-            <artifactId>readyapi4j-bdd4oas</artifactId>
+            <artifactId>readyapi4j-cucumber4oas</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
