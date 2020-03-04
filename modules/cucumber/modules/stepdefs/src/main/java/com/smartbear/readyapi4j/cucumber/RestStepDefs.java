@@ -14,7 +14,7 @@ import com.smartbear.readyapi4j.cucumber.studio.ActionWord;
 import com.smartbear.readyapi4j.support.ContentUtils;
 import com.smartbear.readyapi4j.teststeps.TestStepTypes;
 import com.smartbear.readyapi4j.teststeps.restrequest.ParameterBuilder;
-import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

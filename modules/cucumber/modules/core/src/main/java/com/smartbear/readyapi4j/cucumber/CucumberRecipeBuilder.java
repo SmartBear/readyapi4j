@@ -5,9 +5,9 @@ import com.smartbear.readyapi4j.client.model.TestCase;
 import com.smartbear.readyapi4j.client.model.TestStep;
 import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.support.AssertionUtils;
-import cucumber.runtime.java.guice.ScenarioScoped;
-import io.cucumber.core.api.Scenario;
+import io.cucumber.guice.ScenarioScoped;
 import io.cucumber.java.After;
+import io.cucumber.java.Scenario;
 
 import javax.inject.Inject;
 import java.util.List;

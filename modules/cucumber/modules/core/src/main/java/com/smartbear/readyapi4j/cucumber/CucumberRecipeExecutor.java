@@ -6,7 +6,7 @@ import com.smartbear.readyapi4j.execution.Execution;
 import com.smartbear.readyapi4j.execution.ExecutionListener;
 import com.smartbear.readyapi4j.execution.RecipeExecutor;
 import com.smartbear.readyapi4j.facade.execution.RecipeExecutorBuilder;
-import io.cucumber.core.api.Scenario;
+import io.cucumber.java.Scenario;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -4,21 +4,25 @@ import com.google.common.collect.Lists;
 import com.smartbear.readyapi4j.cucumber.CucumberUtils;
 import com.smartbear.readyapi4j.cucumber.OASStepDefs;
 import com.smartbear.readyapi4j.cucumber.RestStepDefs;
-import cucumber.api.java.ObjectFactory;
-import cucumber.runtime.Backend;
-import cucumber.runtime.DuplicateStepDefinitionException;
-import cucumber.runtime.Glue;
-import cucumber.runtime.HookDefinition;
-import cucumber.runtime.StepDefinition;
-import cucumber.runtime.io.ResourceLoader;
-import cucumber.runtime.java.JavaBackend;
-import cucumber.runtime.snippets.FunctionNameGenerator;
-import gherkin.pickles.PickleStep;
+import io.cucumber.core.backend.Backend;
+import io.cucumber.core.backend.Container;
+import io.cucumber.core.backend.DataTableTypeDefinition;
+import io.cucumber.core.backend.DefaultDataTableCellTransformerDefinition;
+import io.cucumber.core.backend.DefaultDataTableEntryTransformerDefinition;
+import io.cucumber.core.backend.DefaultParameterTransformerDefinition;
+import io.cucumber.core.backend.DocStringTypeDefinition;
+import io.cucumber.core.backend.Glue;
+import io.cucumber.core.backend.HookDefinition;
+import io.cucumber.core.backend.Lookup;
+import io.cucumber.core.backend.ParameterInfo;
+import io.cucumber.core.backend.ParameterTypeDefinition;
+import io.cucumber.core.backend.Snippet;
+import io.cucumber.core.backend.StepDefinition;
+import io.cucumber.core.gherkin.Argument;
+import io.cucumber.core.internal.gherkin.pickles.PickleStep;
+import io.cucumber.java.JavaBackendProviderService;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.stepexpression.Argument;
-import io.cucumber.stepexpression.TypeRegistry;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -27,6 +31,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * Custom Backend that reads Swagger/OAS Cucumber extensions and translates them to the readyapi4j OAS StepDefs
@@ -34,16 +39,20 @@ import java.util.Map;
 
 public class OASBackend implements Backend {
 
-    private JavaBackend javaBackend;
+    private Backend javaBackend;
     private List<StepDefinitionWrapper> wrapperList = Lists.newArrayList();
     private OASWrapper oasWrapper;
 
     private String whenOperationPattern;
     private String thenOperationPattern;
+    private Lookup lookup;
 
-    public OASBackend(ResourceLoader resourceLoader, TypeRegistry typeRegistry) {
-        javaBackend = new JavaBackend(resourceLoader, typeRegistry);
+    public OASBackend(Lookup lookup, Container container, Supplier<ClassLoader> classLoaderSupplier) {
+        this.lookup = lookup;
+
+        javaBackend = new JavaBackendProviderService().create( lookup, container, classLoaderSupplier );
         initOperationPatterns();
+
     }
 
     private void initOperationPatterns() {
@@ -94,8 +103,8 @@ public class OASBackend implements Backend {
     }
 
     @Override
-    public List<String> getSnippet(PickleStep pickleStep, String s, FunctionNameGenerator functionNameGenerator) {
-        return javaBackend.getSnippet( pickleStep, s, functionNameGenerator);
+    public Snippet getSnippet() {
+        return javaBackend.getSnippet();
     }
 
     /**
@@ -110,7 +119,7 @@ public class OASBackend implements Backend {
         }
 
         @Override
-        public void addStepDefinition(StepDefinition stepDefinition) throws DuplicateStepDefinitionException {
+        public void addStepDefinition(StepDefinition stepDefinition) {
             glue.addStepDefinition(new StepDefinitionWrapper(stepDefinition));
         }
 
@@ -135,8 +144,33 @@ public class OASBackend implements Backend {
         }
 
         @Override
-        public void removeScenarioScopedGlue() {
-            glue.removeScenarioScopedGlue();
+        public void addParameterType(ParameterTypeDefinition parameterTypeDefinition) {
+            glue.addParameterType(parameterTypeDefinition);
+        }
+
+        @Override
+        public void addDataTableType(DataTableTypeDefinition dataTableTypeDefinition) {
+            glue.addDataTableType(dataTableTypeDefinition);
+        }
+
+        @Override
+        public void addDefaultParameterTransformer(DefaultParameterTransformerDefinition defaultParameterTransformerDefinition) {
+            glue.addDefaultParameterTransformer(defaultParameterTransformerDefinition);
+        }
+
+        @Override
+        public void addDefaultDataTableEntryTransformer(DefaultDataTableEntryTransformerDefinition defaultDataTableEntryTransformerDefinition) {
+            glue.addDefaultDataTableEntryTransformer(defaultDataTableEntryTransformerDefinition);
+        }
+
+        @Override
+        public void addDefaultDataTableCellTransformer(DefaultDataTableCellTransformerDefinition defaultDataTableCellTransformerDefinition) {
+            glue.addDefaultDataTableCellTransformer(defaultDataTableCellTransformerDefinition);
+        }
+
+        @Override
+        public void addDocStringType(DocStringTypeDefinition docStringTypeDefinition) {
+            glue.addDocStringType(docStringTypeDefinition);
         }
     }
 
@@ -189,26 +223,20 @@ public class OASBackend implements Backend {
         }
 
         @Override
-        public String getLocation(boolean b) {
-            return stepDefinition.getLocation(b);
+        public String getLocation() {
+            return stepDefinition.getLocation();
         }
 
-        @Override
-        public Integer getParameterCount() {
-            return stepDefinition.getParameterCount();
-        }
 
         @Override
-        public void execute(Object[] objects) throws Throwable {
+        public void execute(Object[] objects)  {
             if (objects.length == 1 && objects[0] instanceof ThenResponseWrapper) {
                 ThenResponseWrapper argument = (ThenResponseWrapper) objects[0];
                 stepDefinition.execute(new Object[]{argument.getApiResponse().getDescription()});
 
                 if (argument.getAssertions() != null) {
                     try {
-                        ObjectFactory objectFactory = (ObjectFactory) FieldUtils.readField(stepDefinition, "objectFactory", true);
-                        RestStepDefs stepDefs = objectFactory.getInstance(RestStepDefs.class);
-
+                        RestStepDefs stepDefs = lookup.getInstance(RestStepDefs.class);
                         addAssertions(argument.getAssertions(), stepDefs);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -221,6 +249,11 @@ public class OASBackend implements Backend {
         }
 
         @Override
+        public List<ParameterInfo> parameterInfos() {
+            return stepDefinition.parameterInfos();
+        }
+
+        @Override
         public boolean isDefinedAt(StackTraceElement stackTraceElement) {
             return stepDefinition.isDefinedAt(stackTraceElement);
         }
@@ -230,11 +263,6 @@ public class OASBackend implements Backend {
             return stepDefinition.getPattern();
         }
 
-        @Override
-        @Deprecated
-        public boolean isScenarioScoped() {
-            return stepDefinition.isScenarioScoped();
-        }
     }
 
     private void addAssertions(List<Map<String, Object>> assertions, RestStepDefs stepDefs) {
@@ -324,7 +352,6 @@ public class OASBackend implements Backend {
             this.value = string;
         }
 
-        @Override
         public String getValue() {
             return value;
         }
@@ -338,7 +365,6 @@ public class OASBackend implements Backend {
             this.value = apiResponse;
         }
 
-        @Override
         public ThenResponseWrapper getValue() {
             return value;
         }
