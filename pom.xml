@@ -72,7 +72,7 @@
         <junit-version>4.12</junit-version>
         <DoNotRunSamples>true</DoNotRunSamples>
         <swagger-parser.version>1.0.26</swagger-parser.version>
-        <swagger-v3-parser.version>2.0.14</swagger-v3-parser.version>
+        <swagger-v3-parser.version>2.0.19</swagger-v3-parser.version>
     </properties>
 
     <build>
