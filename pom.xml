@@ -68,7 +68,7 @@
         <jersey-version>1.19</jersey-version>
         <jodatime-version>2.3</jodatime-version>
         <swagger-version>1.6.1</swagger-version>
-        <jackson-version>2.10.2</jackson-version>
+        <jackson-version>2.12.6</jackson-version>
         <junit-version>4.12</junit-version>
         <DoNotRunSamples>true</DoNotRunSamples>
         <swagger-parser.version>1.0.50</swagger-parser.version>
